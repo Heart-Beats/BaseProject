@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="uikit_colorPrimary">@android:color/black</color>
+    <color name="uikit_colorPrimaryDark">@android:color/white</color>
+    <color name="uikit_textColorPrimary">@android:color/white</color>
+    <color name="uikit_dividerColor">#F0EFF4</color>
+    <color name="uikit_backgroundColor">#15151A</color>
+    <color name="uikit_alert_positive_text_color">#5E60C7</color>
+    <color name="uikit_alert_negative_text_color">#7D7D7D</color>
+</resources>

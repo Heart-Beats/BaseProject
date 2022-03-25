@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="uikit_fontsize_1">40sp</dimen>
+    <dimen name="uikit_fontsize_2">34sp</dimen>
+    <dimen name="uikit_fontsize_3">30sp</dimen>
+    <dimen name="uikit_fontsize_4">28sp</dimen>
+    <dimen name="uikit_fontsize_5">20sp</dimen>
+    <dimen name="uikit_fontsize_6">18sp</dimen>
+    <dimen name="uikit_fontsize_7">16sp</dimen>
+    <dimen name="uikit_fontsize_8">14sp</dimen>
+    <dimen name="uikit_fontsize_9">13sp</dimen>
+    <dimen name="uikit_fontsize_10">12sp</dimen>
+</resources>

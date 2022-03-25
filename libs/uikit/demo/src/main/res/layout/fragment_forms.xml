@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.hl.uikit.UIKitToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        app:uikit_title="表单页" />
+
+    <com.hl.uikit.KDividerView
+        android:id="@+id/dividerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="30dp"
+                android:text="表单页 Form"
+                android:textColor="#ff333333"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <com.hl.uikit.form.UIKitFormGroup
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp">
+
+                <com.hl.uikit.form.UIKitFormItemText
+                    android:id="@+id/item1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:foreground="?attr/selectableItemBackground"
+                    app:uikit_formLabel="表单结构 Form"
+                    app:uikit_formRightIcon="@drawable/icon_arrow_right"/>
+                <com.hl.uikit.form.UIKitFormItemText
+                    android:id="@+id/item2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:uikit_formLabel="验证码 Verification Code"
+                    android:foreground="?attr/selectableItemBackground"
+                    app:uikit_formRightIcon="@drawable/icon_arrow_right"/>
+                <com.hl.uikit.form.UIKitFormItemText
+                    android:id="@+id/item3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:uikit_formLabel="文本域 TextArea"
+                    android:foreground="?attr/selectableItemBackground"
+                    app:uikit_formRightIcon="@drawable/icon_arrow_right"/>
+                <com.hl.uikit.form.UIKitFormItemText
+                    android:id="@+id/item5"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:uikit_formLabel="上传 Uploader"
+                    android:foreground="?attr/selectableItemBackground"
+                    app:uikit_formRightIcon="@drawable/icon_arrow_right"/>
+                <com.hl.uikit.form.UIKitFormItemText
+                    android:id="@+id/item4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:uikit_formLabel="开关 Switch"
+                    android:foreground="?attr/selectableItemBackground"
+                    app:uikit_formRightIcon="@drawable/icon_arrow_right"/>
+                <com.hl.uikit.form.UIKitFormItemText
+                    android:id="@+id/item6"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:uikit_formLabel="步进器 Stepper"
+                    android:foreground="?attr/selectableItemBackground"
+                    app:uikit_formDividerEnable="false"
+                    app:uikit_formRightIcon="@drawable/icon_arrow_right"/>
+            </com.hl.uikit.form.UIKitFormGroup>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

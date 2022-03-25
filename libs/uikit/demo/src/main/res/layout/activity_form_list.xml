@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".fragments.forms.FormListFragment">
+
+    <com.hl.uikit.UIKitToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        app:layout_constraintTop_toTopOf="parent"
+        app:uikit_title="列表" />
+
+    <com.hl.uikit.KDividerView
+        android:id="@+id/dividerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <androidx.core.widget.NestedScrollView
+        android:scrollbars="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="30dp">
+
+            <TextView
+                android:id="@+id/textView30"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="30dp"
+                android:text="列表 List"
+                android:textColor="#ff333333"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@+id/formDesc"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_chainStyle="packed" />
+
+            <com.hl.uikit.form.UIKitFormHeaderActionText
+                android:id="@+id/formDesc"
+                style="@style/HeaderTipStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                app:layout_constraintBottom_toTopOf="@+id/formHeader1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView30"
+                app:uikit_formLabel="列表统一作为导航，带有箭头，点击会跳转到下一个页面。" />
+
+            <com.hl.uikit.form.UIKitFormHeaderActionText
+                android:id="@+id/formHeader1"
+                style="@style/HeaderTipStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                app:layout_constraintBottom_toTopOf="@+id/itemGroup1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/formDesc"
+                app:uikit_formLabel="单行列表" />
+
+            <com.hl.uikit.form.UIKitFormGroup
+                android:id="@+id/itemGroup1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:layout_constraintBottom_toTopOf="@+id/formHeader2"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/formHeader1">
+
+                <com.hl.uikit.form.UIKitFormItemText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:uikit_formLabel="单行列表"
+                    app:uikit_formRightIcon="@drawable/icon_arrow_right" />
+
+                <com.hl.uikit.form.UIKitFormItemText
+                    android:id="@+id/pressItem"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:uikit_formCanSelectable="true"
+                    app:uikit_formLabel="列表按下"
+                    app:uikit_formRightIcon="@drawable/icon_arrow_right" />
+
+                <com.hl.uikit.form.UIKitFormItemText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:uikit_formLabel="单行列表"
+                    app:uikit_formRightIcon="@drawable/icon_arrow_right"
+                    app:uikit_formText="描述字段" />
+
+                <com.hl.uikit.form.UIKitFormItemText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:uikit_formLabel="多行列表"
+                    app:uikit_formRightIcon="@drawable/icon_arrow_right"
+                    app:uikit_formText="详细信息内容超多一行详细信息内容超多一行详细信息内容超多一行" />
+            </com.hl.uikit.form.UIKitFormGroup>
+
+            <com.hl.uikit.form.UIKitFormHeaderActionText
+                android:id="@+id/formHeader2"
+                style="@style/HeaderTipStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                app:layout_constraintBottom_toTopOf="@+id/itemGroup2"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/itemGroup1"
+                app:uikit_formLabel="双行列表" />
+
+            <com.hl.uikit.form.UIKitFormGroup
+                android:id="@+id/itemGroup2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:layout_constraintBottom_toTopOf="@+id/formHeader4"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/formHeader2">
+
+                <com.hl.uikit.form.UIKitFormItemText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:uikit_formChildLabel="描述信息"
+                    app:uikit_formLabel="双行列表"
+                    app:uikit_formRightIcon="@drawable/icon_arrow_right" />
+
+                <com.hl.uikit.form.UIKitFormItemText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:uikit_formChildLabel="描述信息描述信息描述信息描述信息描述信息描述信息描述信息信息信息信息信息信息信息信息"
+                    app:uikit_formChildWeight="left_weight"
+                    app:uikit_formLabel="双行列表"
+                    app:uikit_formRightIcon="@drawable/icon_arrow_right" />
+            </com.hl.uikit.form.UIKitFormGroup>
+
+            <com.hl.uikit.form.UIKitFormHeaderActionText
+                android:id="@+id/formHeader4"
+                style="@style/HeaderTipStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                app:layout_constraintBottom_toTopOf="@+id/itemGroup4"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/itemGroup2"
+                app:uikit_formLabel="图标+跳转" />
+
+            <com.hl.uikit.form.UIKitFormGroup
+                android:id="@+id/itemGroup4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/formHeader4">
+
+                <com.hl.uikit.form.UIKitFormItemText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:uikit_formLabel="标题"
+                    app:uikit_formLeftIcon="@drawable/icon_time"
+                    app:uikit_formRightIcon="@drawable/icon_arrow_right" />
+
+                <com.hl.uikit.form.UIKitFormItemText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:uikit_formLabel="标题"
+                    app:uikit_formLeftIcon="@drawable/icon_time"
+                    app:uikit_formRightIcon="@drawable/icon_arrow_right"
+                    app:uikit_formText="详细信息" />
+            </com.hl.uikit.form.UIKitFormGroup>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+</LinearLayout>

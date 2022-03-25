@@ -1,0 +1,44 @@
+pluginManagement {
+    repositories {
+        maven { url 'https://maven.aliyun.com/nexus/content/groups/public/' }
+        maven { url = uri('https://maven.aliyun.com/repository/google') }
+        maven { url = uri('https://maven.aliyun.com/repository/gradle-plugin') }
+        maven { url 'https://jitpack.io' }
+        gradlePluginPortal()
+        google()
+        mavenCentral()
+    }
+}
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        maven { url 'https://maven.aliyun.com/nexus/content/groups/public/' }
+        maven { url = uri('https://maven.aliyun.com/repository/google') }
+        maven { url = uri('https://maven.aliyun.com/repository/gradle-plugin') }
+        maven { url 'https://jitpack.io' }
+        google()
+        mavenCentral()
+    }
+}
+
+rootProject.name='Project'
+
+include ':utils'
+
+// 不添加 includeBuild， 该项目下无法依赖 uikit 项目下的相关库
+includeBuild('../uikit')
+
+includeBase()
+includeSDK()
+
+def includeBase() {
+    include ':base-api', ':base-arch', ':base-app-res'
+
+    project(':base-api').projectDir = file('./base/api')
+    project(':base-arch').projectDir = file('./base/arch')
+    project(':base-app-res').projectDir = file('./base/app-res')
+}
+
+def includeSDK() {
+    include ':SDK:Umeng', ':SDK:Pay', ':libs-aar'
+}

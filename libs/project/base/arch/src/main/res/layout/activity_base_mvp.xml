@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/relLayoutBase"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".mvp.MvpBaseActivity">
+
+    <RelativeLayout
+        android:id="@+id/fraLayoutHeadView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/toolbar_height"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:id="@+id/tv_base_back"
+                android:layout_width="@dimen/px300"
+                android:layout_height="match_parent"
+                android:layout_centerVertical="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/iv_back"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/px46"
+                    android:src="@drawable/nim_icon_title_back" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_tab_title"
+                android:layout_width="@dimen/px600"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:ellipsize="marquee"
+                android:gravity="center"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:singleLine="true"
+                android:text="标题"
+                android:textColor="#31415F"
+                android:textSize="@dimen/px49" />
+
+            <ImageView
+                android:id="@+id/iv_menu"
+                android:layout_width="@dimen/px90"
+                android:layout_height="@dimen/px90"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/px42"
+                android:padding="@dimen/px18"
+                android:visibility="gone"
+                tools:src="@tools:sample/avatars"
+                tools:visibility="visible" />
+
+            <TextView
+                android:id="@+id/tv_menu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:paddingLeft="@dimen/px20"
+                android:paddingRight="@dimen/px20"
+                android:text=""
+                android:textColor="@color/black"
+                android:textSize="@dimen/px45"
+                android:visibility="gone" />
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+    <FrameLayout
+        android:id="@+id/fraLayoutContent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/fraLayoutHeadView"
+        android:background="#F1F5FB" />
+
+
+    <include
+        android:id="@+id/errorLayout"
+        layout="@layout/reset_error_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/fraLayoutHeadView"
+        android:visibility="gone" />
+
+    <include
+        android:id="@+id/emptyLayout"
+        layout="@layout/view_empty_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/fraLayoutHeadView"
+        android:visibility="gone" />
+
+    <FrameLayout
+        android:id="@+id/backgroud_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#25000000"
+        android:visibility="gone" />
+
+</RelativeLayout>

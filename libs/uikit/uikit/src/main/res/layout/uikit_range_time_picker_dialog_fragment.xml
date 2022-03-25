@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingTop="15dp"
+    android:paddingBottom="30dp">
+
+    <TextView
+        android:id="@+id/btnSwitchMode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_marginEnd="15dp"
+        android:background="@drawable/uikit_btn_bg_switch_timeinterval"
+        android:drawableEnd="@drawable/uikit_icon_switch_timeinterval"
+        android:drawablePadding="4dp"
+        android:paddingStart="15dp"
+        android:paddingTop="4dp"
+        android:paddingEnd="15dp"
+        android:paddingBottom="4dp"
+        android:text="按月选择"
+        android:textColor="@color/uikit_color_3"
+        android:textSize="@dimen/uikit_fontsize_8"
+        tools:text="按月选择" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:gravity="bottom"
+        android:orientation="horizontal">
+
+        <CheckedTextView
+            android:id="@+id/ctvStart"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="25dp"
+            android:layout_marginEnd="25dp"
+            android:layout_weight="1"
+            android:background="@drawable/uikit_btn_bg_timeinterval_timeselector"
+            android:gravity="center_horizontal"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp"
+            android:textAlignment="center"
+            android:textColor="@drawable/uikit_btn_text_timeinterval_timeselector"
+            android:textSize="@dimen/uikit_fontsize_7"
+            tools:checked="true"
+            tools:text="2019-10" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="至"
+            android:textColor="#FF333333"
+            android:textSize="14sp" />
+
+        <CheckedTextView
+            android:id="@+id/ctvEnd"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="25dp"
+            android:layout_marginEnd="25dp"
+            android:layout_weight="1"
+            android:background="@drawable/uikit_btn_bg_timeinterval_timeselector"
+            android:gravity="center_horizontal"
+            android:hint="结束月份"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp"
+            android:textAlignment="center"
+            android:textColor="@drawable/uikit_btn_text_timeinterval_timeselector"
+            android:textSize="@dimen/uikit_fontsize_7"
+            tools:checked="false" />
+    </LinearLayout>
+
+    <com.hl.uikit.pickerview.UIKitOptionsExtPickerView
+        android:id="@+id/pickerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:background="@android:color/transparent"
+        tools:background="@android:color/darker_gray" />
+</LinearLayout>

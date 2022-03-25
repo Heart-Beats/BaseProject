@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".dialogs.HalfScreenFragment">
+
+    <com.hl.uikit.UIKitToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        app:uikit_title="弹出式菜单" />
+
+    <com.hl.uikit.KDividerView
+        android:id="@+id/dividerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="30dp"
+        android:text="弹出式菜单 ActionSheet"
+        android:textColor="#ff333333"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <com.hl.uikit.form.UIKitFormGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp">
+
+        <com.hl.uikit.form.UIKitFormItemText
+            android:id="@+id/itemSheet1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:uikit_formLabel="无标题"
+            app:uikit_formRightIcon="@drawable/icon_arrow_right" />
+
+        <com.hl.uikit.form.UIKitFormItemText
+            android:id="@+id/itemSheet2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:uikit_formLabel="提示弹窗固定高度"
+            app:uikit_formRightIcon="@drawable/icon_arrow_right" />
+
+        <com.hl.uikit.form.UIKitFormItemText
+            android:id="@+id/itemSheet3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:uikit_formLabel="带标题"
+            app:uikit_formDividerEnable="false"
+            app:uikit_formRightIcon="@drawable/icon_arrow_right" />
+    </com.hl.uikit.form.UIKitFormGroup>
+</LinearLayout>

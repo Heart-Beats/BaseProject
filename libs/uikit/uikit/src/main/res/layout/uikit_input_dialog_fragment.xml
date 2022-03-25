@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingStart="20dp"
+    android:paddingTop="15dp"
+    android:paddingEnd="20dp">
+
+    <EditText
+        android:id="@+id/etInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:paddingBottom="8dp"
+        android:gravity="center_vertical|start"
+        tools:hint="输入提示语"
+        android:textColor="@color/uikit_color_3"
+        android:textColorHint="@color/uikit_color_4"
+        android:textSize="@dimen/uikit_fontsize_8" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?attr/uikit_dividerColor" />
+
+    <TextView
+        android:id="@+id/tvHint"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:gravity="start"
+        android:textColor="@color/uikit_color_4"
+        android:textSize="@dimen/uikit_fontsize_10"
+        android:visibility="visible"
+        tools:text="别名命名需在2-12个字符以内" />
+</LinearLayout>

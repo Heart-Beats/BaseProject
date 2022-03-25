@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".dialogs.HalfScreenFragment">
+
+    <com.hl.uikit.UIKitToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        app:uikit_title="颜色" />
+    <com.hl.uikit.KDividerView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="30dp"
+        android:text="颜色 Color"
+        android:textColor="#ff333333"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <com.hl.uikit.form.UIKitFormGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp">
+
+        <com.hl.uikit.form.UIKitFormItemText
+            android:id="@+id/itemColor1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:uikit_formLabel="慧徕店主题色"
+            app:uikit_formRightIcon="@drawable/icon_arrow_right" />
+
+        <com.hl.uikit.form.UIKitFormItemText
+            android:id="@+id/itemColor2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:uikit_formLabel="邮政主题色"
+            app:uikit_formRightIcon="@drawable/icon_arrow_right" />
+    </com.hl.uikit.form.UIKitFormGroup>
+</LinearLayout>
+
+<!--<?xml version="1.0" encoding="utf-8"?>-->
+<!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--    xmlns:demo="http://schemas.android.com/apk/res-auto"-->
+<!--    xmlns:tools="http://schemas.android.com/tools"-->
+<!--    android:layout_width="match_parent"-->
+<!--    android:layout_height="match_parent"-->
+<!--    android:orientation="vertical"-->
+<!--    tools:context=".ColorsActivity">-->
+
+<!--    <com.hl.uikit.UIKitToolbar-->
+<!--        android:id="@+id/toolbar"-->
+<!--        android:layout_width="match_parent"-->
+<!--        demo:uikit_title="主题色"-->
+<!--        android:layout_height="?attr/actionBarSize" />-->
+
+<!--    <ScrollView-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content">-->
+
+<!--        <LinearLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:orientation="vertical">-->
+
+<!--            <TextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginStart="15dp"-->
+<!--                android:layout_marginTop="30dp"-->
+<!--                android:text="主题色"-->
+<!--                android:textColor="#ff333333"-->
+<!--                android:textSize="18sp"-->
+<!--                android:textStyle="bold" />-->
+
+<!--            <RadioGroup-->
+<!--                android:id="@+id/radioGroup"-->
+<!--                android:layout_marginTop="24dp"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:orientation="horizontal">-->
+
+<!--                <com.hl.uikit.button.UIKitOptionRadio-->
+<!--                    android:id="@+id/radio1"-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:checked="true"-->
+<!--                    android:text="邮政" />-->
+
+<!--                <com.hl.uikit.button.UIKitOptionRadio-->
+<!--                    android:id="@+id/radio2"-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:text="慧徕店" />-->
+<!--            </RadioGroup>-->
+<!--            <ImageView-->
+<!--                android:id="@+id/imageView"-->
+<!--                android:background="@drawable/ems_color_template"-->
+<!--                android:layout_margin="10dp"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"/>-->
+<!--        </LinearLayout>-->
+<!--    </ScrollView>-->
+<!--</LinearLayout>-->

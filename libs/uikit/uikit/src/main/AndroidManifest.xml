@@ -1,0 +1,11 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.hl.uikit" >
+
+    <!-- PictureSelector 拍照需要使用 -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+
+    <application
+        android:supportsRtl="true"
+        android:theme="@style/UiKit.AppTheme">
+    </application>
+</manifest>

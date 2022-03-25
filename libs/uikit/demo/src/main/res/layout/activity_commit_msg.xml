@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragments.PromptPageFragment">
+
+    <com.hl.uikit.UIKitToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:uikit_title="提示页" />
+
+    <com.hl.uikit.KDividerView
+        android:id="@+id/dividerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+
+    <TextView
+        android:id="@+id/textView34"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="30dp"
+        android:text="提示页 Msg"
+        android:textColor="@color/uikit_color_3"
+        android:textSize="@dimen/uikit_fontsize_6"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dividerView" />
+
+    <com.hl.uikit.form.UIKitFormGroup
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView34">
+
+        <com.hl.uikit.form.UIKitFormItemText
+            android:id="@+id/commit_success"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:uikit_formLabel="成功提示页"
+            app:uikit_formRightIcon="@drawable/icon_arrow_right" />
+
+        <com.hl.uikit.form.UIKitFormItemText
+            android:id="@+id/commit_fail"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:uikit_formLabel="失败提示页"
+            app:uikit_formRightIcon="@drawable/icon_arrow_right" />
+    </com.hl.uikit.form.UIKitFormGroup>
+</androidx.constraintlayout.widget.ConstraintLayout>

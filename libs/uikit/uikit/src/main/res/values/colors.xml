@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="uikit_colorPrimary">@color/uikit_color_1</color>
+    <color name="uikit_colorPrimaryDark">@android:color/white</color>
+    <color name="uikit_textColorPrimary">@android:color/black</color>
+    <color name="uikit_dividerColor">@color/uikit_color_7</color>
+    <color name="uikit_backgroundColor">#F0EFF4</color>
+    <color name="uikit_positiveButtonColor">@color/uikit_color_1</color>
+    <color name="uikit_positiveButtonDisableColor">#4D5E60C7</color>
+    <color name="uikit_bottom_text_color">#205BFF</color>
+    <color name="uikit_main_color">@color/uikit_color_1</color>
+    <color name="uikit_txt_color_normal">@color/uikit_color_3</color>
+    <color name="uikit_form_input_hint">@color/uikit_color_5</color>
+
+    <color name="uikit_txt_color_filter_select">#265E60C7</color>
+    <color name="uikit_txt_color_filter_normal">@color/uikit_color_6</color>
+    <color name="uikit_alert_positive_text_color">@color/uikit_color_1</color>
+    <color name="uikit_alert_negative_text_color">@color/uikit_color_4</color>
+
+    <color name="uikit_common_button_press_bg_color">#4F51A9</color>
+
+    <color name="uikit_form_item_press_bg_color">#EDF1F6</color>
+    <color name="uikit_form_item_normal_bg_color">@android:color/white</color>
+    <color name="light_blue_400">#FF29B6F6</color>
+    <color name="light_blue_600">#FF039BE5</color>
+    <color name="gray_400">#FFBDBDBD</color>
+    <color name="gray_600">#FF757575</color>
+</resources>

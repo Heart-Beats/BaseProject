@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="rectangle">
+            <size
+                android:width="72dp"
+                android:height="25dp" />
+
+            <solid android:color="@color/uikit_common_button_press_bg_color" />
+            <corners android:radius="100dp" />
+        </shape>
+    </item>
+</selector>
