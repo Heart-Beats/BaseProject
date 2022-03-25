@@ -1,0 +1,416 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="UiKit" />
+
+    <style name="UiKit.AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/uikit_colorPrimary</item>
+        <item name="colorPrimaryDark">@color/uikit_colorPrimaryDark</item>
+        <item name="android:textColorPrimary">@color/uikit_textColorPrimary</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowBackground">@color/uikit_backgroundColor</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowDisablePreview">true</item>
+
+        <item name="uikit_toolbarStyle">@style/UiKit.ToolbarStyle</item>
+        <item name="uikit_formGroupStyle">@style/UiKit.FormGroupStyle</item>
+        <item name="uikit_formItemStyle">@style/UiKit.FormItemStyle</item>
+        <item name="uikit_formHeaderActionTextStyle">@style/UiKit.FormHeaderActionTextStyle</item>
+        <item name="uikit_formItemLabelStyle">@style/UiKit.FormItemLabelStyle</item>
+        <item name="uikit_formItemTextStyle">@style/UiKit.FormItemTextStyle</item>
+        <item name="uikit_formItemInputStyle">@style/UiKit.FormItemInputStyle</item>
+        <item name="uikit_formItemTextVerifyCodeStyle">@style/UiKit.FormItemTextVerifyCodeStyle</item>
+        <item name="uikit_formItemInputSmsCodeStyle">@style/UiKit.FormItemInputSmsCodeStyle</item>
+        <item name="uikit_formItemToggleButtonStyle">@style/UiKit.FormItemToggleButtonStyle</item>
+        <item name="uikit_formItemVerticalTextStyle">@style/UiKit.FormItemVerticalTextStyle</item>
+        <item name="uikit_positiveButtonStyle">@style/UiKit.PositiveButtonStyle</item>
+        <item name="uikit_strokeButtonStyle">@style/UiKit.StrokeButtonStyle</item>
+        <item name="uikit_dividerViewStyle">@style/UiKit.DividerViewStyle</item>
+        <item name="uikit_dividerColor">@color/uikit_dividerColor</item>
+        <item name="uikit_alert_positive_text_color">@color/uikit_alert_positive_text_color</item>
+        <item name="uikit_alert_negative_text_color">@color/uikit_alert_negative_text_color</item>
+        <item name="uikit_commonButtonStyle">@style/UiKit.CommonButtonStyle</item>
+        <item name="uikit_searchBarStyle">@style/UiKit.SearchBarStyle</item>
+        <item name="uikit_optionsPickerViewStyle">@style/UiKit.OptionsPickerViewStyle</item>
+        <item name="uikit_optionRadioStyle">@style/UiKit.OptionRadioStyle</item>
+        <item name="uikit_textAreaStyle">@style/UiKit.TextAreaStyle</item>
+        <item name="uikit_progressImageViewStyle">@style/UiKit.ProgressImageViewStyle</item>
+        <item name="uikit_uploadPicImageGridLayout">@style/UiKit.UploadPicImageGridLayout</item>
+    </style>
+
+    <style name="UiKit.OptionsPickerViewStyle">
+        <item name="android:textSize">@dimen/uikit_fontsize_6</item>
+        <item name="android:textColor">@color/uikit_options_picker_wheel_text_color</item>
+        <item name="uikit_wheelCurved">true</item>
+        <item name="uikit_showWheelDivider">true</item>
+        <item name="uikit_wheelDividerColor">?attr/uikit_dividerColor</item>
+        <item name="uikit_wheelDividerHeight">1dp</item>
+        <item name="uikit_wheelLineSpacing">18dp</item>
+        <item name="uikit_wheelVisibleItems">7</item>
+    </style>
+
+    <style name="UiKit.ToolbarStyle" parent="Widget.AppCompat.Toolbar">
+        <!--        <item name="titleTextAppearance">@style/UiKit.ToolbarTitleTextStyle</item>-->
+        <item name="android:minHeight">?attr/actionBarSize</item>
+        <item name="contentInsetStart">0dp</item>
+        <item name="contentInsetLeft">0dp</item>
+        <item name="contentInsetStartWithNavigation">0dp</item>
+        <item name="uikit_backgroundColor">@android:color/white</item>
+        <item name="uikit_titleGravity">center</item>
+        <item name="uikit_titleSize">@dimen/uikit_fontsize_6</item>
+        <item name="uikit_titleColor">@color/uikit_color_3</item>
+        <item name="uikit_rightTextSize">@dimen/uikit_fontsize_8</item>
+        <item name="uikit_rightTextColor">@color/uikit_color_1</item>
+        <item name="uikit_rightPaddingEnd">15dp</item>
+        <item name="navigationIcon">@drawable/uikit_icon_arrow_left</item>
+    </style>
+
+    <style name="UiKit.ToolbarStylePrimary" parent="UiKit.ToolbarStyle">
+        <!--        <item name="titleTextAppearance">@style/UiKit.ToolbarTitleTextStyle</item>-->
+        <item name="android:background">@color/uikit_color_1</item>
+        <item name="uikit_titleGravity">center</item>
+        <item name="uikit_titleSize">@dimen/uikit_fontsize_6</item>
+        <item name="uikit_titleColor">@android:color/white</item>
+        <item name="uikit_rightTextSize">@dimen/uikit_fontsize_8</item>
+        <item name="uikit_rightTextColor">@android:color/white</item>
+        <item name="uikit_rightPaddingEnd">15dp</item>
+    </style>
+
+    <style name="UiKit.CommonDialogStyle" parent="android:Theme.Material.Light.Dialog.NoActionBar">
+        <!--设置竖屏时候的最小宽度-->
+        <item name="android:windowMinWidthMinor">100%</item>
+        <!--设置横屏时候的最小宽度-->
+        <item name="android:windowBackground">@drawable/uikit_bottom_dialog_background</item>
+        <item name="android:windowExitAnimation">@anim/uikit_slide_out_bottom</item>
+        <item name="android:windowEnterAnimation">@anim/uikit_slide_in_bottom</item>
+    </style>
+
+    <style name="UiKit.ToolbarTitleTextStyle">
+        <item name="android:textSize">@dimen/uikit_fontsize_6</item>
+        <item name="android:textColor">@color/uikit_color_3</item>
+    </style>
+
+    <style name="UiKit.AlertDialog" parent="android:Theme.Material.Light.Dialog.NoActionBar">
+        <!--设置竖屏时候的最小宽度-->
+        <item name="android:windowMinWidthMinor">@dimen/uikit_dialog_min_width_minor</item>
+        <!--设置横屏时候的最小宽度-->
+        <item name="android:windowMinWidthMajor">@dimen/uikit_dialog_min_width_major</item>
+        <item name="android:windowBackground">@drawable/uikit_dialog_background</item>
+    </style>
+
+    <style name="UiKit.ProgressDialog" parent="android:Theme.Material.Light.Dialog.NoActionBar">
+        <!--设置竖屏时候的最小宽度-->
+        <item name="android:windowMinWidthMinor">@dimen/uikit_dialog_min_width_minor</item>
+        <!--设置横屏时候的最小宽度-->
+        <item name="android:windowMinWidthMajor">@dimen/uikit_dialog_min_width_major</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+
+    <style name="UiKit.ActionSheetDialogTheme" parent="android:Theme.Material.Light.Dialog.NoActionBar">
+        <!--设置竖屏时候的最小宽度-->
+        <item name="android:windowMinWidthMinor">100%</item>
+        <!--设置横屏时候的最小宽度-->
+        <item name="android:windowMinWidthMajor">@dimen/uikit_dialog_min_width_major</item>
+        <item name="android:windowBackground">@drawable/uikit_bottom_dialog_background</item>
+        <item name="android:windowExitAnimation">@anim/uikit_slide_out_bottom</item>
+        <item name="android:windowEnterAnimation">@anim/uikit_slide_in_bottom</item>
+        <item name="android:backgroundDimAmount">0.5</item>
+        <item name="android:backgroundDimEnabled">true</item>
+    </style>
+
+    <style name="UiKit.ArrayListSheetDialogTheme" parent="UiKit.ActionSheetDialogTheme">
+        <item name="uikit_sheet_list_item_color">@color/uikit_txt_selector</item>
+    </style>
+
+    <style name="UiKit.BottomDialog" parent="android:Theme.Material.Light.Dialog.NoActionBar">
+        <!--设置竖屏时候的最小宽度-->
+        <item name="android:windowMinWidthMinor">100%</item>
+        <!--设置横屏时候的最小宽度-->
+        <item name="android:windowMinWidthMajor">@dimen/uikit_dialog_min_width_major</item>
+        <item name="android:windowBackground">@drawable/uikit_bottom_dialog_background</item>
+        <item name="android:windowExitAnimation">@anim/uikit_slide_out_bottom</item>
+        <item name="android:windowEnterAnimation">@anim/uikit_slide_in_bottom</item>
+    </style>
+
+    <style name="UiKit.SlideXDialog" parent="android:Theme.Material.Light.Dialog.NoActionBar">
+        <!--设置竖屏时候的最小宽度-->
+        <item name="android:windowMinWidthMinor">80%</item>
+        <!--设置横屏时候的最小宽度-->
+        <item name="android:windowMinWidthMajor">@dimen/uikit_dialog_min_width_major</item>
+        <item name="android:windowBackground">@android:color/white</item>
+        <item name="android:windowFullscreen">true</item>
+    </style>
+
+    <style name="UiKit.SlideXRightDialog" parent="UiKit.SlideXDialog">
+        <item name="android:windowExitAnimation">@anim/uikit_slide_out_right</item>
+        <item name="android:windowEnterAnimation">@anim/uikit_slide_in_right</item>
+    </style>
+
+    <style name="UiKit.SlideXLeftDialog" parent="UiKit.SlideXDialog">
+        <item name="android:windowEnterAnimation">@anim/uikit_slide_in_left</item>
+        <item name="android:windowExitAnimation">@anim/uikit_slide_out_left</item>
+    </style>
+
+    <style name="UiKit.LoadingDialog" parent="android:Theme.Material.Light.Dialog.NoActionBar">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowEnterAnimation">@android:anim/fade_in</item>
+        <item name="android:windowExitAnimation">@android:anim/fade_out</item>
+    </style>
+
+    <style name="UiKit.FormGroupStyle">
+        <item name="android:orientation">vertical</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@android:color/white</item>
+        <item name="uikit_formDividerColor">?attr/uikit_dividerColor</item>
+        <item name="uikit_formDividerEnable">true</item>
+        <item name="uikit_formDividerGravity">bottom</item>
+        <item name="uikit_formDividerHeight">1dp</item>
+        <item name="uikit_formDividerPaddingStart">15dp</item>
+        <item name="uikit_formDividerPaddingEnd">0dp</item>
+        <item name="uikit_formDividerNeedLast">false</item>
+    </style>
+
+    <style name="UiKit.FormItemStyle">
+        <item name="android:padding">15dp</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:minHeight">50dp</item>
+    </style>
+
+    <style name="UiKit.FormItemLabelStyle" parent="UiKit.FormItemStyle">
+        <item name="uikit_formLabelColor">@color/uikit_color_3</item>
+        <item name="uikit_formLabelSize">@dimen/uikit_fontsize_8</item>
+        <item name="uikit_formLabelMarginEnd">40dp</item>
+        <item name="uikit_formChildLabelColor">@color/uikit_color_4</item>
+        <item name="uikit_formChildLabelSize">@dimen/uikit_fontsize_10</item>
+        <item name="uikit_formChildLabelMarginTop">0dp</item>
+        <item name="uikit_formRightLayoutOrientation">horizontal</item>
+        <item name="uikit_formRightLayoutChildMargin">4dp</item>
+        <item name="uikit_formChildWeight">right_weight</item>
+    </style>
+
+    <style name="UiKit.FormHeaderActionTextStyle" parent="UiKit.FormItemLabelStyle">
+        <item name="uikit_formLabelBold">true</item>
+        <item name="uikit_formActionTextColor">@color/uikit_color_1</item>
+        <item name="uikit_formActionTextSize">@dimen/uikit_fontsize_8</item>
+    </style>
+
+    <style name="UiKit.FormItemTextStyle" parent="UiKit.FormItemLabelStyle">
+        <item name="uikit_formTextColor">@color/uikit_color_4</item>
+        <item name="uikit_formTextSize">@dimen/uikit_fontsize_8</item>
+        <item name="uikit_formTextGravity">end</item>
+        <item name="uikit_formLeftLayoutGravity">top</item>
+        <item name="uikit_formRightLayoutGravity">center_vertical</item>
+        <item name="uikit_formTextMaxLength">20</item>
+    </style>
+
+    <style name="UiKit.FormItemInputStyle" parent="UiKit.FormItemTextStyle">
+        <item name="uikit_formTextColor">@color/uikit_color_3</item>
+        <item name="uikit_formTextHintColor">@color/uikit_form_input_hint</item>
+        <item name="uikit_formTextDeletable">true</item>
+    </style>
+
+    <style name="UiKit.FormItemTextVerifyCodeStyle">
+        <item name="uikit_formTextGravity">end</item>
+        <item name="uikit_formTextHintColor">@color/uikit_form_input_hint</item>
+        <item name="uikit_formNeedSmsCode">false</item>
+        <item name="uikit_formTextMaxLength">6</item>
+    </style>
+
+    <style name="UiKit.FormItemInputSmsCodeStyle">
+        <item name="android:background">@drawable/uikit_select_time_down_bg</item>
+        <item name="android:gravity">center</item>
+        <item name="android:text">获取验证码</item>
+        <item name="android:textColor">@color/uikit_color_3</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="UiKit.FormItemToggleButtonStyle" parent="UiKit.FormItemLabelStyle">
+        <item name="uikit_formToggleButtonRes">@drawable/uikit_selector_toggle_button_bg</item>
+        <item name="uikit_formChildWeight">left_weight</item>
+    </style>
+
+    <style name="UiKit.FormItemVerticalTextStyle" parent="UiKit.FormItemStyle">
+        <item name="uikit_formLabelColor">#818181</item>
+        <item name="uikit_formLabelSize">14sp</item>
+        <item name="uikit_formTextColor">#333333</item>
+        <item name="uikit_formTextSize">14sp</item>
+    </style>
+
+    <style name="UiKit.PositiveButtonStyle">
+        <item name="android:background">@drawable/uikit_positive_button_radius4_background</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:minHeight">50dp</item>
+    </style>
+
+    <style name="UiKit.StrokeButtonStyle">
+        <item name="android:background">@drawable/uikit_stroke_button_background</item>
+        <item name="android:textColor">@color/uikit_stroke_button_text_color_selector</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:minHeight">50dp</item>
+    </style>
+
+    <style name="UiKit.DividerViewStyle">
+        <item name="android:minHeight">0.5dp</item>
+        <item name="android:src">?attr/uikit_dividerColor</item>
+    </style>
+
+    <style name="UiKit.AdvertDialog" parent="android:Theme.Material.Light.Dialog.NoActionBar">
+        <!--设置竖屏时候的最小宽度-->
+        <item name="android:windowMinWidthMinor">@dimen/uikit_dialog_min_width_minor</item>
+        <!--设置横屏时候的最小宽度-->
+        <item name="android:windowMinWidthMajor">@dimen/uikit_dialog_min_width_major</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+
+    <style name="UiKit.CommonButtonStyle">
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:layout_marginStart">15dp</item>
+        <item name="android:layout_marginEnd">15dp</item>
+    </style>
+
+    <style name="UiKit.LongPressMenuDialogStyle" parent="UiKit.AlertDialog">
+        <!--设置竖屏时候的最小宽度-->
+        <item name="android:windowMinWidthMinor">0%</item>
+        <!--设置横屏时候的最小宽度-->
+        <item name="android:windowMinWidthMajor">0%</item>
+
+        <!--对话框背景 -->
+        <item name="android:windowBackground">@drawable/uikit_long_press_menu_dialog_bg</item>
+
+        <item name="android:windowIsFloating">true</item>
+
+        <!--背景变暗, 即蒙层-->
+        <item name="android:backgroundDimEnabled">false</item>
+    </style>
+
+    <style name="UiKit.AnimationOpenLTCloseRB" parent="android:Animation.Dialog">
+        <item name="android:windowEnterAnimation">@anim/uikit_scale_open_top_left</item>
+        <item name="android:windowExitAnimation">@anim/uikit_scale_close_bottom_right</item>
+    </style>
+
+    <style name="Uikit.AnimationOpenLBCloseRT" parent="android:Animation.Dialog">
+        <item name="android:windowEnterAnimation">@anim/uikit_scale_open_bottom_left</item>
+        <item name="android:windowExitAnimation">@anim/uikit_scale_close_top_right</item>
+    </style>
+
+    <style name="Uikit.AnimationOpenRTCloseLB" parent="android:Animation.Dialog">
+        <item name="android:windowEnterAnimation">@anim/uikit_scale_open_top_right</item>
+        <item name="android:windowExitAnimation">@anim/uikit_scale_close_bottom_left</item>
+    </style>
+
+    <style name="Uikit.AnimationOpenRBCloseLT" parent="android:Animation.Dialog">
+        <item name="android:windowEnterAnimation">@anim/uikit_scale_open_bottom_right</item>
+        <item name="android:windowExitAnimation">@anim/uikit_scale_close_top_left</item>
+    </style>
+
+    <style name="UiKit.SearchBarStyle" parent="Widget.AppCompat.SearchView">
+        <!--修改整个SearchView的整个布局样式-->
+        <item name="layout">@layout/uikit_search_bar_layout</item>
+        <!--修改搜索区域的背景,即去除editText的下划线-->
+        <item name="queryBackground">@null</item>
+        <item name="submitBackground">@drawable/abc_textfield_search_material</item>
+
+        <!--修改打开搜索框的搜索按钮的图标-->
+        <item name="searchIcon">@drawable/uikit_icon_search</item>
+        <!--修改搜索框左边的搜索按钮图标-->
+        <item name="searchHintIcon">@drawable/uikit_icon_search</item>
+        <!--修改搜索框提示文字-->
+        <item name="defaultQueryHint">搜索银行名称</item>
+        <!--修改打开搜索框的关闭按钮的图标-->
+        <item name="closeIcon">@drawable/uikit_icon_search_close</item>
+        <!--修改搜索框默认打开，搜索按钮图标在框外-->
+        <item name="iconifiedByDefault">false</item>
+
+        <item name="goIcon">@drawable/abc_ic_go_search_api_material</item>
+        <item name="voiceIcon">@drawable/abc_ic_voice_search_api_material</item>
+        <item name="commitIcon">@drawable/abc_ic_commit_search_api_mtrl_alpha</item>
+        <item name="suggestionRowLayout">@layout/abc_search_dropdown_item_icons_2line</item>
+    </style>
+
+    <style name="UiKit.OptionRadioStyle" parent="Widget.AppCompat.CompoundButton.RadioButton">
+        <item name="android:button">@null</item>
+        <item name="android:gravity">center</item>
+        <item name="android:minHeight">50dp</item>
+        <item name="android:textColor">@color/uikit_option_radio_text_color</item>
+        <item name="android:background">@drawable/uikit_option_radio_bg</item>
+    </style>
+
+    <style name="UiKit.TextAreaStyle">
+        <item name="android:padding">15dp</item>
+        <item name="android:background">#FFFFFF</item>
+        <item name="android:minHeight">90dp</item>
+
+        <item name="uikit_textAreaTextColor">#333333</item>
+        <item name="uikit_textAreaTextSize">14sp</item>
+        <item name="uikit_textAreaHintColor">#ffc4c4c4</item>
+        <item name="uikit_textAreaMaxCount">200</item>
+        <item name="uikit_textAreaMaxCountTextColor">#ffc4c4c4</item>
+        <item name="uikit_textAreaMaxCountTextSize">13sp</item>
+    </style>
+
+    <style name="UiKit.ProgressImageViewStyle">
+        <item name="uikit_progress">0</item>
+    </style>
+
+    <style name="UiKit.UploadPicImageGridLayout">
+        <item name="uikit_maxColumn">3</item>
+        <item name="uikit_maxSelectPictureCount">9</item>
+        <item name="uikit_itemSpace">10dp</item>
+        <item name="uikit_addItemRes">@drawable/uikit_icon_pick_image</item>
+        <item name="uikit_isCanDelete">true</item>
+        <item name="uikit_isCanAdd">true</item>
+        <item name="uikit_imageRoundRadius">8dp</item>
+    </style>
+
+    <style name="UiKit.TabLayoutStyle" parent="Widget.MaterialComponents.TabLayout">
+        <!--设置tab 的背景-->
+        <item name="tabBackground">@android:color/white</item>
+        <!--设置按下的水波纹颜色 -->
+        <item name="tabRippleColor">@android:color/transparent</item>
+        <!--设置水波纹是否有边界 -->
+        <item name="tabUnboundedRipple">true</item>
+        <!--设置图标与文字是否横向线性排列-->
+        <item name="tabInlineLabel">false</item>
+        <!--设置默认指示器宽度是否与 item 文字等宽，false为与文字等宽 -->
+        <item name="tabIndicatorFullWidth">false</item>
+        <!--设置默认字体样式（字体大小，颜色，风格...） -->
+        <item name="tabTextAppearance">@style/UiKit.TabLayoutTextStyle</item>
+        <!--设置选中的 item 字体颜色-->
+        <item name="tabSelectedTextColor">@color/uikit_color_1</item>
+        <!--设置指示器的颜色 -->
+        <item name="tabIndicatorColor">@color/uikit_color_1</item>
+        <!--设置自定义的指示器 -->
+        <item name="tabIndicator">@drawable/uikit_tab_indicator</item>
+        <!--设置是否可横向滚动 -->
+        <item name="tabMode">scrollable</item>
+
+        <!-- android:theme 这个属性很重要，在 material v1.1.0 之后，未将theme设置为MaterialComponents，使用MD控件可能会出现闪退-->
+        <item name="android:theme">@style/Theme.MaterialComponents.Light.NoActionBar</item>
+    </style>
+
+    <style name="UiKit.TabLayoutTextStyle">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/uikit_color_3</item>
+    </style>
+
+    <style name="UiKit.NoticeBarStyle">
+        <item name="android:paddingStart">15dp</item>
+        <item name="android:paddingEnd">15dp</item>
+        <item name="android:paddingTop">8dp</item>
+        <item name="android:paddingBottom">8dp</item>
+        <item name="android:background">#FFF9ED</item>
+        <item name="android:textColor">#ffff6010</item>
+        <item name="android:textSize">@dimen/uikit_fontsize_8</item>
+    </style>
+</resources>

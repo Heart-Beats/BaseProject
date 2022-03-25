@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragments.forms.FormTextInputFragment">
+
+    <com.hl.uikit.UIKitToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        app:uikit_title="文本域"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.hl.uikit.KDividerView
+        android:id="@+id/dividerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideMarginStart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="15dp" />
+
+    <TextView
+        android:id="@+id/textView26"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="文本域 TextArea"
+        android:textColor="#ff333333"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/guideMarginStart"
+        app:layout_constraintTop_toBottomOf="@+id/dividerView" />
+
+    <TextView
+        android:id="@+id/textView27"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="输入更多内容的输入区域样式展示"
+        android:textColor="#ff818181"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="@+id/guideMarginStart"
+        app:layout_constraintTop_toBottomOf="@+id/textView26" />
+
+    <TextView
+        android:id="@+id/textView28"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:text="问题描述"
+        android:textColor="#ff818181"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="@+id/guideMarginStart"
+        app:layout_constraintTop_toBottomOf="@+id/textView27" />
+
+    <LinearLayout
+        android:id="@+id/frameLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:orientation="vertical"
+        android:background="@android:color/white"
+        android:padding="15dp"
+        app:layout_constraintTop_toBottomOf="@+id/textView28">
+
+        <EditText
+            android:id="@+id/etInput"
+            android:background="@android:color/transparent"
+            android:layout_width="match_parent"
+            android:layout_height="88dp"
+            android:hint="请说明商户解绑原因"
+            android:gravity="top|start"
+            android:textColor="#333333"
+            android:inputType="textMultiLine"
+            android:textColorHint="#ffc4c4c4"
+            android:maxLength="200"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tvCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:text="0/200"
+            android:layout_marginTop="4dp"
+            android:textColor="#ffc4c4c4"
+            android:textSize="13sp" />
+    </LinearLayout>
+
+    <!--    <com.hl.uikit.button.UIKitCommonButton-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginStart="42dp"-->
+    <!--        android:layout_marginTop="30dp"-->
+    <!--        android:layout_marginEnd="42dp"-->
+    <!--        android:text="确定"-->
+    <!--        demo:layout_constraintEnd_toEndOf="parent"-->
+    <!--        demo:layout_constraintStart_toStartOf="parent"-->
+    <!--        demo:layout_constraintTop_toBottomOf="@+id/frameLayout"-->
+    <!--        demo:uikit_buttonStyle="solid_color1_radius4" />-->
+</androidx.constraintlayout.widget.ConstraintLayout>

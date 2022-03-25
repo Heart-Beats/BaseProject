@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <color name="uikit_color_1">#FF5E60C7</color>
+    <color name="uikit_color_2">#FFF36F46</color>
+    <color name="uikit_color_3">#FF333333</color>
+    <color name="uikit_color_4">#FF818181</color>
+    <color name="uikit_color_5">#FFC4C4C4</color>
+    <color name="uikit_color_6">#26F36F46</color>
+    <color name="uikit_color_7">#FFF4F4F4</color>
+    <color name="uikit_color_8">#FFF4F7FB</color>
+    <color name="uikit_color_9">#FFFF3B30</color>
+    <color name="uikit_color_10">#FF4F51A9</color>
+
+    <color name="uikit_fontcolor_1">#FF000000</color>
+    <color name="uikit_fontcolor_2">#BF000000</color>
+</resources>

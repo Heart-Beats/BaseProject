@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.hl.uikit.UIKitToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        app:uikit_title="对话框" />
+    <com.hl.uikit.KDividerView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="30dp"
+        android:text="对话框 Dialog"
+        android:textColor="#ff333333"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="30dp"
+        android:text="基础"
+        android:textColor="#ff818181"
+        android:textSize="14sp" />
+
+    <com.hl.uikit.form.UIKitFormGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp">
+
+        <com.hl.uikit.form.UIKitFormItemText
+            android:id="@+id/itemDialog1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackground"
+            android:gravity="center_vertical"
+            app:uikit_formLabel="提示弹窗（有标题）"
+            app:uikit_formRightIcon="@drawable/icon_arrow_right" />
+
+        <com.hl.uikit.form.UIKitFormItemText
+            android:id="@+id/itemDialog2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackground"
+            android:gravity="center_vertical"
+            app:uikit_formLabel="提示弹窗（无标题）"
+            app:uikit_formRightIcon="@drawable/icon_arrow_right" />
+
+        <com.hl.uikit.form.UIKitFormItemText
+            android:id="@+id/itemDialog3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackground"
+            android:gravity="center_vertical"
+            app:uikit_formDividerEnable="false"
+            app:uikit_formLabel="确认弹窗（无标题）"
+            app:uikit_formRightIcon="@drawable/icon_arrow_right" />
+    </com.hl.uikit.form.UIKitFormGroup>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="30dp"
+        android:text="自定义"
+        android:textColor="#ff818181"
+        android:textSize="14sp" />
+
+
+    <com.hl.uikit.form.UIKitFormGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp">
+
+        <com.hl.uikit.form.UIKitFormItemText
+            android:id="@+id/itemDialog4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackground"
+            android:gravity="center_vertical"
+            app:uikit_formDividerEnable="false"
+            app:uikit_formLabel="带输入框弹窗"
+            app:uikit_formRightIcon="@drawable/icon_arrow_right" />
+    </com.hl.uikit.form.UIKitFormGroup>
+</LinearLayout>

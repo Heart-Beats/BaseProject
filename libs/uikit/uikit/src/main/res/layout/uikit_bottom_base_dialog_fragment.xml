@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/uikit_bottom_dialog_title_background"
+        android:layout_gravity="center_vertical"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:id="@+id/frameLayout_title"
+            android:layout_width="match_parent"
+            android:layout_height="60dp">
+
+
+            <TextView
+                android:id="@+id/tvTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#818181"
+                android:textSize="12sp"
+                android:visibility="visible"
+                android:layout_gravity="center"
+                tools:visibility="visible"
+                tools:text="温馨提示" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_gravity="bottom"
+                android:background="?attr/uikit_dividerColor" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/customLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvClose"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_marginTop="10dp"
+        android:background="@android:color/white"
+        android:foreground="?attr/selectableItemBackground"
+        android:gravity="center"
+        android:text="取消"
+        android:textColor="#ff333333"
+        android:textSize="16sp"
+        tools:ignore="UnusedAttribute" />
+
+</LinearLayout>

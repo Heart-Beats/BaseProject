@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:paddingTop="20dp">
+
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
+            android:gravity="center"
+            android:textColor="@color/uikit_color_3"
+            android:textSize="@dimen/uikit_fontsize_7"
+            android:visibility="gone"
+            tools:text="温馨提示"
+            tools:visibility="visible" />
+
+        <TextView
+            android:id="@+id/tvMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
+            android:gravity="center"
+            android:textColor="@color/uikit_color_3"
+            android:textSize="@dimen/uikit_fontsize_8"
+            android:visibility="gone"
+            tools:text="该商户未开通实时结算，请前往设置结算方式。"
+            tools:visibility="visible" />
+
+        <FrameLayout
+            android:id="@+id/customLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="20dp"
+            android:background="?attr/uikit_dividerColor" />
+
+        <LinearLayout
+            android:id="@+id/lineButtons"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/btnClose"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="?attr/selectableItemBackground"
+                android:gravity="center"
+                tools:textColor="@color/uikit_alert_negative_text_color"
+                android:textColor="?attr/uikit_alert_negative_text_color"
+                android:textSize="@dimen/uikit_fontsize_7"
+                tools:text="关闭" />
+
+            <View
+                android:id="@+id/btnDivider"
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="?attr/uikit_dividerColor" />
+
+            <TextView
+                android:id="@+id/btnConfirm"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="?attr/selectableItemBackground"
+                android:gravity="center"
+                tools:textColor="@color/uikit_alert_positive_text_color"
+                android:textColor="?attr/uikit_alert_positive_text_color"
+                android:textSize="@dimen/uikit_fontsize_7"
+                tools:text="去设置" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/btnTopRightClose"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
+        android:layout_gravity="end|top"
+        android:padding="10dp"
+        android:visibility="gone"
+        android:src="@drawable/uikit_icon_cancel1" />
+</FrameLayout>

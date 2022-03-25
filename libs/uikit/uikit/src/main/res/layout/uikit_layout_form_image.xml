@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    tools:parentTag="android.widget.LinearLayout">
+
+    <ImageView
+        android:id="@+id/image"
+        android:layout_width="144dp"
+        android:layout_height="96dp"
+        android:scaleType="fitCenter"
+        tools:src="@android:drawable/star_on" />
+
+    <TextView
+        android:id="@+id/text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        tools:text="营业执照"
+        android:textColor="@android:color/black"
+        android:textSize="12sp" />
+</merge>

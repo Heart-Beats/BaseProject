@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".loading.LoadingsFragment">
+    <com.hl.uikit.UIKitToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        app:uikit_title="加载" />
+    <com.hl.uikit.KDividerView
+        android:id="@+id/dividerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <com.scwang.smartrefresh.layout.SmartRefreshLayout
+        android:id="@+id/smartRefresh"
+        app:srlEnableAutoLoadMore="false"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingTop="30dp">
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:text="加载 Loading"
+                android:textColor="#ff333333"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.hl.uikit.form.UIKitFormGroup
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/textView1">
+
+                <com.hl.uikit.form.UIKitFormItemText
+                    android:id="@+id/item1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:foreground="?attr/selectableItemBackground"
+                    app:uikit_formLabel="加载（不打断用户操作）"
+                    app:uikit_formRightIcon="@drawable/icon_arrow_right" />
+
+                <com.hl.uikit.form.UIKitFormItemText
+                    android:id="@+id/item2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:foreground="?attr/selectableItemBackground"
+                    app:uikit_formLabel="加载（打断用户操作）"
+                    app:uikit_formRightIcon="@drawable/icon_arrow_right" />
+
+                <com.hl.uikit.form.UIKitFormItemText
+                    android:id="@+id/item3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:foreground="?attr/selectableItemBackground"
+                    app:uikit_formLabel="下拉刷新"
+                    app:uikit_formRightIcon="@drawable/icon_arrow_right" />
+
+                <com.hl.uikit.form.UIKitFormItemText
+                    android:id="@+id/item4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:foreground="?attr/selectableItemBackground"
+                    app:uikit_formLabel="上拉加载"
+                    app:uikit_formRightIcon="@drawable/icon_arrow_right" />
+
+                <com.hl.uikit.form.UIKitFormItemText
+                    android:id="@+id/item5"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:foreground="?attr/selectableItemBackground"
+                    app:uikit_formLabel="进度条加载"
+                    app:uikit_formRightIcon="@drawable/icon_arrow_right" />
+            </com.hl.uikit.form.UIKitFormGroup>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+</LinearLayout>

@@ -1,0 +1,8 @@
+def ARTIFACT_VERSION = '1.0.0'
+
+ext{
+    publicationVersion = ARTIFACT_VERSION
+    myGroupId = 'com.hl'
+    projectPath = 'libs/project'
+    uikitPath = 'libs/uikit'
+}

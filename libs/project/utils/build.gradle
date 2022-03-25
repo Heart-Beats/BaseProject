@@ -1,0 +1,69 @@
+import com.buildsrc.Deps
+
+plugins {
+    id 'com.android.library'
+    id 'kotlin-android'
+}
+
+android {
+    compileSdk 31
+
+    defaultConfig {
+        minSdk 21
+        targetSdk 31
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+}
+
+dependencies {
+    implementation 'com.hl:uikit'
+
+    testImplementation Deps.Test.junit
+    androidTestImplementation Deps.Test.junit_ext
+    androidTestImplementation Deps.Test.espresso_core
+
+    implementation Deps.AndroidX.core_ktx
+    implementation Deps.AndroidX.appcompat
+    implementation Deps.AndroidX.activity_ktx
+    implementation Deps.AndroidX.fragment_ktx
+    implementation Deps.Material.material
+
+    implementation Deps.Lifecycle.lifecycle_extensions
+    implementation Deps.Lifecycle.lifecycle_livedata_ktx
+    implementation Deps.Lifecycle.lifecycle_viewmodel_ktx
+
+    api Deps.JetpackNavigation.navigation_fragment_ktx
+
+    implementation Deps.PermissionX.permission_x
+    implementation Deps.Gson.gson
+    implementation Deps.FancyToast.fancy_toast
+    implementation Deps.AndroidX.security_crypto
+    implementation Deps.Glide.glide
+    implementation(Deps.ZXing.zxing_yuzhiqiang)
+
+    implementation(Deps.ZXing.zxing_android_embedded) {
+        transitive = false
+    }
+
+    api Deps.Banner.banner
+
+    implementation Deps.PickSelector.picture_selector
+    implementation Deps.PickSelector.picture_selector_compress
+    api Deps.Update.update_app_utilsx
+}

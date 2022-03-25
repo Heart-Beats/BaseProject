@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".fragments.FontFragment">
+
+    <com.hl.uikit.UIKitToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        app:uikit_title="字体" />
+    <com.hl.uikit.KDividerView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="20dp"
+            android:orientation="vertical">
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideStart"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_begin="15dp" />
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_begin="176dp" />
+
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="31dp"
+                android:text="字体 Font"
+                android:textColor="#ff333333"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintLeft_toLeftOf="@id/guideStart"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="15dp"
+                android:text="正文大小通常为14-18pt，标题为18-24pt，金额数字为14-40pt，辅助说明文字为12pt，段落行间距通常为字体本身的1.5倍"
+                android:textColor="#ff818181"
+                android:textSize="14sp"
+                app:layout_constraintLeft_toLeftOf="@id/guideStart"
+                app:layout_constraintTop_toBottomOf="@id/textView1" />
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:text="40pt"
+                android:textColor="#ff000000"
+                android:textSize="@dimen/uikit_fontsize_1"
+                app:layout_constraintLeft_toLeftOf="@id/guideStart"
+                app:layout_constraintTop_toBottomOf="@id/textView2" />
+
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="输入金额"
+                android:textColor="#ff999999"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="@id/textView3"
+                app:layout_constraintLeft_toRightOf="@id/guideline"
+                app:layout_constraintTop_toTopOf="@id/textView3" />
+
+            <TextView
+                android:id="@+id/textView5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="34pt"
+                android:textColor="#bf000000"
+                android:textSize="@dimen/uikit_fontsize_2"
+                app:layout_constraintLeft_toLeftOf="@id/guideStart"
+                app:layout_constraintTop_toBottomOf="@id/textView3" />
+
+            <TextView
+                android:id="@+id/textView6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="我的余额页面金额"
+                android:textColor="#ff999999"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="@id/textView5"
+                app:layout_constraintLeft_toRightOf="@id/guideline"
+                app:layout_constraintTop_toTopOf="@id/textView5" />
+
+            <TextView
+                android:id="@+id/textView7"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="30pt"
+                android:textColor="#ff000000"
+                android:textSize="@dimen/uikit_fontsize_3"
+                app:layout_constraintLeft_toLeftOf="@id/guideStart"
+                app:layout_constraintTop_toBottomOf="@id/textView5" />
+            <TextView
+                android:id="@+id/textView8"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="账单/流水详情页金额"
+                android:textColor="#ff999999"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="@id/textView7"
+                app:layout_constraintLeft_toRightOf="@id/guideline"
+                app:layout_constraintTop_toTopOf="@id/textView7" />
+            <TextView
+                android:id="@+id/textView9"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="28pt"
+                android:textColor="#ff000000"
+                android:textSize="@dimen/uikit_fontsize_4"
+                app:layout_constraintLeft_toLeftOf="@id/guideStart"
+                app:layout_constraintTop_toBottomOf="@id/textView7" />
+            <TextView
+                android:id="@+id/textView10"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="首页金额字体"
+                android:textColor="#ff999999"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="@id/textView9"
+                app:layout_constraintLeft_toRightOf="@id/guideline"
+                app:layout_constraintTop_toTopOf="@id/textView9" />
+            <TextView
+                android:id="@+id/textView11"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="20pt"
+                android:textColor="#bf000000"
+                android:textSize="@dimen/uikit_fontsize_5"
+                app:layout_constraintLeft_toLeftOf="@id/guideStart"
+                app:layout_constraintTop_toBottomOf="@id/textView9" />
+            <TextView
+                android:id="@+id/textView12"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="文章大标题"
+                android:textColor="#ff999999"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="@id/textView11"
+                app:layout_constraintLeft_toRightOf="@id/guideline"
+                app:layout_constraintTop_toTopOf="@id/textView11" />
+            <TextView
+                android:id="@+id/textView13"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="18pt"
+                android:textColor="#bf000000"
+                android:textSize="@dimen/uikit_fontsize_6"
+                app:layout_constraintLeft_toLeftOf="@id/guideStart"
+                app:layout_constraintTop_toBottomOf="@id/textView11" />
+            <TextView
+                android:id="@+id/textView14"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="主按钮文字/列表金额强调"
+                android:textColor="#ff999999"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="@id/textView13"
+                app:layout_constraintLeft_toRightOf="@id/guideline"
+                app:layout_constraintTop_toTopOf="@id/textView13" />
+            <TextView
+                android:id="@+id/textView15"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="16pt"
+                android:textColor="#333333"
+                android:textSize="@dimen/uikit_fontsize_7"
+                app:layout_constraintLeft_toLeftOf="@id/guideStart"
+                app:layout_constraintTop_toBottomOf="@id/textView13" />
+            <TextView
+                android:id="@+id/textView16"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="一般标题字"
+                android:textColor="#ff999999"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="@id/textView15"
+                app:layout_constraintLeft_toRightOf="@id/guideline"
+                app:layout_constraintTop_toTopOf="@id/textView15" />
+            <TextView
+                android:id="@+id/textView17"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="14pt"
+                android:textColor="#333333"
+                android:textSize="@dimen/uikit_fontsize_8"
+                app:layout_constraintLeft_toLeftOf="@id/guideStart"
+                app:layout_constraintTop_toBottomOf="@id/textView15" />
+            <TextView
+                android:id="@+id/textView18"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="页面常规内容"
+                android:textColor="#ff999999"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="@id/textView17"
+                app:layout_constraintLeft_toRightOf="@id/guideline"
+                app:layout_constraintTop_toTopOf="@id/textView17" />
+
+            <TextView
+                android:id="@+id/textView19"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="13pt"
+                android:textColor="#333333"
+                android:textSize="@dimen/uikit_fontsize_9"
+                app:layout_constraintLeft_toLeftOf="@id/guideStart"
+                app:layout_constraintTop_toBottomOf="@id/textView17" />
+
+            <TextView
+                android:id="@+id/textView20"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="次常规内容"
+                android:textColor="#ff999999"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="@id/textView19"
+                app:layout_constraintLeft_toRightOf="@id/guideline"
+                app:layout_constraintTop_toTopOf="@id/textView19" />
+
+            <TextView
+                android:id="@+id/textView21"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="12pt"
+                android:textColor="#333333"
+                android:textSize="@dimen/uikit_fontsize_10"
+                app:layout_constraintLeft_toLeftOf="@id/guideStart"
+                app:layout_constraintTop_toBottomOf="@id/textView19" />
+            <TextView
+                android:id="@+id/textView22"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="弱化内容和提示"
+                android:textColor="#ff999999"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="@id/textView21"
+                app:layout_constraintLeft_toRightOf="@id/guideline"
+                app:layout_constraintTop_toTopOf="@id/textView21" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+</LinearLayout>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:drawable="@drawable/uikit_shape_rectangle_press_main_color_radius0" android:state_pressed="true" />
+    <item android:drawable="@drawable/uikit_shape_rectangle_main_color_alpha30_radius0" android:state_enabled="false" />
+
+    <item android:drawable="@drawable/uikit_shape_rectangle_main_color_radius0" />
+
+</selector>

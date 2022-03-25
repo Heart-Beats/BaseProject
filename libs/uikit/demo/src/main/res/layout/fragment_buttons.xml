@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.hl.uikit.UIKitToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        app:uikit_title="按钮" />
+
+    <com.hl.uikit.KDividerView
+        android:id="@+id/dividerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="30dp"
+            tools:context=".ButtonsActivity">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="30dp"
+                android:text="按钮Button"
+                android:textColor="#ff333333"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="30dp"
+                android:text="主要按钮"
+                android:textColor="#ff818181"
+                android:textSize="14sp" />
+
+            <com.hl.uikit.button.UIKitCommonButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="15dp"
+                android:text="主要操作"
+                app:uikit_buttonStyle="solid_color1_radius4" />
+
+            <com.hl.uikit.button.UIKitCommonButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="15dp"
+                android:enabled="false"
+                android:text="主要操作"
+                app:uikit_buttonStyle="solid_color1_radius4" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="30dp"
+                android:text="次要按钮"
+                android:textColor="#ff818181"
+                android:textSize="14sp" />
+
+            <com.hl.uikit.button.UIKitCommonButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="15dp"
+                android:text="次要操作"
+                app:uikit_buttonStyle="stroke_radius4" />
+
+            <com.hl.uikit.button.UIKitCommonButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="43dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="43dp"
+                android:text="登录/注册按钮"
+                app:uikit_buttonStyle="solid_color1_radius4_minHigh44" />
+
+            <com.hl.uikit.button.UIKitCommonButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="80dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="80dp"
+                android:text="操作结果页/关于我们"
+                app:uikit_buttonStyle="solid_color1_radius4_minHigh44" />
+
+            <com.hl.uikit.button.UIKitCommonButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="20dp"
+                android:text="胶囊按钮"
+                app:uikit_buttonStyle="capsule" />
+
+            <com.hl.uikit.button.UIKitCommonButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="20dp"
+                android:text="胶囊按钮"
+                app:uikit_buttonStyle="capsule_stroke" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="30dp"
+                android:text="吸底按钮"
+                android:textColor="#ff818181"
+                android:textSize="14sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="18dp"
+                android:layout_marginEnd="30dp"
+                android:orientation="horizontal">
+
+                <com.hl.uikit.button.UIKitCommonButton
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="重置"
+                    app:uikit_buttonStyle="solid_colorGray_radius0" />
+
+                <com.hl.uikit.button.UIKitCommonButton
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="确定"
+                    app:uikit_buttonStyle="solid_color1_radius0" />
+            </LinearLayout>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:background="@android:color/white"
+                android:paddingStart="15dp"
+                android:paddingTop="12dp"
+                android:paddingEnd="15dp"
+                android:paddingBottom="12dp">
+
+                <com.hl.uikit.button.UIKitCommonButton
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="吸底按钮"
+                    app:uikit_buttonStyle="solid_color1_radius4" />
+            </FrameLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="30dp"
+                android:text="文字按钮"
+                android:textColor="#ff818181"
+                android:textSize="14sp" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="8dp"
+                android:background="@android:color/white"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                android:text="文字按钮"
+                android:textColor="@color/uikit_color_1"
+                android:textSize="@dimen/uikit_fontsize_8" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

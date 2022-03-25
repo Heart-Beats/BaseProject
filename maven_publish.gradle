@@ -1,0 +1,156 @@
+/**
+ *  编译本地相关项目
+ */
+task buildSdk() {
+    dependsOn gradle.includedBuild('uikit').task(':uikit:assemble')
+    dependsOn gradle.includedBuild('uikit').task(':uikit-res:assemble')
+}
+
+apply plugin: 'maven-publish'
+apply from: 'publish_config.gradle'
+
+
+/**
+ *
+ * 生成 Maven 依赖节点
+ */
+static def getDependencyNode(scope, groupId, artifactId, version) {
+    Node node = new Node(null, 'dependency')
+    node.appendNode('groupId', groupId)
+    node.appendNode('artifactId', artifactId)
+    node.appendNode('version', version)
+    node.appendNode('scope', scope)
+    return node
+}
+
+/**
+ *
+ * 获取 git 提交编码
+ */
+static def gitShortRev() {
+    def gitCommit = ""
+    def proc = "git rev-parse --short HEAD".execute()
+    proc.in.eachLine { line -> gitCommit = line }
+    proc.err.eachLine { line -> println line }
+    proc.waitFor()
+    return gitCommit
+}
+
+def setScm(scm) {
+    scm.appendNode('connection', "https://github.com/${System.getenv("GITHUB_ACTOR")}/Shadow.git")
+
+    def commit
+
+    // 判断有没有CI 这个环境变量, 没有使用 git  的提交记录
+    if ("${System.env.CI}".equalsIgnoreCase("true")) {
+        commit = System.getenv("GITHUB_SHA")
+    } else {
+        commit = gitShortRev()
+    }
+    scm.appendNode('url', "https://github.com/${System.getenv("GITHUB_ACTOR")}/Shadow/commit/$commit")
+}
+
+def setGeneratePomFileAndDepends(publicationName) {
+    model {
+        tasks."generatePomFileFor${publicationName.capitalize()}Publication" {
+            destination = file("$buildDir/pom/$publicationName-pom.xml")
+            dependsOn(buildSdk)
+        }
+    }
+}
+
+def sourceJar(String name, String path) {
+    return tasks.create("source${name.capitalize()}Jar", Jar) {
+        group = "publishing"
+        description = "package ${name} source to jar"
+        from "$path/src/main/java"
+        from "$path/src/main/kotlin"
+        destinationDir = file("$path/build/libs/")
+        classifier = 'sources'
+    }
+}
+
+task getPublicationVersion() {
+    doLast {
+        println "publicationVersion:$publicationVersion"
+    }
+}
+
+publishing {
+    publications {
+
+        uikit(MavenPublication) {
+            def moduleName = 'uikit'
+            def modulePath = "$uikitPath/$moduleName"
+
+            groupId myGroupId
+            artifactId 'uikit'
+            version publicationVersion
+            artifact("$modulePath/build/libs/${moduleName}.jar")   //指定 jar 包所在的路径
+            artifact sourceJar(moduleName, modulePath)
+
+            pom.withXml {
+                def root = asNode()
+                def scm = root.appendNode('scm')
+                setScm(scm)
+            }
+        }
+
+        uikitRes(MavenPublication) {
+            def moduleName = 'uikit-res'
+            def modulePath = "$uikitPath/$moduleName"
+
+            groupId myGroupId
+            artifactId 'uikit'
+            version publicationVersion
+            artifact("$modulePath/build/libs/${moduleName}.jar")
+            artifact sourceJar(moduleName, modulePath)
+
+            pom.withXml {
+                def root = asNode()
+                def scm = root.appendNode('scm')
+                setScm(scm)
+            }
+        }
+    }
+
+    repositories {
+        def useLocalCredential = false
+        Properties properties = new Properties()
+        def propertiesFile = project.rootProject.file('local.properties')
+        if (propertiesFile.exists()) {
+            properties.load(propertiesFile.newDataInputStream())
+
+            if ("${properties.getProperty('gpr.local')}".equalsIgnoreCase('true')) {
+                def user = properties.getProperty('gpr.user')
+                def key = properties.getProperty('gpr.key')
+                maven {
+                    name = "GitHubPackages"
+                    credentials {
+                        username = user
+                        password = key
+                    }
+                    url "https://maven.pkg.github.com/${user}/shadow"
+                }
+
+                useLocalCredential = true
+            }
+        }
+
+        if (!useLocalCredential && "${System.env.CI}".equalsIgnoreCase("true")) {
+            maven {
+                name = "GitHubPackages"
+                credentials {
+                    username = System.getenv("GITHUB_ACTOR")
+                    password = System.getenv("GITHUB_TOKEN")
+                }
+                url "https://maven.pkg.github.com/" + "${System.env.GITHUB_REPOSITORY}".toLowerCase()
+            }
+        } else {
+            mavenLocal()
+        }
+    }
+}
+
+setGeneratePomFileAndDepends('uikit')
+setGeneratePomFileAndDepends('uikitRes')

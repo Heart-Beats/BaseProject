@@ -1,0 +1,362 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <attr name="uikit_toolbarStyle" format="reference" />
+    <attr name="uikit_formGroupStyle" format="reference" />
+    <attr name="uikit_formItemStyle" format="reference" />
+    <attr name="uikit_formItemLabelStyle" format="reference" />
+    <attr name="uikit_formHeaderActionTextStyle" format="reference" />
+    <attr name="uikit_formItemTextStyle" format="reference" />
+    <attr name="uikit_formItemInputStyle" format="reference" />
+    <attr name="uikit_formItemTextVerifyCodeStyle" format="reference" />
+    <attr name="uikit_formItemInputSmsCodeStyle" format="reference" />
+    <attr name="uikit_formItemToggleButtonStyle" format="reference" />
+    <attr name="uikit_formItemVerticalTextStyle" format="reference" />
+    <attr name="uikit_dividerColor" format="color|reference" />
+    <attr name="uikit_positiveButtonStyle" format="reference" />
+    <attr name="uikit_strokeButtonStyle" format="reference" />
+    <attr name="uikit_dividerViewStyle" format="reference" />
+    <attr name="uikit_alert_positive_text_color" format="color|reference" />
+    <attr name="uikit_alert_negative_text_color" format="color|reference" />
+    <attr name="uikit_sheet_list_item_color" format="color|reference" />
+    <attr name="uikit_optionsPickerViewStyle" format="reference" />
+    <attr name="uikit_commonButtonStyle" format="reference" />
+    <attr name="uikit_searchBarStyle" format="reference" />
+    <attr name="uikit_optionRadioStyle" format="reference" />
+    <attr name="uikit_textAreaStyle" format="reference" />
+    <attr name="uikit_progressImageViewStyle" format="reference" />
+    <attr name="uikit_uploadPicImageGridLayout" format="reference" />
+
+    <declare-styleable name="UIKitToolbar">
+        <attr name="uikit_backgroundColor" format="color|reference" />
+        <attr name="uikit_title" format="string|reference" />
+        <attr name="uikit_titleColor" format="color|reference" />
+        <attr name="uikit_titleIsBold" format="boolean" />
+
+        <!--标题字体大小（仅对居中显示的有效）-->
+        <attr name="uikit_titleSize" format="dimension|reference" />
+        <attr name="uikit_titleGravity">
+            <enum name="center" value="0" />
+            <enum name="start" value="1" />
+        </attr>
+        <attr name="uikit_rightPaddingEnd" format="dimension|reference" />
+        <attr name="uikit_rightSpacing" format="dimension|reference" />
+        <attr name="uikit_rightText" format="string|reference" />
+        <attr name="uikit_rightTextSize" format="dimension|reference" />
+        <attr name="uikit_rightTextColor" format="color|reference" />
+        <attr name="uikit_rightImage" format="reference" />
+        <attr name="uikit_rightImageColor" format="color|reference" />
+    </declare-styleable>
+
+    <!-- UIKitFormGroup 公用属性 -->
+    <attr name="uikit_formDividerEnable" format="boolean" />
+    <attr name="uikit_formDividerColor" format="color|reference" />
+    <attr name="uikit_formDividerHeight" format="dimension|reference" />
+    <attr name="uikit_formDividerPaddingStart" format="dimension|reference" />
+    <attr name="uikit_formDividerPaddingEnd" format="dimension|reference" />
+    <attr name="uikit_formDividerGravity" format="enum">
+        <enum name="top" value="1" />
+        <enum name="bottom" value="2" />
+        <!--<enum name="both" value="3" />-->
+    </attr>
+
+    <!-- ViewGroup 本身定义可用的属性 -->
+    <declare-styleable name="UIKitFormGroup">
+        <attr name="uikit_formDividerEnable" />
+        <attr name="uikit_formDividerColor" />
+        <attr name="uikit_formDividerHeight" />
+        <attr name="uikit_formDividerPaddingStart" />
+        <attr name="uikit_formDividerPaddingEnd" />
+        <attr name="uikit_formDividerGravity" />
+        <!-- 该属性仅对  uikit_formDividerGravity 为 bottom 时生效 -->
+        <attr name="uikit_formDividerNeedLast" format="boolean" />
+    </declare-styleable>
+
+    <!-- UIKitFormGroup_Layout: 自定义 ViewGroup 属性集合以 "XXX_Layout" 命名，其中的子 View 才可直接使用此 ViewGroup 中的布局参数 -->
+    <declare-styleable name="UIKitFormGroup_Layout">
+        <attr name="uikit_formDividerEnable" />
+        <attr name="uikit_formDividerColor" />
+        <attr name="uikit_formDividerHeight" />
+        <attr name="uikit_formDividerPaddingStart" />
+        <attr name="uikit_formDividerPaddingEnd" />
+    </declare-styleable>
+
+    <declare-styleable name="UIKitFormItemImage">
+        <attr name="uikit_formImage" format="reference" />
+        <attr name="uikit_formImageText" format="string|reference" />
+        <attr name="uikit_formImageTextColor" format="color|reference" />
+        <attr name="uikit_formImageTextSize" format="dimension|reference" />
+        <attr name="uikit_formImageMarginVertical" format="dimension|reference" />
+    </declare-styleable>
+
+    <!-- UIKitFormItemLabel 公用属性 -->
+    <attr name="uikit_formLabel" format="string|reference" />
+    <declare-styleable name="UIKitFormItemLabel">
+        <attr name="uikit_formTagText" format="string|reference" />
+        <attr name="uikit_formTagTextColor" format="color|reference" />
+        <attr name="uikit_formLabel" />
+        <attr name="uikit_formLabelSize" format="dimension|reference" />
+        <attr name="uikit_formLabelColor" format="color|reference" />
+        <attr name="uikit_formLabelBold" format="boolean" />
+        <attr name="uikit_formLabelMarginEnd" format="dimension|reference" />
+        <attr name="uikit_formLeftIcon" format="reference" />
+        <!--子标签，字符串类型，以","分隔, 如： "1,2,3" 会被解析为["1","2","3"]-->
+        <attr name="uikit_formChildLabel" format="string|reference" />
+        <attr name="uikit_formChildLabelSize" format="dimension|reference" />
+        <attr name="uikit_formChildLabelColor" format="color|reference" />
+        <attr name="uikit_formChildLabelMarginTop" format="dimension|reference" />
+        <attr name="uikit_formRightLayoutOrientation" format="enum">
+            <enum name="horizontal" value="0" />
+            <enum name="vertical" value="1" />
+        </attr>
+        <attr name="uikit_formRightLayoutChildMargin" format="dimension|reference" />
+
+        <!--该属性决定子布局哪个占比较大， 若label占比较大建议设置 left_weight ， 默认右边子布局占比大 -->
+        <attr name="uikit_formChildWeight" format="enum">
+            <enum name="left_weight" value="0x01" />
+            <enum name="right_weight" value="0x02" />
+        </attr>
+
+        <!--控制左布局中的 View 在父布局中的位置 -->
+        <attr name="uikit_formLeftLayoutGravity" format="flags">
+            <flag name="top" value="0x30" />
+            <flag name="bottom" value="0x50" />
+            <flag name="start" value="0x00800003" />
+            <flag name="end" value="0x00800005" />
+            <flag name="center_vertical" value="0x10" />
+            <flag name="center_horizontal" value="0x01" />
+            <flag name="center" value="0x11" />
+        </attr>
+
+        <!--控制右布局中的 View 在父布局中的位置 -->
+        <attr name="uikit_formRightLayoutGravity" format="flags">
+            <flag name="top" value="0x30" />
+            <flag name="bottom" value="0x50" />
+            <flag name="start" value="0x00800003" />
+            <flag name="end" value="0x00800005" />
+            <flag name="center_vertical" value="0x10" />
+            <flag name="center_horizontal" value="0x01" />
+            <flag name="center" value="0x11" />
+        </attr>
+
+        <attr name="uikit_formCanSelectable" format="boolean"/>
+    </declare-styleable>
+
+    <declare-styleable name="UIKitFormHeaderActionText">
+        <attr name="uikit_formActionText" format="string|reference" />
+        <attr name="uikit_formActionTextBold" format="boolean" />
+        <attr name="uikit_formActionTextSize" format="dimension|reference" />
+        <attr name="uikit_formActionTextColor" format="color|reference" />
+    </declare-styleable>
+
+    <!-- UIKitFormItemText 公用属性-->
+    <attr name="uikit_formTextGravity" format="flags">
+        <flag name="top" value="0x30" />
+        <flag name="bottom" value="0x50" />
+        <flag name="start" value="0x00800003" />
+        <flag name="end" value="0x00800005" />
+        <flag name="center_vertical" value="0x10" />
+        <flag name="center_horizontal" value="0x01" />
+        <flag name="center" value="0x11" />
+    </attr>
+    <attr name="uikit_formText" format="string|reference" />
+    <attr name="uikit_formTextHint" format="string|reference" />
+    <attr name="uikit_formTextHintColor" format="color|reference" />
+    <attr name="uikit_formTextMaxLength" format="integer" />
+
+    <declare-styleable name="UIKitFormItemText">
+        <attr name="uikit_formText" />
+        <attr name="uikit_formTextGravity" />
+        <attr name="uikit_formTextHint" />
+        <attr name="uikit_formTextHintColor" />
+        <attr name="uikit_formTextBold" format="boolean" />
+        <attr name="uikit_formTextMaxLines" format="integer" />
+        <attr name="uikit_formTextMaxLength" />
+        <attr name="uikit_formTextCustom" format="boolean" />
+        <attr name="uikit_formTextSize" format="dimension|reference" />
+        <attr name="uikit_formTextColor" format="color|reference" />
+        <attr name="uikit_formRightIcon" format="reference" />
+    </declare-styleable>
+
+    <declare-styleable name="UIKitFormNumberStepView">
+        <attr name="uikit_formStepLabel" format="string|reference" />
+        <attr name="uikit_formStepLabelSize" format="dimension|reference" />
+        <attr name="uikit_formStepLabelColor" format="color|reference" />
+        <attr name="uikit_formStepLabelBold" format="boolean" />
+        <attr name="uikit_formStepText" format="string|reference" />
+        <attr name="uikit_formStepTextBold" format="boolean" />
+        <attr name="uikit_formStepTextMaxLines" format="integer" />
+        <attr name="uikit_formStepTextSize" format="dimension|reference" />
+        <attr name="uikit_formStepTextColor" format="color|reference" />
+        <attr name="uikit_formStepHasUnit" format="boolean|reference" />
+        <attr name="uikit_formStepUnitValue" format="string|reference" />
+        <attr name="uikit_formStepInputAble" format="boolean|reference" />
+        <attr name="uikit_formStepIsInterval" format="boolean|reference" />
+    </declare-styleable>
+
+    <declare-styleable name="UIKitFormItemInput">
+        <attr name="uikit_formTextDeletable" format="boolean" />
+    </declare-styleable>
+    <declare-styleable name="UIKitFormTextVerifyCode">
+        <attr name="uikit_formLabel" />
+        <attr name="uikit_formLabelColor" />
+        <attr name="uikit_formLabelSize" />
+        <attr name="uikit_formLabelMarginEnd" />
+
+        <attr name="uikit_formText" />
+        <attr name="uikit_formTextGravity" />
+        <attr name="uikit_formTextHint" />
+        <attr name="uikit_formTextHintColor" />
+        <attr name="uikit_formTextMaxLength" />
+        <attr name="uikit_formLeftWarnText" format="string|reference" />
+        <attr name="uikit_formRightWarnText" format="string|reference" />
+        <attr name="uikit_formNeedSmsCode" format="boolean" />
+    </declare-styleable>
+    <declare-styleable name="UIKitTagFlowLayout">
+        <attr name="uikit_max_select" format="integer" />
+        <attr name="uikit_tag_gravity">
+            <enum name="left" value="-1" />
+            <enum name="center" value="0" />
+            <enum name="right" value="1" />
+        </attr>
+    </declare-styleable>
+    <declare-styleable name="UIKitActionSheetLayout">
+        <!--设置控件的最大高度为屏幕的百分比-->
+        <attr name="uikit_maxScrHeightPer" format="dimension|fraction" />
+    </declare-styleable>
+
+    <declare-styleable name="UIKitCommonButton">
+        <attr name="uikit_buttonStyle" format="enum">
+            <enum name="solid_color1_radius4" value="0" />
+            <enum name="solid_color1_radius4_minHigh44" value="1" />
+            <enum name="solid_color1_radius0" value="2" />
+            <enum name="solid_colorGray_radius0" value="3" />
+            <enum name="stroke_radius4" value="4" />
+            <enum name="capsule" value="5" />
+            <enum name="capsule_stroke" value="6" />
+            <enum name="custom" value="7" />
+        </attr>
+
+        <attr name="uikit_custom_drawable" format="reference"/>
+    </declare-styleable>
+
+    <declare-styleable name="UIKitNumberStepView">
+        <attr name="android:text" format="reference|string" />
+        <attr name="android:textColor" format="reference|color" />
+        <attr name="android:textSize" format="reference|dimension" />
+        <attr name="uikit_operatorVisibility">
+            <enum name="visible" value="0x00000000" />
+            <enum name="invisible" value="0x00000004" />
+            <enum name="gone" value="0x00000008" />
+        </attr>
+        <attr name="uikit_operatorPadding" format="reference|dimension" />
+        <attr name="uikit_hasUnit" format="boolean" />
+        <attr name="uikit_unitValue" format="reference|string" />
+    </declare-styleable>
+
+    <declare-styleable name="UIKitFormItemToggleButton">
+        <attr name="uikit_formToggleButtonRes" format="reference" />
+        <attr name="uikit_formToggleCheck" format="boolean" />
+    </declare-styleable>
+
+    <declare-styleable name="UIKitOptionsExtPickerView">
+        <attr name="android:textSize" format="dimension|reference" />
+        <attr name="android:textColor" format="color|reference" />
+        <attr name="uikit_wheelCurved" format="boolean|reference" />
+        <attr name="uikit_showWheelDivider" format="boolean|reference" />
+        <attr name="uikit_wheelDividerColor" format="color|reference" />
+        <attr name="uikit_wheelDividerHeight" format="dimension|reference" />
+        <attr name="uikit_wheelLineSpacing" format="dimension|reference" />
+        <attr name="uikit_wheelVisibleItems" format="integer|reference" />
+    </declare-styleable>
+    <declare-styleable name="UIKitOptionRadio" />
+
+    <declare-styleable name="UIKitLottieRefreshHeaderFooter">
+        <attr name="uikit_pull_lottie_animation_res" format="reference" />
+        <attr name="uikit_pull_lottie_animation_url" format="string|reference" />
+        <attr name="uikit_refresh_lottie_animation_res" format="reference" />
+        <attr name="uikit_refresh_lottie_animation_url" format="string|reference" />
+        <attr name="uikit_spinner_style" format="enum">
+            <enum name="translate" value="0"/>
+            <enum name="scale" value="1"/>
+            <enum name="fixed_behind" value="2"/>
+            <enum name="fixed_front" value="3"/>
+            <enum name="match_layout" value="4"/>
+        </attr>
+        <attr name="uikit_primary_background" format="color|reference" />
+    </declare-styleable>
+
+
+    <!-- ViewGroup 本身定义可用的属性 -->
+    <declare-styleable name="UIKitCornerLayout">
+
+    </declare-styleable>
+
+    <!-- 自定义 ViewGroup 属性集合以 "XXX_Layout" 命名，其中的子 View 才可直接使用此 ViewGroup 中的布局参数 -->
+    <declare-styleable name="UIKitCornerLayout_Layout">
+        <attr name="uikit_corner" format="flags">
+            <flag name="leftTop" value="0x01" />
+            <flag name="rightTop" value="0x02" />
+            <flag name="leftBottom" value="0x04" />
+            <flag name="rightBottom" value="0x08" />
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="UIKitDividerView">
+
+        <!--分隔线背景-->
+        <attr name="uikit_dividerColor" />
+
+        <!--分隔线高度-->
+        <attr name="uikit_dividerHeight" format="dimension|reference" />
+
+        <!--分隔线类型-->
+        <attr name="uikit_dividerLineType" format="enum">
+            <enum name="solid_path" value="0" />
+            <enum name="dash_path" value="1" />
+        </attr>
+
+        <!--当分隔线类型为 dash_path 时使用  -->
+        <attr name="uikit_dashWidth" format="dimension|reference" />
+
+        <!--当分隔线类型为 dash_path 时使用  -->
+        <attr name="uikit_dashSpaceWidth" format="dimension|reference" />
+    </declare-styleable>
+
+
+    <declare-styleable name="UIKitTextArea">
+        <attr name="uikit_textAreaHint" format="string" />
+        <attr name="uikit_textAreaHintColor" format="color|reference" />
+        <attr name="uikit_textAreaTextColor" format="color|reference" />
+        <attr name="uikit_textAreaTextSize" format="dimension|reference" />
+        <attr name="uikit_textAreaMaxCount" format="integer" />
+        <attr name="uikit_textAreaMaxCountTextColor" format="color|reference" />
+        <attr name="uikit_textAreaMaxCountTextSize" format="dimension|reference" />
+    </declare-styleable>
+
+    <declare-styleable name="UIKitProgressImageView">
+        <attr name="uikit_progress" format="integer" />
+        <attr name="uikit_progressAreaColor" format="color|reference" />
+    </declare-styleable>
+
+    <declare-styleable name="UikitUploadPicImageGridLayout">
+        <attr name="uikit_maxColumn" format="integer" />
+        <attr name="uikit_maxSelectPictureCount" format="integer" />
+        <attr name="uikit_itemSpace" format="dimension|reference" />
+        <attr name="uikit_addItemRes" format="reference" />
+        <attr name="uikit_isCanDelete" format="boolean" />
+        <attr name="uikit_isCanAdd" format="boolean" />
+        <attr name="uikit_imageRoundRadius" format="dimension|reference" />
+    </declare-styleable>
+
+    <declare-styleable name="UIKitGifImageView">
+        <!--gif文件引用-->
+        <attr name="uikit_gif_src" format="reference"  />
+        <!--是否加载完自动播放-->
+        <attr name="uikit_auto_play" format="boolean"  />
+        <!--播放次放，默认永远播放-->
+        <attr name="uikit_play_count" format="integer"  />
+        <!--播放完成后是否停留在最后一帧，默认false-->
+        <attr name="uikit_end_last_frame" format="boolean"  />
+    </declare-styleable>
+</resources>

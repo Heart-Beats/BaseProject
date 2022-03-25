@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/resetLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F1F5FB"
+    android:clickable="true">
+
+    <ImageView
+        android:layout_width="@dimen/px300"
+        android:layout_height="@dimen/px300"
+        android:layout_above="@id/reset_textView"
+        android:layout_centerInParent="true"
+        android:src="@drawable/icon_scan_error" />
+
+    <TextView
+        android:id="@+id/reset_textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/text_margin"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:text="加载错误，请重新加载"
+        android:textColor="#c0c6c9"
+        android:textSize="14sp" />
+
+</RelativeLayout>

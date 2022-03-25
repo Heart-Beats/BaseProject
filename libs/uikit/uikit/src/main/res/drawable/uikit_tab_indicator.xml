@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--决定指示器的位置， tabIndicatorFullWidth 不同值可能有不同效果-->
+    <item android:gravity="center">
+        <shape>
+            <size
+                android:width="18dp"
+                android:height="3dp" />
+            <!--这里设置的颜色不会生效，需要通过 tabIndicatorColor 设置-->
+            <solid android:color="@color/uikit_color_1" />
+            <corners android:radius="0dp" />
+        </shape>
+    </item>
+</layer-list>

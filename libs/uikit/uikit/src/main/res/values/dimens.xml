@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="uikit_formItemHeight">50dp</dimen>
+    <dimen name="uikit_dialog_min_width_minor">72%</dimen>
+    <dimen name="uikit_dialog_min_width_major">65%</dimen>
+</resources>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.youma.pay">
+
+    <!--微信支付权限-->
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <!-- Android 11开始，必须要在 AndroidManifest.xml 清单文件中加入 query 权限, 以符合 Android 应用可见性机制的要求-->
+    <queries>
+        <!-- 正式环境 -->
+        <package android:name="com.eg.android.AlipayGphone" />
+        <!-- 沙箱环境 -->
+        <package android:name="com.eg.android.AlipayGphoneRC" />
+        <package android:name="hk.alipay.wallet" />
+    </queries>
+
+    <application>
+
+        <!--微信支付-->
+        <activity
+            android:name=".weixin.wxapi.WXPayEntryActivity"
+            android:exported="true"
+            android:launchMode="singleTop"
+             />
+    </application>
+
+</manifest>

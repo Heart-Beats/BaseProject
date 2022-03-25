@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".dialogs.PickersFragment">
+
+    <com.hl.uikit.UIKitToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        app:uikit_title="选择器" />
+
+    <com.hl.uikit.KDividerView
+        android:id="@+id/dividerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="30dp"
+        android:text="选择器 Picker"
+        android:textColor="#ff333333"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <com.hl.uikit.form.UIKitFormGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp">
+
+        <com.hl.uikit.form.UIKitFormItemText
+            android:id="@+id/itemPicker1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:uikit_formLabel="单列选择器"
+            app:uikit_formRightIcon="@drawable/icon_arrow_right" />
+
+        <com.hl.uikit.form.UIKitFormItemText
+            android:id="@+id/itemPicker2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:uikit_formLabel="多列选择器"
+            app:uikit_formRightIcon="@drawable/icon_arrow_right" />
+        <com.hl.uikit.form.UIKitFormItemText
+            android:id="@+id/itemPicker3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:uikit_formLabel="多列联动选择器"
+            app:uikit_formRightIcon="@drawable/icon_arrow_right" />
+        <com.hl.uikit.form.UIKitFormItemText
+            android:id="@+id/itemPicker4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:uikit_formLabel="日期选择器（年月）"
+            app:uikit_formRightIcon="@drawable/icon_arrow_right" />
+        <com.hl.uikit.form.UIKitFormItemText
+            android:id="@+id/itemPicker5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:uikit_formLabel="日期选择器（年月日）"
+            app:uikit_formRightIcon="@drawable/icon_arrow_right" />
+        <com.hl.uikit.form.UIKitFormItemText
+            android:id="@+id/itemPicker6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:uikit_formLabel="日期选择器（区间）"
+            app:uikit_formRightIcon="@drawable/icon_arrow_right" />
+        <com.hl.uikit.form.UIKitFormItemText
+            android:id="@+id/itemPicker7"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:uikit_formLabel="时间选择器"
+            app:uikit_formDividerEnable="false"
+            app:uikit_formRightIcon="@drawable/icon_arrow_right" />
+    </com.hl.uikit.form.UIKitFormGroup>
+</LinearLayout>
