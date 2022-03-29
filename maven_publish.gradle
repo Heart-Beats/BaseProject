@@ -1,3 +1,5 @@
+import com.buildsrc.Versions
+
 /**
  *  编译本地相关项目
  */
@@ -6,9 +8,9 @@ task buildSdk() {
     dependsOn gradle.includedBuild('uikit').task(':uikit-res:assemble')
 }
 
-apply plugin: 'maven-publish'
+//引入配置设置
 apply from: 'publish_config.gradle'
-
+apply plugin: 'maven-publish'
 
 /**
  *
@@ -16,11 +18,36 @@ apply from: 'publish_config.gradle'
  */
 static def getDependencyNode(scope, groupId, artifactId, version) {
     Node node = new Node(null, 'dependency')
+    node.appendNode('scope', scope)
     node.appendNode('groupId', groupId)
     node.appendNode('artifactId', artifactId)
     node.appendNode('version', version)
-    node.appendNode('scope', scope)
     return node
+}
+
+/**
+ *
+ * 设置 pom 文件的 dependencies节点
+ *      别的项目依赖该 pom  文件时，会从 dependencies节点下根据 scope 来选择是否下载依赖库
+ *
+ *  scope 有如下取值：
+ *      compile：    默认值，compile 表示被依赖的 Jar 包，参与当前项目的编译，并且后续的测试和运行阶段也参与其中
+ *      test：       表示依赖项目仅参与测试阶段相关的工作，包括测试代码的编译，执行
+ *      runntime：   表示依赖项目并不参与项目的编译阶段工作，但是后续的测试和运行阶段的工作要其参与其中。这个作用域日常工作中使用的比较少
+ *      provided：   与 compile 类似，唯一的区别就是在打包的时候会跳过作用域是 provided 的项目，一般用于系统内置相关 sdk
+ *      system：     与 provide 的作用范围类似，唯一的区别就是不会从 Maven 仓库抓取 Jar 包，而是从本地文件系统获取
+ */
+def setDependencyNode(root, scope, groupId, artifactId, version) {
+    println "添加依赖项：  $scope ---> $groupId:$artifactId:$version"
+    Node dependencies
+    NodeList dependenciesList = root.get('dependencies')
+    if (dependenciesList.size() == 0) {
+        dependencies = root.appendNode('dependencies')
+    } else {
+        dependencies = (Node) dependenciesList[0]
+    }
+
+    dependencies.append(getDependencyNode(scope, groupId, artifactId, version))
 }
 
 /**
@@ -36,8 +63,13 @@ static def gitShortRev() {
     return gitCommit
 }
 
-def setScm(scm) {
-    scm.appendNode('connection', "https://github.com/${System.getenv("GITHUB_ACTOR")}/Shadow.git")
+/**
+ * pom 文件添加 scm 节点下的  connection 和  url 信息
+ *
+ */
+def setScm(root) {
+    def scm = root.appendNode('scm')
+    scm.appendNode('connection', "https://github.com/${GITHUB_USER}/Shadow.git")
 
     def commit
 
@@ -47,11 +79,19 @@ def setScm(scm) {
     } else {
         commit = gitShortRev()
     }
-    scm.appendNode('url', "https://github.com/${System.getenv("GITHUB_ACTOR")}/Shadow/commit/$commit")
+    scm.appendNode('url', "https://github.com/${GITHUB_USER}/Shadow/commit/$commit")
 }
 
+/**
+ * 设置发布依赖的 pom 文件名以及编译项目|
+ *
+ *  pom.xml 配置文件具体使用说明见： https://www.jianshu.com/p/0e3a1f9c9ce7
+ *
+ */
 def setGeneratePomFileAndDepends(publicationName) {
     model {
+        // generatePomFileForPubNamePublication: 为名为PubName的发布创建一个POM文件，填充已知元数据，如项目名称、项目版本和依赖项。
+        //                                          生成的POM文件默认放在 *build/publications/$pubName/pom-default.xml*.
         tasks."generatePomFileFor${publicationName.capitalize()}Publication" {
             destination = file("$buildDir/pom/$publicationName-pom.xml")
             dependsOn(buildSdk)
@@ -65,8 +105,19 @@ def sourceJar(String name, String path) {
         description = "package ${name} source to jar"
         from "$path/src/main/java"
         from "$path/src/main/kotlin"
-        destinationDir = file("$path/build/libs/")
-        classifier = 'sources'
+        destinationDirectory = file("$path/build/libs/")
+        getArchiveClassifier().set('sources')
+    }
+}
+
+def sourceAar(String name, String path) {
+    return tasks.create("source${name.capitalize()}Aar", Jar) {
+        group = "publishing"
+        description = "package ${name} source to aar"
+        from "$path/src/main/java"
+        from "$path/src/main/kotlin"
+        destinationDirectory = file("$path/build/libs/")
+        getArchiveClassifier().set('sources')
     }
 }
 
@@ -76,23 +127,42 @@ task getPublicationVersion() {
     }
 }
 
+
+/**
+ *  详情使用可见：  https://juejin.cn/post/6844904185754812423
+ */
 publishing {
     publications {
 
+        //定义发布器的名称
         uikit(MavenPublication) {
             def moduleName = 'uikit'
             def modulePath = "$uikitPath/$moduleName"
 
             groupId myGroupId
-            artifactId 'uikit'
+            artifactId moduleName
             version publicationVersion
-            artifact("$modulePath/build/libs/${moduleName}.jar")   //指定 jar 包所在的路径
-            artifact sourceJar(moduleName, modulePath)
+            artifact("$modulePath/build/outputs/aar/${moduleName}-release.aar") //指定 jar 包所在的路径
+
+            // 上传 source，这样使用方可以看到方法注释
+            artifact sourceAar(moduleName, modulePath)
 
             pom.withXml {
                 def root = asNode()
-                def scm = root.appendNode('scm')
-                setScm(scm)
+
+                // 添加相关依赖库，缺失会导致运行时无法找到对应类
+                setDependencyNode(root, 'compile', 'org.jetbrains.kotlin', 'kotlin-stdlib', Versions.KOTLIN)
+                setDependencyNode(root, 'compile', myGroupId, 'uikit-res', publicationVersion)
+                setDependencyNode(root, 'compile', 'com.github.zyyoona7', 'wheelview', '1.0.7')
+                setDependencyNode(root, 'compile', 'com.github.zyyoona7', 'pickerview', '1.0.9')
+                setDependencyNode(root, 'compile', 'com.airbnb.android', 'lottie', Versions.LOTTIE)
+                setDependencyNode(root, 'compile', 'io.github.scwang90', 'refresh-layout-kernel', Versions.SMART_REFRESH_LAYOUT)
+                setDependencyNode(root, 'compile', 'io.github.lucksiege', 'pictureselector', Versions.PICTURE_SELECTOR)
+                setDependencyNode(root, 'compile', 'io.github.lucksiege', 'compress', Versions.PICTURE_SELECTOR)
+                setDependencyNode(root, 'compile', 'com.github.bumptech.glide', 'glide', Versions.GLIDE)
+                setDependencyNode(root, 'compile', 'com.guolindev.permissionx', 'permissionx', Versions.PERMISSION_X)
+                setDependencyNode(root, 'compile', 'com.github.CarGuo.GSYVideoPlayer', 'GSYVideoPlayer', Versions.GSY_VIDEO_PLAYER)
+                setScm(root)
             }
         }
 
@@ -101,56 +171,55 @@ publishing {
             def modulePath = "$uikitPath/$moduleName"
 
             groupId myGroupId
-            artifactId 'uikit'
+            artifactId moduleName
             version publicationVersion
-            artifact("$modulePath/build/libs/${moduleName}.jar")
-            artifact sourceJar(moduleName, modulePath)
+            artifact("$modulePath/build/outputs/aar/${moduleName}-release.aar")
+            artifact sourceAar(moduleName, modulePath)
 
             pom.withXml {
                 def root = asNode()
-                def scm = root.appendNode('scm')
-                setScm(scm)
+                setScm(root)
             }
         }
     }
 
     repositories {
-        def useLocalCredential = false
-        Properties properties = new Properties()
-        def propertiesFile = project.rootProject.file('local.properties')
-        if (propertiesFile.exists()) {
-            properties.load(propertiesFile.newDataInputStream())
-
-            if ("${properties.getProperty('gpr.local')}".equalsIgnoreCase('true')) {
-                def user = properties.getProperty('gpr.user')
-                def key = properties.getProperty('gpr.key')
-                maven {
-                    name = "GitHubPackages"
-                    credentials {
-                        username = user
-                        password = key
-                    }
-                    url "https://maven.pkg.github.com/${user}/shadow"
-                }
-
-                useLocalCredential = true
+        // 配置 GitHubPackages 仓库
+        maven {
+            name = "GitHubPackages"
+            credentials {
+                username = GITHUB_USER
+                password = GITHUB_PERSONAL_ACCESS_TOKEN
             }
+
+            url GITHUB_REPOSITORY
         }
 
-        if (!useLocalCredential && "${System.env.CI}".equalsIgnoreCase("true")) {
-            maven {
-                name = "GitHubPackages"
-                credentials {
-                    username = System.getenv("GITHUB_ACTOR")
-                    password = System.getenv("GITHUB_TOKEN")
-                }
-                url "https://maven.pkg.github.com/" + "${System.env.GITHUB_REPOSITORY}".toLowerCase()
-            }
-        } else {
-            mavenLocal()
-        }
+        // 配置 MavenLocal 仓库
+        mavenLocal()
     }
 }
 
 setGeneratePomFileAndDepends('uikit')
 setGeneratePomFileAndDepends('uikitRes')
+
+
+task publishingToGitHubPackages() {
+    description "打包至 GitHubPackages"
+    group 'my-publishing'
+    dependsOn ':publishAllPublicationsToGitHubPackagesRepository'
+
+    doLast {
+        println "打包完成------> GitHubPackages:$GITHUB_REPOSITORY"
+    }
+}
+
+task publishingToMavenLocal() {
+    description "打包至 MavenLocal"
+    group 'my-publishing'
+    dependsOn ':publishAllPublicationsToMavenLocalRepository'
+
+    doLast {
+        println "打包完成 ------>  MavenLocal"
+    }
+}

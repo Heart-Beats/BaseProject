@@ -3,6 +3,7 @@ import java.nio.file.Files
 pluginManagement {
     repositories {
         maven { url 'https://maven.aliyun.com/nexus/content/groups/public/' }
+        maven { url = 'https://maven.aliyun.com/repository/gradle-plugin' }
         maven { url 'https://jitpack.io' }
         gradlePluginPortal()
         google()
@@ -27,6 +28,7 @@ include ':app'
 def includeBuildProjects = ['./libs/project', './libs/uikit']
 
 includeBuildProjects.forEach {
+    println "开始构建 -------------> $it"
     includeBuild(it)
 }
 

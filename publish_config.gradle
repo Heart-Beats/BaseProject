@@ -1,6 +1,10 @@
 def ARTIFACT_VERSION = '1.0.0'
 
-ext{
+ext {
+    GITHUB_REPOSITORY = "https://maven.pkg.github.com/" + "Heart-Beats/BaseProject".toLowerCase()
+    GITHUB_USER = System.getenv("GITHUB_USER") ?: 'Heart-Beats'
+    GITHUB_PERSONAL_ACCESS_TOKEN = System.getenv("GITHUB_PERSONAL_ACCESS_TOKEN") ?: project.properties['GITHUB_PERSONAL_ACCESS_TOKEN']
+
     publicationVersion = ARTIFACT_VERSION
     myGroupId = 'com.hl'
     projectPath = 'libs/project'

@@ -16,14 +16,10 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.hl.uikit.R
+import com.hl.uikit.*
 import com.hl.uikit.actionsheet.ArrayListSheetDialogFragment
-import com.hl.uikit.dpInt
 import com.hl.uikit.image.pictureselector.PickImageUtil
-import com.hl.uikit.onClick
 import com.hl.uikit.recyclerview.decoration.GridSpacingItemDecoration
-import com.hl.uikit.reqPermissions
-import com.luck.picture.lib.utils.ToastUtils
 import java.io.File
 
 
@@ -152,13 +148,13 @@ class UikitUploadPicImageGridLayout : FrameLayout {
 
     private fun showPickImageDialog() {
         if (attachActivity == null) {
-            ToastUtils.showToast(context, "未设置关联的 Activity！")
+            context.toast("未设置关联的 Activity！")
             return
         }
 
         val uploadPictures = picImageAdapter.data.filterIsInstance<UploadPicture>()
         if (uploadPictures.size >= maxSelectPictureCount) {
-            ToastUtils.showToast(context, "最多只可上传${maxSelectPictureCount}张图片")
+            context.toast("最多只可上传${maxSelectPictureCount}张图片")
             return
         }
 
@@ -178,7 +174,7 @@ class UikitUploadPicImageGridLayout : FrameLayout {
                                 }
                             }
                         }, deniedAction = {
-                            ToastUtils.showToast(this@UikitUploadPicImageGridLayout.context, "未授予相机权限")
+                            this@UikitUploadPicImageGridLayout.context.toast("未授予相机权限")
                         })
 
                         1 -> reqPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE, allGrantedAction = {
@@ -190,7 +186,7 @@ class UikitUploadPicImageGridLayout : FrameLayout {
                                 }
                             }
                         }, deniedAction = {
-                            ToastUtils.showToast(this@UikitUploadPicImageGridLayout.context, "未授予存储权限")
+                            this@UikitUploadPicImageGridLayout.context.toast("未授予存储权限")
                         })
                     }
                 }
