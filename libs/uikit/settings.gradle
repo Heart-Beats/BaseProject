@@ -1,8 +1,7 @@
 pluginManagement {
     repositories {
         maven { url 'https://maven.aliyun.com/nexus/content/groups/public/' }
-        maven { url = uri('https://maven.aliyun.com/repository/google') }
-        maven { url = uri('https://maven.aliyun.com/repository/gradle-plugin') }
+        maven { url = 'https://maven.aliyun.com/repository/gradle-plugin' }
         maven { url 'https://jitpack.io' }
         gradlePluginPortal()
         google()
@@ -13,9 +12,8 @@ dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
         maven { url 'https://maven.aliyun.com/nexus/content/groups/public/' }
-        maven { url = uri('https://maven.aliyun.com/repository/google') }
-        maven { url = uri('https://maven.aliyun.com/repository/gradle-plugin') }
         maven { url 'https://jitpack.io' }
+        mavenLocal()
         google()
         mavenCentral()
     }

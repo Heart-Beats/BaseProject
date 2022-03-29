@@ -8,7 +8,11 @@ plugins {
 apply from: 'maven_publish.gradle'
 
 task clean(type: Delete) {
-    gradle.includedBuilds.forEach{
+    if (rootProject.buildDir.exists()) {
+        delete rootProject.buildDir
+    }
+
+    gradle.includedBuilds.forEach {
         dependsOn it.task(":clean")
     }
 }

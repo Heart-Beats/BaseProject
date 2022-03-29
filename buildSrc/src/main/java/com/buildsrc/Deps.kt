@@ -50,9 +50,10 @@ internal object Versions {
     const val FLOW_LAYOUT = "1.1.2"
     const val CAMERA = "1.1.9"
     const val VERIFICATION_CODE_INPUT_VIEW = "1.0.2"
-    const val GSY_VIDEO_PLAYER = "8.1.8-release-jitpack"
+    const val GSY_VIDEO_PLAYER = "v8.1.8-release-jitpack"
     const val WEI_XIN_OPEN_SDK = "+"
     const val UPDATE_APP_UTILSX = "2.3.0"
+    const val LOTTIE = "5.0.3"
 }
 
 class Deps {
@@ -386,7 +387,7 @@ class Deps {
 
     object GSYVideoPlayer {
         //完整版引入（视频播放）
-        const val gsy_video_player = "com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer:v${Versions.GSY_VIDEO_PLAYER}"
+        const val gsy_video_player = "com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer:${Versions.GSY_VIDEO_PLAYER}"
     }
 
     object WeXin {
@@ -398,6 +399,10 @@ class Deps {
     object Update {
         //不包含统计功能
         const val update_app_utilsx = "com.teprinciple:updateapputilsx:${Versions.UPDATE_APP_UTILSX}"
+    }
+
+    object Lottie {
+        const val lottie = "'com.airbnb.android:lottie':${Versions.LOTTIE}"
     }
 }
 
