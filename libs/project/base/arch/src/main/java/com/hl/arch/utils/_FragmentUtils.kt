@@ -1,4 +1,4 @@
-package com.youma.arch.utils
+package com.hl.arch.utils
 
 import android.util.Log
 import androidx.fragment.app.Fragment

@@ -1,10 +1,10 @@
-package com.youma.arch.mvvm.vm
+package com.hl.arch.mvvm.vm
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.youma.arch.mvvm.PublicResp
-import com.youma.arch.mvvm.api.event.RequestStateEvent
+import com.hl.arch.mvvm.PublicResp
+import com.hl.arch.mvvm.api.event.RequestStateEvent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 

@@ -18,6 +18,9 @@ internal object Versions {
 
     const val LIFECYCLE = "2.4.0"
     const val NAV_VERSION = "2.4.0-rc01"
+
+    const val MATERIAL = "1.4.0"
+
     const val XLOG = "1.10.1"
 
     const val NERTC = "4.5.2"
@@ -96,7 +99,7 @@ class Deps {
     }
 
     object Material {
-        const val material = "com.google.android.material:material:1.4.0"
+        const val material = "com.google.android.material:material:${Versions.MATERIAL}"
     }
 
     object Kotlin {

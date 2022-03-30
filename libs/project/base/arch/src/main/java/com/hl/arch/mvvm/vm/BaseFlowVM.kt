@@ -1,7 +1,7 @@
-package com.youma.arch.mvvm.vm
+package com.hl.arch.mvvm.vm
 
 import androidx.lifecycle.viewModelScope
-import com.youma.arch.mvvm.PublicResp
+import com.hl.arch.mvvm.PublicResp
 import kotlinx.coroutines.CoroutineScope
 
 /**

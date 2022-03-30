@@ -1,7 +1,7 @@
-package com.youma.api
+package com.hl.api
 
 import android.util.Log
-import com.youma.api.interceptor.RequestHeaderOrParamsInterceptor
+import com.hl.api.interceptor.RequestHeaderOrParamsInterceptor
 import okhttp3.ConnectionSpec
 import okhttp3.OkHttpClient
 import okhttp3.TlsVersion

@@ -3,7 +3,7 @@ package com.example.zhanglei.myapplication.activities.base
 import android.os.Bundle
 import android.view.View
 import androidx.viewbinding.ViewBinding
-import com.youma.arch.utils.ViewBindingUtil
+import com.hl.arch.utils.ViewBindingUtil
 
 /**
  * @Author  张磊  on  2021/03/02 at 15:36

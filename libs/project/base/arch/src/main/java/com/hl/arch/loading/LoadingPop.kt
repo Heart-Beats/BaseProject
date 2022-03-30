@@ -1,11 +1,11 @@
-package com.youma.arch.loading
+package com.hl.arch.loading
 
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import com.blankj.utilcode.util.ActivityUtils
 import com.lxj.xpopup.impl.LoadingPopupView
-import com.youma.arch.utils.createPop
+import com.hl.arch.utils.createPop
 import java.lang.ref.WeakReference
 
 /**

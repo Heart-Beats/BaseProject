@@ -6,6 +6,13 @@ import com.buildsrc.Versions
 task buildSdk() {
     dependsOn gradle.includedBuild('uikit').task(':uikit:assemble')
     dependsOn gradle.includedBuild('uikit').task(':uikit-res:assemble')
+
+    dependsOn gradle.includedBuild('project').task(':base-api:assemble')
+    dependsOn gradle.includedBuild('project').task(':base-app-res:assemble')
+    dependsOn gradle.includedBuild('project').task(':base-arch:assemble')
+    dependsOn gradle.includedBuild('project').task(':utils:assemble')
+    dependsOn gradle.includedBuild('project').task(':SDK:Pay:assemble')
+    dependsOn gradle.includedBuild('project').task(':SDK:Umeng:assemble')
 }
 
 //引入配置设置
@@ -69,7 +76,7 @@ static def gitShortRev() {
  */
 def setScm(root) {
     def scm = root.appendNode('scm')
-    scm.appendNode('connection', "https://github.com/${GITHUB_USER}/Shadow.git")
+    scm.appendNode('connection', "https://github.com/${GITHUB_USER}/${GITHUB_PROJECT_NAME}.git")
 
     def commit
 
@@ -79,7 +86,7 @@ def setScm(root) {
     } else {
         commit = gitShortRev()
     }
-    scm.appendNode('url', "https://github.com/${GITHUB_USER}/Shadow/commit/$commit")
+    scm.appendNode('url', "https://github.com/${GITHUB_USER}/${GITHUB_PROJECT_NAME}/commit/$commit")
 }
 
 /**
@@ -121,103 +128,342 @@ def sourceAar(String name, String path) {
     }
 }
 
-task getPublicationVersion() {
+task printPublicationVersion() {
     doLast {
-        println "publicationVersion:$publicationVersion"
+        println "publicationVersion:${getPublicationVersion()}"
     }
 }
+
+
+setGeneratePomFileAndDepends('uikit')
+setGeneratePomFileAndDepends('uikitRes')
+setGeneratePomFileAndDepends('baseApi')
+setGeneratePomFileAndDepends('baseAppRes')
+setGeneratePomFileAndDepends('baseArch')
+setGeneratePomFileAndDepends('utils')
+setGeneratePomFileAndDepends('Pay')
+setGeneratePomFileAndDepends('Umeng')
 
 
 /**
  *  详情使用可见：  https://juejin.cn/post/6844904185754812423
  */
-publishing {
-    publications {
+project.afterEvaluate {
+    publishing {
 
-        //定义发布器的名称
-        uikit(MavenPublication) {
-            def moduleName = 'uikit'
-            def modulePath = "$uikitPath/$moduleName"
+        publications {
 
-            groupId myGroupId
-            artifactId moduleName
-            version publicationVersion
-            artifact("$modulePath/build/outputs/aar/${moduleName}-release.aar") //指定 jar 包所在的路径
+            //定义发布器的名称
+            uikit(MavenPublication) {
+                def moduleName = 'uikit'
+                def modulePath = "$libUikitPath/$moduleName"
 
-            // 上传 source，这样使用方可以看到方法注释
-            artifact sourceAar(moduleName, modulePath)
+                groupId myGroupId
+                artifactId moduleName
 
-            pom.withXml {
-                def root = asNode()
+                version getPublicationVersion()
+                artifact("$modulePath/build/outputs/aar/${moduleName}-release.aar") //指定 jar 包所在的路径
 
-                // 添加相关依赖库，缺失会导致运行时无法找到对应类
-                setDependencyNode(root, 'compile', 'org.jetbrains.kotlin', 'kotlin-stdlib', Versions.KOTLIN)
-                setDependencyNode(root, 'compile', myGroupId, 'uikit-res', publicationVersion)
-                setDependencyNode(root, 'compile', 'com.github.zyyoona7', 'wheelview', '1.0.7')
-                setDependencyNode(root, 'compile', 'com.github.zyyoona7', 'pickerview', '1.0.9')
-                setDependencyNode(root, 'compile', 'com.airbnb.android', 'lottie', Versions.LOTTIE)
-                setDependencyNode(root, 'compile', 'io.github.scwang90', 'refresh-layout-kernel', Versions.SMART_REFRESH_LAYOUT)
-                setDependencyNode(root, 'compile', 'io.github.lucksiege', 'pictureselector', Versions.PICTURE_SELECTOR)
-                setDependencyNode(root, 'compile', 'io.github.lucksiege', 'compress', Versions.PICTURE_SELECTOR)
-                setDependencyNode(root, 'compile', 'com.github.bumptech.glide', 'glide', Versions.GLIDE)
-                setDependencyNode(root, 'compile', 'com.guolindev.permissionx', 'permissionx', Versions.PERMISSION_X)
-                setDependencyNode(root, 'compile', 'com.github.CarGuo.GSYVideoPlayer', 'GSYVideoPlayer', Versions.GSY_VIDEO_PLAYER)
-                setScm(root)
+                // 上传 source，这样使用方可以看到方法注释
+                artifact sourceAar(moduleName, modulePath)
+
+                pom.withXml {
+                    def root = asNode()
+
+                    // 添加相关依赖库，缺失会导致运行时无法找到对应类
+                    setDependencyNode(root, 'compile', 'org.jetbrains.kotlin', 'kotlin-stdlib', Versions.KOTLIN)
+                    setDependencyNode(root, 'compile', myGroupId, 'uikit-res', getPublicationVersion())
+                    setDependencyNode(root, 'compile', 'com.github.zyyoona7', 'wheelview', '1.0.7')
+                    setDependencyNode(root, 'compile', 'com.github.zyyoona7', 'pickerview', '1.0.9')
+                    setDependencyNode(root, 'compile', 'com.airbnb.android', 'lottie', Versions.LOTTIE)
+                    setDependencyNode(root, 'compile', 'io.github.scwang90', 'refresh-layout-kernel', Versions.SMART_REFRESH_LAYOUT)
+                    setDependencyNode(root, 'compile', 'io.github.lucksiege', 'pictureselector', Versions.PICTURE_SELECTOR)
+                    setDependencyNode(root, 'compile', 'io.github.lucksiege', 'compress', Versions.PICTURE_SELECTOR)
+                    setDependencyNode(root, 'compile', 'com.github.bumptech.glide', 'glide', Versions.GLIDE)
+                    setDependencyNode(root, 'compile', 'com.guolindev.permissionx', 'permissionx', Versions.PERMISSION_X)
+                    setDependencyNode(root, 'compile', 'com.github.CarGuo.GSYVideoPlayer', 'GSYVideoPlayer', Versions.GSY_VIDEO_PLAYER)
+                    setScm(root)
+                }
+            }
+
+            uikitRes(MavenPublication) {
+                def moduleName = 'uikit-res'
+                def modulePath = "$libUikitPath/$moduleName"
+
+                groupId myGroupId
+                artifactId moduleName
+                version getPublicationVersion()
+                artifact("$modulePath/build/outputs/aar/${moduleName}-release.aar")
+                artifact sourceAar(moduleName, modulePath)
+
+                pom.withXml {
+                    def root = asNode()
+                    setScm(root)
+                }
+            }
+
+            baseApi(MavenPublication) {
+                def moduleName = 'base-api'
+                def modulePath = "$libProjectPath/base/api"
+
+                groupId myGroupId
+                artifactId moduleName
+                version getPublicationVersion()
+                artifact("$modulePath/build/outputs/aar/${moduleName}-release.aar")
+                artifact sourceAar(moduleName, modulePath)
+
+                pom.withXml {
+                    def root = asNode()
+
+                    setDependencyNode(root, 'compile', 'org.jetbrains.kotlin', 'kotlin-stdlib', Versions.KOTLIN)
+                    setDependencyNode(root, 'compile', 'com.squareup.retrofit2', 'retrofit', Versions.RETROFIT)
+                    setDependencyNode(root, 'compile', 'com.squareup.retrofit2', 'converter-gson', Versions.RETROFIT)
+                    setDependencyNode(root, 'compile', 'com.squareup.retrofit2', 'adapter-rxjava3', Versions.RETROFIT)
+                    setDependencyNode(root, 'compile', 'com.squareup.okhttp3', 'logging-interceptor', Versions.OKHTTP)
+                    setScm(root)
+                }
+            }
+
+
+            baseAppRes(MavenPublication) {
+                def moduleName = 'base-app-res'
+                def modulePath = "$libProjectPath/base/app-res"
+
+                groupId myGroupId
+                artifactId moduleName
+                version getPublicationVersion()
+                artifact("$modulePath/build/outputs/aar/${moduleName}-release.aar")
+                artifact sourceAar(moduleName, modulePath)
+
+                pom.withXml {
+                    def root = asNode()
+                    setScm(root)
+                }
+            }
+
+            baseArch(MavenPublication) {
+                def moduleName = 'base-arch'
+                def modulePath = "$libProjectPath/base/arch"
+
+                groupId myGroupId
+                artifactId moduleName
+                version getPublicationVersion()
+                artifact("$modulePath/build/outputs/aar/${moduleName}-release.aar")
+                artifact sourceAar(moduleName, modulePath)
+
+                pom.withXml {
+                    def root = asNode()
+                    setDependencyNode(root, 'compile', myGroupId, 'base-app-res', getPublicationVersion())
+
+                    setDependencyNode(root, 'compile', 'androidx.core', 'core-ktx', Versions.CORE_KTX)
+                    setDependencyNode(root, 'compile', 'androidx.appcompat', 'appcompat', Versions.APPCOMPAT)
+                    setDependencyNode(root, 'compile', 'androidx.activity', 'activity-ktx', Versions.ACTIVITY_KTX)
+                    setDependencyNode(root, 'compile', 'androidx.fragment', 'fragment-ktx', Versions.FRAGMENT_KTX)
+                    setDependencyNode(root, 'compile', 'androidx.databinding', 'viewbinding', Versions.DATA_BINDING)
+                    setDependencyNode(root, 'compile', 'androidx.databinding', 'databinding-runtime', Versions.DATA_BINDING)
+                    setDependencyNode(root, 'compile', 'com.google.android.material', 'material', Versions.MATERIAL)
+                    setDependencyNode(root, 'compile', 'androidx.recyclerview', 'recyclerview', Versions.RECYCLERVIEW)
+                    setDependencyNode(root, 'compile', 'androidx.lifecycle', 'lifecycle-viewmodel-ktx', Versions.LIFECYCLE)
+                    setDependencyNode(root, 'compile', 'androidx.lifecycle', 'lifecycle-livedata-ktx', Versions.LIFECYCLE)
+                    setDependencyNode(root, 'compile', 'androidx.lifecycle', 'lifecycle-extensions', '2.2.0')
+                    setDependencyNode(root, 'compile', 'androidx.lifecycle', 'lifecycle-runtime-ktx', Versions.LIFECYCLE)
+                    setDependencyNode(root, 'compile', 'androidx.navigation', 'navigation-fragment-ktx', Versions.NAV_VERSION)
+                    setDependencyNode(root, 'compile', 'androidx.navigation', 'navigation-ui', Versions.NAV_VERSION)
+
+                    setDependencyNode(root, 'compile', 'com.geyifeng.immersionbar', 'immersionbar', Versions.IMMERSION_BAR)
+                    setDependencyNode(root, 'compile', 'com.geyifeng.immersionbar', 'immersionbar-ktx', Versions.IMMERSION_BAR)
+                    setDependencyNode(root, 'compile', 'com.github.bumptech.glide', 'glide', Versions.GLIDE)
+                    setDependencyNode(root, 'compile', 'com.google.code.gson', 'gson', Versions.GSON)
+                    setDependencyNode(root, 'compile', 'com.github.li-xiaojun', 'XPopup', Versions.X_POPUP)
+                    setDependencyNode(root, 'compile', 'com.blankj', 'utilcodex', Versions.UTIL_CODE_X)
+                    setScm(root)
+                }
+            }
+
+            utils(MavenPublication) {
+                def moduleName = 'utils'
+                def modulePath = "$libProjectPath/$moduleName"
+
+                groupId myGroupId
+                artifactId moduleName
+                version getPublicationVersion()
+                artifact("$modulePath/build/outputs/aar/${moduleName}-release.aar")
+                artifact sourceAar(moduleName, modulePath)
+
+                pom.withXml {
+                    def root = asNode()
+                    setDependencyNode(root, 'compile', myGroupId, 'uikit', getPublicationVersion())
+
+                    setDependencyNode(root, 'compile', 'androidx.core', 'core-ktx', Versions.CORE_KTX)
+                    setDependencyNode(root, 'compile', 'androidx.appcompat', 'appcompat', Versions.APPCOMPAT)
+                    setDependencyNode(root, 'compile', 'androidx.activity', 'activity-ktx', Versions.ACTIVITY_KTX)
+                    setDependencyNode(root, 'compile', 'androidx.fragment', 'fragment-ktx', Versions.FRAGMENT_KTX)
+                    setDependencyNode(root, 'compile', 'com.google.android.material', 'material', Versions.MATERIAL)
+                    setDependencyNode(root, 'compile', 'androidx.lifecycle', 'lifecycle-viewmodel-ktx', Versions.LIFECYCLE)
+                    setDependencyNode(root, 'compile', 'androidx.lifecycle', 'lifecycle-livedata-ktx', Versions.LIFECYCLE)
+                    setDependencyNode(root, 'compile', 'androidx.lifecycle', 'lifecycle-runtime-ktx', Versions.LIFECYCLE)
+                    setDependencyNode(root, 'compile', 'androidx.navigation', 'navigation-fragment-ktx', Versions.NAV_VERSION)
+
+                    setDependencyNode(root, 'compile', 'com.guolindev.permissionx', 'permissionx', Versions.PERMISSION_X)
+                    setDependencyNode(root, 'compile', 'com.google.code.gson', 'gson', Versions.GSON)
+                    setDependencyNode(root, 'compile', 'io.github.shashank02051997', 'FancyToast', Versions.FANCY_TOAST)
+                    setDependencyNode(root, 'compile', 'androidx.security', 'security-crypto', Versions.SECURITY_CRYPTO)
+                    setDependencyNode(root, 'compile', 'com.github.bumptech.glide', 'glide', Versions.GLIDE)
+                    setDependencyNode(root, 'compile', 'com.github.yuzhiqiang1993', 'zxing', Versions.ZXING)
+                    setDependencyNode(root, 'compile', 'com.journeyapps', 'zxing-android-embedded', '4.3.0')
+                    setDependencyNode(root, 'compile', 'io.github.youth5201314', 'banner', Versions.BANNER)
+                    setDependencyNode(root, 'compile', 'io.github.lucksiege', 'pictureselector', Versions.PICTURE_SELECTOR)
+                    setDependencyNode(root, 'compile', 'io.github.lucksiege', 'compress', Versions.PICTURE_SELECTOR)
+                    setDependencyNode(root, 'compile', 'com.teprinciple', 'updateapputilsx', Versions.UPDATE_APP_UTILSX)
+
+                    setScm(root)
+                }
+            }
+
+            Pay(MavenPublication) {
+                def moduleName = 'Pay'
+                def modulePath = "$libProjectPath/SDK/$moduleName"
+
+                groupId myGroupId
+                artifactId moduleName
+                version getPublicationVersion()
+                artifact("$modulePath/build/outputs/aar/${moduleName}-release.aar")
+                artifact sourceAar(moduleName, modulePath)
+
+                pom.withXml {
+                    def root = asNode()
+
+                    // 该库所依赖的 libs-aar 模块下的三方 aar 需要使用项目单独下载依赖
+
+                    setDependencyNode(root, 'compile', 'androidx.core', 'core-ktx', Versions.CORE_KTX)
+                    setDependencyNode(root, 'compile', 'androidx.appcompat', 'appcompat', Versions.APPCOMPAT)
+
+                    setDependencyNode(root, 'compile', 'com.tencent.mm.opensdk', 'wechat-sdk-android-without-mta', Versions.WEI_XIN_OPEN_SDK)
+                    setDependencyNode(root, 'compile', 'com.google.code.gson', 'gson', Versions.GSON)
+
+                    setScm(root)
+                }
+            }
+
+            Umeng(MavenPublication) {
+                def moduleName = 'Umeng'
+                def modulePath = "$libProjectPath/SDK/$moduleName"
+
+                groupId myGroupId
+                artifactId moduleName
+                version getPublicationVersion()
+                artifact("$modulePath/build/outputs/aar/${moduleName}-release.aar")
+                artifact sourceAar(moduleName, modulePath)
+
+                pom.withXml {
+                    def root = asNode()
+
+                    setDependencyNode(root, 'compile', 'androidx.core', 'core-ktx', Versions.CORE_KTX)
+                    setDependencyNode(root, 'compile', 'androidx.appcompat', 'appcompat', Versions.APPCOMPAT)
+
+                    setDependencyNode(root, 'compile', 'com.umeng.umsdk', 'common', '9.4.4')
+                    setDependencyNode(root, 'compile', 'com.umeng.umsdk', 'asms', '1.5.0')
+                    setDependencyNode(root, 'compile', 'com.umeng.umsdk', 'apm', '1.5.2')
+                    setDependencyNode(root, 'compile', 'com.umeng.umsdk', 'push', '6.4.8')
+                    setDependencyNode(root, 'compile', 'com.umeng.umsdk', 'share-core', '7.1.7')
+                    setDependencyNode(root, 'compile', 'com.umeng.umsdk', 'share-board', '7.1.7')
+                    setDependencyNode(root, 'compile', 'com.umeng.umsdk', 'share-wx', '7.1.7')
+                    setDependencyNode(root, 'compile', 'com.tencent.mm.opensdk', 'wechat-sdk-android-without-mta', Versions.WEI_XIN_OPEN_SDK)
+
+                    setScm(root)
+                }
             }
         }
 
-        uikitRes(MavenPublication) {
-            def moduleName = 'uikit-res'
-            def modulePath = "$uikitPath/$moduleName"
+        repositories {
+            // 配置 GitHubPackages 仓库
+            maven {
+                name = "GitHubPackages"
 
-            groupId myGroupId
-            artifactId moduleName
-            version publicationVersion
-            artifact("$modulePath/build/outputs/aar/${moduleName}-release.aar")
-            artifact sourceAar(moduleName, modulePath)
+                url GITHUB_REPOSITORY
 
-            pom.withXml {
-                def root = asNode()
-                setScm(root)
-            }
-        }
-    }
-
-    repositories {
-        // 配置 GitHubPackages 仓库
-        maven {
-            name = "GitHubPackages"
-            credentials {
-                username = GITHUB_USER
-                password = GITHUB_PERSONAL_ACCESS_TOKEN
+                credentials {
+                    username = GITHUB_USER
+                    password = GITHUB_PERSONAL_ACCESS_TOKEN
+                }
             }
 
-            url GITHUB_REPOSITORY
-        }
+            // 配置 GitLab 仓库
+            maven {
+                name = "GitLab"
 
-        // 配置 MavenLocal 仓库
-        mavenLocal()
+                url GITLAB_REPOSITORY
+
+                credentials(HttpHeaderCredentials) {
+                    name = 'GitLab 个人访问 token'
+                    value = GITLAB_PERSONAL_ACCESS_TOKEN
+                }
+
+                authentication {
+                    header(HttpHeaderAuthentication)
+                }
+
+                allowInsecureProtocol = true
+            }
+
+            // 配置 YouMa 仓库
+            maven {
+                name = "YouMa"
+
+                url 'http://121.89.215.221:8081/repository/maven-releases/'
+
+                credentials {
+                    username = 'youmaAdmin'
+                    password = '0JjlsIO6BV'
+                }
+
+                allowInsecureProtocol = true
+            }
+
+            // 配置 MavenLocal 仓库
+            mavenLocal()
+        }
     }
 }
-
-setGeneratePomFileAndDepends('uikit')
-setGeneratePomFileAndDepends('uikitRes')
-
 
 task publishingToGitHubPackages() {
     description "打包至 GitHubPackages"
     group 'my-publishing'
     dependsOn ':publishAllPublicationsToGitHubPackagesRepository'
+    dependsOn ':printPublicationVersion'
 
     doLast {
         println "打包完成------> GitHubPackages:$GITHUB_REPOSITORY"
     }
 }
 
+task publishingToGitLab() {
+    description "打包至 GitLab"
+    group 'my-publishing'
+    dependsOn ':publishAllPublicationsToGitLabRepository'
+    dependsOn ':printPublicationVersion'
+
+    doLast {
+        println "打包完成------> GitLab:$GITLAB_REPOSITORY"
+    }
+}
+
+task publishingToYouMaMaven() {
+    description "打包至 youma Maven"
+    group 'my-publishing'
+    dependsOn ':publishAllPublicationsToYouMaRepository'
+    dependsOn ':printPublicationVersion'
+
+    doLast {
+        println "打包完成------> youma Maven:$GITLAB_REPOSITORY"
+    }
+}
+
 task publishingToMavenLocal() {
     description "打包至 MavenLocal"
     group 'my-publishing'
-    dependsOn ':publishAllPublicationsToMavenLocalRepository'
+    dependsOn ':publishToMavenLocal'
+    dependsOn ':printPublicationVersion'
 
     doLast {
         println "打包完成 ------>  MavenLocal"

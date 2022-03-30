@@ -1,12 +1,12 @@
-package com.youma.arch.mvvm.vm
+package com.hl.arch.mvvm.vm
 
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.youma.arch.mvvm.PublicResp
-import com.youma.arch.mvvm.api.event.dismissLoading
-import com.youma.arch.mvvm.api.event.showException
-import com.youma.arch.utils.setSafeValue
+import com.hl.arch.mvvm.PublicResp
+import com.hl.arch.mvvm.api.event.dismissLoading
+import com.hl.arch.mvvm.api.event.showException
+import com.hl.arch.utils.setSafeValue
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import java.net.ConnectException

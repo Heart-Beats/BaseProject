@@ -1,6 +1,6 @@
-package com.youma.pay.alipay.util
+package com.hl.pay.alipay.util
 
-import com.youma.pay.alipay.AlipayConfig
+import com.hl.pay.alipay.AlipayConfig
 import java.io.UnsupportedEncodingException
 import java.net.URLEncoder
 import java.text.SimpleDateFormat

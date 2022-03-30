@@ -1,12 +1,12 @@
-package com.youma.arch.mvvm.vm
+package com.hl.arch.mvvm.vm
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.youma.arch.mvvm.api.event.UiEvent
-import com.youma.arch.mvvm.api.event.dismissLoading
-import com.youma.arch.mvvm.api.event.showException
-import com.youma.arch.mvvm.api.event.showLoading
+import com.hl.arch.mvvm.api.event.UiEvent
+import com.hl.arch.mvvm.api.event.dismissLoading
+import com.hl.arch.mvvm.api.event.showException
+import com.hl.arch.mvvm.api.event.showLoading
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job

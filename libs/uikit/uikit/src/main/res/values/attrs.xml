@@ -359,4 +359,19 @@
         <!--播放完成后是否停留在最后一帧，默认false-->
         <attr name="uikit_end_last_frame" format="boolean"  />
     </declare-styleable>
+
+    <declare-styleable name="UikitRoundImageView">
+        <attr name="uikit_is_circle" format="boolean" />
+        <attr name="uikit_is_cover_src" format="boolean" />
+        <attr name="uikit_corner_radius" format="dimension" />
+        <attr name="uikit_corner_top_left_radius" format="dimension" />
+        <attr name="uikit_corner_top_right_radius" format="dimension" />
+        <attr name="uikit_corner_bottom_left_radius" format="dimension" />
+        <attr name="uikit_corner_bottom_right_radius" format="dimension" />
+        <attr name="uikit_border_width" format="dimension" />
+        <attr name="uikit_border_color" format="color" />
+        <attr name="uikit_inner_border_width" format="dimension" />
+        <attr name="uikit_inner_border_color" format="color" />
+        <attr name="uikit_mask_color" format="color" />
+    </declare-styleable>
 </resources>

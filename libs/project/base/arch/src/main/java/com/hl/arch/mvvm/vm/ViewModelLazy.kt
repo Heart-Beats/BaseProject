@@ -1,4 +1,4 @@
-package com.youma.arch.mvvm.vm
+package com.hl.arch.mvvm.vm
 
 import androidx.annotation.IdRes
 import androidx.annotation.MainThread
@@ -8,7 +8,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStore
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.navigation.fragment.findNavController
-import com.youma.arch.mvvm.fragment.BaseFragment
+import com.hl.arch.mvvm.fragment.BaseFragment
 import kotlin.reflect.KClass
 
 @MainThread

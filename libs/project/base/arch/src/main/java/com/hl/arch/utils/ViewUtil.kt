@@ -1,4 +1,4 @@
-package com.youma.arch.utils
+package com.hl.arch.utils
 
 import android.os.SystemClock
 import android.view.View
