@@ -1,4 +1,4 @@
-package com.youma.arch.mvvm
+package com.hl.arch.mvvm
 
 import com.google.gson.annotations.SerializedName
 

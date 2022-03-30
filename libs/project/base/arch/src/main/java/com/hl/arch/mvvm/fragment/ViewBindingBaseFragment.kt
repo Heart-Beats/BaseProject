@@ -1,11 +1,11 @@
-package com.youma.arch.mvvm.fragment
+package com.hl.arch.mvvm.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.viewbinding.ViewBinding
-import com.youma.arch.utils.ViewBindingUtil
+import com.hl.arch.utils.ViewBindingUtil
 
 /**
  * @Author  张磊  on  2021/03/02 at 12:44

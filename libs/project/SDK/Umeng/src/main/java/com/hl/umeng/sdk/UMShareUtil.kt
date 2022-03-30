@@ -1,4 +1,4 @@
-package com.youma.umeng.sdk
+package com.hl.umeng.sdk
 
 import android.app.Activity
 import android.util.Log

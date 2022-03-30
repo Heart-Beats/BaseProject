@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.youma.pay">
+    package="com.hl.pay">
 
     <!--微信支付权限-->
     <uses-permission android:name="android.permission.INTERNET" />
@@ -18,7 +18,7 @@
 
         <!--微信支付-->
         <activity
-            android:name=".weixin.wxapi.WXPayEntryActivity"
+            android:name="com.hl.pay.weixin.wxapi.WXPayEntryActivity"
             android:exported="true"
             android:launchMode="singleTop"
              />

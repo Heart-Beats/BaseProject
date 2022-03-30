@@ -1,4 +1,4 @@
-package com.youma.api.interceptor
+package com.hl.api.interceptor
 
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull

@@ -1,13 +1,13 @@
-package com.youma.pay
+package com.hl.pay
 
 import android.app.Activity
 import com.google.gson.Gson
 import com.tencent.mm.opensdk.modelpay.PayReq
 import com.tencent.mm.opensdk.openapi.WXAPIFactory
-import com.youma.pay.alipay.AliPayThread
-import com.youma.pay.weixin.PayResultCallBack
-import com.youma.pay.weixin.PayState
-import com.youma.pay.weixin.WxPayResponse
+import com.hl.pay.alipay.AliPayThread
+import com.hl.pay.weixin.PayResultCallBack
+import com.hl.pay.weixin.PayState
+import com.hl.pay.weixin.WxPayResponse
 
 
 /**

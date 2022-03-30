@@ -1,6 +1,6 @@
-package com.youma.api.logger
+package com.hl.api.logger
 
-import com.youma.api.logger.JsonUtil.decodeUnicode
+import com.hl.api.logger.JsonUtil.decodeUnicode
 import okhttp3.logging.HttpLoggingInterceptor
 
 /**

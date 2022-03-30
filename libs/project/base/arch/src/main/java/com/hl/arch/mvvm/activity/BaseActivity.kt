@@ -15,9 +15,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
 import com.gyf.immersionbar.ImmersionBar
 import com.gyf.immersionbar.ktx.immersionBar
-import com.youma.arch.R
-import com.youma.arch.utils.initInsetPadding
-import com.youma.arch.utils.setSafeValue
+import com.hl.arch.R
+import com.hl.arch.utils.initInsetPadding
+import com.hl.arch.utils.setSafeValue
 
 abstract class BaseActivity : AppCompatActivity() {
 

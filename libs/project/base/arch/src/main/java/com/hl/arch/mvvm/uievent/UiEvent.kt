@@ -1,7 +1,7 @@
-package com.youma.arch.mvvm.api.event
+package com.hl.arch.mvvm.api.event
 
 import android.os.Looper
-import com.youma.arch.mvvm.vm.EventLiveData
+import com.hl.arch.mvvm.vm.EventLiveData
 
 /**
  * @author  张磊  on  2021/11/06 at 18:57

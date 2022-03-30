@@ -1,4 +1,4 @@
-package com.youma.health.wxapi
+package com.hl.health.wxapi
 
 import android.app.Activity
 import com.umeng.socialize.UMAuthListener

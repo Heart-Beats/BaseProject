@@ -1,6 +1,6 @@
-package com.youma.pay.alipay
+package com.hl.pay.alipay
 
-import com.youma.pay.alipay.util.OrderInfoUtil2_0
+import com.hl.pay.alipay.util.OrderInfoUtil2_0
 
 
 /**

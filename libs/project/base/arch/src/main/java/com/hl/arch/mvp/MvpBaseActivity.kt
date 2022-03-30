@@ -1,4 +1,4 @@
-package com.youma.arch.mvp
+package com.hl.arch.mvp
 
 import android.content.Intent
 import android.content.pm.ActivityInfo
@@ -22,8 +22,8 @@ import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.gyf.immersionbar.ImmersionBar
 import com.gyf.immersionbar.ktx.immersionBar
-import com.youma.arch.R
-import com.youma.arch.ToastUtils
+import com.hl.arch.R
+import com.hl.arch.ToastUtils
 
 /**
  * 功能：activity基类

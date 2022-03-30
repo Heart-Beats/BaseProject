@@ -1,4 +1,4 @@
-package com.youma.arch.adapters
+package com.hl.arch.adapters
 
 import android.view.View
 import android.view.ViewGroup

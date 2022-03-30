@@ -1,4 +1,4 @@
-package com.youma.pay.weixin.wxapi
+package com.hl.pay.weixin.wxapi
 
 import android.app.Activity
 import android.content.Intent
@@ -11,8 +11,8 @@ import com.tencent.mm.opensdk.modelbase.BaseResp
 import com.tencent.mm.opensdk.openapi.IWXAPI
 import com.tencent.mm.opensdk.openapi.IWXAPIEventHandler
 import com.tencent.mm.opensdk.openapi.WXAPIFactory
-import com.youma.pay.PaymentHelper
-import com.youma.pay.weixin.PayState
+import com.hl.pay.PaymentHelper
+import com.hl.pay.weixin.PayState
 
 
 class WXPayEntryActivity : Activity(), IWXAPIEventHandler {

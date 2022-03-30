@@ -18,6 +18,9 @@ internal object Versions {
 
     const val LIFECYCLE = "2.4.0"
     const val NAV_VERSION = "2.4.0-rc01"
+
+    const val MATERIAL = "1.4.0"
+
     const val XLOG = "1.10.1"
 
     const val NERTC = "4.5.2"
@@ -53,6 +56,7 @@ internal object Versions {
     const val GSY_VIDEO_PLAYER = "v8.1.8-release-jitpack"
     const val WEI_XIN_OPEN_SDK = "+"
     const val UPDATE_APP_UTILSX = "2.3.0"
+    const val LOTTIE = "5.0.3"
 }
 
 class Deps {
@@ -95,7 +99,7 @@ class Deps {
     }
 
     object Material {
-        const val material = "com.google.android.material:material:1.4.0"
+        const val material = "com.google.android.material:material:${Versions.MATERIAL}"
     }
 
     object Kotlin {
@@ -398,6 +402,10 @@ class Deps {
     object Update {
         //不包含统计功能
         const val update_app_utilsx = "com.teprinciple:updateapputilsx:${Versions.UPDATE_APP_UTILSX}"
+    }
+
+    object Lottie {
+        const val lottie = "'com.airbnb.android:lottie':${Versions.LOTTIE}"
     }
 }
 

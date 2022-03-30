@@ -1,4 +1,4 @@
-package com.youma.arch.mvvm.fragment
+package com.hl.arch.mvvm.fragment
 
 import android.content.Context
 import android.graphics.Color
@@ -17,16 +17,16 @@ import androidx.navigation.fragment.FragmentNavigator
 import androidx.navigation.fragment.findNavController
 import com.gyf.immersionbar.ImmersionBar
 import com.gyf.immersionbar.ktx.immersionBar
-import com.youma.arch.R
-import com.youma.arch.loading.loadingPopupWeakReference
-import com.youma.arch.mvvm.PublicResp
-import com.youma.arch.mvvm.api.event.RequestStateEvent
-import com.youma.arch.mvvm.api.event.UiEvent
-import com.youma.arch.mvvm.apiRespRepeatSafeCollect
-import com.youma.arch.mvvm.repeatSafeCollect
-import com.youma.arch.mvvm.vm.FlowVM
-import com.youma.arch.mvvm.vm.LiveDataVM
-import com.youma.arch.utils.*
+import com.hl.arch.R
+import com.hl.arch.loading.loadingPopupWeakReference
+import com.hl.arch.mvvm.PublicResp
+import com.hl.arch.mvvm.api.event.RequestStateEvent
+import com.hl.arch.mvvm.api.event.UiEvent
+import com.hl.arch.mvvm.apiRespRepeatSafeCollect
+import com.hl.arch.mvvm.repeatSafeCollect
+import com.hl.arch.mvvm.vm.FlowVM
+import com.hl.arch.mvvm.vm.LiveDataVM
+import com.hl.arch.utils.*
 import kotlinx.coroutines.flow.Flow
 
 /**

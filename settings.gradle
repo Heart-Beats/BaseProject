@@ -25,7 +25,7 @@ rootProject.name = "BaseProject"
 include ':app'
 
 
-def includeBuildProjects = ['./libs/project', './libs/uikit']
+def includeBuildProjects = ['libs/project', 'libs/uikit']
 
 includeBuildProjects.forEach {
     println "开始构建 -------------> $it"
