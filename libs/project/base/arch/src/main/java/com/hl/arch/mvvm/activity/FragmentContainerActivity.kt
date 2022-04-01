@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import com.example.zhanglei.myapplication.activities.base.ViewBindingBaseActivity
 import com.hl.arch.R
 import com.hl.arch.databinding.ActivityFragmentContainerBinding
 

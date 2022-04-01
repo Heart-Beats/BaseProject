@@ -44,4 +44,9 @@ dependencies {
     implementation Deps.Material.material
 
     implementation  'com.hl:uikit:1.0.0'
+    implementation  'com.hl:utils:0.0.2'
+
+    implementation(Deps.ZXing.zxing_lite){
+        transitive(false)
+    }
 }

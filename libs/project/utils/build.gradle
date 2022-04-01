@@ -55,11 +55,8 @@ dependencies {
     implementation Deps.FancyToast.fancy_toast
     implementation Deps.AndroidX.security_crypto
     implementation Deps.Glide.glide
-    implementation(Deps.ZXing.zxing_yuzhiqiang)
-
-    implementation(Deps.ZXing.zxing_android_embedded) {
-        transitive = false
-    }
+    implementation Deps.ZXing.zxing_yuzhiqiang
+//    implementation Deps.ZXing.zxing_lite
 
     api Deps.Banner.banner
 

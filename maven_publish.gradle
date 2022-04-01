@@ -310,7 +310,7 @@ project.afterEvaluate {
                     setDependencyNode(root, 'compile', 'androidx.security', 'security-crypto', Versions.SECURITY_CRYPTO)
                     setDependencyNode(root, 'compile', 'com.github.bumptech.glide', 'glide', Versions.GLIDE)
                     setDependencyNode(root, 'compile', 'com.github.yuzhiqiang1993', 'zxing', Versions.ZXING)
-                    setDependencyNode(root, 'compile', 'com.journeyapps', 'zxing-android-embedded', '4.3.0')
+//                    setDependencyNode(root, 'compile', 'com.github.jenly1314', 'zxing-lite', Versions.ZXING_LITE)
                     setDependencyNode(root, 'compile', 'io.github.youth5201314', 'banner', Versions.BANNER)
                     setDependencyNode(root, 'compile', 'io.github.lucksiege', 'pictureselector', Versions.PICTURE_SELECTOR)
                     setDependencyNode(root, 'compile', 'io.github.lucksiege', 'compress', Versions.PICTURE_SELECTOR)
@@ -455,7 +455,7 @@ task publishingToYouMaMaven() {
     dependsOn ':printPublicationVersion'
 
     doLast {
-        println "打包完成------> youma Maven:$GITLAB_REPOSITORY"
+        println "打包完成------> youma Maven"
     }
 }
 
