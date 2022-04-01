@@ -41,6 +41,7 @@ internal object Versions {
     const val BASE_POPUP = "3.1.8"
     const val X_POPUP = "2.7.5"
     const val ZXING = "2.2.8"
+    const val ZXING_LITE = "2.1.1"
     const val UTIL_CODE_X = "1.31.0"
     const val SHORTCUT_BADGER = "1.1.22@aar"
     const val PHOTO_VIEW = "latest.release"
@@ -249,12 +250,10 @@ class Deps {
          */
         const val zxing_yuzhiqiang = "com.github.yuzhiqiang1993:zxing:${Versions.ZXING}"
 
-
         /**
-         * https://github.com/journeyapps/zxing-android-embedded
+         * https://github.com/jenly1314/ZXingLite
          */
-        const val zxing_android_embedded = "com.journeyapps:zxing-android-embedded:4.3.0"
-        const val zxing_core = "com.google.zxing:core:3.3.0"
+        const val zxing_lite = "com.github.jenly1314:zxing-lite:${Versions.ZXING_LITE}"
     }
 
     object UtilCodeX {
@@ -408,4 +407,3 @@ class Deps {
         const val lottie = "'com.airbnb.android:lottie':${Versions.LOTTIE}"
     }
 }
-

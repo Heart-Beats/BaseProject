@@ -1,4 +1,4 @@
-package com.example.zhanglei.myapplication.activities.base
+package com.hl.arch.mvvm.activity
 
 import android.os.Bundle
 import android.view.View
