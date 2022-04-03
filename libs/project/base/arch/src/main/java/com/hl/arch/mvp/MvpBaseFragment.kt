@@ -14,7 +14,7 @@ import com.hl.arch.ToastUtils
  * @param <Presenter>
  * @author 91330
 </Presenter> */
-abstract class MvpBaseFragment<Presenter : MvpBasePresenter<BaseView>> : Fragment(), BaseView {
+abstract class MvpBaseFragment<Presenter : MvpBasePresenter<out BaseView>> : Fragment(), BaseView {
     var presenter: Presenter? = null
         private set
 
