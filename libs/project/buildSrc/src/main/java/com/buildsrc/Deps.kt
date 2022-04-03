@@ -5,6 +5,7 @@ internal object Versions {
     const val JUNIT_EXT = "1.1.3"
     const val ESPRESSO_CORE = "3.4.0"
     const val KOTLIN = "1.6.10"
+    const val KOTLIN_COROUTINES = "1.4.2"
     const val CORE_KTX = "1.6.0"
 
     const val APPCOMPAT = "1.4.0"
@@ -43,7 +44,7 @@ internal object Versions {
     const val ZXING = "2.2.8"
     const val ZXING_LITE = "2.1.1"
     const val UTIL_CODE_X = "1.31.0"
-    const val SHORTCUT_BADGER = "1.1.22@aar"
+    const val SHORTCUT_BADGER = "1.1.22"
     const val PHOTO_VIEW = "latest.release"
     const val BANNER = "2.2.2"
     const val JS_BRIDGE = "1.0.4"
@@ -106,6 +107,16 @@ class Deps {
     object Kotlin {
         const val kotlin_gradle_plugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.KOTLIN}"
         const val kotlin_stdlib = "org.jetbrains.kotlin:kotlin-stdlib:${Versions.KOTLIN}"
+
+        /**
+         * 协程核心库
+         */
+        const val kotlinx_coroutines_core = "org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.KOTLIN_COROUTINES}"
+
+        /**
+         * 协程 Android 平台库
+         */
+        const val kotlinx_coroutines_android = "org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.KOTLIN_COROUTINES}"
     }
 
     object JetpackNavigation {
