@@ -15,6 +15,9 @@ import com.hl.arch.ToastUtils
  * @author 91330
 </Presenter> */
 abstract class MvpBaseFragment<Presenter : MvpBasePresenter<out BaseView>> : Fragment(), BaseView {
+
+    protected val TAG = this.javaClass.simpleName
+
     var presenter: Presenter? = null
         private set
 
@@ -52,12 +55,12 @@ abstract class MvpBaseFragment<Presenter : MvpBasePresenter<out BaseView>> : Fra
      * @param view               页面对应的 view
      * @param savedInstanceState 保存的状态
      */
-    protected abstract fun initView(view: View?, savedInstanceState: Bundle?)
+    protected abstract fun initView(view: View, savedInstanceState: Bundle?)
 
     /**
      * 返回请求服务器的数据
      */
-    protected fun requestData() {}
+    protected open fun requestData() {}
 
     override fun showMsg(msg: String) {
         ToastUtils.showShort(requireContext(), msg)

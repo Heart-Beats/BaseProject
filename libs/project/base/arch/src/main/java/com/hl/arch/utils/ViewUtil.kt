@@ -84,3 +84,7 @@ fun View.invisible() {
 fun View.gone() {
 	setVisible(View.GONE)
 }
+
+fun View.visibleOrGone(show: Boolean) {
+	if (show) visible() else gone()
+}
