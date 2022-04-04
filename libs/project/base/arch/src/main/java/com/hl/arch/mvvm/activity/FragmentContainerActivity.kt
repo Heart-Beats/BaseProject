@@ -1,6 +1,7 @@
 package com.hl.arch.mvvm.activity
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -28,7 +29,7 @@ class FragmentContainerActivity : ViewBindingBaseActivity<ActivityFragmentContai
 private const val DESTINATION_SCREEN = "目标画面"
 private const val DESTINATION_ARGUMENTS = "目标画面参数"
 
-fun Activity.startFragment(fragmentClass: Class<out Fragment>, extras: Bundle? = null) {
+fun Context.startFragment(fragmentClass: Class<out Fragment>, extras: Bundle? = null) {
     val intent = Intent(this, FragmentContainerActivity::class.java)
     intent.putExtra(DESTINATION_SCREEN, fragmentClass)
     if (extras != null) {
@@ -37,6 +38,11 @@ fun Activity.startFragment(fragmentClass: Class<out Fragment>, extras: Bundle? =
     this.startActivity(intent)
 }
 
+fun Activity.startFragment(fragmentClass: Class<out Fragment>, extras: Bundle? = null) {
+    this.baseContext.startFragment(fragmentClass, extras)
+}
+
 fun Fragment.startFragment(fragmentClass: Class<out Fragment>, extras: Bundle? = null) {
     requireActivity().startFragment(fragmentClass, extras)
 }
+
