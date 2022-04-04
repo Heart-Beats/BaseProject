@@ -7,16 +7,18 @@ import android.graphics.Rect
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.hl.uikit.dp
+import com.hl.uikit.dpInt
 
 /**
  * @Author  张磊  on  2020/07/20 at 14:44
  * Email: 913305160@qq.com
  */
-class MarginStartDecoration(mMarginDp: Float, dividerColor: Int = Color.parseColor("#F4F4F4"), dividerHeight: Float = 1F) : RecyclerView.ItemDecoration() {
+class MarginStartDecoration(
+	val marginPx: Int,
+	dividerColor: Int = Color.parseColor("#F4F4F4"),
+	val dividerHeightPx: Int = 1.dpInt
+) : RecyclerView.ItemDecoration() {
 
-	private val marginPx: Int = mMarginDp.dp.toInt()
-	private val dividerHeightPx: Int = dividerHeight.dp.toInt()
 	private val paint: Paint = Paint()
 
 	init {
