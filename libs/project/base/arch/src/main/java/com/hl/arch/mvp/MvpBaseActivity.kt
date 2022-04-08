@@ -1,11 +1,9 @@
 package com.hl.arch.mvp
 
 import android.content.Intent
-import android.content.pm.ActivityInfo
 import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
@@ -16,14 +14,12 @@ import androidx.annotation.ColorInt
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.FragmentActivity
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
-import com.gyf.immersionbar.ImmersionBar
-import com.gyf.immersionbar.ktx.immersionBar
 import com.hl.arch.R
 import com.hl.arch.ToastUtils
+import com.hl.arch.base.BaseActivity
 
 /**
  * 功能：activity基类
@@ -32,7 +28,7 @@ import com.hl.arch.ToastUtils
  * @Version : 1.0
  * @date : 2019.3.5
  */
-abstract class MvpBaseActivity<Presenter : MvpBasePresenter<out BaseView>> : FragmentActivity(), BaseView {
+abstract class MvpBaseActivity<Presenter : MvpBasePresenter<out BaseView>> : BaseActivity(), BaseView {
 
     protected val TAG = this.javaClass.simpleName
     protected lateinit var menuIV: ImageView
@@ -60,29 +56,11 @@ abstract class MvpBaseActivity<Presenter : MvpBasePresenter<out BaseView>> : Fra
             finish()
             return
         }
-        Log.d(TAG, "onCreate: ")
-        /**
-         * 设置为竖屏
-         */
-        if (requestedOrientation != ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
-            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-        }
-        setContentView(getLayoutId())
 
-        immersionBar {
-            fitsSystemWindows(false)
-            statusBarDarkFont(true)
-            navigationBarColor(R.color.white)
-            navigationBarDarkIcon(true)
-        }
-
-        mFraLayoutHeadView!!.setPadding(0, ImmersionBar.getStatusBarHeight(this), 0, 0)
         presenter = createPresenter()?.also {
-
             it.detachView(this)
         }
 
-        initView()
         requestData()
     }
 
@@ -94,14 +72,9 @@ abstract class MvpBaseActivity<Presenter : MvpBasePresenter<out BaseView>> : Fra
         return true
     }
 
-    ////布局中Fragment的ID
-    protected abstract fun getLayoutId(): Int
-
     override fun dealNetError(code: Int, e: Throwable) {
         showError("错误信息（" + e.message + "），点击刷新")
     }
-
-    protected abstract fun initView()
 
     protected open fun requestData() {}
 
@@ -154,6 +127,7 @@ abstract class MvpBaseActivity<Presenter : MvpBasePresenter<out BaseView>> : Fra
     }
 
     protected open fun onTvMenuClick() {}
+
     protected open fun onIvMenuClick() {}
 
     override fun setTitleColor(resId: Int) {

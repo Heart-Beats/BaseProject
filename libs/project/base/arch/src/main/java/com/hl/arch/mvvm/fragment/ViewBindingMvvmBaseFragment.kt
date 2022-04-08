@@ -11,7 +11,7 @@ import com.hl.arch.utils.ViewBindingUtil
  * @Author  张磊  on  2021/03/02 at 12:44
  * Email: 913305160@qq.com
  */
-abstract class  ViewBindingBaseFragment<Binding : ViewBinding> : BaseFragment() {
+abstract class  ViewBindingMvvmBaseFragment<Binding : ViewBinding> : MvvmBaseFragment() {
 
     protected var viewBinding: Binding? = null
         private set
