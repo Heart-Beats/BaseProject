@@ -5,8 +5,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import com.hl.arch.ToastUtils
+import com.hl.arch.base.BaseFragment
 
 /**
  * fragment基类
@@ -14,7 +14,7 @@ import com.hl.arch.ToastUtils
  * @param <Presenter>
  * @author 91330
 </Presenter> */
-abstract class MvpBaseFragment<Presenter : MvpBasePresenter<out BaseView>> : Fragment(), BaseView {
+abstract class MvpBaseFragment<Presenter : MvpBasePresenter<out BaseView>> : BaseFragment(), BaseView {
 
     protected val TAG = this.javaClass.simpleName
 
@@ -25,13 +25,12 @@ abstract class MvpBaseFragment<Presenter : MvpBasePresenter<out BaseView>> : Fra
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(layoutId, container, false)
 
         presenter = createPresenter()?.also {
             it.detachView(this)
         }
 
-        return view
+        return super.onCreateView(inflater, container, savedInstanceState)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -44,10 +43,6 @@ abstract class MvpBaseFragment<Presenter : MvpBasePresenter<out BaseView>> : Fra
         showError("错误信息（" + e.message + "），点击刷新")
     }
 
-    /**
-     * @return 布局 id
-     */
-    protected abstract val layoutId: Int
 
     protected abstract fun createPresenter(): Presenter?
 
@@ -69,6 +64,4 @@ abstract class MvpBaseFragment<Presenter : MvpBasePresenter<out BaseView>> : Fra
     override fun getContext(): Context {
         return requireActivity()
     }
-
-
 }

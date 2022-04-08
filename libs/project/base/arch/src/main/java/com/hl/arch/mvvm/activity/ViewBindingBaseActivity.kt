@@ -3,6 +3,7 @@ package com.hl.arch.mvvm.activity
 import android.os.Bundle
 import android.view.View
 import androidx.viewbinding.ViewBinding
+import com.hl.arch.base.BaseActivity
 import com.hl.arch.utils.ViewBindingUtil
 
 /**

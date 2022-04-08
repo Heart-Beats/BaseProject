@@ -1,8 +1,11 @@
 package com.hl.uikit.image.pictureselector
 
 import android.Manifest
+import android.content.ContentValues
 import android.content.Context
+import android.content.Intent
 import android.os.Environment
+import android.provider.MediaStore
 import android.widget.Toast
 import androidx.fragment.app.FragmentActivity
 import com.hl.uikit.actionsheet.ArrayListSheetDialogFragment
@@ -70,13 +73,22 @@ object PickImageUtil {
     ) {
         PictureSelector.create(context)
             .openCamera(SelectMimeType.ofImage())
-            .setOutputCameraDir(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)?.absolutePath)
+            .setOutputCameraDir(context.getExternalFilesDir(Environment.DIRECTORY_DCIM)?.absolutePath)
             .setCompressEngine(MyCompressEngine(true))
             .apply(option)
             .forResultActivity(object : OnResultCallbackListener<LocalMedia> {
                 override fun onResult(result: ArrayList<LocalMedia>) {
                     result.map { it.compressPath ?: it.realPath }.run {
                         onImagePathResult(this)
+
+                        this.forEach { photoPath ->
+                            //发送广播，通知图库更新
+                            val values = ContentValues()
+                            values.put(MediaStore.Images.Media.DATA, photoPath)
+                            values.put(MediaStore.Images.Media.MIME_TYPE, "image/*")
+                            val uri = context.contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
+                            context.sendBroadcast(Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri))
+                        }
                     }
                 }
 

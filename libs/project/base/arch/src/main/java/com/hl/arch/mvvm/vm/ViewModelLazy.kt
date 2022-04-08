@@ -8,17 +8,17 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStore
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.navigation.fragment.findNavController
-import com.hl.arch.mvvm.fragment.BaseFragment
+import com.hl.arch.mvvm.fragment.MvvmBaseFragment
 import kotlin.reflect.KClass
 
 @MainThread
-inline fun <reified VM : ViewModel> BaseFragment.activityViewModels(
+inline fun <reified VM : ViewModel> MvvmBaseFragment.activityViewModels(
 	noinline factoryProducer: (() -> ViewModelProvider.Factory)? = null
 ) = createViewModelLazy(VM::class, { requireActivity().viewModelStore },
 	factoryProducer ?: { requireActivity().defaultViewModelProviderFactory })
 
 @MainThread
-inline fun <reified VM : ViewModel> BaseFragment.navGraphViewModels(
+inline fun <reified VM : ViewModel> MvvmBaseFragment.navGraphViewModels(
 	@IdRes navGraphId: Int,
 	noinline factoryProducer: (() -> ViewModelProvider.Factory)? = null
 ): Lazy<VM> {
@@ -28,9 +28,9 @@ inline fun <reified VM : ViewModel> BaseFragment.navGraphViewModels(
 	val storeProducer: () -> ViewModelStore = {
 		backStackEntry.viewModelStore
 	}
-	return createViewModelLazy(VM::class, storeProducer, {
+	return createViewModelLazy(VM::class, storeProducer) {
 		factoryProducer?.invoke() ?: backStackEntry.defaultViewModelProviderFactory
-	})
+	}
 }
 
 @MainThread
@@ -51,7 +51,7 @@ fun <VM : ViewModel> Fragment.createViewModelLazy(
 	return ViewModelLazy(viewModelClass, storeProducer, factoryPromise) { vm ->
 		view?.let {
 			val fragment = this
-			if (fragment is BaseFragment) {
+			if (fragment is MvvmBaseFragment) {
 				fragment.onViewModelCreated(vm)
 			}
 		}

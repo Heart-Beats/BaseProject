@@ -1,4 +1,4 @@
-package com.hl.arch.mvvm.activity
+package com.hl.arch.base
 
 import android.content.Context
 import android.content.Intent
@@ -38,6 +38,8 @@ abstract class BaseActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Log.d(TAG, "onCreate: ")
+
         layoutResId?.run {
             setContentView(this)
         }
@@ -55,7 +57,7 @@ abstract class BaseActivity : AppCompatActivity() {
      */
     override fun onSaveInstanceState(outState: Bundle, outPersistentState: PersistableBundle) {
         super.onSaveInstanceState(outState, outPersistentState)
-        Log.d(TAG, "onSaveInstanceState: ${this} 保存的数据 == ${outState}")
+        Log.d(TAG, "onSaveInstanceState: $this 保存的数据 == $outState")
     }
 
     /**
@@ -66,7 +68,7 @@ abstract class BaseActivity : AppCompatActivity() {
      *                          onStart -> onRestoreInstanceState -> onResume;
      */
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-        Log.d(TAG, "onRestoreInstanceState: ${this} 恢复时保存的数据 == ${savedInstanceState}")
+        Log.d(TAG, "onRestoreInstanceState: $this 恢复时保存的数据 == $savedInstanceState")
         super.onRestoreInstanceState(savedInstanceState)
     }
 
