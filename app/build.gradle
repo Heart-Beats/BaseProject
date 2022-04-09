@@ -43,10 +43,8 @@ dependencies {
     implementation Deps.AndroidX.constraint_layout
     implementation Deps.Material.material
 
-    implementation  'com.hl:uikit:1.0.0'
-    implementation  'com.hl:utils:0.0.2'
+    def hlVersion='0.0.7'
 
-    implementation(Deps.ZXing.zxing_lite){
-        transitive(false)
-    }
+    implementation  "com.hl:uikit:$hlVersion"
+    implementation  "com.hl:utils:$hlVersion"
 }
