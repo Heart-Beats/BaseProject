@@ -262,6 +262,8 @@ class Deps {
         const val zxing_yuzhiqiang = "com.github.yuzhiqiang1993:zxing:${Versions.ZXING}"
 
         /**
+         * 该库使用更灵活，可扩展性更高
+         *
          * https://github.com/jenly1314/ZXingLite
          */
         const val zxing_lite = "com.github.jenly1314:zxing-lite:${Versions.ZXING_LITE}"

@@ -55,12 +55,13 @@ dependencies {
     implementation Deps.FancyToast.fancy_toast
     implementation Deps.AndroidX.security_crypto
     implementation Deps.Glide.glide
-    implementation Deps.ZXing.zxing_yuzhiqiang
-//    implementation Deps.ZXing.zxing_lite
+    implementation Deps.ZXing.zxing_lite
 
     api Deps.Banner.banner
 
     implementation Deps.PickSelector.picture_selector
     implementation Deps.PickSelector.picture_selector_compress
     api Deps.Update.update_app_utilsx
+
+    api  Deps.UtilCodeX.utilcodex
 }
