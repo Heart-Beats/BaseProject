@@ -115,7 +115,7 @@ abstract class BaseFragment : Fragment() {
         //默认设置根布局上方 padding 为状态栏高度
         initInsetPadding(top = true)
 
-        // 默认状态栏透明，深色字体， 导航栏白色深色字体
+        // 默认状态栏与标题栏同色，深色字体， 导航栏白色深色字体
         immersionBar {
             fitsSystemWindows(false)
             statusBarDarkFont(true)
@@ -237,7 +237,7 @@ abstract class BaseFragment : Fragment() {
     }
 
     /**
-     * 该方法可重写更改状态栏颜色
+     * 该方法可重写更改状态栏颜色, 默认与标题栏保持同色
      */
     protected open fun getStatusBarColor(): Int {
         return getColorByRes(R.color.colorTitlePrimary)

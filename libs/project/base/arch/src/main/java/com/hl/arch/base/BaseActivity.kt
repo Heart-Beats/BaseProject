@@ -1,7 +1,6 @@
 package com.hl.arch.base
 
-import android.content.Context
-import android.content.Intent
+import android.graphics.Color
 import android.graphics.Rect
 import android.os.Bundle
 import android.os.PersistableBundle
@@ -16,6 +15,7 @@ import androidx.lifecycle.MutableLiveData
 import com.gyf.immersionbar.ImmersionBar
 import com.gyf.immersionbar.ktx.immersionBar
 import com.hl.arch.R
+import com.hl.arch.utils.getColorByRes
 import com.hl.arch.utils.initInsetPadding
 import com.hl.arch.utils.setSafeValue
 
@@ -76,13 +76,29 @@ abstract class BaseActivity : AppCompatActivity() {
         //默认设置根布局上方 padding 为状态栏高度
         initInsetPadding(top = true)
 
-        // 默认状态栏透明，深色字体， 导航栏白色深色字体
+        // 默认状态栏与标题栏同色，深色字体， 导航栏白色深色字体
         immersionBar {
             fitsSystemWindows(false)
             statusBarDarkFont(true)
-            navigationBarColor(R.color.white)
+
+            statusBarColorInt(getStatusBarColor())
+            navigationBarColorInt(getNavigationBarColor())
             navigationBarDarkIcon(true)
         }
+    }
+
+    /**
+     * 该方法可重写更改状态栏颜色, 默认与标题栏保持同色
+     */
+    protected open fun getStatusBarColor(): Int {
+        return getColorByRes(R.color.colorTitlePrimary)
+    }
+
+    /**
+     * 该方法可重写更改导航条/导航栏颜色
+     */
+    protected open fun getNavigationBarColor(): Int {
+        return Color.TRANSPARENT
     }
 
     /**
@@ -99,11 +115,6 @@ abstract class BaseActivity : AppCompatActivity() {
             transparentStatusBar()
             immersionBarBlock()
         }
-    }
-
-
-    protected fun Context.startActivity(clazz: Class<*>) {
-        startActivity(Intent(this, clazz))
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
