@@ -314,6 +314,7 @@ project.afterEvaluate {
                     setDependencyNode(root, 'compile', 'io.github.lucksiege', 'pictureselector', Versions.PICTURE_SELECTOR)
                     setDependencyNode(root, 'compile', 'io.github.lucksiege', 'compress', Versions.PICTURE_SELECTOR)
                     setDependencyNode(root, 'compile', 'com.teprinciple', 'updateapputilsx', Versions.UPDATE_APP_UTILSX)
+                    setDependencyNode(root, 'compile', 'com.blankj', 'utilcodex', Versions.UTIL_CODE_X)
 
                     setScm(root)
                 }
