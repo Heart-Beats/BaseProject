@@ -4,7 +4,9 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
 
-    <application>
+    <!-- requestLegacyExternalStorage: 禁用分区存储, 但在 Android 11 会忽略该字段，强制开启分区存储-->
+    <application
+        android:requestLegacyExternalStorage="true">
         <activity android:name=".mvvm.activity.FragmentContainerActivity" />
     </application>
 </manifest>

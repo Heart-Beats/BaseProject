@@ -1,7 +1,6 @@
 package com.hl.arch.base
 
 import android.graphics.Color
-import android.graphics.Rect
 import android.os.Bundle
 import android.os.PersistableBundle
 import android.util.Log
@@ -139,15 +138,26 @@ abstract class BaseActivity : AppCompatActivity() {
      * 点击除 EditText 外区域，当前焦点在 ET 上，EditText 取消焦点
      */
     private fun handleHideSoftKeyBoard(ev: MotionEvent) {
-        val v = currentFocus
-        if (v != null && v is EditText) {
-            val outRect = Rect()
-            v.getGlobalVisibleRect(outRect)
-            if (!outRect.contains(ev.rawX.toInt(), ev.rawY.toInt())) {
-                v.clearFocus()
-                val imm: InputMethodManager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-                imm.hideSoftInputFromWindow(v.windowToken, 0)
+        if (ev.action == MotionEvent.ACTION_DOWN) {
+            val v = currentFocus
+            if (isShouldHideKeyboard(v, ev)) {
+                v?.clearFocus()
+                val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.hideSoftInputFromWindow(v!!.windowToken, 0)
             }
         }
+    }
+
+    private fun isShouldHideKeyboard(v: View?, event: MotionEvent): Boolean {
+        if (v != null && v is EditText) {
+            val outLocation = IntArray(2)
+            v.getLocationInWindow(outLocation)
+            val left = outLocation[0]
+            val top = outLocation[1]
+            val bottom = top + v.getHeight()
+            val right = left + v.getWidth()
+            return !(event.x > left && event.x < right && event.y > top && event.y < bottom)
+        }
+        return false
     }
 }

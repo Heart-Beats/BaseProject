@@ -42,9 +42,33 @@ include ':app'
 def includeBuildProjects = ['libs/project', 'libs/uikit']
 
 includeBuildProjects.forEach {
-    println "开始构建 -------------> $it"
+    println "开始添加构建 -------------> $it"
     includeBuild(it)
 }
+
+//setting.gradle 加载和评估配置阶段完成
+gradle.settingsEvaluated {
+    println '设置加载完毕'
+}
+
+//项目加载完成
+gradle.projectsLoaded {
+    println "${it} ---------> projectsLoaded"
+
+    gradle.rootProject.buildscript {
+        println '开始执行初始化配置脚本'
+    }
+}
+
+gradle.addProjectEvaluationListener(new ProjectEvaluationListener() {
+    void beforeEvaluate(Project project) {
+        println "${project} -------------> beforeEvaluate"
+    }
+
+    void afterEvaluate(Project project, ProjectState state) {
+        println "${project} -------------> afterEvaluate"
+    }
+})
 
 
 //gradle.settingsEvaluated {
