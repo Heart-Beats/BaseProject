@@ -18,6 +18,10 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    viewBinding {
+        enabled = true
+    }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -43,8 +47,11 @@ dependencies {
     implementation Deps.AndroidX.constraint_layout
     implementation Deps.Material.material
 
-    def hlVersion='0.0.7'
+    implementation Deps.LetterSlideBar.side_bar
 
+    def hlVersion='0.0.8'
+
+    implementation  "com.hl:base-arch:$hlVersion"
     implementation  "com.hl:uikit:$hlVersion"
     implementation  "com.hl:utils:$hlVersion"
 }

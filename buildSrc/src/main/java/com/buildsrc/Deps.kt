@@ -59,6 +59,8 @@ internal object Versions {
     const val WEI_XIN_OPEN_SDK = "+"
     const val UPDATE_APP_UTILSX = "2.3.0"
     const val LOTTIE = "5.0.3"
+    const val WAVE_SIDE_BAR = "1.3"
+    const val SIDE_BAR = "1.0.0"
 }
 
 class Deps {
@@ -417,6 +419,26 @@ class Deps {
     }
 
     object Lottie {
-        const val lottie = "'com.airbnb.android:lottie':${Versions.LOTTIE}"
+        const val lottie = "com.airbnb.android:lottie:${Versions.LOTTIE}"
     }
+
+    object LetterSlideBar {
+
+        /**
+         * 波浪动画的字符侧边栏
+         *
+         * 地址： https://github.com/gjiazhe/WaveSideBar
+         */
+        const val wave_side_bar = "com.gjiazhe:wavesidebar:${Versions.WAVE_SIDE_BAR}"
+
+        /**
+         * kotlin 写的的字符侧边栏， 使用时可能有相关问题
+         *
+         * 地址： https://github.com/Leo199206/SideBar
+         */
+        const val side_bar = "com.github.Leo199206:SideBar:${Versions.SIDE_BAR}"
+
+
+    }
+
 }
