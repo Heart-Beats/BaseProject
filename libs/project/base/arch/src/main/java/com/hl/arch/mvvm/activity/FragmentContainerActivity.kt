@@ -39,7 +39,7 @@ fun Context.startFragment(fragmentClass: Class<out Fragment>, extras: Bundle? = 
 }
 
 fun Activity.startFragment(fragmentClass: Class<out Fragment>, extras: Bundle? = null) {
-    this.baseContext.startFragment(fragmentClass, extras)
+    (this as Context).startFragment(fragmentClass, extras)
 }
 
 fun Fragment.startFragment(fragmentClass: Class<out Fragment>, extras: Bundle? = null) {

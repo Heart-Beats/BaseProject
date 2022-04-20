@@ -102,8 +102,13 @@ abstract class MvpBaseActivity<Presenter : MvpBasePresenter<out BaseView>> : Bas
 
     override fun setContentView(layoutResID: Int) {
         super.setContentView(R.layout.activity_base_mvp)
-        mRelLayoutBase = findViewById<View>(R.id.relLayoutBase) as RelativeLayout
         mFraLayoutContent = findViewById<View>(R.id.fraLayoutContent) as FrameLayout
+        LayoutInflater.from(this).inflate(layoutResID, mFraLayoutContent, true)
+        initView()
+    }
+
+    private fun initView() {
+        mRelLayoutBase = findViewById<View>(R.id.relLayoutBase) as RelativeLayout
         mFraLayoutHeadView = findViewById(R.id.fraLayoutHeadView)
         //        mFraLayoutHeadView.setPadding(0,StatusBarUtil.getStatusBarHeight(this),0,StatusBarUtil.getStatusBarHeight(this));
         backView = findViewById(R.id.tv_base_back)
@@ -113,7 +118,6 @@ abstract class MvpBaseActivity<Presenter : MvpBasePresenter<out BaseView>> : Bas
         menuTV = findViewById<View>(R.id.tv_menu) as TextView
         menuIV = findViewById<View>(R.id.iv_menu) as ImageView
         ivBack = findViewById<View>(R.id.iv_back) as ImageView
-        LayoutInflater.from(this).inflate(layoutResID, mFraLayoutContent, true)
         errorLayout = findViewById<View>(R.id.errorLayout) as RelativeLayout
         errorTV = errorLayout!!.findViewById(R.id.reset_textView)
         emptyLayout = findViewById<View>(R.id.emptyLayout) as RelativeLayout
@@ -124,6 +128,13 @@ abstract class MvpBaseActivity<Presenter : MvpBasePresenter<out BaseView>> : Bas
             errorLayout!!.visibility = View.GONE
             requestData()
         }
+    }
+
+    override fun setContentView(view: View) {
+        super.setContentView(R.layout.activity_base_mvp)
+        mFraLayoutContent = findViewById<View>(R.id.fraLayoutContent) as FrameLayout
+        mFraLayoutContent?.addView(view)
+        initView()
     }
 
     protected open fun onTvMenuClick() {}

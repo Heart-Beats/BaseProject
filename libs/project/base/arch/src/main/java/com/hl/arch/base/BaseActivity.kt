@@ -10,6 +10,7 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.MutableLiveData
 import com.gyf.immersionbar.ImmersionBar
 import com.gyf.immersionbar.ktx.immersionBar
@@ -17,6 +18,7 @@ import com.hl.arch.R
 import com.hl.arch.utils.getColorByRes
 import com.hl.arch.utils.initInsetPadding
 import com.hl.arch.utils.setSafeValue
+import com.hl.arch.utils.traverseFindFirstViewByType
 
 abstract class BaseActivity : AppCompatActivity() {
 
@@ -27,6 +29,9 @@ abstract class BaseActivity : AppCompatActivity() {
     }
 
     abstract val layoutResId: Int?
+
+    @JvmField
+    protected var toolbar: Toolbar? = null
 
     abstract fun onViewCreated(savedInstanceState: Bundle?)
 
@@ -39,13 +44,22 @@ abstract class BaseActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         Log.d(TAG, "onCreate: ")
 
-        layoutResId?.run {
-            setContentView(this)
+        layoutResId?.let {
+            val inflateView = View.inflate(this, it, null)
+            toolbar = inflateView?.traverseFindFirstViewByType(Toolbar::class.java)?.apply {
+                // xml 中通过 style 可统一配置，这里设置会导致 xml 中设置失效
+                // this.setTitleTextColor(getColorByRes(R.color.colorTitleText))
+                // this.setBackgroundColor(getColorByRes(R.color.colorTitlePrimary))
+            }
+            setContentView(inflateView)
         }
         getViewBindingLayoutView()?.run {
             setContentView(this)
         }
         updateSystemBar()
+
+        //Activity 创建之后设置toolbar
+        setSupportActionBar(toolbar)
 
         onViewCreated(savedInstanceState)
     }
