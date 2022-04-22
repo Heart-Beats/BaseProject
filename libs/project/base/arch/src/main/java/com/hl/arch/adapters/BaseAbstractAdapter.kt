@@ -106,6 +106,26 @@ abstract class BaseAbstractAdapter<T>(private var data: MutableList<T>) :
     }
 
     /**
+     * 向列表尾部插入数据
+     */
+    fun insertData(vararg addDatas: T) {
+        val lastDataSize = data.size
+        this.data.addAll(addDatas)
+        notifyItemRangeInserted(lastDataSize, addDatas.size)
+    }
+
+    /**
+     *  删除数据
+     */
+    fun removeData(vararg removeDatas: T) {
+        for (removeData in removeDatas) {
+            val removeIndex = this.data.indexOf(removeData)
+            this.data.remove(removeData)
+            notifyItemRemoved(removeIndex)
+        }
+    }
+
+    /**
      * 更新当前的数据
      */
     fun updateData(newData: MutableList<T>) {
@@ -114,14 +134,6 @@ abstract class BaseAbstractAdapter<T>(private var data: MutableList<T>) :
         this.data = newData
     }
 
-    /**
-     * 更新当前的数据
-     */
-    fun insertData(addData: MutableList<T>) {
-        val lastDataSize = data.size
-        this.data.addAll(addData)
-        notifyItemRangeInserted(lastDataSize, addData.size)
-    }
 
     /**
      * 获取当前的数据
