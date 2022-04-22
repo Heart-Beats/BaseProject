@@ -1,13 +1,13 @@
 package com.hl.baseproject
 
+import android.Manifest
 import android.os.Bundle
-import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import com.hl.arch.mvvm.activity.ViewBindingBaseActivity
 import com.hl.baseproject.databinding.ActivityMainBinding
 import com.hl.uikit.onClick
 import com.hl.uikit.toast
 import com.hl.utils.qrcode.QRScanUtil
+import com.hl.utils.reqPermissions
 
 
 class MainActivity : ViewBindingBaseActivity<ActivityMainBinding>() {
@@ -28,10 +28,16 @@ class MainActivity : ViewBindingBaseActivity<ActivityMainBinding>() {
 
     override fun ActivityMainBinding.onViewCreated(savedInstanceState: Bundle?) {
         testScanQrcode.onClick {
-            qrScanUtil.launchDefault()
-        }
 
+            reqPermissions(Manifest.permission.CAMERA, deniedAction = {
+                toast("你拒绝了权限请求呀")
+
+            }) {
+                qrScanUtil.launchDefault()
+            }
+        }
 
         sideBar.setLetters(letterArray)
     }
+
 }

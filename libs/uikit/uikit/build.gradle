@@ -76,7 +76,7 @@ dependencies {
     def picture_selector_version = 'v3.0.6'
     implementation "io.github.lucksiege:pictureselector:$picture_selector_version"
     implementation "io.github.lucksiege:compress:$picture_selector_version"
-    implementation 'com.guolindev.permissionx:permissionx:1.6.1'
+    implementation 'com.guolindev.permissionx:permissionx:1.6.2'
 
     //完整版引入
     implementation('com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer:v8.1.9-release-jitpack')
