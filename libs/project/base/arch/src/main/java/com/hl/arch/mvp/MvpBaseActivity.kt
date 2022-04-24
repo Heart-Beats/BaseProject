@@ -141,8 +141,8 @@ abstract class MvpBaseActivity<Presenter : MvpBasePresenter<out BaseView>> : Bas
 
     protected open fun onIvMenuClick() {}
 
-    override fun setTitleColor(resId: Int) {
-        titleTV!!.setTextColor(resId)
+    override fun setTitleColor(@ColorInt color: Int) {
+        titleTV!!.setTextColor(color)
     }
 
     //增加title
@@ -176,8 +176,8 @@ abstract class MvpBaseActivity<Presenter : MvpBasePresenter<out BaseView>> : Bas
         mFraLayoutHeadView!!.setBackgroundResource(resId)
     }
 
-    fun setMenuColor(resId: Int) {
-        menuTV!!.setTextColor(resId)
+    fun setMenuColor(@ColorInt color: Int) {
+        menuTV!!.setTextColor(color)
     }
 
     fun setTitleBgColor(color: String) {

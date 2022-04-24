@@ -123,6 +123,7 @@ abstract class BaseFragment : Fragment() {
             statusBarColorInt(getStatusBarColor())
             navigationBarColorInt(getNavigationBarColor())
             navigationBarDarkIcon(true)
+            keyboardEnable(true)
         }
     }
 
