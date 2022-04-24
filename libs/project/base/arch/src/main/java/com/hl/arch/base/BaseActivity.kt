@@ -97,6 +97,7 @@ abstract class BaseActivity : AppCompatActivity() {
             statusBarColorInt(getStatusBarColor())
             navigationBarColorInt(getNavigationBarColor())
             navigationBarDarkIcon(true)
+            keyboardEnable(true)
         }
     }
 

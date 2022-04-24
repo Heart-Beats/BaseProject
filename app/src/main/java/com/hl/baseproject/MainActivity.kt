@@ -19,7 +19,7 @@ class MainActivity : ViewBindingBaseActivity<ActivityMainBinding>() {
     }
 
     private val letterArray: List<String> by lazy {
-        var list = arrayListOf<String>()
+        val list = arrayListOf<String>()
         for (char in 'A'..'C') {
             list.add(char.toString())
         }
@@ -27,6 +27,8 @@ class MainActivity : ViewBindingBaseActivity<ActivityMainBinding>() {
     }
 
     override fun ActivityMainBinding.onViewCreated(savedInstanceState: Bundle?) {
+        uikitToolbar.title = "主页面"
+
         testScanQrcode.onClick {
 
             reqPermissions(Manifest.permission.CAMERA, deniedAction = {

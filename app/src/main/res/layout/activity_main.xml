@@ -4,43 +4,54 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal"
+    android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+    <com.hl.uikit.UIKitToolbar
+        android:id="@+id/uikit_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
-        <com.hl.uikit.image.UikitUploadPicImageGridLayout
-            android:id="@+id/uikitUploadPicImageGridLayout"
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <LinearLayout
             android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <com.hl.uikit.image.UikitUploadPicImageGridLayout
+                android:id="@+id/uikitUploadPicImageGridLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <TextView
+                android:id="@+id/test_scan_qrcode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="测试扫码"
+                android:textSize="35dp" />
+
+        </LinearLayout>
+
+        <com.jlertele.sidebar.SideBarView
+            android:id="@+id/side_bar"
+            android:layout_width="50dp"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-
-        <TextView
-            android:id="@+id/test_scan_qrcode"
-            android:textSize="35dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="测试扫码"/>
-
-    </LinearLayout>
-
-    <com.jlertele.sidebar.SideBarView
-        android:id="@+id/side_bar"
-        android:layout_width="50dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:sideItemSpacing="10dp"
-        app:sidePressedTextBgColor="@android:color/holo_orange_dark"
-        app:sidePressedTextColor="@color/white"
-        app:sideTextColor="@color/black"
-        android:layout_gravity="end|center_vertical"
-        app:sideTextSize="14sp" />
+            android:layout_gravity="end|center_vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:sideItemSpacing="10dp"
+            app:sidePressedTextBgColor="@android:color/holo_orange_dark"
+            app:sidePressedTextColor="@color/white"
+            app:sideTextColor="@color/black"
+            app:sideTextSize="14sp" />
+    </FrameLayout>
 
 </LinearLayout>

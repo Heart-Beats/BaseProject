@@ -204,6 +204,12 @@ class UIKitToolbar : Toolbar {
     }
 
     override fun setTitle(title: CharSequence?) {
+        if (mTitle != null && title == context.getString(context.applicationInfo.labelRes)) {
+            // 当标题不为空且设置的标题为 app label 时，不更改标题，
+            // 忽略 Fragment 中设置 setSupportActionBar  后 Activity 的 onPostCreate ---> onTitleChanged 对 title 更改的影响
+            return
+        }
+
         mTitle = title
         if (isCenterGravity()) {
             setCenterTitle(title)
