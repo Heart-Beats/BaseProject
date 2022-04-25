@@ -17,9 +17,15 @@ android {
         consumerProguardFiles 'consumer-rules.pro'
 
         ndk {
+            /**
+             * armeabi-v7a 和 arm64-v8a 架构的设备会向下兼容：
+             * 1. 只适配 armeabi 的 APP 可以跑在 armeabi,x86,x86_64,armeabi-v7a,arm64-v8 设备上
+             * 2. 只适配 armeabi-v7a 可以运行在 armeabi-v7a 和 arm64-v8a 设备上
+             * 3. 只适配 arm64-v8a 的 App 只可以运行在 arm64-v8a 设备上
+             *
+             */
             //设置支持的SO库架构
-            //            abiFilters "armeabi-v7a", "x86", "arm64-v8a", "x86_64"
-            abiFilters "armeabi-v7a"
+            abiFilters "armeabi-v7a", "arm64-v8a"
         }
     }
     kotlinOptions {
