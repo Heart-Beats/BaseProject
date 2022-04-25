@@ -52,6 +52,7 @@ class UIKitToolbar : Toolbar {
     private var tvCenterTitle: TextView? = null
     private var mTitleTextAppearance: Int = 0
     private var mTitleTextColor: ColorStateList? = null
+    private var mTitleIsBold: Boolean = false
     private var mConfigBuilder: ConfigBuilder<Any>? = null
 
     constructor(context: Context) : this(context, null)
@@ -158,7 +159,7 @@ class UIKitToolbar : Toolbar {
             setTitleTextColor(it)
         }
 
-        barTypedArray.getBoolean(R.styleable.UIKitToolbar_uikit_titleIsBold, false).let {
+        barTypedArray.getBoolean(R.styleable.UIKitToolbar_uikit_titleIsBold, mTitleIsBold).let {
             setTitleBold(it)
         }
 
@@ -231,6 +232,7 @@ class UIKitToolbar : Toolbar {
     }
 
     fun setTitleBold(isBold: Boolean) {
+        mTitleIsBold = isBold
         if (isCenterGravity() && isBold) {
             tvCenterTitle?.typeface = Typeface.DEFAULT_BOLD
         }
@@ -398,6 +400,9 @@ class UIKitToolbar : Toolbar {
                 }
                 mTitleTextSize?.toFloat()?.let { titleSize ->
                     tvCenterTitle?.setTextSize(TypedValue.COMPLEX_UNIT_PX, titleSize)
+                }
+                if (mTitleIsBold) {
+                    tvCenterTitle?.typeface = Typeface.DEFAULT_BOLD
                 }
                 addView(tvCenterTitle)
             } else if (tvCenterTitle?.parent == null) {
