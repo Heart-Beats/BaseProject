@@ -24,7 +24,20 @@ import tv.danmaku.ijk.media.player.IjkMediaPlayer
 /**
  *
  * @param  lifecycleOwner：  自动在该生命周期内创建、销毁对象
- * @param  url：  自动在该生命周期内创建、销毁对象
+ * @param  url：  视频地址
+ *                  raw 下的视频：  GSYVideoManager.instance().enableRawPlay(getApplicationContext()) 这个必须打开
+ *                          1. "android.resource://" + getPackageName() + "/" + R.raw.test;
+ *                          2. "rawresource://" + getPackageName() + "/" + R.raw.test;
+ *                          3. RawResourceDataSource.buildRawResourceUri(R.raw.test).toString();
+ *
+ *                  网络上的视频：
+ *                          1. "https://cos.icxl.xyz/c03328206d894477a3f8c9767a4de5649342908.mov" (网络视频地址)
+ *                          2. "rtsp://ajj:12345678@218.21.217.122:65523/h264/ch40/sub/av_stream" (流媒体)
+ *                          3. "ijkhttphook:https://res.exexm.com/cw_145225549855002" （断网自动重新链接，url前接上 ijkhttphook）
+ *
+ *                  本地视频：
+ *                          "file://"+ Environment.getExternalStorageDirectory().getPath() + "Download/132451525666042.mp4"
+ *
  * @param  videoName：  视频标题名
  * @param  needTitle：  是否需要视频标题
  * @param  optionBuilder：  GSYVideo 播放器相关的构造选项
