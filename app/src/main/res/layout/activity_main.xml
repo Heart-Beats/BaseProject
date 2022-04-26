@@ -37,6 +37,14 @@
                 android:text="测试扫码"
                 android:textSize="35dp" />
 
+            <TextView
+                android:id="@+id/test"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="旋转屏幕"
+                android:textSize="24sp" />
+
         </LinearLayout>
 
         <com.jlertele.sidebar.SideBarView
