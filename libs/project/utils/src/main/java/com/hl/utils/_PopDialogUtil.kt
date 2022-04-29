@@ -33,6 +33,49 @@ fun Fragment.showAgreeDialog(itemClickListener: (dialog: Dialog, position: Int) 
     }.showInFragment(this)
 }
 
+fun FragmentActivity.popConfirmDialog(
+    dialogTitle: String? = null, dialogMessage: CharSequence, confirmText: CharSequence = "确认",
+    onConfirmListener: () -> Unit = {}
+): AlertDialogFragment {
+    val dialogFragment = AlertDialogFragment().apply {
+        if (dialogTitle != null) {
+            setTitle(dialogTitle)
+        }
+        setMessage(dialogMessage)
+        setPositiveButton(confirmText) { _, _ ->
+            dismiss()
+            onConfirmListener()
+        }
+    }
+    dialogFragment.showInActivity(this)
+    return dialogFragment
+}
+
+fun FragmentActivity.popConfirmAndCancelDialog(
+    dialogTitle: String? = null, dialogMessage: CharSequence,
+    cancelText: CharSequence = "取消",
+    onCancelListener: () -> Unit = {},
+    confirmText: CharSequence = "确认",
+    onConfirmListener: () -> Unit = {}
+): AlertDialogFragment {
+    val dialogFragment = AlertDialogFragment().apply {
+        if (dialogTitle != null) {
+            setTitle(dialogTitle)
+        }
+        setMessage(dialogMessage)
+        setNegativeButton(cancelText) { _, _ ->
+            dismiss()
+            onCancelListener()
+        }
+        setPositiveButton(confirmText) { _, _ ->
+            dismiss()
+            onConfirmListener()
+        }
+    }
+    dialogFragment.showInActivity(this)
+    return dialogFragment
+}
+
 fun Fragment.popConfirmDialog(
     dialogTitle: String? = null, dialogMessage: CharSequence, confirmText: CharSequence = "确认",
     onConfirmListener: () -> Unit = {}
