@@ -47,7 +47,7 @@ fun UIKitMyStandardGSYVideoPlayer.initPlayer(
     url: String,
     videoName: String = "测试视频",
     needTitle: Boolean = true,
-    optionBuilder: GSYVideoOptionBuilder.() -> Unit
+    optionBuilder: GSYVideoOptionBuilder.() -> Unit = {}
 ) {
     lifecycleOwner.lifecycle.addObserver(this)
 

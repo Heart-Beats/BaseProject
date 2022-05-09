@@ -317,6 +317,14 @@ project.afterEvaluate {
                     setDependencyNode(root, 'compile', 'com.blankj', 'utilcodex', Versions.UTIL_CODE_X)
                     setDependencyNode(root, 'compile', 'com.github.CarGuo.GSYVideoPlayer', 'GSYVideoPlayer', Versions.GSY_VIDEO_PLAYER)
 
+                    setDependencyNode(root, 'compile', myGroupId, 'base-app-res', getPublicationVersion())
+                    setDependencyNode(root, 'compile', 'com.elvishew', 'xlog', Versions.XLOG)
+                    setDependencyNode(root, 'compile', 'com.tencent.tbs', 'tbssdk', Versions.TBS_SDK)
+                    setDependencyNode(root, 'compile', 'com.github.getActivity', 'EasyHttp', Versions.EASY_HTTP)
+                    setDependencyNode(root, 'compile', 'com.github.li-xiaojun', 'XPopup', Versions.X_POPUP)
+                    setDependencyNode(root, 'compile', 'com.squareup.okhttp3', 'okhttp', Versions.OKHTTP)
+                    setDependencyNode(root, 'compile', 'com.geyifeng.immersionbar', 'immersionbar', Versions.IMMERSION_BAR)
+
                     setScm(root)
                 }
             }
