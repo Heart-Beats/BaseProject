@@ -14,7 +14,7 @@ import com.hl.uikit.R
  * https://github.com/SheHuan/NiceImageView
  * https://www.jianshu.com/p/9016ecf1d213
  */
-class UikitRoundImageView @JvmOverloads constructor(
+class UIKitRoundImageView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
@@ -299,43 +299,43 @@ class UikitRoundImageView @JvmOverloads constructor(
     }
 
     init {
-        val ta = context.obtainStyledAttributes(attrs, R.styleable.UikitRoundImageView, 0, 0)
+        val ta = context.obtainStyledAttributes(attrs, R.styleable.UIKitRoundImageView, 0, 0)
         for (i in 0 until ta.indexCount) {
             when (val attr = ta.getIndex(i)) {
-                R.styleable.UikitRoundImageView_uikit_is_cover_src -> {
+                R.styleable.UIKitRoundImageView_uikit_is_cover_src -> {
                     isCoverSrc = ta.getBoolean(attr, isCoverSrc)
                 }
-                R.styleable.UikitRoundImageView_uikit_is_circle -> {
+                R.styleable.UIKitRoundImageView_uikit_is_circle -> {
                     isCircle = ta.getBoolean(attr, isCircle)
                 }
-                R.styleable.UikitRoundImageView_uikit_border_width -> {
+                R.styleable.UIKitRoundImageView_uikit_border_width -> {
                     borderWidth = ta.getDimensionPixelSize(attr, borderWidth)
                 }
-                R.styleable.UikitRoundImageView_uikit_border_color -> {
+                R.styleable.UIKitRoundImageView_uikit_border_color -> {
                     borderColor = ta.getColor(attr, borderColor)
                 }
-                R.styleable.UikitRoundImageView_uikit_inner_border_width -> {
+                R.styleable.UIKitRoundImageView_uikit_inner_border_width -> {
                     innerBorderWidth = ta.getDimensionPixelSize(attr, innerBorderWidth)
                 }
-                R.styleable.UikitRoundImageView_uikit_inner_border_color -> {
+                R.styleable.UIKitRoundImageView_uikit_inner_border_color -> {
                     innerBorderColor = ta.getColor(attr, innerBorderColor)
                 }
-                R.styleable.UikitRoundImageView_uikit_corner_radius -> {
+                R.styleable.UIKitRoundImageView_uikit_corner_radius -> {
                     cornerRadius = ta.getDimensionPixelSize(attr, cornerRadius)
                 }
-                R.styleable.UikitRoundImageView_uikit_corner_top_left_radius -> {
+                R.styleable.UIKitRoundImageView_uikit_corner_top_left_radius -> {
                     cornerTopLeftRadius = ta.getDimensionPixelSize(attr, cornerTopLeftRadius)
                 }
-                R.styleable.UikitRoundImageView_uikit_corner_top_right_radius -> {
+                R.styleable.UIKitRoundImageView_uikit_corner_top_right_radius -> {
                     cornerTopRightRadius = ta.getDimensionPixelSize(attr, cornerTopRightRadius)
                 }
-                R.styleable.UikitRoundImageView_uikit_corner_bottom_left_radius -> {
+                R.styleable.UIKitRoundImageView_uikit_corner_bottom_left_radius -> {
                     cornerBottomLeftRadius = ta.getDimensionPixelSize(attr, cornerBottomLeftRadius)
                 }
-                R.styleable.UikitRoundImageView_uikit_corner_bottom_right_radius -> {
+                R.styleable.UIKitRoundImageView_uikit_corner_bottom_right_radius -> {
                     cornerBottomRightRadius = ta.getDimensionPixelSize(attr, cornerBottomRightRadius)
                 }
-                R.styleable.UikitRoundImageView_uikit_mask_color -> {
+                R.styleable.UIKitRoundImageView_uikit_mask_color -> {
                     maskColor = ta.getColor(attr, maskColor)
                 }
             }

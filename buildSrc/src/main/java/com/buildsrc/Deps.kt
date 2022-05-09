@@ -28,6 +28,7 @@ internal object Versions {
     const val NIM = "8.5.1"
     const val RETROFIT = "2.9.0"
     const val OKHTTP = "4.2.2"
+    const val EASY_HTTP = "11.0"
     const val IMMERSION_BAR = "3.2.2"
     const val EVENT_BUS = "3.3.1"
     const val RX_JAVA_3 = "3.1.3"
@@ -57,6 +58,7 @@ internal object Versions {
     const val VERIFICATION_CODE_INPUT_VIEW = "1.0.2"
     const val GSY_VIDEO_PLAYER = "v8.2.0-release-jitpack"
     const val WEI_XIN_OPEN_SDK = "+"
+    const val TBS_SDK = "44181"
     const val UPDATE_APP_UTILSX = "2.3.0"
     const val LOTTIE = "5.0.3"
     const val WAVE_SIDE_BAR = "1.3"
@@ -188,9 +190,16 @@ class Deps {
     object Okhttp {
         const val logging_interceptor = "com.squareup.okhttp3:logging-interceptor:${Versions.OKHTTP}"
         const val okhttp = "com.squareup.okhttp3:okhttp:${Versions.OKHTTP}"
+
+        /**
+         * 基于 Okhttp 的一个网络请求库：https://github.com/getActivity/EasyHttp
+         *
+         * 除了定义接口进行请求外，可以更方便地进行文件上传或者下载
+         */
+        const val easy_http = "com.github.getActivity:EasyHttp:${Versions.EASY_HTTP}"
     }
 
-    object Immersion_Bar {
+    object Status_Bar {
 
         /**
          *  基础依赖包，必须要依赖
@@ -407,10 +416,12 @@ class Deps {
         const val gsy_video_player = "com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer:${Versions.GSY_VIDEO_PLAYER}"
     }
 
-    object WeXin {
+    object Tencent {
         //不包含统计功能
         const val wechat_sdk_android_without_mta =
             "com.tencent.mm.opensdk:wechat-sdk-android-without-mta:${Versions.WEI_XIN_OPEN_SDK}"
+
+        const val tbs_sdk = "com.tencent.tbs:tbssdk:${Versions.TBS_SDK}"
     }
 
     object Update {
@@ -419,7 +430,7 @@ class Deps {
     }
 
     object Lottie {
-        const val lottie = "com.airbnb.android:lottie:${Versions.LOTTIE}"
+        const val lottie = "'com.airbnb.android:lottie':${Versions.LOTTIE}"
     }
 
     object LetterSlideBar {

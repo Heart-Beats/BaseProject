@@ -52,8 +52,8 @@ dependencies {
     api Deps.Lifecycle.lifecycle_extensions
     api Deps.Lifecycle.lifecycle_runtime_ktx
 
-    api Deps.Immersion_Bar.immersionbar
-    api Deps.Immersion_Bar.immersionbar_ktx
+    api Deps.Status_Bar.immersionbar
+    api Deps.Status_Bar.immersionbar_ktx
     api Deps.Glide.glide
     api Deps.Gson.gson
     api Deps.JetpackNavigation.navigation_fragment_ktx

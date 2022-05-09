@@ -339,7 +339,7 @@
         <attr name="uikit_progressAreaColor" format="color|reference" />
     </declare-styleable>
 
-    <declare-styleable name="UikitUploadPicImageGridLayout">
+    <declare-styleable name="UIKitUploadPicImageGridLayout">
         <attr name="uikit_maxColumn" format="integer" />
         <attr name="uikit_maxSelectPictureCount" format="integer" />
         <attr name="uikit_itemSpace" format="dimension|reference" />
@@ -360,7 +360,7 @@
         <attr name="uikit_end_last_frame" format="boolean"  />
     </declare-styleable>
 
-    <declare-styleable name="UikitRoundImageView">
+    <declare-styleable name="UIKitRoundImageView">
         <attr name="uikit_is_circle" format="boolean" />
         <attr name="uikit_is_cover_src" format="boolean" />
         <attr name="uikit_corner_radius" format="dimension" />
@@ -373,5 +373,14 @@
         <attr name="uikit_inner_border_width" format="dimension" />
         <attr name="uikit_inner_border_color" format="color" />
         <attr name="uikit_mask_color" format="color" />
+    </declare-styleable>
+
+    <declare-styleable name="UIKitCircleProgressBar">
+        <attr name="uikit_cpb_background" format="color|reference" />
+        <attr name="uikit_cpb_background_width" format="dimension|reference" />
+        <attr name="uikit_cpb_color" format="color|reference" />
+        <attr name="uikit_cpb_width" format="dimension|reference" />
+        <attr name="uikit_cpb_max_progress" format="float" />
+        <attr name="uikit_cpb_progress" format="float" />
     </declare-styleable>
 </resources>

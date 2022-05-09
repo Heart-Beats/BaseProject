@@ -3,6 +3,7 @@ import com.buildsrc.Deps
 plugins {
     id 'com.android.library'
     id 'kotlin-android'
+    id 'kotlin-android-extensions'
 }
 
 android {
@@ -75,6 +76,15 @@ dependencies {
     implementation Deps.PickSelector.picture_selector_compress
     api Deps.Update.update_app_utilsx
 
-    api  Deps.UtilCodeX.utilcodex
+    api Deps.UtilCodeX.utilcodex
     api Deps.GSYVideoPlayer.gsy_video_player
+
+    api project(path: ':base-app-res')
+    api Deps.XLog.xlog
+    api Deps.Tencent.tbs_sdk
+    api Deps.Okhttp.easy_http
+    api Deps.Popup.x_popup
+    api Deps.Okhttp.okhttp
+    api Deps.Status_Bar.immersionbar
+
 }

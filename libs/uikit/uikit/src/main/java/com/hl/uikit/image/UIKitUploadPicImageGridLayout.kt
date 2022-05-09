@@ -28,7 +28,7 @@ import java.io.File
  * Email: 913305160@qq.com
  */
 
-class UikitUploadPicImageGridLayout : FrameLayout {
+class UIKitUploadPicImageGridLayout : FrameLayout {
 
     /**
      * 最大列数
@@ -91,25 +91,25 @@ class UikitUploadPicImageGridLayout : FrameLayout {
 
     private fun init(attrs: AttributeSet?, defStyle: Int) {
         val ta = context.obtainStyledAttributes(
-            attrs, R.styleable.UikitUploadPicImageGridLayout, defStyle, 0
+            attrs, R.styleable.UIKitUploadPicImageGridLayout, defStyle, 0
         )
 
         ta.also {
-            maxColumn = it.getInt(R.styleable.UikitUploadPicImageGridLayout_uikit_maxColumn, maxColumn)
+            maxColumn = it.getInt(R.styleable.UIKitUploadPicImageGridLayout_uikit_maxColumn, maxColumn)
             maxSelectPictureCount = it.getInt(
-                R.styleable.UikitUploadPicImageGridLayout_uikit_maxSelectPictureCount, maxSelectPictureCount
+                R.styleable.UIKitUploadPicImageGridLayout_uikit_maxSelectPictureCount, maxSelectPictureCount
             )
             itemSpace = it.getDimensionPixelSize(
-                R.styleable.UikitUploadPicImageGridLayout_uikit_itemSpace, itemSpace
+                R.styleable.UIKitUploadPicImageGridLayout_uikit_itemSpace, itemSpace
             )
             addItemRes = it.getResourceId(
-                R.styleable.UikitUploadPicImageGridLayout_uikit_addItemRes, addItemRes
+                R.styleable.UIKitUploadPicImageGridLayout_uikit_addItemRes, addItemRes
             )
-            isCanDelete = it.getBoolean(R.styleable.UikitUploadPicImageGridLayout_uikit_isCanDelete, isCanDelete)
-            isCanAdd = it.getBoolean(R.styleable.UikitUploadPicImageGridLayout_uikit_isCanDelete, isCanAdd)
+            isCanDelete = it.getBoolean(R.styleable.UIKitUploadPicImageGridLayout_uikit_isCanDelete, isCanDelete)
+            isCanAdd = it.getBoolean(R.styleable.UIKitUploadPicImageGridLayout_uikit_isCanDelete, isCanAdd)
             imageRoundRadius =
                 it.getDimensionPixelSize(
-                    R.styleable.UikitUploadPicImageGridLayout_uikit_imageRoundRadius,
+                    R.styleable.UIKitUploadPicImageGridLayout_uikit_imageRoundRadius,
                     imageRoundRadius
                 )
         }.recycle()
@@ -174,7 +174,7 @@ class UikitUploadPicImageGridLayout : FrameLayout {
                                 }
                             }
                         }, deniedAction = {
-                            this@UikitUploadPicImageGridLayout.context.toast("未授予相机权限")
+                            this@UIKitUploadPicImageGridLayout.context.toast("未授予相机权限")
                         })
 
                         1 -> reqPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE, allGrantedAction = {
@@ -186,7 +186,7 @@ class UikitUploadPicImageGridLayout : FrameLayout {
                                 }
                             }
                         }, deniedAction = {
-                            this@UikitUploadPicImageGridLayout.context.toast("未授予存储权限")
+                            this@UIKitUploadPicImageGridLayout.context.toast("未授予存储权限")
                         })
                     }
                 }
