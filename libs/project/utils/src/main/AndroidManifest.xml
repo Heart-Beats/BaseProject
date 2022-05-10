@@ -7,6 +7,9 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_PRIVILEGED_PHONE_STATE" />
 
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+
     <!-- zxing-android-embedded 使用了 TextureView，因此需要硬件加速 -->
     <application android:hardwareAccelerated="true">
 
@@ -15,5 +18,13 @@
             android:name="com.king.zxing.CaptureActivity"
             android:screenOrientation="portrait"
             android:theme="@style/CaptureTheme" />
+
+        <activity
+            android:name=".previewfile.PreviewFileActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".camera.MyCaptureActivity"
+            android:exported="false" />
     </application>
 </manifest>

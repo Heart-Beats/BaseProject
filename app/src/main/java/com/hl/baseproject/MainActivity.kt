@@ -1,6 +1,8 @@
 package com.hl.baseproject
 
 import android.Manifest
+import android.app.Activity
+import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.content.res.Configuration
 import android.os.Bundle
@@ -8,6 +10,8 @@ import com.hl.arch.mvvm.activity.ViewBindingBaseActivity
 import com.hl.baseproject.databinding.ActivityMainBinding
 import com.hl.uikit.onClick
 import com.hl.uikit.toast
+import com.hl.utils.camera.CaptureFeature
+import com.hl.utils.camera.MyCaptureActivity
 import com.hl.utils.qrcode.QRScanUtil
 import com.hl.utils.reqPermissions
 import com.hl.utils.setImmersiveSystemBar
@@ -46,12 +50,16 @@ class MainActivity : ViewBindingBaseActivity<ActivityMainBinding>() {
         sideBar.setLetters(letterArray)
 
 
-        test.onClick {
+        testRotateScreen.onClick {
             requestedOrientation = if (requestedOrientation == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
                 ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
             } else {
                 ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
             }
+        }
+
+        testCapture.onClick {
+            MyCaptureActivity.start(this@MainActivity, CaptureFeature.BOTH, 1)
         }
     }
 
@@ -61,6 +69,14 @@ class MainActivity : ViewBindingBaseActivity<ActivityMainBinding>() {
             setImmersiveSystemBar(true)
         } else {
             setImmersiveSystemBar(false)
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        val captureFilePath = data?.getStringExtra(MyCaptureActivity.CAPTURE_FILE_PATH)
+        if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
+            toast("拍摄后路径 == $captureFilePath")
         }
     }
 }

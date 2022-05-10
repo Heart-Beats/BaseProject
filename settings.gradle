@@ -20,7 +20,7 @@ dependencyResolutionManagement {
         maven {
             name = "YouMa"
 
-            url 'http://121.89.215.221:8081/repository/maven-public/'
+            url 'http://maven.pm.youmatech.com/repository/maven-releases/'
 
             credentials {
                 username = 'youmaAdmin'
