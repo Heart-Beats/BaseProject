@@ -324,6 +324,10 @@ project.afterEvaluate {
                     setDependencyNode(root, 'compile', 'com.github.li-xiaojun', 'XPopup', Versions.X_POPUP)
                     setDependencyNode(root, 'compile', 'com.squareup.okhttp3', 'okhttp', Versions.OKHTTP)
                     setDependencyNode(root, 'compile', 'com.geyifeng.immersionbar', 'immersionbar', Versions.IMMERSION_BAR)
+                    setDependencyNode(root, 'compile', 'com.geyifeng.immersionbar', 'immersionbar-ktx', Versions.IMMERSION_BAR)
+
+                    setDependencyNode(root, 'compile', 'me.rosuh', 'AndroidFilePicker', Versions.ANDROID_FILE_PICKER)
+                    setDependencyNode(root, 'compile', 'cjt.library.wheel', 'camera', Versions.CAMERA)
 
                     setScm(root)
                 }

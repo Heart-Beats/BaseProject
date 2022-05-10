@@ -17,7 +17,7 @@ class QRScanUtil(private val activityResultCaller: ActivityResultCaller) {
 
 
     /**
-     * 必须在 activity 的 onCreate中调用此方法
+     * 必须在 activity 的 onCreate中或之前调用此方法
      */
     fun registerScanActivityResult(scanResultAction: (String?) -> Unit) {
         qrCodeScanActivityResult = activityResultCaller.registerForActivityResult(
