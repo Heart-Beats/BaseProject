@@ -31,7 +31,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
         android:layout_marginTop="4dp"
-        android:text="0/200"
+        tools:text="0/200"
         android:textColor="#ffc4c4c4"
         android:textSize="13sp" />
 </merge>

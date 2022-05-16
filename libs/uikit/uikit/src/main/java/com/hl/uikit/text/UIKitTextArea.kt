@@ -8,6 +8,8 @@ import android.view.View
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.annotation.ColorInt
+import androidx.annotation.Px
 import androidx.core.widget.addTextChangedListener
 import com.hl.uikit.R
 import com.hl.uikit.setMaxLength
@@ -15,8 +17,9 @@ import com.hl.uikit.setMaxLength
 class UIKitTextArea : LinearLayout {
 
     private lateinit var etInput: EditText
+    private lateinit var tvCount: TextView
 
-    private var textAreaHint: String? = null
+    private var textAreaHint: CharSequence? = null
     private var textAreaHintColor: ColorStateList? = null
     private var textAreaTextColor: ColorStateList? = null
     private var textAreaTextSize: Int = 14
@@ -60,11 +63,12 @@ class UIKitTextArea : LinearLayout {
 
     private fun initView() {
         etInput = findViewById(R.id.etInput)
-        val tvCount = findViewById<TextView>(R.id.tvCount)
+        tvCount = findViewById(R.id.tvCount)
 
         etInput.addTextChangedListener {
-            tvCount?.text = "${it?.toString()?.length ?: 0}/$textAreaMaxCount"
+            tvCount.text = "${it?.toString()?.length ?: 0}/$textAreaMaxCount"
         }
+        tvCount.text = "${etInput.text.toString().length}/$textAreaMaxCount"
 
         etInput.setMaxLength(textAreaMaxCount)
         textAreaHint?.run {
@@ -89,4 +93,49 @@ class UIKitTextArea : LinearLayout {
     fun setText(text: CharSequence?) {
         etInput.setText(text ?: "")
     }
+
+    fun setTextColor(@ColorInt color: Int) {
+        textAreaTextColor = ColorStateList.valueOf(color)
+        etInput.setTextColor(textAreaTextColor)
+    }
+
+    fun setTextSize(@Px textSize: Int) {
+        textAreaTextSize = textSize
+        etInput.setTextSize(TypedValue.COMPLEX_UNIT_PX, textAreaTextSize.toFloat())
+    }
+
+    fun getTextSize() = textAreaTextSize
+
+    fun setTextHint(text: CharSequence?) {
+        textAreaHint = text ?: ""
+        etInput.hint = textAreaHint
+    }
+
+    fun getTextHint() = textAreaHint
+
+    fun setTextHintColor(@ColorInt color: Int) {
+        textAreaHintColor = ColorStateList.valueOf(color)
+        etInput.setHintTextColor(textAreaTextColor)
+    }
+
+    fun setMaxCount(maxCount: Int) {
+        textAreaMaxCount = maxCount
+        etInput.setMaxLength(textAreaMaxCount)
+    }
+
+    fun getMaxCount() = textAreaMaxCount
+
+
+    fun setMaxCountTextColor(@ColorInt color: Int) {
+        textAreaMaxCountTextColor = ColorStateList.valueOf(color)
+        tvCount.setTextColor(textAreaTextColor)
+    }
+
+    fun setMaxCountTextSize(@Px textSize: Int) {
+        textAreaMaxCountTextSize = textSize
+        tvCount.setTextSize(TypedValue.COMPLEX_UNIT_PX, textAreaTextSize.toFloat())
+    }
+
+    fun getMaxCountTextSize() = textAreaMaxCountTextSize
+
 }
