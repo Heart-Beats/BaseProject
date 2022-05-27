@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="UiKit" />
+    <!-- MaterialComponents 主题后加个 Bridge， 就只会对 material 下的组件生效，
+                            不加会将默认的 Button 转为 MaterialButton，以此类推 -->
+    <style name="UiKit" parent="Theme.MaterialComponents.Light.NoActionBar.Bridge" />
 
-    <style name="UiKit.AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="UiKit.AppTheme">
         <item name="colorPrimary">@color/uikit_colorPrimary</item>
         <item name="colorPrimaryDark">@color/uikit_colorPrimaryDark</item>
         <item name="android:textColorPrimary">@color/uikit_textColorPrimary</item>
