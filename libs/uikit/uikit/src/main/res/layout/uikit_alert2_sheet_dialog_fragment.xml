@@ -26,7 +26,7 @@
             android:layout_height="42dp"
             android:backgroundTint="@color/uikit_alert2_sheet_negative_bg_tint"
             android:textColor="@color/uikit_color_1"
-            android:textSize="@dimen/uikit_fontsize_7"
+            android:textSize="@dimen/uikit_font_size_7"
             app:uikit_buttonStyle="solid_color1_radius4"
             tools:text="取消" />
 
@@ -36,7 +36,7 @@
             android:layout_height="42dp"
             android:layout_marginStart="20dp"
             app:uikit_buttonStyle="solid_color1_radius4"
-            android:textSize="@dimen/uikit_fontsize_7"
+            android:textSize="@dimen/uikit_font_size_7"
             tools:text="确定" />
     </LinearLayout>
 

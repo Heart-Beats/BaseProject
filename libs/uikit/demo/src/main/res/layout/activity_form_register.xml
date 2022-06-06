@@ -16,7 +16,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:uikit_title="验证码" />
 
-    <com.hl.uikit.KDividerView
+    <com.hl.uikit.UIKitDividerView
         android:id="@+id/dividerView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar"

@@ -1,48 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- MaterialComponents 主题后加个 Bridge， 就只会对 material 下的组件生效，
-                            不加会将默认的 Button 转为 MaterialButton，以此类推 -->
-    <style name="UiKit" parent="Theme.MaterialComponents.Light.NoActionBar.Bridge" />
-
-    <style name="UiKit.AppTheme">
-        <item name="colorPrimary">@color/uikit_colorPrimary</item>
-        <item name="colorPrimaryDark">@color/uikit_colorPrimaryDark</item>
-        <item name="android:textColorPrimary">@color/uikit_textColorPrimary</item>
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-        <item name="android:windowBackground">@color/uikit_backgroundColor</item>
-        <item name="android:windowTranslucentStatus">true</item>
-        <item name="android:windowDisablePreview">true</item>
-
-        <item name="uikit_toolbarStyle">@style/UiKit.ToolbarStyle</item>
-        <item name="uikit_formGroupStyle">@style/UiKit.FormGroupStyle</item>
-        <item name="uikit_formItemStyle">@style/UiKit.FormItemStyle</item>
-        <item name="uikit_formHeaderActionTextStyle">@style/UiKit.FormHeaderActionTextStyle</item>
-        <item name="uikit_formItemLabelStyle">@style/UiKit.FormItemLabelStyle</item>
-        <item name="uikit_formItemTextStyle">@style/UiKit.FormItemTextStyle</item>
-        <item name="uikit_formItemInputStyle">@style/UiKit.FormItemInputStyle</item>
-        <item name="uikit_formItemTextVerifyCodeStyle">@style/UiKit.FormItemTextVerifyCodeStyle</item>
-        <item name="uikit_formItemInputSmsCodeStyle">@style/UiKit.FormItemInputSmsCodeStyle</item>
-        <item name="uikit_formItemToggleButtonStyle">@style/UiKit.FormItemToggleButtonStyle</item>
-        <item name="uikit_formItemVerticalTextStyle">@style/UiKit.FormItemVerticalTextStyle</item>
-        <item name="uikit_positiveButtonStyle">@style/UiKit.PositiveButtonStyle</item>
-        <item name="uikit_strokeButtonStyle">@style/UiKit.StrokeButtonStyle</item>
-        <item name="uikit_dividerViewStyle">@style/UiKit.DividerViewStyle</item>
-        <item name="uikit_dividerColor">@color/uikit_dividerColor</item>
-        <item name="uikit_alert_positive_text_color">@color/uikit_alert_positive_text_color</item>
-        <item name="uikit_alert_negative_text_color">@color/uikit_alert_negative_text_color</item>
-        <item name="uikit_commonButtonStyle">@style/UiKit.CommonButtonStyle</item>
-        <item name="uikit_searchBarStyle">@style/UiKit.SearchBarStyle</item>
-        <item name="uikit_optionsPickerViewStyle">@style/UiKit.OptionsPickerViewStyle</item>
-        <item name="uikit_optionRadioStyle">@style/UiKit.OptionRadioStyle</item>
-        <item name="uikit_textAreaStyle">@style/UiKit.TextAreaStyle</item>
-        <item name="uikit_progressImageViewStyle">@style/UiKit.ProgressImageViewStyle</item>
-        <item name="uikit_uploadPicImageGridLayout">@style/UiKit.UploadPicImageGridLayout</item>
-    </style>
-
     <style name="UiKit.OptionsPickerViewStyle">
-        <item name="android:textSize">@dimen/uikit_fontsize_6</item>
+        <item name="android:textSize">@dimen/uikit_font_size_6</item>
         <item name="android:textColor">@color/uikit_options_picker_wheel_text_color</item>
         <item name="uikit_wheelCurved">true</item>
         <item name="uikit_showWheelDivider">true</item>
@@ -61,9 +21,9 @@
         <item name="uikit_backgroundColor">@android:color/white</item>
         <!--<item name="uikit_title">@string/app_name</item>-->
         <item name="uikit_titleGravity">center</item>
-        <item name="uikit_titleSize">@dimen/uikit_fontsize_6</item>
+        <item name="uikit_titleSize">@dimen/uikit_font_size_6</item>
         <item name="uikit_titleColor">@color/uikit_color_3</item>
-        <item name="uikit_rightTextSize">@dimen/uikit_fontsize_8</item>
+        <item name="uikit_rightTextSize">@dimen/uikit_font_size_8</item>
         <item name="uikit_rightTextColor">@color/uikit_color_1</item>
         <item name="uikit_rightPaddingEnd">15dp</item>
         <item name="navigationIcon">@drawable/uikit_icon_arrow_left</item>
@@ -73,9 +33,9 @@
         <!--        <item name="titleTextAppearance">@style/UiKit.ToolbarTitleTextStyle</item>-->
         <item name="android:background">@color/uikit_color_1</item>
         <item name="uikit_titleGravity">center</item>
-        <item name="uikit_titleSize">@dimen/uikit_fontsize_6</item>
+        <item name="uikit_titleSize">@dimen/uikit_font_size_6</item>
         <item name="uikit_titleColor">@android:color/white</item>
-        <item name="uikit_rightTextSize">@dimen/uikit_fontsize_8</item>
+        <item name="uikit_rightTextSize">@dimen/uikit_font_size_8</item>
         <item name="uikit_rightTextColor">@android:color/white</item>
         <item name="uikit_rightPaddingEnd">15dp</item>
     </style>
@@ -90,7 +50,7 @@
     </style>
 
     <style name="UiKit.ToolbarTitleTextStyle">
-        <item name="android:textSize">@dimen/uikit_fontsize_6</item>
+        <item name="android:textSize">@dimen/uikit_font_size_6</item>
         <item name="android:textColor">@color/uikit_color_3</item>
     </style>
 
@@ -184,10 +144,10 @@
 
     <style name="UiKit.FormItemLabelStyle" parent="UiKit.FormItemStyle">
         <item name="uikit_formLabelColor">@color/uikit_color_3</item>
-        <item name="uikit_formLabelSize">@dimen/uikit_fontsize_8</item>
+        <item name="uikit_formLabelSize">@dimen/uikit_font_size_8</item>
         <item name="uikit_formLabelMarginEnd">40dp</item>
         <item name="uikit_formChildLabelColor">@color/uikit_color_4</item>
-        <item name="uikit_formChildLabelSize">@dimen/uikit_fontsize_10</item>
+        <item name="uikit_formChildLabelSize">@dimen/uikit_font_size_10</item>
         <item name="uikit_formChildLabelMarginTop">0dp</item>
         <item name="uikit_formRightLayoutOrientation">horizontal</item>
         <item name="uikit_formRightLayoutChildMargin">4dp</item>
@@ -197,12 +157,12 @@
     <style name="UiKit.FormHeaderActionTextStyle" parent="UiKit.FormItemLabelStyle">
         <item name="uikit_formLabelBold">true</item>
         <item name="uikit_formActionTextColor">@color/uikit_color_1</item>
-        <item name="uikit_formActionTextSize">@dimen/uikit_fontsize_8</item>
+        <item name="uikit_formActionTextSize">@dimen/uikit_font_size_8</item>
     </style>
 
     <style name="UiKit.FormItemTextStyle" parent="UiKit.FormItemLabelStyle">
         <item name="uikit_formTextColor">@color/uikit_color_4</item>
-        <item name="uikit_formTextSize">@dimen/uikit_fontsize_8</item>
+        <item name="uikit_formTextSize">@dimen/uikit_font_size_8</item>
         <item name="uikit_formTextGravity">end</item>
         <item name="uikit_formLeftLayoutGravity">top</item>
         <item name="uikit_formRightLayoutGravity">center_vertical</item>
@@ -259,8 +219,10 @@
     </style>
 
     <style name="UiKit.DividerViewStyle">
-        <item name="android:minHeight">0.5dp</item>
-        <item name="android:src">?attr/uikit_dividerColor</item>
+        <item name="uikit_dividerThickness">1dp</item>
+        <item name="uikit_dividerColor">?attr/uikit_dividerColor</item>
+        <item name="uikit_dividerLineType">solid_path</item>
+        <item name="uikit_dividerOrientation">horizontal</item>
     </style>
 
     <style name="UiKit.AdvertDialog" parent="android:Theme.Material.Light.Dialog.NoActionBar">
@@ -414,6 +376,6 @@
         <item name="android:paddingBottom">8dp</item>
         <item name="android:background">#FFF9ED</item>
         <item name="android:textColor">#ffff6010</item>
-        <item name="android:textSize">@dimen/uikit_fontsize_8</item>
+        <item name="android:textSize">@dimen/uikit_font_size_8</item>
     </style>
 </resources>

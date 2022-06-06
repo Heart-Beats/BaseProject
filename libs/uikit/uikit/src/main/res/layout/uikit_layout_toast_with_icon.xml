@@ -25,7 +25,7 @@
         android:layout_marginTop="10dp"
         android:gravity="center"
         android:textColor="@android:color/white"
-        android:textSize="@dimen/uikit_fontsize_8"
+        android:textSize="@dimen/uikit_font_size_8"
         tools:text="关联成功"/>
 
 

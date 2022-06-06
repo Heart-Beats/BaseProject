@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         app:uikit_title="对话框" />
-    <com.hl.uikit.KDividerView
+    <com.hl.uikit.UIKitDividerView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
     <TextView

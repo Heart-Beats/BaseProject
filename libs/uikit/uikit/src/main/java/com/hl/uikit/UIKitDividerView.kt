@@ -3,23 +3,28 @@ package com.hl.uikit
 import android.content.Context
 import android.content.res.Resources
 import android.graphics.Canvas
-import android.graphics.Color
 import android.graphics.DashPathEffect
 import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.View
 import androidx.annotation.ColorInt
+import androidx.core.content.ContextCompat
 
 
 class UIKitDividerView : View {
 
+    private companion object {
+        const val ORIENTATION_HORIZONTAL = 0
+    }
+
     private val paint = Paint()
 
-    private var dividerColor: Int = Color.WHITE
-    private var dividerHeight: Float = 1F
+    private var dividerColor: Int = ContextCompat.getColor(context, R.color.uikit_dividerColor)
+    private var dividerThickness: Float = 1F
     private var dividerLineType: DividerLineType = DividerLineType.SOLID_PATH
     private var dashWidth: Float = 0F
     private var dashSpaceWidth: Float = 0F
+    private var dividerOrientation = ORIENTATION_HORIZONTAL
 
     private val density: Float = Resources.getSystem().displayMetrics.density
 
@@ -39,16 +44,12 @@ class UIKitDividerView : View {
     }
 
 
-    constructor(context: Context) : super(context) {
-        init(null, 0)
-    }
+    constructor(context: Context) : this(context, null)
 
-    constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
-        init(attrs, 0)
-    }
+    constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, R.attr.uikit_dividerViewStyle)
 
-    constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(context, attrs, defStyle) {
-        dividerHeight *= density
+    constructor(context: Context, attrs: AttributeSet?, defStyle: Int) : super(context, attrs, defStyle) {
+        dividerThickness *= density
         dashWidth *= density
         dashSpaceWidth *= density
 
@@ -61,10 +62,12 @@ class UIKitDividerView : View {
         )
 
         dividerColor = ta.getColor(R.styleable.UIKitDividerView_uikit_dividerColor, dividerColor)
-        dividerHeight = ta.getDimension(R.styleable.UIKitDividerView_uikit_dividerHeight, dividerHeight)
-        dividerLineType = DividerLineType.createByCode(ta.getInteger(R.styleable.UIKitDividerView_uikit_dividerLineType, 0))
-        dashWidth = ta.getDimension(R.styleable.UIKitDividerView_uikit_dashWidth, dividerHeight)
-        dashSpaceWidth = ta.getDimension(R.styleable.UIKitDividerView_uikit_dashSpaceWidth, dividerHeight)
+        dividerThickness = ta.getDimension(R.styleable.UIKitDividerView_uikit_dividerThickness, dividerThickness)
+        dividerLineType =
+            DividerLineType.createByCode(ta.getInteger(R.styleable.UIKitDividerView_uikit_dividerLineType, 0))
+        dashWidth = ta.getDimension(R.styleable.UIKitDividerView_uikit_dashWidth, dividerThickness)
+        dashSpaceWidth = ta.getDimension(R.styleable.UIKitDividerView_uikit_dashSpaceWidth, dividerThickness)
+        dividerOrientation = ta.getInt(R.styleable.UIKitDividerView_uikit_dividerOrientation, dividerOrientation)
 
         ta.recycle()
 
@@ -75,7 +78,9 @@ class UIKitDividerView : View {
         paint.isAntiAlias = true
         paint.style = Paint.Style.FILL
         paint.color = dividerColor
-        paint.strokeWidth = dividerHeight
+
+        // 画笔宽度等于分割线高度
+        paint.strokeWidth = dividerThickness
         if (dividerLineType == DividerLineType.DASH_PATH) {
             paint.pathEffect = DashPathEffect(floatArrayOf(dashWidth, dashSpaceWidth), 0F)
         }
@@ -83,15 +88,27 @@ class UIKitDividerView : View {
 
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        val width = MeasureSpec.getSize(widthMeasureSpec)
-        setMeasuredDimension(width, dividerHeight.toInt())
+        val originWidth = MeasureSpec.getSize(widthMeasureSpec)
+        val originHeight = MeasureSpec.getSize(heightMeasureSpec)
+
+        if (dividerOrientation == ORIENTATION_HORIZONTAL) {
+            val height = resolveSize(dividerThickness.toInt(), heightMeasureSpec)
+            setMeasuredDimension(originWidth, height)
+        } else {
+            val width = resolveSize(dividerThickness.toInt(), widthMeasureSpec)
+            setMeasuredDimension(width, originHeight)
+        }
     }
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
-        val y = dividerHeight / 2
-        canvas.drawLine(0F, y, width.toFloat(), y, paint)
+        val drawLineCenter = dividerThickness / 2
+        if (dividerOrientation == ORIENTATION_HORIZONTAL) {
+            canvas.drawLine(0F, drawLineCenter, width.toFloat(), drawLineCenter, paint)
+        } else {
+            canvas.drawLine(drawLineCenter, 0F, drawLineCenter, height.toFloat(), paint)
+        }
     }
 
     fun setDividerLineType(dividerLineType: DividerLineType, dashWidth: Float = 0F, dashSpaceWidth: Float = 0F) {

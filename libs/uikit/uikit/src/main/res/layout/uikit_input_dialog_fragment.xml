@@ -18,7 +18,7 @@
         tools:hint="输入提示语"
         android:textColor="@color/uikit_color_3"
         android:textColorHint="@color/uikit_color_4"
-        android:textSize="@dimen/uikit_fontsize_8" />
+        android:textSize="@dimen/uikit_font_size_8" />
 
     <View
         android:layout_width="match_parent"
@@ -32,7 +32,7 @@
         android:layout_marginTop="8dp"
         android:gravity="start"
         android:textColor="@color/uikit_color_4"
-        android:textSize="@dimen/uikit_fontsize_10"
+        android:textSize="@dimen/uikit_font_size_10"
         android:visibility="visible"
         tools:text="别名命名需在2-12个字符以内" />
 </LinearLayout>

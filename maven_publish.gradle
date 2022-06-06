@@ -170,9 +170,19 @@ project.afterEvaluate {
                 pom.withXml {
                     def root = asNode()
 
+                    setDependencyNode(root, 'compile', myGroupId, 'uikit-res', getPublicationVersion())
+
                     // 添加相关依赖库，缺失会导致运行时无法找到对应类
                     setDependencyNode(root, 'compile', 'org.jetbrains.kotlin', 'kotlin-stdlib', Versions.KOTLIN)
-                    setDependencyNode(root, 'compile', myGroupId, 'uikit-res', getPublicationVersion())
+                    setDependencyNode(root, 'compile', 'androidx.appcompat', 'appcompat', Versions.APPCOMPAT)
+                    setDependencyNode(root, 'compile', 'androidx.core', 'core-ktx', Versions.CORE_KTX)
+                    setDependencyNode(root, 'compile', 'androidx.recyclerview', 'recyclerview', Versions.RECYCLERVIEW)
+                    setDependencyNode(root, 'compile', 'androidx.fragment', 'fragment-ktx', Versions.FRAGMENT_KTX)
+                    setDependencyNode(root, 'compile', 'androidx.constraintlayout', 'constraintlayout', Versions.CONSTRAINT_LAYOUT)
+                    setDependencyNode(root, 'compile', 'org.jetbrains.kotlinx', 'kotlinx-coroutines-core', Versions.KOTLIN_COROUTINES)
+                    setDependencyNode(root, 'compile', 'org.jetbrains.kotlinx', 'kotlinx-coroutines-android', Versions.KOTLIN_COROUTINES)
+                    setDependencyNode(root, 'compile', 'com.google.android.material', 'material', Versions.MATERIAL)
+
                     setDependencyNode(root, 'compile', 'com.github.zyyoona7', 'wheelview', '1.0.7')
                     setDependencyNode(root, 'compile', 'com.github.zyyoona7', 'pickerview', '1.0.9')
                     setDependencyNode(root, 'compile', 'com.airbnb.android', 'lottie', Versions.LOTTIE)

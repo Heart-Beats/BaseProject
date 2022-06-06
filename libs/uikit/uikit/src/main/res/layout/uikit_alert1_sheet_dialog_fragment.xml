@@ -14,10 +14,10 @@
         android:gravity="center"
         android:padding="15dp"
         android:textColor="@color/uikit_color_4"
-        android:textSize="@dimen/uikit_fontsize_8"
+        android:textSize="@dimen/uikit_font_size_8"
         tools:text="这里提供一行小标题或注释" />
 
-    <com.hl.uikit.KDividerView
+    <com.hl.uikit.UIKitDividerView
         android:id="@+id/dividerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
@@ -42,7 +42,7 @@
         android:gravity="center"
         android:padding="15dp"
         android:textColor="@color/uikit_color_3"
-        android:textSize="@dimen/uikit_fontsize_7"
+        android:textSize="@dimen/uikit_font_size_7"
         tools:ignore="UnusedAttribute"
         tools:text="取消" />
 </LinearLayout>
