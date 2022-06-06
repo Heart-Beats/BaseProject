@@ -14,7 +14,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:uikit_title="H5加载" />
-    <com.hl.uikit.KDividerView
+    <com.hl.uikit.UIKitDividerView
         android:id="@+id/dividerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

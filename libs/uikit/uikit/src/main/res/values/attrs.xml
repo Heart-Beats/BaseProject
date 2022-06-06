@@ -307,8 +307,8 @@
         <!--分隔线背景-->
         <attr name="uikit_dividerColor" />
 
-        <!--分隔线高度-->
-        <attr name="uikit_dividerHeight" format="dimension|reference" />
+        <!--分隔线画笔的高度或宽度-->
+        <attr name="uikit_dividerThickness" format="dimension|reference" />
 
         <!--分隔线类型-->
         <attr name="uikit_dividerLineType" format="enum">
@@ -321,6 +321,12 @@
 
         <!--当分隔线类型为 dash_path 时使用  -->
         <attr name="uikit_dashSpaceWidth" format="dimension|reference" />
+
+        <!-- 虚线朝向 -->
+        <attr name="uikit_dividerOrientation" format="enum">
+            <enum name="horizontal" value="0" />
+            <enum name="vertical" value="1" />
+        </attr>
     </declare-styleable>
 
 

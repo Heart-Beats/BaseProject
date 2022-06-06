@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         app:uikit_title="UIKit" />
-    <com.hl.uikit.KDividerView
+    <com.hl.uikit.UIKitDividerView
         android:id="@+id/dividerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>

@@ -17,7 +17,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:uikit_title="表单结构" />
 
-    <com.hl.uikit.KDividerView
+    <com.hl.uikit.UIKitDividerView
         android:id="@+id/dividerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />

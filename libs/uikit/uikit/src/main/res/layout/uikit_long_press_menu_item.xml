@@ -15,6 +15,6 @@
         android:layout_marginEnd="32dp"
         android:layout_marginBottom="15dp"
         android:textColor="@color/uikit_color_3"
-        android:textSize="@dimen/uikit_fontsize_8"
+        android:textSize="@dimen/uikit_font_size_8"
         tools:text="@tools:sample/full_names" />
 </FrameLayout>

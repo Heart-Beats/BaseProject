@@ -22,7 +22,7 @@
         android:paddingBottom="4dp"
         android:text="按月选择"
         android:textColor="@color/uikit_color_3"
-        android:textSize="@dimen/uikit_fontsize_8"
+        android:textSize="@dimen/uikit_font_size_8"
         tools:text="按月选择" />
 
     <LinearLayout
@@ -45,7 +45,7 @@
             android:paddingBottom="6dp"
             android:textAlignment="center"
             android:textColor="@drawable/uikit_btn_text_timeinterval_timeselector"
-            android:textSize="@dimen/uikit_fontsize_7"
+            android:textSize="@dimen/uikit_font_size_7"
             tools:checked="true"
             tools:text="2019-10" />
 
@@ -70,7 +70,7 @@
             android:paddingBottom="6dp"
             android:textAlignment="center"
             android:textColor="@drawable/uikit_btn_text_timeinterval_timeselector"
-            android:textSize="@dimen/uikit_fontsize_7"
+            android:textSize="@dimen/uikit_font_size_7"
             tools:checked="false" />
     </LinearLayout>
 

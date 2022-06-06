@@ -19,7 +19,7 @@
             android:layout_marginEnd="15dp"
             android:gravity="center"
             android:textColor="@color/uikit_color_3"
-            android:textSize="@dimen/uikit_fontsize_7"
+            android:textSize="@dimen/uikit_font_size_7"
             android:visibility="gone"
             tools:text="温馨提示"
             tools:visibility="visible" />
@@ -33,7 +33,7 @@
             android:layout_marginEnd="15dp"
             android:gravity="center"
             android:textColor="@color/uikit_color_3"
-            android:textSize="@dimen/uikit_fontsize_8"
+            android:textSize="@dimen/uikit_font_size_8"
             android:visibility="gone"
             tools:text="该商户未开通实时结算，请前往设置结算方式。"
             tools:visibility="visible" />
@@ -64,7 +64,7 @@
                 android:gravity="center"
                 tools:textColor="@color/uikit_alert_negative_text_color"
                 android:textColor="?attr/uikit_alert_negative_text_color"
-                android:textSize="@dimen/uikit_fontsize_7"
+                android:textSize="@dimen/uikit_font_size_7"
                 tools:text="关闭" />
 
             <View
@@ -82,7 +82,7 @@
                 android:gravity="center"
                 tools:textColor="@color/uikit_alert_positive_text_color"
                 android:textColor="?attr/uikit_alert_positive_text_color"
-                android:textSize="@dimen/uikit_fontsize_7"
+                android:textSize="@dimen/uikit_font_size_7"
                 tools:text="去设置" />
         </LinearLayout>
     </LinearLayout>
