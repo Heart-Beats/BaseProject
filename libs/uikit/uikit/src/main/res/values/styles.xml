@@ -21,6 +21,8 @@
         <item name="uikit_backgroundColor">@android:color/white</item>
         <!--<item name="uikit_title">@string/app_name</item>-->
         <item name="uikit_titleGravity">center</item>
+        <item name="uikit_titleEllipsize">middle</item>
+        <item name="uikit_titleMargin">0dp</item>
         <item name="uikit_titleSize">@dimen/uikit_font_size_6</item>
         <item name="uikit_titleColor">@color/uikit_color_3</item>
         <item name="uikit_rightTextSize">@dimen/uikit_font_size_8</item>

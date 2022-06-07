@@ -15,6 +15,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.ImageButton
 import android.widget.TextView
+import androidx.annotation.GravityInt
 import androidx.appcompat.widget.*
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
@@ -53,6 +54,9 @@ class UIKitToolbar : Toolbar {
     private var mTitleTextAppearance: Int = 0
     private var mTitleTextColor: ColorStateList? = null
     private var mTitleIsBold: Boolean = false
+    private var titleMargin: Int = 15.dpInt
+    private var titleEllipsize: TextUtils.TruncateAt = TextUtils.TruncateAt.MIDDLE
+
     private var mConfigBuilder: ConfigBuilder<Any>? = null
 
     constructor(context: Context) : this(context, null)
@@ -141,12 +145,21 @@ class UIKitToolbar : Toolbar {
         }
 
         val gravity = barTypedArray.getInt(R.styleable.UIKitToolbar_uikit_titleGravity, 0)
-        setTitleGravity(
-            when (gravity) {
-                0 -> Gravity.CENTER
-                else -> Gravity.START
-            }
-        )
+
+        mTitleGravity = when (gravity) {
+            0 -> Gravity.CENTER
+            else -> Gravity.START
+        }
+
+        val ellipsize = barTypedArray.getInt(R.styleable.UIKitToolbar_uikit_titleEllipsize, 1)
+        titleEllipsize = when (ellipsize) {
+            0 -> TextUtils.TruncateAt.START
+            1 -> TextUtils.TruncateAt.MIDDLE
+            2 -> TextUtils.TruncateAt.END
+            else -> TextUtils.TruncateAt.MARQUEE
+        }
+
+        titleMargin = barTypedArray.getDimensionPixelSize(R.styleable.UIKitToolbar_uikit_titleMargin, titleMargin)
 
         val titleSize =
             barTypedArray.getDimensionPixelSize(R.styleable.UIKitToolbar_uikit_titleSize, -1)
@@ -159,9 +172,7 @@ class UIKitToolbar : Toolbar {
             setTitleTextColor(it)
         }
 
-        barTypedArray.getBoolean(R.styleable.UIKitToolbar_uikit_titleIsBold, mTitleIsBold).let {
-            setTitleBold(it)
-        }
+        setTitleBold(barTypedArray.getBoolean(R.styleable.UIKitToolbar_uikit_titleIsBold, mTitleIsBold))
 
         mRightPaddingEnd =
             barTypedArray.getDimensionPixelSize(R.styleable.UIKitToolbar_uikit_rightPaddingEnd, 0)
@@ -227,7 +238,7 @@ class UIKitToolbar : Toolbar {
         return mTitleGravity == Gravity.CENTER || mTitleGravity == Gravity.CENTER_HORIZONTAL
     }
 
-    fun setTitleGravity(gravity: Int) {
+    fun setTitleGravity(@GravityInt gravity: Int) {
         mTitleGravity = gravity
     }
 
@@ -389,9 +400,12 @@ class UIKitToolbar : Toolbar {
     private fun setCenterTitle(title: CharSequence?) {
         if (!title.isNullOrEmpty()) {
             if (tvCenterTitle == null) {
-                val lp = generateDefaultLayoutParams()
-                lp.gravity = Gravity.CENTER
-                tvCenterTitle = getTextViewWithParams(lp)
+                val lp = generateDefaultLayoutParams().apply {
+                    this.marginStart = titleMargin
+                    this.marginEnd = titleMargin
+                    this.gravity = Gravity.CENTER
+                }
+                tvCenterTitle = getTitleTextViewWithParams(lp)
                 if (mTitleTextAppearance != 0) {
                     tvCenterTitle?.setTextAppearance(context, mTitleTextAppearance)
                 }
@@ -412,6 +426,26 @@ class UIKitToolbar : Toolbar {
             removeView(tvCenterTitle)
         }
         tvCenterTitle?.text = title
+    }
+
+    private fun getTitleTextViewWithParams(
+        params: LayoutParams,
+        defStyleAttr: Int = android.R.attr.textViewStyle
+    ): TextView {
+        val textView = AppCompatTextView(context, null, defStyleAttr)
+        textView.setSingleLine()
+        textView.ellipsize = titleEllipsize
+
+        if (titleEllipsize == TextUtils.TruncateAt.MARQUEE) {
+            textView.isFocusable = true
+            textView.isFocusableInTouchMode = true
+            // 重复循环
+            textView.marqueeRepeatLimit = -1
+            textView.requestFocus()
+        }
+
+        textView.layoutParams = params
+        return textView
     }
 
     private fun getTextViewWithParams(
