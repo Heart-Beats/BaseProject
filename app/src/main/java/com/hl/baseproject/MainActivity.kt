@@ -35,7 +35,7 @@ class MainActivity : ViewBindingBaseActivity<ActivityMainBinding>() {
     }
 
     override fun ActivityMainBinding.onViewCreated(savedInstanceState: Bundle?) {
-        uikitToolbar.title = "主页面"
+        uikitToolbar.title = "主页面主页面主页面主页面主页面主页面主页面主页面主页面主页面主页面(1237)"
 
         testScanQrcode.onClick {
 
