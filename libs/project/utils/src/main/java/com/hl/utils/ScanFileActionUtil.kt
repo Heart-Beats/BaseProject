@@ -3,10 +3,16 @@ package com.hl.utils
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
+import android.os.Build
 import android.provider.MediaStore
+import android.util.Log
 import androidx.collection.arraySetOf
+import com.blankj.utilcode.util.UriUtils
 import java.io.File
+import java.io.OutputStream
 import java.util.*
+
 
 /**
  * @author  张磊  on  2022/04/09 at 17:32
@@ -14,16 +20,219 @@ import java.util.*
  */
 object ScanFileActionUtil {
 
+    private const val TAG = "ScanFileActionUtil"
+
     /**
-     * 发送广播，通知刷新媒体文件
+     * 扫描媒体文件到相册
+     *
+     * 注： vivo 手机和魅族手机部分机型只支持在文件管理中查看视频, 用微信保存视频试了一下同样不能在相册中将视频显示出来
+     *
+     *
+     * @param context     context
+     * @param mediaFilePath  文件路径
+     * @param createTime 创建时间 <=0时为当前时间 ms
+     * @param width      宽度
+     * @param height     高度
+     * @param duration   视频长度 ms, 视频时可以选择传入
      */
-    fun scanMedia(context: Context, mediaFile: File) {
-        val values = ContentValues()
-        values.put(MediaStore.Images.Media.DATA, mediaFile.absolutePath)
-        values.put(MediaStore.Images.Media.MIME_TYPE, MimeType.getByExtension(mediaFile.extension)?.mMimeTypeName)
-        val uri = context.contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
-        context.sendBroadcast(Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri))
+    fun scanMedia(
+        context: Context,
+        mediaFilePath: String,
+        createTime: Long = System.currentTimeMillis(),
+        width: Int = 0,
+        height: Int = 0,
+        duration: Long = 0
+    ) {
+        if (!checkFile(mediaFilePath)) return
+
+        if (isSystemDcim(mediaFilePath)) {
+            notifyScanDcimByPath(context, mediaFilePath)
+        } else {
+            scanFile2MediaStore(context, mediaFilePath, createTime, width, height, duration)
+        }
     }
+
+
+    ///////////////////////////////////////////////////////////////////////////
+    // 扫描系统相册核心方法
+    ///////////////////////////////////////////////////////////////////////////
+    /**
+     * 针对系统文夹只需要扫描,不用插入内容提供者,不然会重复
+     *
+     * 通知刷新文件到相册
+     *
+     * @param context  上下文
+     * @param filePath 文件路径
+     */
+    private fun notifyScanDcimByPath(context: Context, filePath: String) {
+        if (!checkFile(filePath)) return
+        notifyScanDcimByUri(context, UriUtils.file2Uri(File(filePath)))
+    }
+
+
+    /**
+     *  通知刷新文件到相册
+     */
+    private fun notifyScanDcimByUri(context: Context, fileUri: Uri) {
+        val intent = Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, fileUri).apply {
+            this.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        }
+        context.sendBroadcast(intent)
+    }
+
+
+    // 检测文件存在
+    private fun checkFile(filePath: String): Boolean {
+        return File(filePath).exists()
+    }
+
+    // 是不是系统相册
+    private fun isSystemDcim(path: String): Boolean {
+        return path.lowercase(Locale.getDefault()).contains("dcim")
+                || path.lowercase(Locale.getDefault()).contains("camera")
+    }
+
+
+    ///////////////////////////////////////////////////////////////////////////
+    // 非系统相册像MediaContent中插入数据，核心方法
+    ///////////////////////////////////////////////////////////////////////////
+
+    /**
+     * 扫描非系统文件夹下的资源文件到媒体库
+     *
+     * 注： vivo 手机和魅族手机部分机型只支持在文件管理中查看视频, 用微信保存视频试了一下同样不能在相册中将视频显示出来
+     *
+     *
+     * @param context     context
+     * @param mediaFilePath  文件路径
+     * @param createTime 创建时间 <=0时为当前时间 ms
+     * @param width      宽度
+     * @param height     高度
+     * @param duration   视频长度 ms, 视频时可以选择传入
+     */
+    private fun scanFile2MediaStore(
+        context: Context,
+        mediaFilePath: String,
+        createTime: Long = System.currentTimeMillis(),
+        width: Int = 0,
+        height: Int = 0,
+        duration: Long = 0
+    ) {
+        val mediaUri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            val values = initCommonContentValues(File(mediaFilePath), createTime)
+            val mimeTypeName = values.getAsString(MediaStore.MediaColumns.MIME_TYPE)
+
+            val externalContentUri = when {
+                mimeTypeName?.matches(Regex("image/.*")) == true -> {
+                    insertImageValue(values, createTime, width, height)
+                    // 图片
+                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+                }
+                mimeTypeName?.matches(Regex("video/.*")) == true -> {
+                    insertVideoValue(values, createTime, width, height, duration)
+                    // 视频
+                    MediaStore.Video.Media.EXTERNAL_CONTENT_URI
+                }
+                else -> MediaStore.Files.getContentUri("external")
+            }
+
+            val contentResolver = context.applicationContext.contentResolver
+            val uri = contentResolver.insert(externalContentUri, values)
+
+            if (uri == null) {
+                Log.e(TAG, "插入${mediaFilePath}到图库失败.")
+                return
+            }
+
+            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.Q) {
+                // 拷贝到指定 uri, 如果没有这步操作，android11不会在相册显示
+                try {
+                    val out: OutputStream = contentResolver.openOutputStream(uri) ?: return
+                    FileUtil.copyFile(mediaFilePath, out)
+                } catch (e: Exception) {
+                    Log.e(TAG, "拷贝${mediaFilePath}到图库失败.")
+                }
+            }
+
+            uri
+        } else {
+            UriUtils.file2Uri(File(mediaFilePath))
+        }
+
+        notifyScanDcimByUri(context, mediaUri)
+    }
+
+    /**
+     * 插入时初始化公共字段
+     *
+     * @param mediaFile 文件
+     * @param createTime   创建时间  ms
+     * @return ContentValues
+     */
+    private fun initCommonContentValues(mediaFile: File, createTime: Long): ContentValues {
+        val mMimeTypeName = MimeType.getByExtension(mediaFile.extension)?.mMimeTypeName ?: ""
+
+        val values = ContentValues()
+        val timeMillis: Long = getTimeWrap(createTime)
+        values.put(MediaStore.MediaColumns.TITLE, mediaFile.name)
+        values.put(MediaStore.MediaColumns.DISPLAY_NAME, mediaFile.name)
+        values.put(MediaStore.MediaColumns.DATE_MODIFIED, timeMillis)
+        values.put(MediaStore.MediaColumns.DATE_ADDED, timeMillis)
+        values.put(MediaStore.MediaColumns.DATA, mediaFile.absolutePath)
+        values.put(MediaStore.MediaColumns.SIZE, mediaFile.length())
+
+        values.put(MediaStore.MediaColumns.MIME_TYPE, mMimeTypeName)
+        return values
+    }
+
+
+    /**
+     * 向 MediaStore.Images 插入指定的值
+     *
+     * @param values   ContentValues
+     * @param createTime 创建时间 <=0时为当前时间 ms
+     * @param width      宽度
+     * @param height     高度
+     */
+    private fun insertImageValue(values: ContentValues, createTime: Long, width: Int, height: Int) {
+        values.put(MediaStore.Images.ImageColumns.DATE_TAKEN, createTime)
+        values.put(MediaStore.Images.ImageColumns.ORIENTATION, 0)
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN) {
+            if (width > 0) values.put(MediaStore.Images.ImageColumns.WIDTH, 0)
+            if (height > 0) values.put(MediaStore.Images.ImageColumns.HEIGHT, 0)
+        }
+    }
+
+
+    /**
+     * 向 MediaStore.Video 插入指定的值
+     *
+     * @param values   ContentValues
+     * @param createTime 创建时间 <=0时为当前时间 ms
+     * @param width      宽度
+     * @param height     高度
+     * @param duration   视频长度 ms
+     */
+    private fun insertVideoValue(values: ContentValues, createTime: Long, width: Int, height: Int, duration: Long) {
+        values.put(MediaStore.Video.VideoColumns.DATE_TAKEN, createTime)
+        if (duration > 0) {
+            values.put(MediaStore.Video.VideoColumns.DURATION, duration)
+        }
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN) {
+            if (width > 0) values.put(MediaStore.Video.VideoColumns.WIDTH, width)
+            if (height > 0) values.put(MediaStore.Video.VideoColumns.HEIGHT, height)
+        }
+    }
+
+    /**
+     * 获得转化后的时间
+     */
+    private fun getTimeWrap(time: Long): Long {
+        return if (time <= 0) {
+            System.currentTimeMillis()
+        } else time
+    }
+
 }
 
 

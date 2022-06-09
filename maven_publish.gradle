@@ -128,10 +128,8 @@ def sourceAar(String name, String path) {
     }
 }
 
-task printPublicationVersion() {
-    doLast {
-        println "publicationVersion:${getPublicationVersion()}"
-    }
+def printPublicationVersion() {
+    println "publicationVersion:${getPublicationVersion()}"
 }
 
 
@@ -453,9 +451,9 @@ task publishingToGitHubPackages() {
     description "打包至 GitHubPackages"
     group 'my-publishing'
     dependsOn ':publishAllPublicationsToGitHubPackagesRepository'
-    dependsOn ':printPublicationVersion'
 
     doLast {
+        printPublicationVersion()
         println "打包完成------> GitHubPackages:$GITHUB_REPOSITORY"
     }
 }
@@ -464,9 +462,9 @@ task publishingToGitLab() {
     description "打包至 GitLab"
     group 'my-publishing'
     dependsOn ':publishAllPublicationsToGitLabRepository'
-    dependsOn ':printPublicationVersion'
 
     doLast {
+        printPublicationVersion()
         println "打包完成------> GitLab:$GITLAB_REPOSITORY"
     }
 }
@@ -475,9 +473,9 @@ task publishingToYouMaMaven() {
     description "打包至 youma Maven"
     group 'my-publishing'
     dependsOn ':publishAllPublicationsToYouMaRepository'
-    dependsOn ':printPublicationVersion'
 
     doLast {
+        printPublicationVersion()
         println "打包完成------> youma Maven"
     }
 }
@@ -486,9 +484,9 @@ task publishingToMavenLocal() {
     description "打包至 MavenLocal"
     group 'my-publishing'
     dependsOn ':publishToMavenLocal'
-    dependsOn ':printPublicationVersion'
 
     doLast {
+        printPublicationVersion()
         println "打包完成 ------>  MavenLocal"
     }
 }

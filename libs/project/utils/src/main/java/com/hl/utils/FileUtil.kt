@@ -8,15 +8,25 @@ import java.io.*
  */
 object FileUtil {
 
-	fun copyFile(srcPath: String, desPath: String): File {
+	fun copyFile(srcPath: String, desPath: String): File? {
 		val outputFile = File(desPath)
-		val bis = BufferedInputStream(FileInputStream(srcPath))
-		val bos = BufferedOutputStream(FileOutputStream(outputFile))
-		bis.use {
-			it.copyTo(bos)
-			bos.flush()
-		}
+		val bos = BufferedOutputStream(FileOutputStream(File(desPath)))
 
-		return outputFile
+		return if (copyFile(srcPath, bos)) outputFile else null
+	}
+
+	fun copyFile(srcPath: String, outputStream: OutputStream): Boolean {
+		try {
+			val bis = BufferedInputStream(FileInputStream(srcPath))
+			val bos = BufferedOutputStream(outputStream)
+			bis.use {
+				it.copyTo(bos)
+				bos.flush()
+
+				return true
+			}
+		} catch (e: Exception) {
+			return false
+		}
 	}
 }
