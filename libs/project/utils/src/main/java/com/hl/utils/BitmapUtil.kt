@@ -57,7 +57,7 @@ object BitmapUtil {
         }
 
         if (isSave) {
-            ScanFileActionUtil.scanMedia(context, saveFile)
+            ScanFileActionUtil.scanMedia(context, saveFile.absolutePath)
             successAction()
         } else {
             failAction()
