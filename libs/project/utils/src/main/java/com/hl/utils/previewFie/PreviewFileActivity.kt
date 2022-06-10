@@ -1,4 +1,4 @@
-package com.hl.utils.previewfile
+package com.hl.utils.previewFie
 
 import android.Manifest
 import android.content.Context
@@ -11,17 +11,22 @@ import android.util.Log
 import android.view.MenuInflater
 import android.view.View
 import androidx.appcompat.widget.PopupMenu
+import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
 import com.elvishew.xlog.XLog
 import com.gyf.immersionbar.ImmersionBar
 import com.hjq.http.EasyHttp
 import com.hjq.http.listener.OnDownloadListener
+import com.hl.uikit.gone
+import com.hl.uikit.onClick
 import com.hl.uikit.progressbar.UIKitCircleProgressBar
 import com.hl.uikit.toast
 import com.hl.uikit.video.UIKitMyStandardGSYVideoPlayer
+import com.hl.uikit.visible
 import com.hl.utils.*
-import com.hl.utils.previewfile.SuperFileView.DocView
+import com.hl.utils.mimetype.MimeType
+import com.hl.utils.previewFie.superFileView.DocView
 import com.hl.utils.videoplayer.initPlayer
 import com.permissionx.guolindev.PermissionX
 import kotlinx.android.synthetic.main.activity_preview_file.*
@@ -58,7 +63,6 @@ class PreviewFileActivity : FragmentActivity() {
     private var fileType: String? = "doc"
     private var fileName: String? = null
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         ImmersionBar.with(this)
@@ -81,22 +85,25 @@ class PreviewFileActivity : FragmentActivity() {
         titleTv.text = fileName ?: "文件预览"
         fileType = getFileTypeByName(fileName).lowercase(Locale.getDefault())
 
-        when (fileType) {
-            "png", "jpg", "jpeg" -> {
+        val mimeType = MimeType.getByExtension(fileType ?: "")
+
+        when {
+            fileType == "" && mimeType == null -> {
+                toast("获取文件类型失败")
+            }
+
+            MimeType.isImage(mimeType?.mMimeTypeName) -> {
                 mSuperFileView.visibility = View.GONE
-                empty.visibility = View.GONE
+                no_support_file_container.visibility = View.GONE
                 img.visibility = View.VISIBLE
                 GlideUtil.load(this, fileUrl, img)
             }
-            "mp4" -> {
+            MimeType.isVideo(mimeType?.mMimeTypeName) -> {
                 mSuperFileView.visibility = View.GONE
-                empty.visibility = View.GONE
+                no_support_file_container.visibility = View.GONE
                 video_player.visibility = View.VISIBLE
 
                 initPlayer(video_player, fileUrl)
-            }
-            "" -> {
-                toast("获取文件类型失败")
             }
             else -> {
                 // 其他文档格式使用 X5 预览
@@ -104,8 +111,8 @@ class PreviewFileActivity : FragmentActivity() {
             }
         }
 
-        back.setOnClickListener { finish() }
-        dot.setOnClickListener {
+        back.onClick { onBackPressed() }
+        dot.onClick {
             showPopup(it)
         }
     }
@@ -209,6 +216,16 @@ class PreviewFileActivity : FragmentActivity() {
                 if (allGranted) {
                     mDocView = findViewById(R.id.mSuperFileView)
 
+                    // 设置打开失败时的处理
+                    mDocView?.openFailedAction = { openFile ->
+                        preview_file_content.gone()
+                        no_support_file_container.visible()
+
+                        replaceFragment(R.id.no_support_file_container, NoSupportFileFragment().apply {
+                            this.arguments = bundleOf(NoSupportFileFragment.NO_SUPPORT_FILE_KEY to openFile)
+                        })
+                    }
+
                     if (!TextUtils.isEmpty(fileUrl)) {
                         Log.e(TAG, "需要使用 X5 预览的文件path:$fileUrl")
 
@@ -227,8 +244,13 @@ class PreviewFileActivity : FragmentActivity() {
     private fun getFilePathAndShowFile(mDocView: DocView) {
         //网络地址要先下载
         if (fileUrl.contains("http")) {
-            downLoadFromNet(fileUrl, mDocView)
+            try {
+                downLoadFromNet(fileUrl, mDocView)
+            } catch (e: Exception) {
+                toast("下载预览文件失败，请重新尝试！")
+            }
         } else {
+            // 本地文件直接打开
             mDocView.displayFile(File(fileUrl))
         }
     }
@@ -303,13 +325,19 @@ class PreviewFileActivity : FragmentActivity() {
     }
 
     private suspend fun getDownloadFileLength(url: String): Long {
-        return withContext(Dispatchers.IO) {
-            val request = Request.Builder()
-                .url(url)
-                .head()
-                .build()
+        return try {
+            withContext(Dispatchers.IO) {
+                val request = Request.Builder()
+                    .url(url)
+                    .head()
+                    .build()
 
-            OkHttpClient().newCall(request).execute().header("Content-Length")?.toLongOrNull() ?: 0
+                OkHttpClient().newCall(request).execute().header("Content-Length")?.toLongOrNull() ?: 0
+            }
+        } catch (e: Exception) {
+            XLog.e(e)
+
+            0
         }
     }
 

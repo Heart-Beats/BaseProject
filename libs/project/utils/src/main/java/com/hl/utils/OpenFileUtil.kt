@@ -9,6 +9,7 @@ import android.os.StrictMode
 import android.os.StrictMode.VmPolicy
 import android.widget.Toast
 import com.blankj.utilcode.util.UriUtils
+import com.hl.uikit.toast
 import java.io.File
 
 /**
@@ -87,6 +88,9 @@ object OpenFileUtil {
         arrayOf("", "*/*")
     )
 
+    /**
+     * 分享文件通过其他应用打开
+     */
     fun openFileShare(context: Context, path: String) {
         //文件的类型
         var type = ""
@@ -139,10 +143,10 @@ object OpenFileUtil {
             if (context.packageManager.resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY) != null) {
                 context.startActivity(intent)
             } else {
-                Toast.makeText(context, "没有找到对应的程序", Toast.LENGTH_SHORT).show()
+                context.toast("没有找到对应的程序")
             }
         } catch (e: Exception) { //当系统没有携带文件打开软件，提示
-            Toast.makeText(context, "无法打开该格式文件", Toast.LENGTH_SHORT).show()
+            context.toast("无法打开该格式文件")
             e.printStackTrace()
         }
     }
