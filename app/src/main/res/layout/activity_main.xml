@@ -1,75 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <com.hl.uikit.UIKitToolbar
-        android:id="@+id/uikit_toolbar"
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/view_pager"
         android:layout_width="match_parent"
-        app:uikit_rightImage="@drawable/icon_more_dot"
-        app:uikit_titleMargin="15dp"
-        app:uikit_titleEllipsize="marquee"
-        android:layout_height="wrap_content" />
+        android:layout_height="0dp"
+        android:layout_weight="1" />
 
-    <FrameLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="@dimen/dp_50"
+        android:orientation="horizontal">
 
-
-        <LinearLayout
-            android:layout_width="wrap_content"
+        <TextView
+            android:id="@+id/main"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_weight="1"
+            android:background="@color/uikit_colorPrimary"
+            android:gravity="center"
+            android:text="主页"
+            android:textColor="@color/white" />
 
-            <com.hl.uikit.image.UIKitUploadPicImageGridLayout
-                android:id="@+id/uikitUploadPicImageGridLayout"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/test"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/uikit_color_2"
+            android:gravity="center"
+            android:text="测试"
+            android:textColor="@color/white" />
 
-            <TextView
-                android:id="@+id/test_scan_qrcode"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="测试扫码"
-                android:textSize="35dp" />
-
-            <TextView
-                android:id="@+id/test_rotate_screen"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:text="旋转屏幕"
-                android:textSize="24sp" />
-
-            <TextView
-                android:id="@+id/test_capture"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:text="测试拍照"
-                android:textSize="24sp" />
-
-        </LinearLayout>
-
-        <com.jlertele.sidebar.SideBarView
-            android:id="@+id/side_bar"
-            android:layout_width="50dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end|center_vertical"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:sideItemSpacing="10dp"
-            app:sidePressedTextBgColor="@android:color/holo_orange_dark"
-            app:sidePressedTextColor="@color/white"
-            app:sideTextColor="@color/black"
-            app:sideTextSize="14sp" />
-    </FrameLayout>
+    </LinearLayout>
 
 </LinearLayout>

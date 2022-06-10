@@ -39,6 +39,28 @@ fun TextView.setMaxLength(length: Int) {
     this.ellipsize = TextUtils.TruncateAt.END
 }
 
+private fun View.setVisible(visibility: Int) {
+    if (this.visibility != visibility) {
+        this.visibility = visibility
+    }
+}
+
+fun View.visible() {
+    setVisible(View.VISIBLE)
+}
+
+fun View.invisible() {
+    setVisible(View.INVISIBLE)
+}
+
+fun View.gone() {
+    setVisible(View.GONE)
+}
+
+fun View.visibleOrGone(show: Boolean) {
+    if (show) visible() else gone()
+}
+
 
 val Int.dpInt
     get() = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, this.toFloat(), Resources.getSystem().displayMetrics)

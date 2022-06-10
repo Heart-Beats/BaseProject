@@ -39,7 +39,7 @@
             android:layout_marginTop="@dimen/px29"
             android:layout_marginEnd="@dimen/px202"
             android:indeterminateOnly="false"
-            android:progress="80"
+            tools:progress="80"
             android:progressDrawable="@drawable/download_progress_indeterminate_horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

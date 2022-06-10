@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".fragments.MainFragment">
+
+    <com.hl.uikit.UIKitToolbar
+        android:id="@+id/uikit_toolbar"
+        android:layout_width="match_parent"
+        app:uikit_rightImage="@drawable/icon_more_dot"
+        app:uikit_titleMargin="15dp"
+        app:uikit_titleEllipsize="marquee"
+        android:layout_height="wrap_content" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <com.hl.uikit.image.UIKitUploadPicImageGridLayout
+                android:id="@+id/uikitUploadPicImageGridLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/test_scan_qrcode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="测试扫码"
+                android:textSize="35dp" />
+
+            <TextView
+                android:id="@+id/test_rotate_screen"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="旋转屏幕"
+                android:textSize="24sp" />
+
+            <TextView
+                android:id="@+id/test_capture"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="测试拍照"
+                android:textSize="24sp" />
+
+            <TextView
+                android:id="@+id/test_file_preview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="测试文件预览"
+                android:textSize="24sp" />
+
+        </LinearLayout>
+
+        <com.jlertele.sidebar.SideBarView
+            android:id="@+id/side_bar"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|center_vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:sideItemSpacing="10dp"
+            app:sidePressedTextBgColor="@android:color/holo_orange_dark"
+            app:sidePressedTextColor="@color/white"
+            app:sideTextColor="@color/black"
+            app:sideTextSize="14sp" />
+    </FrameLayout>
+
+</LinearLayout>
