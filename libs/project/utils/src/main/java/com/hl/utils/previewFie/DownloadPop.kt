@@ -1,4 +1,4 @@
-package com.hl.utils.previewfile
+package com.hl.utils.previewFie
 
 import android.os.Environment
 import android.widget.ProgressBar

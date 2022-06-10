@@ -1,5 +1,6 @@
 package com.hl.arch.base
 
+import android.content.pm.ActivityInfo
 import android.graphics.Color
 import android.os.Bundle
 import android.os.PersistableBundle
@@ -114,7 +115,7 @@ abstract class BaseActivity : AppCompatActivity() {
         super.onRestoreInstanceState(savedInstanceState)
     }
 
-    private fun updateSystemBar() {
+    protected open fun updateSystemBar() {
         //默认设置根布局上方 padding 为状态栏高度
         initInsetPadding(top = true)
 
@@ -181,7 +182,7 @@ abstract class BaseActivity : AppCompatActivity() {
     /**
      * 点击除 EditText 外区域，当前焦点在 ET 上，EditText 取消焦点
      */
-    private fun handleHideSoftKeyBoard(ev: MotionEvent) {
+    protected open fun handleHideSoftKeyBoard(ev: MotionEvent) {
         if (ev.action == MotionEvent.ACTION_DOWN) {
             val v = currentFocus
             if (isShouldHideKeyboard(v, ev)) {

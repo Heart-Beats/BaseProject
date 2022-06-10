@@ -44,14 +44,14 @@ abstract class BaseFragment : Fragment() {
     /**
      * Fragment 销毁视图时保存页面数据至  arguments
      */
-    protected fun saveStateToArguments(key: String, saveState: Bundle) {
+    protected open fun saveStateToArguments(key: String, saveState: Bundle) {
         requireArguments().putBundle(key, saveState)
     }
 
     /**
      * Fragment 视图创建时从  arguments 恢复数据
      */
-    protected fun restoreStateFromArguments(key: String): Bundle? {
+    protected open fun restoreStateFromArguments(key: String): Bundle? {
         return requireArguments().getBundle(key)
     }
 
@@ -111,7 +111,7 @@ abstract class BaseFragment : Fragment() {
         }
     }
 
-    protected fun updateSystemBar() {
+    protected open fun updateSystemBar() {
         //默认设置根布局上方 padding 为状态栏高度
         initInsetPadding(top = true)
 
@@ -229,7 +229,7 @@ abstract class BaseFragment : Fragment() {
      *
      *         注意：fragment 为 页面子视图时，必须重写返回 false , 否则会导致无法返回页面
      */
-    protected fun isActivityMainPage() = true
+    protected open fun isActivityMainPage() = true
 
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

@@ -3,13 +3,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="#ffffffff"
     android:fitsSystemWindows="true"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".previewfile.PreviewFileActivity"
+    tools:context=".previewFie.PreviewFileActivity"
     android:orientation="vertical">
 
     <RelativeLayout
+        android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="@dimen/px30">
@@ -58,57 +58,63 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.hl.utils.previewfile.SuperFileView.DocView
-            android:id="@+id/mSuperFileView"
+        <FrameLayout
+            android:id="@+id/preview_file_content"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:visibility="visible"
-            tools:visibility="gone" />
+            android:background="@color/white">
 
-        <com.hl.uikit.video.UIKitMyStandardGSYVideoPlayer
-            android:id="@+id/video_player"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:layout_gravity="center"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/toolbar2" />
+            <com.hl.utils.previewFie.superFileView.DocView
+                android:id="@+id/mSuperFileView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:visibility="visible"
+                tools:visibility="gone" />
 
-        <ImageView
-            android:id="@+id/img"
+            <com.hl.uikit.video.UIKitMyStandardGSYVideoPlayer
+                android:id="@+id/video_player"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_gravity="center"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/toolbar2" />
+
+            <ImageView
+                android:id="@+id/img"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/px20"
+                android:adjustViewBounds="true"
+                android:scaleType="fitXY"
+                android:visibility="gone"
+                tools:visibility="visible" />
+
+            <com.hl.uikit.progressbar.UIKitCircleProgressBar
+                android:id="@+id/progress_bar"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:indeterminate="false"
+                android:visibility="gone"
+                app:uikit_cpb_background="@color/lightcyan"
+                app:uikit_cpb_max_progress="100"
+                tools:rpb_progress="50"
+                tools:visibility="visible" />
+
+        </FrameLayout>
+
+
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/no_support_file_container"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="@dimen/px20"
-            android:adjustViewBounds="true"
-            android:scaleType="fitXY"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/dp_8"
             android:visibility="gone"
             tools:visibility="visible" />
-
-        <com.hl.uikit.progressbar.UIKitCircleProgressBar
-            android:id="@+id/progress_bar"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_gravity="center"
-            android:indeterminate="false"
-            android:visibility="gone"
-            app:uikit_cpb_background="@color/lightcyan"
-            app:uikit_cpb_max_progress="100"
-            tools:rpb_progress="50"
-            tools:visibility="visible" />
-
     </FrameLayout>
-
-    <TextView
-        android:id="@+id/empty"
-        android:layout_width="match_parent"
-        android:layout_centerInParent="true"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="无法查看此文件格式"
-        android:textColor="#333333"
-        android:textSize="@dimen/px55" />
 </LinearLayout>
