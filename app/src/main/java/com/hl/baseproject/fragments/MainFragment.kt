@@ -6,12 +6,20 @@ import android.content.pm.ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
 import android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
 import android.content.res.Configuration
 import android.os.Bundle
+import androidx.fragment.app.Fragment
+import com.github.lzyzsd.jsbridge.BridgeHandler
+import com.github.lzyzsd.jsbridge.BridgeWebView
 import com.hl.arch.mvvm.fragment.ViewBindingMvvmBaseFragment
 import com.hl.arch.mvvm.vm.FlowVM
 import com.hl.arch.mvvm.vm.LiveDataVM
+import com.hl.arch.web.helpers.JsBridgeHelper
+import com.hl.arch.web.navigateToWeb
+import com.hl.arch.web.sdk.ISdk
+import com.hl.arch.web.sdk.ISdkImplProvider
 import com.hl.baseproject.databinding.FragmentMainBinding
 import com.hl.uikit.onClick
 import com.hl.uikit.toast
+import com.hl.utils.ProxyHandler
 import com.hl.utils.camera.CaptureFeature
 import com.hl.utils.camera.MyCaptureActivity
 import com.hl.utils.previewFie.PreviewFileActivity
@@ -81,6 +89,22 @@ class MainFragment : ViewBindingMvvmBaseFragment<FragmentMainBinding>() {
 				"Enigma_Principles_of_Lust-part.flv",
 				"http://samples.mplayerhq.hu/FLV/Enigma_Principles_of_Lust-part.flv"
 			)
+		}
+
+		JsBridgeHelper.setISdkImplProvider(object : ISdkImplProvider() {
+			override fun provideProjectSdkImpl(
+				currentFragment: Fragment,
+				bridgeWebView: BridgeWebView,
+				bridgeHandlerProxy: ProxyHandler<BridgeHandler>
+			): ISdk {
+				return object : ISdk {
+
+				}
+			}
+		})
+		testWebView.onClick {
+
+			this@MainFragment.navigateToWeb("https://www.baidu.com", isNeedTitle = true)
 		}
 	}
 
