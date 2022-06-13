@@ -45,7 +45,7 @@ android {
 }
 
 dependencies {
-    implementation 'com.hl:uikit'
+    api 'com.hl:uikit'
 
     testImplementation Deps.Test.junit
     androidTestImplementation Deps.Test.junit_ext
@@ -74,8 +74,8 @@ dependencies {
 
     api Deps.Banner.banner
 
-    implementation Deps.PickSelector.picture_selector
-    implementation Deps.PickSelector.picture_selector_compress
+//    implementation Deps.PickSelector.picture_selector
+//    implementation Deps.PickSelector.picture_selector_compress
     api Deps.Update.update_app_utilsx
 
     api Deps.UtilCodeX.utilcodex

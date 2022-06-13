@@ -62,6 +62,7 @@ dependencies {
     api Deps.JetpackNavigation.navigation_ui
     api Deps.Popup.x_popup
     api Deps.UtilCodeX.utilcodex
+    api Deps.JsBridge.jsbridge
     api project(path: ':base-app-res')
-
+    api project(path: ':utils')
 }
