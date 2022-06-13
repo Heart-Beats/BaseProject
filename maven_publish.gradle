@@ -190,6 +190,7 @@ project.afterEvaluate {
                     setDependencyNode(root, 'compile', 'com.github.bumptech.glide', 'glide', Versions.GLIDE)
                     setDependencyNode(root, 'compile', 'com.guolindev.permissionx', 'permissionx', Versions.PERMISSION_X)
                     setDependencyNode(root, 'compile', 'com.github.CarGuo.GSYVideoPlayer', 'GSYVideoPlayer', Versions.GSY_VIDEO_PLAYER)
+                    setDependencyNode(root, 'compile', 'com.github.lzyzsd', 'jsbridge', Versions.JS_BRIDGE)
                     setScm(root)
                 }
             }
@@ -262,6 +263,7 @@ project.afterEvaluate {
                 pom.withXml {
                     def root = asNode()
                     setDependencyNode(root, 'compile', myGroupId, 'base-app-res', getPublicationVersion())
+                    setDependencyNode(root, 'compile', myGroupId, 'utils', getPublicationVersion())
 
                     setDependencyNode(root, 'compile', 'androidx.core', 'core-ktx', Versions.CORE_KTX)
                     setDependencyNode(root, 'compile', 'androidx.appcompat', 'appcompat', Versions.APPCOMPAT)
@@ -286,6 +288,7 @@ project.afterEvaluate {
                     setDependencyNode(root, 'compile', 'com.google.code.gson', 'gson', Versions.GSON)
                     setDependencyNode(root, 'compile', 'com.github.li-xiaojun', 'XPopup', Versions.X_POPUP)
                     setDependencyNode(root, 'compile', 'com.blankj', 'utilcodex', Versions.UTIL_CODE_X)
+                    setDependencyNode(root, 'compile', 'com.github.lzyzsd', 'jsbridge', Versions.JS_BRIDGE)
                     setScm(root)
                 }
             }

@@ -190,7 +190,7 @@ abstract class BaseFragment : Fragment() {
     /**
      * 判断当前 Fragment 是否为主页面
      */
-    private fun isMainPage(): Boolean {
+    protected fun isMainPage(): Boolean {
         return if (isNavigationPage()) {
             Log.d(TAG, "isMainPage =====> ${this.javaClass.simpleName} 为 Navigation 页面")
             // 使用 Navigation 时

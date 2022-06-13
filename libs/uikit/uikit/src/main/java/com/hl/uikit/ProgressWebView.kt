@@ -6,8 +6,9 @@ import android.view.View
 import android.webkit.WebView
 import android.widget.ProgressBar
 import androidx.core.content.ContextCompat
+import com.github.lzyzsd.jsbridge.BridgeWebView
 
-class ProgressWebView : WebView {
+class ProgressWebView : BridgeWebView {
 
     private var isDisplay: Boolean = true
     private var progressBar: ProgressBar? = null
@@ -20,28 +21,14 @@ class ProgressWebView : WebView {
         init(context)
     }
 
-    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(
-        context,
-        attrs,
-        defStyleAttr
-    ) {
-        init(context)
-    }
-
-    constructor(
-        context: Context,
-        attrs: AttributeSet?,
-        defStyleAttr: Int,
-        defStyleRes: Int
-    ) : super(context, attrs, defStyleAttr, defStyleRes) {
+    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
         init(context)
     }
 
     private fun init(context: Context) {
         progressBar = ProgressBar(context, null, android.R.attr.progressBarStyleHorizontal)
         progressBar?.layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, 6, 0, 0)
-        progressBar?.progressDrawable =
-            ContextCompat.getDrawable(context, R.drawable.uikit_progress_webview_top)
+        progressBar?.progressDrawable = ContextCompat.getDrawable(context, R.drawable.uikit_progress_webview_top)
         addView(progressBar)
         webChromeClient = WebChromeClient()
     }
