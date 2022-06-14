@@ -20,6 +20,16 @@ data class H5ReturnBean<T>(
 object H5Return {
 
 	@JvmStatic
+	fun success(): String {
+		return success("")
+	}
+
+	@JvmStatic
+	fun fail(): String {
+		return fail("")
+	}
+
+	@JvmStatic
 	fun <T> success(data: T): String {
 		return H5ReturnBean("success", "操作成功", data).toJsonString()
 	}

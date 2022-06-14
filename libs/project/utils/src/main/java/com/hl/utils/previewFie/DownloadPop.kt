@@ -12,6 +12,7 @@ import com.hl.uikit.onClick
 import com.hl.uikit.toast
 import com.hl.utils.R
 import com.lxj.xpopup.core.BottomPopupView
+import kotlinx.android.synthetic.main.item_file_download.view.*
 import java.io.File
 
 /**
@@ -67,6 +68,8 @@ class DownloadPop(private val fragmentActivity: FragmentActivity, private val do
                     }
 
                     fragmentActivity.toast("文件已保存至 ${file?.absolutePath}")
+
+                    cancel_download.text = "完成"
                 }
 
                 override fun onError(file: File?, e: Exception?) {

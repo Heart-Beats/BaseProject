@@ -333,6 +333,7 @@ project.afterEvaluate {
                     setDependencyNode(root, 'compile', 'com.github.CarGuo.GSYVideoPlayer', 'GSYVideoPlayer', Versions.GSY_VIDEO_PLAYER)
 
                     setDependencyNode(root, 'compile', myGroupId, 'base-app-res', getPublicationVersion())
+                    setDependencyNode(root, 'compile', myGroupId, 'Umeng', getPublicationVersion())
                     setDependencyNode(root, 'compile', 'com.elvishew', 'xlog', Versions.XLOG)
                     setDependencyNode(root, 'compile', 'com.tencent.tbs', 'tbssdk', Versions.TBS_SDK)
                     setDependencyNode(root, 'compile', 'com.github.getActivity', 'EasyHttp', Versions.EASY_HTTP)

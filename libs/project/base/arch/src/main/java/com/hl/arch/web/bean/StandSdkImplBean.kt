@@ -1,5 +1,7 @@
 package com.hl.arch.web.bean
 
+import com.hl.umeng.sdk.SharePlatformParam
+
 
 data class H5DeviceInfo(
 	val deviceInfo: AndroidDeviceInfo,
@@ -95,3 +97,49 @@ data class StatusBarColorParam(
 	 */
 	var color: String? = null
 )
+
+data class GetNetworkConnectTypeReturn(
+
+	/**
+	 * 返回值：WIFI、 MOBILE、UNKNOWN、NO
+	 */
+	var networkType: String? = null,
+)
+
+
+data class Share2PlatformParam(
+	/**
+	 * 标题
+	 */
+	var title: String = "",
+
+	/**
+	 * 描述
+	 */
+	var description: String = "",
+
+	/**
+	 * 链接
+	 */
+	var link: String = "",
+
+	/**
+	 * 封面图
+	 */
+	var coverUrl: String = "",
+
+	/**
+	 * 类型
+	 */
+	var type: String = "",
+) {
+
+	fun convert2SharePlatformParam(): SharePlatformParam {
+		return SharePlatformParam().also {
+			it.title = this.title
+			it.description = this.description
+			it.link = this.link
+			it.coverUrl = this.coverUrl
+		}
+	}
+}

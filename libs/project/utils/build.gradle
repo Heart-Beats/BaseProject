@@ -82,6 +82,7 @@ dependencies {
     api Deps.GSYVideoPlayer.gsy_video_player
 
     api project(path: ':base-app-res')
+    api project(path: ':SDK:Umeng')
     api Deps.XLog.xlog
     api Deps.Tencent.tbs_sdk
     api Deps.Okhttp.easy_http

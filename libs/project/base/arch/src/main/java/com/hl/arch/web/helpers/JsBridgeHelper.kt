@@ -23,6 +23,7 @@ object JsBridgeHelper {
 	/**
 	 * 设置  h5 调用方法的提供者
 	 */
+	@JvmStatic
 	fun setISdkImplProvider(iSdkImplProvider: ISdkImplProvider) {
 		this.iSdkImplProvider = iSdkImplProvider
 	}
