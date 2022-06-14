@@ -5,6 +5,8 @@ import android.util.Log
 import com.umeng.socialize.ShareAction
 import com.umeng.socialize.UMShareListener
 import com.umeng.socialize.bean.SHARE_MEDIA
+import com.umeng.socialize.media.UMImage
+import com.umeng.socialize.media.UMWeb
 
 /**
  * @author  张磊  on  2022/01/23 at 7:44
@@ -15,10 +17,82 @@ object UMShareUtil {
 
     private const val TAG = "UMShareUtil"
 
+    /**
+     * 单个 App 分享 web 形式页面
+     */
+    fun shareUMWebWithPlatform(
+        activity: Activity,
+        sharePlatformParam: SharePlatformParam,
+        shareListener: MyUMShareListener = object : MyUMShareListener() {
+            override fun onResult(platform: SHARE_MEDIA) {
+                Log.d(TAG, "onShareResult: ${platform.getName()} 分享成功")
+            }
+        }
+    ) {
+        ShareAction(activity)
+            .setPlatform(sharePlatformParam.platform)
+            .setCallback(shareListener)
+            .apply {
+                this.withMedia(buildUMWeb(sharePlatformParam, activity))
+            }
+            .share()
+    }
+
+    /**
+     * 单个 App 分享
+     */
+    fun shareWithPlatform(
+        activity: Activity,
+        platform: SHARE_MEDIA,
+        shareListener: MyUMShareListener = object : MyUMShareListener() {
+            override fun onResult(platform: SHARE_MEDIA) {
+                Log.d(TAG, "onShareResult: ${platform.getName()} 分享成功")
+            }
+        },
+        shareContentAction: ShareAction.() -> Unit,
+    ) {
+        ShareAction(activity)
+            .setPlatform(platform)
+            .setCallback(shareListener)
+            .apply(shareContentAction)
+            .share()
+    }
+
+    /**
+     * 通过分享面板分享 web 形式页面
+     */
+    fun shareUMWeb2PlatformsWithBoard(
+        activity: Activity,
+        sharePlatformParam: SharePlatformParam,
+        shareListener: MyUMShareListener = object : MyUMShareListener() {
+            override fun onResult(platform: SHARE_MEDIA) {
+                Log.d(TAG, "onShareResult: ${platform.getName()} 分享成功")
+            }
+        }
+    ) {
+        shareWithBoard(
+            activity, *sharePlatformParam.sharePlatforms.toTypedArray(),
+            shareListener = shareListener,
+        ) {
+            this.withMedia(buildUMWeb(sharePlatformParam, activity))
+        }
+    }
+
+    private fun buildUMWeb(sharePlatformParam: SharePlatformParam, activity: Activity): UMWeb {
+        return UMWeb(sharePlatformParam.link).apply {
+            this.title = sharePlatformParam.title
+            this.description = sharePlatformParam.description
+            this.setThumb(UMImage(activity, sharePlatformParam.coverUrl))
+        }
+    }
+
+    /**
+     * 通过分享面板分享
+     */
     fun share2PlatformsWithBoard(
         activity: Activity,
         vararg sharePlatforms: SHARE_MEDIA = arrayOf(SHARE_MEDIA.WEIXIN),
-        shareListener: MyUMShareListener = object: MyUMShareListener() {
+        shareListener: MyUMShareListener = object : MyUMShareListener() {
             override fun onResult(platform: SHARE_MEDIA) {
                 Log.d(TAG, "onShareResult: ${platform.getName()} 分享成功")
             }
@@ -32,9 +106,6 @@ object UMShareUtil {
         )
     }
 
-    /**
-     * 通过分享面板分享
-     */
     private fun shareWithBoard(
         activity: Activity,
         vararg sharePlatforms: SHARE_MEDIA,
@@ -47,23 +118,6 @@ object UMShareUtil {
             .apply(shareContentAction)
             .open()
     }
-
-    /**
-     * 单个 App 分享
-     */
-    fun shareWithsetPlatform(
-        activity: Activity,
-        platform: SHARE_MEDIA,
-        shareListener: MyUMShareListener,
-        shareContentAction: ShareAction.() -> Unit,
-    ) {
-        ShareAction(activity)
-            .setPlatform(platform)
-            .setCallback(shareListener)
-            .apply(shareContentAction)
-            .share()
-    }
-
 }
 
 

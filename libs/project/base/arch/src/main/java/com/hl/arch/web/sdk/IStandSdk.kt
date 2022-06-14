@@ -17,7 +17,7 @@ interface IStandSdk : ISdk {
 	fun navigateBack(handlerName: String = Thread.currentThread().stackTrace[1].methodName)
 
 	/**
-	 * 打开新页面
+	 * 打开新 H5 页面
 	 */
 	fun navigateTo(handlerName: String = Thread.currentThread().stackTrace[1].methodName)
 
@@ -30,6 +30,11 @@ interface IStandSdk : ISdk {
 	 * 从本地获取数据
 	 */
 	fun getH5Data(handlerName: String = Thread.currentThread().stackTrace[1].methodName)
+
+	/**
+	 * 清除所有 H5 本地数据
+	 */
+	fun clearH5Data(handlerName: String = Thread.currentThread().stackTrace[1].methodName)
 
 
 	/**
@@ -52,4 +57,45 @@ interface IStandSdk : ISdk {
 	 *  设置状态栏颜色
 	 */
 	fun setStatusBarColor(handlerName: String = Thread.currentThread().stackTrace[1].methodName)
+
+	/**
+	 * 获取网络连接类型
+	 */
+	fun getNetworkConnectType(handlerName: String = Thread.currentThread().stackTrace[1].methodName)
+
+	/**
+	 * 获取位置信息
+	 */
+	fun getLocation(handlerName: String = Thread.currentThread().stackTrace[1].methodName)
+
+	/**
+	 *  图片预览
+	 */
+	fun previewImage(handlerName: String = Thread.currentThread().stackTrace[1].methodName)
+
+	/**
+	 *  保存图片
+	 */
+	fun savePhotoToAlbum(handlerName: String = Thread.currentThread().stackTrace[1].methodName)
+
+	/**
+	 *  打电话
+	 */
+	fun callPhone(handlerName: String = Thread.currentThread().stackTrace[1].methodName)
+
+	/**
+	 *  保存/下载文件
+	 */
+	fun downLoadFile(handlerName: String = Thread.currentThread().stackTrace[1].methodName)
+
+	/**
+	 *  扫描二维码
+	 */
+	fun scanQRCode(handlerName: String = Thread.currentThread().stackTrace[1].methodName)
+
+
+	/**
+	 *  分享链接/图片 到三方平台
+	 */
+	fun share2Platform(handlerName: String = Thread.currentThread().stackTrace[1].methodName)
 }

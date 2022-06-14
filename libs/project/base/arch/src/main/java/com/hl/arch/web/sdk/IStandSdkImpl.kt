@@ -25,9 +25,12 @@ import com.hl.arch.web.bean.*
 import com.hl.arch.web.helpers.H5DataHelper
 import com.hl.arch.web.helpers.logJs
 import com.hl.uikit.getStatusBarHeight
+import com.hl.umeng.sdk.MyUMShareListener
+import com.hl.umeng.sdk.UMShareUtil
 import com.hl.utils.ProxyHandler
 import com.hl.utils.getCurrentNavigationFragment
 import com.hl.utils.traverseFindFirstViewByType
+import com.umeng.socialize.bean.SHARE_MEDIA
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -70,8 +73,12 @@ class IStandSdkImpl(
 		})
 	}
 
+	private fun commonRegisterHandler(handlerName: String, bridgeHandler: BridgeHandler) {
+		bridgeWebView.registerHandler(handlerName, bridgeHandlerProxy.bind(bridgeHandler))
+	}
+
 	override fun getDeviceInfo(handlerName: String) {
-		bridgeWebView.registerHandler(handlerName, bridgeHandlerProxy.bind { _, function ->
+		commonRegisterHandler(handlerName) { _, function ->
 
 			// h5 获取的状态栏高度需要除以 density
 			val statusBarHeightDp =
@@ -81,13 +88,13 @@ class IStandSdkImpl(
 			val deviceInfo =
 				H5DeviceInfo(AndroidDeviceInfo(statusBarHeight = statusBarHeightDp.toInt(), isWifi = isWifi))
 			function.onCallBack(H5Return.success(deviceInfo))
-		})
+		}
 	}
 
 	override fun navigateBack(handlerName: String) {
-		bridgeWebView.registerHandler(handlerName, bridgeHandlerProxy.bind { data, function ->
+		commonRegisterHandler(handlerName) { data, function ->
 			bridgeWebView.h5NavigateBack(data, function)
-		})
+		}
 	}
 
 	private fun BridgeWebView.h5NavigateBack(data: String?, function: CallBackFunction) {
@@ -164,10 +171,10 @@ class IStandSdkImpl(
 
 
 	override fun navigateTo(handlerName: String) {
-		bridgeWebView.registerHandler(handlerName, bridgeHandlerProxy.bind { data, function ->
+		commonRegisterHandler(handlerName) { data, function ->
 			gotoWebByContainerActivity(data)
-			function.onCallBack(H5Return.success(""))
-		})
+			function.onCallBack(H5Return.success())
+		}
 	}
 
 	/**
@@ -185,31 +192,38 @@ class IStandSdkImpl(
 	}
 
 	override fun saveH5Data(handlerName: String) {
-		bridgeWebView.registerHandler(handlerName, bridgeHandlerProxy.bind { data, function ->
+		commonRegisterHandler(handlerName) { data, function ->
 			val h5SaveDataEntity = Gson().fromJson(data, H5SaveDataEntity::class.java)
 			h5SaveDataEntity.key?.also {
 				H5DataHelper.putData(it, h5SaveDataEntity.value)
 				function.onCallBack(H5Return.success("保存数据成功"))
 			} ?: function.onCallBack(H5Return.fail("key 不可为空"))
-		})
+		}
 	}
 
 	override fun getH5Data(handlerName: String) {
-		bridgeWebView.registerHandler(handlerName, bridgeHandlerProxy.bind { data, function ->
+		commonRegisterHandler(handlerName) { data, function ->
 			val h5DataEntity = Gson().fromJson(data, H5GetDataEntity::class.java)
 			if (h5DataEntity == null) {
 				function.onCallBack(H5Return.fail("h5 传输的数据异常"))
-				return@bind
+				return@commonRegisterHandler
 			}
 
 			h5DataEntity.key?.also {
 				function.onCallBack(H5Return.success(H5DataHelper.getData(it)))
 			} ?: function.onCallBack(H5Return.fail("key 不可为空"))
-		})
+		}
+	}
+
+	override fun clearH5Data(handlerName: String) {
+		commonRegisterHandler(handlerName) { _, function ->
+			H5DataHelper.clearData()
+			function.onCallBack(H5Return.success())
+		}
 	}
 
 	override fun redirectTo(handlerName: String) {
-		bridgeWebView.registerHandler(handlerName, bridgeHandlerProxy.bind { data, function ->
+		commonRegisterHandler(handlerName) { data, function ->
 			MainScope().launch {
 
 				//打开新的页面
@@ -225,13 +239,13 @@ class IStandSdkImpl(
 					bridgeWebView.findNavController().popBackStack()
 				}
 
-				function.onCallBack(H5Return.success(""))
+				function.onCallBack(H5Return.success())
 			}
-		})
+		}
 	}
 
 	override fun reLaunch(handlerName: String) {
-		bridgeWebView.registerHandler(handlerName, bridgeHandlerProxy.bind { data, function ->
+		commonRegisterHandler(handlerName) { data, function ->
 			MainScope().launch {
 				//打开新的页面
 				gotoWebByContainerActivity(data)
@@ -274,13 +288,13 @@ class IStandSdkImpl(
 					}
 				}
 
-				function.onCallBack(H5Return.success(""))
+				function.onCallBack(H5Return.success())
 			}
-		})
+		}
 	}
 
 	override fun setStatusBarLightMode(handlerName: String) {
-		bridgeWebView.registerHandler(handlerName, bridgeHandlerProxy.bind { data, function ->
+		commonRegisterHandler(handlerName) { data, function ->
 			val lightModeParam = Gson().fromJson(data, StatusBarLightModeParam::class.java)
 			currentFragment.lifecycleScope.launchWhenStarted {
 				currentFragment.immersionBar {
@@ -292,22 +306,103 @@ class IStandSdkImpl(
 					}
 				}
 
-				function.onCallBack(H5Return.success(""))
+				function.onCallBack(H5Return.success())
 			}
-		})
+		}
 	}
 
 	override fun setStatusBarColor(handlerName: String) {
-		logJs("setStatusBarColor", "测试 setStatusBarColor 方法调用")
-		bridgeWebView.registerHandler(handlerName, bridgeHandlerProxy.bind { data, function ->
+		commonRegisterHandler(handlerName) { data, function ->
 			Gson().fromJson(data, StatusBarColorParam::class.java)?.color?.also {
 				currentFragment.lifecycleScope.launchWhenStarted {
 					currentFragment.immersionBar {
 						statusBarColor(it)
 					}
-					function.onCallBack(H5Return.success(""))
+					function.onCallBack(H5Return.success())
 				}
 			} ?: function.onCallBack(H5Return.fail("颜色值为 null"))
-		})
+		}
+	}
+
+	override fun getNetworkConnectType(handlerName: String) {
+		commonRegisterHandler(handlerName) { _, function ->
+			val connectType = when (NetworkUtils.getNetworkType()) {
+				NetworkUtils.NetworkType.NETWORK_2G, NetworkUtils.NetworkType.NETWORK_3G,
+				NetworkUtils.NetworkType.NETWORK_4G, NetworkUtils.NetworkType.NETWORK_5G -> "MOBILE"
+				NetworkUtils.NetworkType.NETWORK_WIFI -> "WIFI"
+				NetworkUtils.NetworkType.NETWORK_ETHERNET, NetworkUtils.NetworkType.NETWORK_UNKNOWN -> "UNKNOWN"
+				else -> "NO"
+			}
+			function.onCallBack(H5Return.success(GetNetworkConnectTypeReturn(connectType)))
+		}
+	}
+
+	override fun getLocation(handlerName: String) {
+		commonRegisterHandler(handlerName) { data, function ->
+
+		}
+	}
+
+	override fun previewImage(handlerName: String) {
+		commonRegisterHandler(handlerName) { data, function ->
+
+		}
+	}
+
+	override fun savePhotoToAlbum(handlerName: String) {
+		commonRegisterHandler(handlerName) { data, function ->
+
+		}
+	}
+
+	override fun callPhone(handlerName: String) {
+		commonRegisterHandler(handlerName) { data, function ->
+
+		}
+	}
+
+	override fun downLoadFile(handlerName: String) {
+		commonRegisterHandler(handlerName) { data, function ->
+
+		}
+	}
+
+	override fun scanQRCode(handlerName: String) {
+		commonRegisterHandler(handlerName) { data, function ->
+
+		}
+	}
+
+	override fun share2Platform(handlerName: String) {
+		commonRegisterHandler(handlerName) { data, function ->
+			bridgeWebView.registerHandler(handlerName, bridgeHandlerProxy.bind { data, function ->
+				val shareListener = object : MyUMShareListener() {
+
+					override fun onResult(platform: SHARE_MEDIA) {
+						function.onCallBack(H5Return.success("分享成功"))
+					}
+
+					override fun onError(platform: SHARE_MEDIA, t: Throwable) {
+						function.onCallBack(H5Return.fail("分享失败"))
+					}
+
+					override fun onCancel(platform: SHARE_MEDIA) {
+						function.onCallBack(H5Return.fail("分享取消"))
+					}
+
+				}
+
+				val h5Share2PPlatformParam = Gson().fromJson(data, Share2PlatformParam::class.java)
+				when (h5Share2PPlatformParam.type) {
+					"" -> {
+						UMShareUtil.shareUMWebWithPlatform(
+							attachActivity,
+							h5Share2PPlatformParam.convert2SharePlatformParam(),
+							shareListener
+						)
+					}
+				}
+			})
+		}
 	}
 }
