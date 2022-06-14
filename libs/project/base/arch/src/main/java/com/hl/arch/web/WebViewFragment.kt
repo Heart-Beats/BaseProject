@@ -116,18 +116,79 @@ open class WebViewFragment : ViewBindingMvvmBaseFragment<FragmentWebViewBinding>
 	private fun FragmentWebViewBinding.initWebView(args: WebViewFragmentArgs) {
 		webView = progressWebView.apply {
 			setProgressDisplay(onLoadNeedProgress())
-
-			settings.apply {
-				settings.userAgentString = "${settings.userAgentString}-${AppUtils.getAppName()}"
-				domStorageEnabled = true
-				javaScriptEnabled = true
-				defaultTextEncodingName = "utf-8"
-				databaseEnabled = true
-				cacheMode = WebSettings.LOAD_DEFAULT
-			}
+			settings.initWebSetting()
 		}
 
-		webChromeClient = object : MyWebChromeClient(this@WebViewFragment) {
+		webChromeClient = getWebChromeClient(args)
+		webView.webChromeClient = webChromeClient
+		webView.webViewClient = getWebViewClient()
+	}
+
+	private fun initTitle(args: WebViewFragmentArgs, title: String?) {
+		val paint = TextPaint()
+		paint.textSize = 16f.dp
+
+		val realTitle: String? = if (args.title.isNullOrEmpty()) {
+			title
+		} else {
+			args.title
+		}
+		if (realTitle.isNullOrEmpty()) return
+
+		val bounds = Rect()
+		paint.getTextBounds(realTitle, 0, realTitle.length, bounds)
+		val maxWidth = 200.dpInt
+		if (bounds.width() > maxWidth) {
+			val start = 0
+			val end = (realTitle.length * (1.0f * maxWidth / bounds.width())).toInt()
+			toolbar?.title = realTitle.substring(start, end) + "..."
+		} else {
+			toolbar?.title = realTitle
+		}
+	}
+
+	private fun webViewShouldOverrideUrlLoading(view: WebView?, uri: Uri?): Boolean {
+		XLog.i("url == $uri")
+		if (uri?.scheme == "native") {
+			XLog.i("url == $uri , 识别到自定义 native 链接")
+			return onNativeRequestLoading(view, uri)
+		}
+		return false
+	}
+
+	override fun onLiveDataVMCreated(liveDataVM: LiveDataVM) {
+	}
+
+	override fun onFlowVMCreated(flowVM: FlowVM) {
+	}
+
+	/**
+	 * 重写此方法可实现加载页面时是否需要进度显示, 默认不需要
+	 */
+	open fun onLoadNeedProgress(): Boolean {
+		return false
+	}
+
+	/**
+	 *  重写此方法实现 WebSetting 的定制化
+	 */
+	open fun WebSettings.initWebSetting() {
+		this.javaScriptEnabled = true
+		this.userAgentString = "${this.userAgentString}-${AppUtils.getAppName()}"
+		this.domStorageEnabled = true
+		this.defaultTextEncodingName = "utf-8"
+		this.databaseEnabled = true
+		this.useWideViewPort = true
+		this.loadWithOverviewMode = true
+		this.displayZoomControls = true
+		this.cacheMode = WebSettings.LOAD_DEFAULT
+	}
+
+	/**
+	 * 重写此方法实现 WebChromeClient 的自定义
+	 */
+	open fun FragmentWebViewBinding.getWebChromeClient(args: WebViewFragmentArgs) =
+		object : MyWebChromeClient(this@WebViewFragment) {
 
 			//用于全屏渲染视频的View
 			private var mCustomView: View? = null
@@ -183,69 +244,26 @@ open class WebViewFragment : ViewBindingMvvmBaseFragment<FragmentWebViewBinding>
 				requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
 			}
 		}
-		webView.webChromeClient = webChromeClient
 
-		webView.webViewClient = object : MyBridgeWebViewClient(webView) {
-
-			override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
-				val uri = request?.url
-				if (webViewShouldOverrideUrlLoading(view, uri)) {
-					return true
-				}
-				return super.shouldOverrideUrlLoading(view, request)
-			}
-
-			override fun onPageFinished(view: WebView?, url: String?) {
-				super.onPageFinished(view, url)
-				logJs("onH5Load", url)
-				webView.callHandler("onH5Load", url) { }
-			}
-		}
-	}
-
-	private fun initTitle(args: WebViewFragmentArgs, title: String?) {
-		val paint = TextPaint()
-		paint.textSize = 16f.dp
-
-		val realTitle: String? = if (args.title.isNullOrEmpty()) {
-			title
-		} else {
-			args.title
-		}
-		if (realTitle.isNullOrEmpty()) return
-
-		val bounds = Rect()
-		paint.getTextBounds(realTitle, 0, realTitle.length, bounds)
-		val maxWidth = 200.dpInt
-		if (bounds.width() > maxWidth) {
-			val start = 0
-			val end = (realTitle.length * (1.0f * maxWidth / bounds.width())).toInt()
-			toolbar?.title = realTitle.substring(start, end) + "..."
-		} else {
-			toolbar?.title = realTitle
-		}
-	}
-
-	private fun webViewShouldOverrideUrlLoading(view: WebView?, uri: Uri?): Boolean {
-		XLog.i("url == $uri")
-		if (uri?.scheme == "native") {
-			XLog.i("url == $uri , 识别到自定义 native 链接")
-			return onNativeRequestLoading(view, uri)
-		}
-		return false
-	}
-
-	override fun onLiveDataVMCreated(liveDataVM: LiveDataVM) {
-	}
-
-	override fun onFlowVMCreated(flowVM: FlowVM) {
-	}
 
 	/**
-	 * 重写此方法可实现加载页面时是否需要进度显示, 默认不需要
+	 * 重写此方法实现 WebViewClient 的自定义
 	 */
-	open fun onLoadNeedProgress(): Boolean {
-		return false
+	open fun getWebViewClient() = object : MyBridgeWebViewClient(webView) {
+
+		override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
+			val uri = request?.url
+			if (webViewShouldOverrideUrlLoading(view, uri)) {
+				return true
+			}
+			return super.shouldOverrideUrlLoading(view, request)
+		}
+
+		override fun onPageFinished(view: WebView?, url: String?) {
+			super.onPageFinished(view, url)
+			logJs("onH5Load", url)
+			webView.callHandler("onH5Load", url) { }
+		}
 	}
 
 	/**
