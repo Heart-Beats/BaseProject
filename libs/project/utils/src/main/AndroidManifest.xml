@@ -10,6 +10,8 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
+    <uses-permission android:name="android.permission.SEND_SMS"/>
+
     <!-- zxing-android-embedded 使用了 TextureView，因此需要硬件加速 -->
     <application
         android:hardwareAccelerated="true"

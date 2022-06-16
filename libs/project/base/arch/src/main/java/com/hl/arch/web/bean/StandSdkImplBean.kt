@@ -130,9 +130,14 @@ data class Share2PlatformParam(
 	var coverUrl: String = "",
 
 	/**
-	 * 类型
+	 * 分享类型：  wx-微信， qq-QQ， wechatWork-企业微信，  sms-微信，  copy-复制链接，    其他类型情况
 	 */
 	var type: String = "",
+
+	/**
+	 * 短信数据，当 type 为 sms 时使用
+	 */
+	var smsData: SmsData? = null
 ) {
 
 	fun convert2SharePlatformParam(): SharePlatformParam {
@@ -151,3 +156,15 @@ data class Share2PlatformParam(
 		}
 	}
 }
+
+data class SmsData(
+	/**
+	 * 收信人集合
+	 */
+	var phoneNumbers: List<String>? = null,
+
+	/**
+	 * 消息内容
+	 */
+	var message: String? = null
+)

@@ -18,6 +18,18 @@ def initBuildConfigValueFun(defaultConfig) {
 
         buildConfigField('String', 'umengAppKey', "\"${manifestPlaceholders.UMENG_APP_KEY}\"")
         buildConfigField('String', 'umengSecretKey', "\"${manifestPlaceholders.UMENG_SECRET_KEY}\"")
+
+        buildConfigField('String', 'wxAppKey', "\"1\"")
+        buildConfigField('String', 'wxSecretKey', "\"1\"")
+
+        buildConfigField('String', 'qqAppKey', "\"1\"")
+        buildConfigField('String', 'qqSecretKey', "\"1\"")
+
+        buildConfigField('String', 'wxWorkAppKey', "\"1\"")
+        buildConfigField('String', 'wxWorkSecretKey', "\"1\"")
+
+        buildConfigField('String', 'aliPayAppKey', "\"1\"")
+
         buildConfigField('String', 'xunfeiAppid', "\"${manifestPlaceholders.XUNFEI_APPID}\"")
 
 
