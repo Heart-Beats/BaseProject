@@ -12,6 +12,11 @@ import com.hl.uikit.onClick
 
 class MainActivity : ViewBindingBaseActivity<ActivityMainBinding>() {
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        SDKInitHelper.initSdk(this)
+    }
+
     override fun ActivityMainBinding.onViewCreated(savedInstanceState: Bundle?) {
 
         this.viewPager.adapter = object : FragmentStateAdapter(this@MainActivity) {

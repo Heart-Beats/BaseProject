@@ -5,7 +5,7 @@ import android.text.TextUtils
 /**
  * Created by chibb on 2019/5/18.
  */
-object PhoneNumUtil {
+object RegexUtil {
 
     /**
      * 验证手机号是否合法
@@ -38,11 +38,6 @@ object PhoneNumUtil {
         return if (phone == null) {
             ""
         } else phone.substring(0, 3) + "****" + phone.substring(7, phone.length)
-    }
-
-    @JvmStatic
-    fun main(args: Array<String>) {
-        System.err.print(isMobileNO("021-8782997"))
     }
 
 }

@@ -34,6 +34,8 @@ class MyApplication : Application() {
 		initEasyHttp("https://www.baidu.com/", debug)
 
 		initX5(this, debug)
+
+		SDKInitHelper.preInitSdk(this)
 	}
 
 	private fun initXlog(isPrintLog: Boolean) {

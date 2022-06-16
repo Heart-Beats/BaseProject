@@ -9,6 +9,6 @@
     <com.hl.uikit.UIKitToolbar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:title="测试" />
+        app:uikit_title="测试" />
 
 </LinearLayout>

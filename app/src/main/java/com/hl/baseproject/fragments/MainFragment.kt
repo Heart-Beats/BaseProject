@@ -103,8 +103,7 @@ class MainFragment : ViewBindingMvvmBaseFragment<FragmentMainBinding>() {
 			}
 		})
 		testWebView.onClick {
-
-			this@MainFragment.navigateToWeb("https://www.baidu.com", isNeedTitle = true)
+			this@MainFragment.navigateToWeb("http://192.168.3.18:9003")
 		}
 	}
 

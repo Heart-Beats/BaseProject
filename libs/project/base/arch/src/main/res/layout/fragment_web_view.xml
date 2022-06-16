@@ -36,6 +36,7 @@
             tools:visibility="visible" />
 
         <com.hl.uikit.ProgressWebView
+            android:overScrollMode="never"
             android:id="@+id/progress_webView"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
