@@ -1,6 +1,7 @@
 package com.hl.arch.web.sdk
 
 import android.app.Activity
+import android.content.Intent
 import android.graphics.Color
 import android.webkit.WebView
 import androidx.fragment.app.Fragment
@@ -27,9 +28,7 @@ import com.hl.arch.web.helpers.logJs
 import com.hl.uikit.getStatusBarHeight
 import com.hl.umeng.sdk.MyUMShareListener
 import com.hl.umeng.sdk.UMShareUtil
-import com.hl.utils.ProxyHandler
-import com.hl.utils.getCurrentNavigationFragment
-import com.hl.utils.traverseFindFirstViewByType
+import com.hl.utils.*
 import com.umeng.socialize.bean.SHARE_MEDIA
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.delay
@@ -50,7 +49,7 @@ class IStandSdkImpl(
 	/**
 	 * 当前 WebViewFragment 依附的 Activity
 	 */
-	private val attachActivity = currentFragment.requireActivity()
+	private val attachActivity by lazy { currentFragment.requireActivity() }
 
 	init {
 		currentFragment.lifecycle.addObserver(object : DefaultLifecycleObserver {
@@ -375,37 +374,56 @@ class IStandSdkImpl(
 
 	override fun share2Platform(handlerName: String) {
 		commonRegisterHandler(handlerName) { data, function ->
-			bridgeWebView.registerHandler(handlerName, bridgeHandlerProxy.bind { data, function ->
+			val share2PlatformParam = Gson().fromJson(data, Share2PlatformParam::class.java)
+			val platformParam = share2PlatformParam.convert2SharePlatformParam()
 
-				val platformParam =
-					Gson().fromJson(data, Share2PlatformParam::class.java).convert2SharePlatformParam()
+			val shareListener = object : MyUMShareListener() {
 
-				when(platformParam.platform){
-					SHARE_MEDIA.MORE -> {}
+				override fun onResult(platform: SHARE_MEDIA) {
+					function.onCallBack(H5Return.success("分享成功"))
 				}
 
-				val shareListener = object : MyUMShareListener() {
-
-					override fun onResult(platform: SHARE_MEDIA) {
-						function.onCallBack(H5Return.success("分享成功"))
-					}
-
-					override fun onError(platform: SHARE_MEDIA, t: Throwable) {
-						function.onCallBack(H5Return.fail("分享失败"))
-					}
-
-					override fun onCancel(platform: SHARE_MEDIA) {
-						function.onCallBack(H5Return.fail("分享取消"))
-					}
-
+				override fun onError(platform: SHARE_MEDIA, t: Throwable) {
+					function.onCallBack(H5Return.fail("分享失败"))
 				}
 
-				UMShareUtil.shareUMWebWithPlatform(
-					attachActivity,
-					platformParam,
-					shareListener
-				)
-			})
+				override fun onCancel(platform: SHARE_MEDIA) {
+					function.onCallBack(H5Return.fail("分享取消"))
+				}
+			}
+
+			when (platformParam.platform) {
+				SHARE_MEDIA.MORE -> {
+					doShare2More(share2PlatformParam,function)
+				}
+				else -> UMShareUtil.shareUMWebWithPlatform(attachActivity, platformParam, shareListener)
+			}
+		}
+	}
+
+	private fun doShare2More(share2PlatformParam: Share2PlatformParam, function: CallBackFunction) {
+		when (share2PlatformParam.type) {
+			"sms" -> share2PlatformParam?.smsData?.run {
+				SmsHelper(attachActivity).sendMessage(this.phoneNumbers, this.message ?: "") {
+					if (it) {
+						function.onCallBack(H5Return.success("短信发送成功"))
+					} else {
+						function.onCallBack(H5Return.fail("短信发送失败"))
+					}
+				}
+			}
+
+			"copy" -> {
+				ClipboardHelper(attachActivity).copyText(share2PlatformParam.link)
+				function.onCallBack(H5Return.success("复制链接成功"))
+			}
+
+			else -> {
+				// 其他类型发送广播通知 APP 实现
+				attachActivity.sendBroadcast(Intent("ACTION_SHARE_TO_PLATFORM").apply {
+					this.putExtra("SHARE_TYPE", share2PlatformParam.type)
+				})
+			}
 		}
 	}
 }
