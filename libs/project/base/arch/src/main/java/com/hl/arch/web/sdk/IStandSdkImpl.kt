@@ -376,6 +376,14 @@ class IStandSdkImpl(
 	override fun share2Platform(handlerName: String) {
 		commonRegisterHandler(handlerName) { data, function ->
 			bridgeWebView.registerHandler(handlerName, bridgeHandlerProxy.bind { data, function ->
+
+				val platformParam =
+					Gson().fromJson(data, Share2PlatformParam::class.java).convert2SharePlatformParam()
+
+				when(platformParam.platform){
+					SHARE_MEDIA.MORE -> {}
+				}
+
 				val shareListener = object : MyUMShareListener() {
 
 					override fun onResult(platform: SHARE_MEDIA) {
@@ -392,16 +400,11 @@ class IStandSdkImpl(
 
 				}
 
-				val h5Share2PPlatformParam = Gson().fromJson(data, Share2PlatformParam::class.java)
-				when (h5Share2PPlatformParam.type) {
-					"" -> {
-						UMShareUtil.shareUMWebWithPlatform(
-							attachActivity,
-							h5Share2PPlatformParam.convert2SharePlatformParam(),
-							shareListener
-						)
-					}
-				}
+				UMShareUtil.shareUMWebWithPlatform(
+					attachActivity,
+					platformParam,
+					shareListener
+				)
 			})
 		}
 	}

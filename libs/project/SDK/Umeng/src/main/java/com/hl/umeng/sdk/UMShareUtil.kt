@@ -82,7 +82,10 @@ object UMShareUtil {
         return UMWeb(sharePlatformParam.link).apply {
             this.title = sharePlatformParam.title
             this.description = sharePlatformParam.description
-            this.setThumb(UMImage(activity, sharePlatformParam.coverUrl))
+
+            if (sharePlatformParam.coverUrl.isNotBlank()) {
+                this.setThumb(UMImage(activity, sharePlatformParam.coverUrl))
+            }
         }
     }
 

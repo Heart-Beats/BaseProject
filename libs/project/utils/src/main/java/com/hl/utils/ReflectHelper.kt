@@ -1,6 +1,7 @@
 package com.hl.utils
 
 import android.util.Log
+import java.lang.reflect.Type
 
 /**
  * @Author  张磊  on  2020/12/31 at 0:11
@@ -50,5 +51,21 @@ class ReflectHelper<T>(private val clazz: Class<T>) {
             Log.e(TAG, "callMethod: ", e)
             null
         }
+    }
+
+    /**
+     * 获取 clazz  的泛型参数
+     */
+    fun getGenericsType(): List<Class<Type>>? {
+
+        // 获取带有泛型的父类类型
+        val genericSuperclass = clazz.genericSuperclass
+        if (genericSuperclass != null) {
+            if (genericSuperclass is ParameterizedTypeImpl) {
+                // 获取父类的泛型参数的实际类型
+                return genericSuperclass.actualTypeArguments.map { it.javaClass }
+            }
+        }
+        return null
     }
 }

@@ -1,6 +1,7 @@
 package com.hl.arch.web.bean
 
 import com.hl.umeng.sdk.SharePlatformParam
+import com.umeng.socialize.bean.SHARE_MEDIA
 
 
 data class H5DeviceInfo(
@@ -140,6 +141,13 @@ data class Share2PlatformParam(
 			it.description = this.description
 			it.link = this.link
 			it.coverUrl = this.coverUrl
+
+			it.platform = when (this.type) {
+				"wx" -> SHARE_MEDIA.WEIXIN
+				"qq" -> SHARE_MEDIA.QQ
+				"wechatWork" -> SHARE_MEDIA.WXWORK
+				else -> SHARE_MEDIA.MORE
+			}
 		}
 	}
 }

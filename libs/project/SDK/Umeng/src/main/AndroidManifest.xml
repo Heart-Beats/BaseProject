@@ -13,14 +13,14 @@
 
     <!-- Android 11开始，必须要在AndroidManifest.xml清单文件中加入query权限, 添加如下<queries>标签 -->
     <queries>
-        <package android:name="com.tencent.mm" />
-        <package android:name="com.tencent.mobileqq" />
-        <package android:name="com.sina.weibo" />
-        <package android:name="com.tencent.wework" />
-        <package android:name="com.qzone" />
-        <package android:name="com.alibaba.android.rimet" />
-        <package android:name="com.eg.android.AlipayGphone" />
-        <package android:name="com.instagram.android" />
+        <package android:name="com.tencent.mm" />            // 指定微信包名
+        <package android:name="com.tencent.mobileqq" />    //指定qq包名
+        <package android:name="com.sina.weibo" />             //指定微博包名
+        <package android:name="com.tencent.wework" />      //指定企业微信包名
+        <package android:name="com.qzone" />                   //指定QQ空间包名
+        <package android:name="com.alibaba.android.rimet" />   // 指定钉钉包名
+        <package android:name="com.eg.android.AlipayGphone" /> // 指定支付宝包名
+        <package android:name="com.instagram.android" />         // 指定instagram包名
     </queries>
 
     <application>
