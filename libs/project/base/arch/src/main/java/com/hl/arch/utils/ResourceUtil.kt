@@ -38,7 +38,6 @@ fun Fragment.geTextByRes(@StringRes stringRes: Int): CharSequence {
 	return requireContext().getText(stringRes)
 }
 
-
 fun Context.getDrawableByRes(@DrawableRes drawableRes: Int): Drawable? {
 	return ContextCompat.getDrawable(this, drawableRes)
 }

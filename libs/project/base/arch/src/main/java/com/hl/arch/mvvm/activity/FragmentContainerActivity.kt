@@ -29,13 +29,21 @@ class FragmentContainerActivity : ViewBindingBaseActivity<ActivityFragmentContai
 private const val DESTINATION_SCREEN = "目标画面"
 private const val DESTINATION_ARGUMENTS = "目标画面参数"
 
-fun Context.startFragment(fragmentClass: Class<out Fragment>, extras: Bundle? = null) {
-    val intent = Intent(this, FragmentContainerActivity::class.java)
+fun Context.startFragment(
+    fragmentClass: Class<out Fragment>,
+    containerActivityClass: Class<in FragmentContainerActivity>,
+    extras: Bundle? = null
+) {
+    val intent = Intent(this, containerActivityClass)
     intent.putExtra(DESTINATION_SCREEN, fragmentClass)
     if (extras != null) {
         intent.putExtra(DESTINATION_ARGUMENTS, extras)
     }
     this.startActivity(intent)
+}
+
+fun Context.startFragment(fragmentClass: Class<out Fragment>, extras: Bundle? = null) {
+    this.startFragment(fragmentClass, FragmentContainerActivity::class.java, extras)
 }
 
 fun Activity.startFragment(fragmentClass: Class<out Fragment>, extras: Bundle? = null) {

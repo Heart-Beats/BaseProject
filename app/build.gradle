@@ -1,11 +1,28 @@
-import com.buildsrc.*
+import com.buildsrc.AndroidVersions
+import com.buildsrc.Deps
 
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
 }
 
+apply from: "build_config.gradle"
+
 android {
+    signingConfigs {
+        debug {
+            storeFile file('./license/BaseProject.jks')
+            storePassword 'android123456'
+            keyPassword 'android123456'
+            keyAlias 'BaseProject'
+        }
+        realse {
+            storeFile file('./license/BaseProject.jks')
+            storePassword 'android123456'
+            keyPassword 'android123456'
+            keyAlias 'BaseProject'
+        }
+    }
     compileSdk AndroidVersions.COMPILE_SDK
 
     defaultConfig {
@@ -16,6 +33,9 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        // 初始化相关的配置值
+        initBuildConfigValue(getOwner())
     }
 
     viewBinding {
@@ -26,6 +46,12 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.realse
+        }
+        debug {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.debug
         }
     }
     compileOptions {

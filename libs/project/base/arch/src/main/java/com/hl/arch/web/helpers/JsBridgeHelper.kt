@@ -55,10 +55,15 @@ object JsBridgeHelper {
 	}
 
 	private fun createBridgeHandlerProxy(bridgeWebView: BridgeWebView): ProxyHandler<BridgeHandler> {
+		// 循环获取 BridgeWebView 对应的 Class
+		var bridgeWebViewClass: Class<in BridgeWebView> = bridgeWebView.javaClass
+		while (bridgeWebViewClass.typeName != BridgeWebView::class.java.typeName) {
+			bridgeWebViewClass = bridgeWebViewClass.superclass
+		}
 
 		// 动态代理创建时获取该属性，避免多次反射取值
 		val messageHandlers by lazy {
-			ReflectHelper(bridgeWebView.javaClass).getFiledValue<Map<String, BridgeHandler>>(
+			ReflectHelper(bridgeWebViewClass).getFiledValue<Map<String, BridgeHandler>>(
 				bridgeWebView, "messageHandlers"
 			)
 		}
