@@ -2,6 +2,7 @@ package com.hl.arch.web.sdk
 
 import android.app.Activity
 import android.content.Intent
+import android.content.IntentFilter
 import android.graphics.Color
 import android.webkit.WebView
 import androidx.fragment.app.Fragment
@@ -20,11 +21,14 @@ import com.google.gson.Gson
 import com.gyf.immersionbar.ktx.immersionBar
 import com.hl.arch.mvvm.activity.FragmentContainerActivity
 import com.hl.arch.mvvm.activity.startFragment
+import com.hl.arch.web.H5Constants
 import com.hl.arch.web.WebViewFragment
 import com.hl.arch.web.WebViewFragmentArgs
 import com.hl.arch.web.bean.*
 import com.hl.arch.web.helpers.H5DataHelper
 import com.hl.arch.web.helpers.logJs
+import com.hl.arch.web.receiver.CallBackFunctionDataStore
+import com.hl.arch.web.receiver.CallBackFunctionHandlerReceiver
 import com.hl.uikit.getStatusBarHeight
 import com.hl.umeng.sdk.MyUMShareListener
 import com.hl.umeng.sdk.UMShareUtil
@@ -53,6 +57,14 @@ class IStandSdkImpl(
 
 	init {
 		currentFragment.lifecycle.addObserver(object : DefaultLifecycleObserver {
+
+			override fun onCreate(owner: LifecycleOwner) {
+				val intentFilter = IntentFilter(H5Constants.ACTION_CALL_BACK)
+
+				// 注册 CallBackFunction 需要单独处理的广播
+				currentFragment.requireContext().registerReceiver(CallBackFunctionHandlerReceiver, intentFilter)
+			}
+
 			override fun onResume(owner: LifecycleOwner) {
 				logJs("onH5Show", "")
 				// 通知 h5 页面可见
@@ -66,7 +78,9 @@ class IStandSdkImpl(
 			}
 
 			override fun onDestroy(owner: LifecycleOwner) {
-				super.onDestroy(owner)
+				// 反注册 CallBackFunction 需要单独处理的广播
+				currentFragment.requireContext().unregisterReceiver(CallBackFunctionHandlerReceiver)
+				CallBackFunctionDataStore.clearCallBackFunction()
 				currentFragment.lifecycle.removeObserver(this)
 			}
 		})
@@ -430,15 +444,17 @@ class IStandSdkImpl(
 				true
 			}
 
-			"youmaIm" -> {
-				// 其他类型发送广播通知 APP 实现
-				attachActivity.sendBroadcast(Intent("ACTION_SHARE_TO_YOUMA_IM").apply {
-					//todo 需要发送分享的参数
+			else -> {
+				// 其他更多类型发送广播通知 APP 实现
+				attachActivity.sendBroadcast(Intent(H5Constants.ACTION_SHARE_TO_MORE).apply {
+					this.putExtra(H5Constants.ACTION_SHARE_MORE_DATA, share2PlatformParam)
 				})
+
+				// 存放更多分享对应的 CallbackFunction
+				CallBackFunctionDataStore.putCallBackFunction(H5Constants.ACTION_SHARE_TO_MORE, function)
 
 				true
 			}
-			else -> false
 		}
 	}
 }

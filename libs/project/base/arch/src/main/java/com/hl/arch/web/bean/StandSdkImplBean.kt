@@ -1,7 +1,9 @@
 package com.hl.arch.web.bean
 
+import android.os.Parcelable
 import com.hl.umeng.sdk.SharePlatformParam
 import com.umeng.socialize.bean.SHARE_MEDIA
+import kotlinx.android.parcel.Parcelize
 
 
 data class H5DeviceInfo(
@@ -108,6 +110,7 @@ data class GetNetworkConnectTypeReturn(
 )
 
 
+@Parcelize
 data class Share2PlatformParam(
 	/**
 	 * 标题
@@ -138,7 +141,7 @@ data class Share2PlatformParam(
 	 * 短信内容，当 type 为 sms 时使用
 	 */
 	var smsContent: String? = null
-) {
+) : Parcelable {
 
 	fun convert2SharePlatformParam(): SharePlatformParam {
 		return SharePlatformParam().also {
