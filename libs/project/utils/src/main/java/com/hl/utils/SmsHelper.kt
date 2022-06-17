@@ -4,11 +4,14 @@ import android.app.Activity
 import android.app.PendingIntent
 import android.content.Intent
 import android.content.IntentFilter
+import android.net.Uri
+import android.telephony.PhoneNumberUtils
 import android.telephony.SmsManager
 import android.util.Log
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
+import com.hl.uikit.toast
 
 
 /**
@@ -93,7 +96,10 @@ class SmsHelper(val activity: FragmentActivity) {
 	}
 
 
-	fun sendMessage(phoneNumber: String, message: String, sendSmsResultCallBack: (Boolean) -> Unit = {}) {
+	/**
+	 * 后台发送短信 ，可获取发送的状态
+	 */
+	fun sendMessageInBackground(phoneNumber: String, message: String, sendSmsResultCallBack: (Boolean) -> Unit = {}) {
 		this.sendSmsResultCallBack = sendSmsResultCallBack
 
 		val sentIntent = Intent(SENT_SMS_ACTION)
@@ -117,9 +123,33 @@ class SmsHelper(val activity: FragmentActivity) {
 		}
 	}
 
-	fun sendMessage(phoneNumbers: List<String>? = null, message: String, sendSmsResultCallBack: (Boolean) -> Unit = {}) {
+	/**
+	 * 后台群发短信， 可获取发送的状态
+	 */
+	fun sendMessageInBackground(
+		phoneNumbers: List<String>? = null,
+		message: String,
+		sendSmsResultCallBack: (Boolean) -> Unit = {}
+	) {
 		phoneNumbers?.forEach {
-			sendMessage(it, message, sendSmsResultCallBack)
+			sendMessageInBackground(it, message, sendSmsResultCallBack)
+		}
+	}
+
+	/**
+	 * 前台可由用户选择发送短信， 无法获取发送的状态
+	 */
+	fun sendMessage(message: String, phoneNumber: String? = null, sendSmsResultCallBack: (Boolean) -> Unit = {}) {
+		if (phoneNumber == null || PhoneNumberUtils.isGlobalPhoneNumber(phoneNumber)) {
+			val intent = Intent(Intent.ACTION_SENDTO, Uri.parse("smsto:"))
+			phoneNumber?.run { intent.putExtra("address", phoneNumber) }
+			intent.putExtra("sms_body", message)
+			activity.startActivity(intent)
+
+			// 此种情况无法获取发送的结果状态
+		} else {
+			activity.toast("非合法的号码格式！")
+			sendSmsResultCallBack(false)
 		}
 	}
 

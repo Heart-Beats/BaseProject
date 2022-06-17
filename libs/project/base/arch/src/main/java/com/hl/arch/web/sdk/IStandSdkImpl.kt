@@ -394,36 +394,51 @@ class IStandSdkImpl(
 
 			when (platformParam.platform) {
 				SHARE_MEDIA.MORE -> {
-					doShare2More(share2PlatformParam,function)
+					if (!doShareCustom(share2PlatformParam, function)) {
+						// 友盟分享更多
+						UMShareUtil.shareUMWebWithPlatform(attachActivity, platformParam, shareListener)
+					}
 				}
 				else -> UMShareUtil.shareUMWebWithPlatform(attachActivity, platformParam, shareListener)
 			}
 		}
 	}
 
-	private fun doShare2More(share2PlatformParam: Share2PlatformParam, function: CallBackFunction) {
-		when (share2PlatformParam.type) {
-			"sms" -> share2PlatformParam?.smsData?.run {
-				SmsHelper(attachActivity).sendMessage(this.phoneNumbers, this.message ?: "") {
-					if (it) {
-						function.onCallBack(H5Return.success("短信发送成功"))
-					} else {
-						function.onCallBack(H5Return.fail("短信发送失败"))
+	/**
+	 * 自定义分享处理
+	 */
+	private fun doShareCustom(share2PlatformParam: Share2PlatformParam, function: CallBackFunction): Boolean {
+		return when (share2PlatformParam.type) {
+			"sms" -> {
+				share2PlatformParam?.smsContent?.run {
+					SmsHelper(attachActivity).sendMessage(this) {
+						if (it) {
+							function.onCallBack(H5Return.success("短信发送成功"))
+						} else {
+							function.onCallBack(H5Return.fail("短信发送失败"))
+						}
 					}
 				}
+
+				true
 			}
 
 			"copy" -> {
 				ClipboardHelper(attachActivity).copyText(share2PlatformParam.link)
 				function.onCallBack(H5Return.success("复制链接成功"))
+
+				true
 			}
 
-			else -> {
+			"youmaIm" -> {
 				// 其他类型发送广播通知 APP 实现
-				attachActivity.sendBroadcast(Intent("ACTION_SHARE_TO_PLATFORM").apply {
-					this.putExtra("SHARE_TYPE", share2PlatformParam.type)
+				attachActivity.sendBroadcast(Intent("ACTION_SHARE_TO_YOUMA_IM").apply {
+					//todo 需要发送分享的参数
 				})
+
+				true
 			}
+			else -> false
 		}
 	}
 }

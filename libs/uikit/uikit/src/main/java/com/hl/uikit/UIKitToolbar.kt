@@ -194,15 +194,11 @@ class UIKitToolbar : Toolbar {
         setRightActionIcon(icon = mRightActionIconRes)
         setRightActionText(mRightText)
 
-        val intArray = intArrayOf(
-            R.styleable.Toolbar_titleTextAppearance,
-            R.styleable.Toolbar_titleTextColor
-        )
-        val ta = TintTypedArray.obtainStyledAttributes(context, attrs, intArray, defStyleAttr, 0)
+        val ta = TintTypedArray.obtainStyledAttributes(context, attrs, R.styleable.Toolbar, defStyleAttr, 0)
         mTitleTextAppearance = ta.getResourceId(R.styleable.Toolbar_titleTextAppearance, 0)
-        // if (ta.hasValue(R.styleable.Toolbar_titleTextColor)) {
-        //     setTitleTextColor(ta.getColorStateList(R.styleable.Toolbar_titleTextColor))
-        // }
+        if (ta.hasValue(R.styleable.Toolbar_titleTextColor)) {
+            setTitleTextColor(ta.getColorStateList(R.styleable.Toolbar_titleTextColor))
+        }
         ta.recycle()
     }
 
