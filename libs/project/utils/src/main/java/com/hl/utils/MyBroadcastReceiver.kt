@@ -12,9 +12,7 @@ import android.content.Intent
 /**
  * 广播接受器快速实现类
  */
-class MyBroadcastReceiver(
-	val action: (receiver: BroadcastReceiver, context: Context, intent: Intent) -> Unit = { _, _, _ -> }
-) : BroadcastReceiver() {
+open class MyBroadcastReceiver(val action: (receiver: BroadcastReceiver, context: Context, intent: Intent) -> Unit = { _, _, _ -> }) : BroadcastReceiver() {
 
 	override fun onReceive(context: Context, intent: Intent) {
 		action(this, context, intent)

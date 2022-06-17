@@ -7,6 +7,7 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import com.hl.arch.R
 import com.hl.arch.databinding.ActivityFragmentContainerBinding
+import com.hl.utils.replaceFragment
 
 class FragmentContainerActivity : ViewBindingBaseActivity<ActivityFragmentContainerBinding>() {
 
@@ -18,11 +19,9 @@ class FragmentContainerActivity : ViewBindingBaseActivity<ActivityFragmentContai
 
         val fragment = fragmentClass.getConstructor().newInstance()
         fragment.arguments = fragmentArgument
-        supportFragmentManager
-            .beginTransaction()
-            // 使用 fragment 名称作为 tag, 便于以后查找它
-            .replace(R.id.container, fragment, fragment.javaClass.simpleName)
-            .commit()
+
+        // 使用 fragment 名称作为 tag, 便于以后查找它
+        replaceFragment(R.id.container, fragment, fragment.javaClass.simpleName)
     }
 }
 
