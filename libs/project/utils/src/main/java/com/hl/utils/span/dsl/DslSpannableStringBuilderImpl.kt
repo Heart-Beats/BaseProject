@@ -28,7 +28,10 @@ class DslSpannableStringBuilderImpl : DslSpannableStringBuilder {
 				charSeq = charSeq.toBackgroundColorSpan(0..text.length, textBackgroundColor)
 			}
 			if (isSetScale) {
-				charSeq = charSeq.toSizeSpan(0..text.length, scaleSize)
+				charSeq = charSeq.toScaleSpan(0..text.length, scaleSize)
+			}
+			if (isSetSize) {
+				charSeq = charSeq.toSizeSpan(0..text.length, textSize, isSp)
 			}
 			if (isOnClick) {
 				charSeq = charSeq.toClickSpan(0..text.length, textColor, isUseUnderLine, onClick)

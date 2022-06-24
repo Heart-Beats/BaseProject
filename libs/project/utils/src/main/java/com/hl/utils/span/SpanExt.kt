@@ -44,11 +44,28 @@ toast("哎呀，您点到我了呢，嘿嘿")
  */
 
 /**
- * 将一段文字中指定range的文字改变大小
+ * 将一段文字中指定range的文字绝对改变大小
+ * @param range 要改变大小的文字的范围
+ * @param size  文字大小的值， 默认 14
+ * @param isSp  单位是否为 sp，默认 true
+ */
+fun CharSequence.toSizeSpan(range: IntRange, size: Int = 14, isSp: Boolean = true): CharSequence {
+	return SpannableString(this).apply {
+		setSpan(
+			AbsoluteSizeSpan(size, isSp),
+			range.first,
+			range.last,
+			Spannable.SPAN_INCLUSIVE_EXCLUSIVE
+		)
+	}
+}
+
+/**
+ * 将一段文字中指定range的文字相对改变大小
  * @param range 要改变大小的文字的范围
  * @param scale 缩放值，大于1，则比其他文字大；小于1，则比其他文字小；默认是1.5
  */
-fun CharSequence.toSizeSpan(range: IntRange, scale: Float = 1.5f): CharSequence {
+fun CharSequence.toScaleSpan(range: IntRange, scale: Float = 1.5f): CharSequence {
 	return SpannableString(this).apply {
 		setSpan(
 			RelativeSizeSpan(scale),
@@ -197,14 +214,24 @@ fun CharSequence.toImageSpan(
 }
 
 
-/** TextView的扩展 ,本质上还是调用上面的方法**/
-fun TextView.sizeSpan(str: String = "", range: IntRange, scale: Float = 1.5f): TextView {
-	text = (str.ifEmpty { text }).toSizeSpan(range, scale)
+/******************************** TextView的扩展 ,本质上还是调用上面的方法  ********************************/
+fun TextView.sizeSpan(str: String = "", range: IntRange, textSize: Int = 14, isSp: Boolean = true): TextView {
+	text = (str.ifEmpty { text }).toSizeSpan(range, textSize, isSp)
 	return this
 }
 
-fun TextView.appendSizeSpan(str: String = "", scale: Float = 1.5f): TextView {
-	append(str.toSizeSpan(0..str.length, scale))
+fun TextView.appendSizeSpan(str: String = "", textSize: Int = 14, isSp: Boolean = true): TextView {
+	append(str.toSizeSpan(0..str.length, textSize, isSp))
+	return this
+}
+
+fun TextView.scaleSpan(str: String = "", range: IntRange, scale: Float = 1.5f): TextView {
+	text = (str.ifEmpty { text }).toScaleSpan(range, scale)
+	return this
+}
+
+fun TextView.appendScaleSpan(str: String = "", scale: Float = 1.5f): TextView {
+	append(str.toScaleSpan(0..str.length, scale))
 	return this
 }
 

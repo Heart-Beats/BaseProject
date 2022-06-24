@@ -18,6 +18,10 @@ class DslSpanBuilderImpl : DslSpanBuilder {
 	var isSetScale = false
 	var scaleSize = 1.0f
 
+	var isSetSize = false
+	var textSize = 14
+	var isSp = true
+
 	var isSetTypeface = false
 	var typefaces: Typeface = Typeface.DEFAULT
 
@@ -40,6 +44,12 @@ class DslSpanBuilderImpl : DslSpanBuilder {
 	override fun setScale(scale: Float) {
 		isSetScale = true
 		scaleSize = scale
+	}
+
+	override fun setSize(size: Int, isSp: Boolean) {
+		this.isSetSize = true
+		this.textSize = size
+		this.isSp= isSp
 	}
 
 	override fun setTypeface(typeface: Typeface) {
