@@ -13,6 +13,7 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import com.hl.arch.web.helpers.logJs
 import com.hl.uikit.image.pictureselector.GlideEngine
+import com.hl.uikit.image.pictureselector.MyCompressEngine
 import com.hl.utils.reqPermissions
 import com.luck.picture.lib.basic.PictureSelector
 import com.luck.picture.lib.config.SelectMimeType
@@ -46,6 +47,8 @@ open class MyWebChromeClient(val fragment: Fragment) : WebChromeClient() {
 	): Boolean {
 		mUploadCallbackAboveL = filePathCallback
 		val acceptTypes: Array<String> = fileChooserParams.acceptTypes
+		val isMultipleChoose = fileChooserParams.mode == FileChooserParams.MODE_OPEN_MULTIPLE
+
 		val stringBuffer = StringBuffer()
 		for (i in acceptTypes.indices) {
 			if (stringBuffer.isEmpty()) {
@@ -54,8 +57,9 @@ open class MyWebChromeClient(val fragment: Fragment) : WebChromeClient() {
 				stringBuffer.append("," + acceptTypes[i])
 			}
 		}
-		logJs("类型:", stringBuffer.toString())
-		fileChooser(stringBuffer.toString(), acceptTypes, fileChooserParams.isCaptureEnabled)
+
+		logJs("选择文件:", "是否多选模式 == ${isMultipleChoose}, 选择文件的类型 == $stringBuffer")
+		fileChooser(stringBuffer.toString(), acceptTypes, fileChooserParams.isCaptureEnabled, isMultipleChoose)
 		return true
 	}
 
@@ -68,7 +72,12 @@ open class MyWebChromeClient(val fragment: Fragment) : WebChromeClient() {
 		super.onGeolocationPermissionsShowPrompt(origin, callback)
 	}
 
-	private fun fileChooser(accept: String, acceptTypes: Array<String>, captureEnabled: Boolean) {
+	private fun fileChooser(
+		accept: String,
+		acceptTypes: Array<String>,
+		captureEnabled: Boolean,
+		isMultipleChoose: Boolean
+	) {
 
 		var chooseMode: Int? = null
 
@@ -89,11 +98,14 @@ open class MyWebChromeClient(val fragment: Fragment) : WebChromeClient() {
 
 
 					// vivio 手机上述方式不行
-					val i = Intent(Intent.ACTION_GET_CONTENT)
-					i.addCategory(Intent.CATEGORY_OPENABLE)
+					val intent = Intent(Intent.ACTION_GET_CONTENT)
+					intent.addCategory(Intent.CATEGORY_OPENABLE)
+
+					// 是否多选
+					intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, isMultipleChoose)
 					//i.putExtra(Intent.EXTRA_MIME_TYPES, acceptTypes)
-					i.type = "*/*"
-					fragment.startActivityForResult(i, REQUEST_CODE_SELECT_FILE)
+					intent.type = "*/*"
+					fragment.startActivityForResult(intent, REQUEST_CODE_SELECT_FILE)
 				}
 			}
 		}
@@ -105,6 +117,8 @@ open class MyWebChromeClient(val fragment: Fragment) : WebChromeClient() {
 			fragment.reqPermissions(*permissions) {
 				PictureSelector.create(fragment)
 					.openGallery(chooseMode)
+					.setMaxSelectNum(if (isMultipleChoose) 9 else 1)
+					.setCompressEngine(MyCompressEngine())
 					.setImageEngine(GlideEngine.createGlideEngine())
 					.forResult(object : OnResultCallbackListener<LocalMedia> {
 						override fun onResult(result: ArrayList<LocalMedia>?) {
@@ -131,11 +145,24 @@ open class MyWebChromeClient(val fragment: Fragment) : WebChromeClient() {
 		if (resultCode == Activity.RESULT_OK) {
 			when (requestCode) {
 				REQUEST_CODE_SELECT_FILE -> {
-					// 这里是针对从文件中选图片的处理
+					// 这里是针对从系统自带的文件选择器中选择问题
 
-					val resultUri = data?.data?.let {
-						arrayOf(it)
+					val clipData = data?.clipData
+					val resultUri = if (clipData != null) {
+						//有选择多个文件
+
+						val uris = mutableListOf<Uri>()
+						repeat(clipData.itemCount) {
+							uris.add(clipData.getItemAt(it).uri)
+						}
+
+						uris.toTypedArray()
+					} else {
+						// 单选文件
+
+						data?.data?.let { arrayOf(it) }
 					}
+
 					mUploadCallbackAboveL?.onReceiveValue(resultUri)
 				}
 				else -> {}
