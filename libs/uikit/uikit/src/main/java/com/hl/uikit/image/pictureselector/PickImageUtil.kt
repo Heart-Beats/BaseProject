@@ -78,7 +78,7 @@ object PickImageUtil {
             .apply(option)
             .forResultActivity(object : OnResultCallbackListener<LocalMedia> {
                 override fun onResult(result: ArrayList<LocalMedia>) {
-                    result.map { it.compressPath ?: it.realPath }.run {
+                    result.map { it.availablePath }.run {
                         onImagePathResult(this)
 
                         this.forEach { photoPath ->
@@ -109,7 +109,7 @@ object PickImageUtil {
             .forResult(object : OnResultCallbackListener<LocalMedia> {
 
                 override fun onResult(result: ArrayList<LocalMedia>) {
-                    result.map { it.compressPath ?: it.realPath }.run {
+                    result.map { it.availablePath }.run {
                         onImagePathResult(this)
                     }
                 }

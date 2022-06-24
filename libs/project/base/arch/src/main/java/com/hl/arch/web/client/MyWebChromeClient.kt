@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment
 import com.hl.arch.web.helpers.logJs
 import com.hl.uikit.image.pictureselector.GlideEngine
 import com.hl.uikit.image.pictureselector.MyCompressEngine
+import com.hl.utils.file2Uri
 import com.hl.utils.reqPermissions
 import com.luck.picture.lib.basic.PictureSelector
 import com.luck.picture.lib.config.SelectMimeType
@@ -122,7 +123,7 @@ open class MyWebChromeClient(val fragment: Fragment) : WebChromeClient() {
 					.setImageEngine(GlideEngine.createGlideEngine())
 					.forResult(object : OnResultCallbackListener<LocalMedia> {
 						override fun onResult(result: ArrayList<LocalMedia>?) {
-							val availableUris = result?.map { Uri.parse(it.availablePath) }
+							val availableUris = result?.map { file2Uri(fragment.requireContext(), it.availablePath) }
 
 							logJs("请求${operaType}", "${operaType}成功：结果 == $availableUris")
 							availableUris?.run {
