@@ -37,11 +37,76 @@ enum class MimeType(val mMimeTypeName: String, private val mExtensions: Set<Stri
 
 	TS("video/mp2ts", arraySetOf("ts")),
 
-	AVI("video/avi", arraySetOf("avi"));
+	AVI("video/avi", arraySetOf("avi")),
+
+	/*****  ============== words ============== *****/
+	/*文档 */
+	WORD("application/msword", arraySetOf("doc", "docx", "xls", "xlsx")),
+	PDF("application/pdf", arraySetOf("pdf")),
+	WPS("application/vnd.ms-works", arraySetOf("wps")),  //金山 Office 文字排版文件格式
+	TXT("text/plain", arraySetOf("txt")),
+	ODT("application/vnd.oasis.opendocument.text", arraySetOf("odt")),
+
+	/* 表格 */
+	ET("application/kset", arraySetOf("et")),     // 金山 Office 表格文件格式
+	CSV("text/csv", arraySetOf("csv")),
+	ODS("application/vnd.oasis.opendocument.spreadsheet", arraySetOf("ods")),
+
+	/* ppt */
+	PPT("application/vnd.ms-powerpoint", arraySetOf("ppt", "pps")),
+	PPTX("application/vnd.openxmlformats-officedocument.presentationml.presentation", arraySetOf("pptx")),
+	DPS("application/ksdps", arraySetOf("dps")),    // 金山 Office 演示文稿格式
+	ODP("application/vnd.oasis.opendocument.presentation", arraySetOf("odp"));
 
 	override fun toString(): String {
 		return mMimeTypeName
 	}
+
+	/**
+	 * 是否为图片
+	 */
+	fun isImage(): Boolean {
+		return mMimeTypeName.startsWith("image")
+	}
+
+	/**
+	 * 是否为视频
+	 */
+	fun isVideo(): Boolean {
+		return mMimeTypeName.startsWith("video")
+	}
+
+	/**
+	 * 是否为 GIF
+	 */
+	fun isGif(): Boolean {
+		return mMimeTypeName == GIF.toString()
+	}
+
+	/**
+	 * 是否为文档
+	 */
+	fun isDocument(): Boolean {
+		return mMimeTypeName == WORD.mMimeTypeName || mMimeTypeName == PDF.mMimeTypeName || mMimeTypeName == WPS.mMimeTypeName
+				|| mMimeTypeName == TXT.mMimeTypeName || mMimeTypeName == ODT.mMimeTypeName || mMimeTypeName == ET.mMimeTypeName
+				|| mMimeTypeName == CSV.mMimeTypeName || mMimeTypeName == ODS.mMimeTypeName
+	}
+
+	/**
+	 * 是否为  PPT
+	 */
+	fun isPPT(): Boolean {
+		return mMimeTypeName == PPT.mMimeTypeName || mMimeTypeName == PPTX.mMimeTypeName || mMimeTypeName == DPS.mMimeTypeName
+				|| mMimeTypeName == ODP.mMimeTypeName
+	}
+
+	/**
+	 * 是否为 office 文件
+	 */
+	fun isOffice(): Boolean {
+		return isDocument() || isPPT()
+	}
+
 
 	companion object {
 
@@ -58,29 +123,16 @@ enum class MimeType(val mMimeTypeName: String, private val mExtensions: Set<Stri
 		}
 
 		fun ofImage(onlyGif: Boolean): Set<MimeType> {
-			return EnumSet.of(GIF)
+			return if (onlyGif) ofGif() else ofImage()
 		}
 
 		fun ofGif(): Set<MimeType> {
-			return ofImage(true)
+			return EnumSet.of(GIF)
 		}
 
 		fun ofVideo(): Set<MimeType> {
 			return EnumSet.of(MPEG, MP4, QUICKTIME, THREE_GPP, THREE_GPP2, MKV, WEBM, TS, AVI)
 		}
-
-		fun isImage(mimeType: String?): Boolean {
-			return mimeType?.startsWith("image") ?: false
-		}
-
-		fun isVideo(mimeType: String?): Boolean {
-			return mimeType?.startsWith("video") ?: false
-		}
-
-		fun isGif(mimeType: String?): Boolean {
-			return if (mimeType == null) false else mimeType == GIF.toString()
-		}
-
 
 		/**
 		 * 通过文件扩展名获取 MimeType

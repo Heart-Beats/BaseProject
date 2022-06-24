@@ -37,7 +37,7 @@ internal object Versions {
     const val GLIDE = "4.12.0"
     const val PERMISSION_X = "1.6.2"
     const val GSON = "2.8.9"
-    const val FAST_JSON = "1.2.76"
+    const val FAST_JSON = "1.1.72.android"
     const val BUTTER_KNIFE = "10.2.1"
     const val BRVAH = "3.0.7"
     const val BASE_POPUP = "3.1.8"
@@ -63,6 +63,7 @@ internal object Versions {
     const val LOTTIE = "5.0.3"
     const val WAVE_SIDE_BAR = "1.3"
     const val SIDE_BAR = "1.0.0"
+    const val ANDROID_AUTO_SIZE = "v1.2.1"
 }
 
 class Deps {
@@ -241,11 +242,9 @@ class Deps {
     }
 
 
-    object Gson {
+    object Json {
         const val gson = "com.google.code.gson:gson:${Versions.GSON}"
-    }
 
-    object FastJson {
         const val fast_json = "com.alibaba:fastjson:${Versions.FAST_JSON}"
     }
 
@@ -450,8 +449,14 @@ class Deps {
          * 地址： https://github.com/Leo199206/SideBar
          */
         const val side_bar = "com.github.Leo199206:SideBar:${Versions.SIDE_BAR}"
-
-
     }
 
+    /**
+     * 今日头条屏幕适配方案：
+     *
+     * 地址： https://github.com/JessYanCoding/AndroidAutoSize
+     */
+    object AndroidAutoSize {
+        const val android_auto_size = "com.github.JessYanCoding:AndroidAutoSize:${Versions.ANDROID_AUTO_SIZE}"
+    }
 }
