@@ -40,5 +40,5 @@ dependencies {
     implementation(Deps.AndroidX.core_ktx)
     implementation(Deps.AndroidX.appcompat)
     implementation(Deps.Tencent.wechat_sdk_android_without_mta)
-    implementation(Deps.Gson.gson)
+    implementation(Deps.Json.gson)
 }
