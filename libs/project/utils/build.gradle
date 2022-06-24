@@ -66,7 +66,7 @@ dependencies {
     api Deps.JetpackNavigation.navigation_fragment_ktx
 
     implementation Deps.PermissionX.permission_x
-    implementation Deps.Gson.gson
+    implementation Deps.Json.gson
     implementation Deps.FancyToast.fancy_toast
     implementation Deps.AndroidX.security_crypto
     implementation Deps.Glide.glide

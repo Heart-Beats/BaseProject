@@ -91,14 +91,13 @@ class PreviewFileActivity : FragmentActivity() {
             fileType == "" && mimeType == null -> {
                 toast("获取文件类型失败")
             }
-
-            MimeType.isImage(mimeType?.mMimeTypeName) -> {
+            mimeType?.isImage() == true -> {
                 mSuperFileView.visibility = View.GONE
                 no_support_file_container.visibility = View.GONE
                 img.visibility = View.VISIBLE
                 GlideUtil.load(this, fileUrl, img)
             }
-            MimeType.isVideo(mimeType?.mMimeTypeName) -> {
+            mimeType?.isVideo() == true -> {
                 mSuperFileView.visibility = View.GONE
                 no_support_file_container.visibility = View.GONE
                 video_player.visibility = View.VISIBLE

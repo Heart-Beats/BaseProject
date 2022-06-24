@@ -58,7 +58,7 @@ dependencies {
     api Deps.Status_Bar.immersionbar
     api Deps.Status_Bar.immersionbar_ktx
     api Deps.Glide.glide
-    api Deps.Gson.gson
+    api Deps.Json.gson
     api Deps.JetpackNavigation.navigation_fragment_ktx
     api Deps.JetpackNavigation.navigation_ui
     api Deps.Popup.x_popup

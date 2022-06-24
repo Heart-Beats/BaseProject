@@ -3,11 +3,6 @@ package com.hl.utils
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.net.Uri
-import android.os.Build
-import android.os.StrictMode
-import android.os.StrictMode.VmPolicy
-import android.widget.Toast
 import com.blankj.utilcode.util.UriUtils
 import com.hl.uikit.toast
 import java.io.File
