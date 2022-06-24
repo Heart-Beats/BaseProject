@@ -22,8 +22,8 @@ class MiddleIMarginImageSpan @JvmOverloads constructor(
 	marginLeft: Int,
 	marginRight: Int,
 	offsetY: Int = 0
-) :
-	AlignMiddleImageSpan(d!!, verticalAlignment) {
+) : AlignMiddleImageSpan(d!!, verticalAlignment) {
+
 	private var mSpanMarginLeft = 0
 	private var mSpanMarginRight = 0
 	private var mOffsetY = 0

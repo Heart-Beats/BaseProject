@@ -21,8 +21,8 @@ open class AlignMiddleImageSpan @JvmOverloads constructor(
 	@NonNull d: Drawable,
 	verticalAlignment: Int,
 	fontWidthMultiple: Float = 0f
-) :
-	ImageSpan(d.mutate(), verticalAlignment) {
+) : ImageSpan(d.mutate(), verticalAlignment) {
+
 	/**
 	 * 规定这个Span占几个字的宽度
 	 */

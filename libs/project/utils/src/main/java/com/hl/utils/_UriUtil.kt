@@ -11,7 +11,7 @@ import java.io.File
  * Email: 913305160@qq.com
  */
 
-fun file2Uri(context: Context, filePath: String): Uri? {
+fun file2Uri(context: Context, filePath: String): Uri {
     val file = File(filePath)
     if (!file.exists()) {
         if (file.parentFile?.exists() == false) {
