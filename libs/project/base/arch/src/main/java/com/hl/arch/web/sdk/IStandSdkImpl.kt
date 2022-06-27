@@ -204,7 +204,7 @@ class IStandSdkImpl(
 		currentFragment.startFragment(WebViewFragment::class.java, args)
 	}
 
-	override fun saveH5Data(handlerName: String) {
+	override fun setH5Data(handlerName: String) {
 		commonRegisterHandler(handlerName) { data, function ->
 			val h5SaveDataEntity = Gson().fromJson(data, H5SaveDataEntity::class.java)
 			h5SaveDataEntity.key?.also {
