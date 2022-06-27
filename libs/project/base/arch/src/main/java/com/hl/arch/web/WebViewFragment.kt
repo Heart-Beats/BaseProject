@@ -1,5 +1,6 @@
 package com.hl.arch.web
 
+import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.content.res.Configuration
@@ -55,12 +56,19 @@ open class WebViewFragment : ViewBindingMvvmBaseFragment<FragmentWebViewBinding>
 			currentActivity: FragmentActivity, url: String,
 			title: String? = null, isNeedTitle: Boolean = false
 		) {
+			startNewPage(currentActivity as Context, url, title, isNeedTitle)
+		}
+
+		fun startNewPage(
+			context: Context, url: String,
+			title: String? = null, isNeedTitle: Boolean = false
+		) {
 			val args = WebViewFragmentArgs.Builder(url)
 				.setTitle(title)
 				.setIsNeedTitle(isNeedTitle)
 				.build()
 				.toBundle()
-			currentActivity.startFragment(WebViewFragment::class.java, args)
+			context.startFragment(WebViewFragment::class.java, args)
 		}
 	}
 
@@ -253,6 +261,12 @@ open class WebViewFragment : ViewBindingMvvmBaseFragment<FragmentWebViewBinding>
 
 		override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
 			val uri = request?.url
+
+			// BridgeWebViewClient 原有的 url 拦截处理不可去掉，否则可能页面跳转异常
+			if (shouldOverrideUrlLoading(view, uri.toString())) {
+				return true
+			}
+
 			if (webViewShouldOverrideUrlLoading(view, uri)) {
 				return true
 			}
@@ -329,5 +343,13 @@ fun Fragment.navigateToWeb(url: String, title: String? = null, isNeedTitle: Bool
  * 打开新的 Web 页面， 会开启新的 Activity
  */
 fun FragmentActivity.navigateToWeb(url: String, title: String? = null, isNeedTitle: Boolean = false) {
+	WebViewFragment.startNewPage(this, url, title, isNeedTitle)
+}
+
+/**
+ * 非 Navigation 框架下使用
+ * 打开新的 Web 页面， 会开启新的 Activity
+ */
+fun Context.navigateToWeb(url: String, title: String? = null, isNeedTitle: Boolean = false) {
 	WebViewFragment.startNewPage(this, url, title, isNeedTitle)
 }

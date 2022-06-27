@@ -3,9 +3,9 @@ package com.hl.arch.web.client
 import android.content.Intent
 import android.net.Uri
 import android.net.http.SslError
+import android.util.Log
 import android.webkit.SslErrorHandler
 import android.webkit.WebView
-import com.elvishew.xlog.XLog
 import com.github.lzyzsd.jsbridge.BridgeWebView
 import com.github.lzyzsd.jsbridge.BridgeWebViewClient
 import java.io.UnsupportedEncodingException
@@ -25,8 +25,9 @@ open class MyBridgeWebViewClient(val webView: BridgeWebView) : BridgeWebViewClie
 		var decodeUrl = url
 		try {
 			decodeUrl = URLDecoder.decode(decodeUrl, "UTF-8")
+			Log.d(TAG, "shouldOverrideUrlLoading:  decodeUrl == ${decodeUrl}")
 		} catch (e: UnsupportedEncodingException) {
-			 XLog.e(e)
+			Log.e(TAG, "shouldOverrideUrlLoading: ", e)
 		}
 		if (decodeUrl.startsWith("tel:")) {
 			val intent = Intent(Intent.ACTION_VIEW, Uri.parse(decodeUrl))
