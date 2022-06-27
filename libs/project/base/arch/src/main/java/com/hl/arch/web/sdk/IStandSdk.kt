@@ -24,7 +24,7 @@ interface IStandSdk : ISdk {
 	/**
 	 * 向本地保存数据
 	 */
-	fun saveH5Data(handlerName: String = Thread.currentThread().stackTrace[1].methodName)
+	fun setH5Data(handlerName: String = Thread.currentThread().stackTrace[1].methodName)
 
 	/**
 	 * 从本地获取数据
