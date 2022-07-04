@@ -16,10 +16,14 @@ import com.hl.arch.web.helpers.JsBridgeHelper
 import com.hl.arch.web.navigateToWeb
 import com.hl.arch.web.sdk.ISdk
 import com.hl.arch.web.sdk.ISdkImplProvider
+import com.hl.baseproject.TestActivity
+import com.hl.baseproject.TestActivity2
 import com.hl.baseproject.databinding.FragmentMainBinding
 import com.hl.uikit.onClick
 import com.hl.uikit.toast
 import com.hl.utils.ProxyHandler
+import com.hl.utils.activityResult.ActivityResultHelper
+import com.hl.utils.activityResult.OnActivityResult
 import com.hl.utils.camera.CaptureFeature
 import com.hl.utils.camera.MyCaptureActivity
 import com.hl.utils.previewFie.PreviewFileActivity
@@ -34,11 +38,9 @@ class MainFragment : ViewBindingMvvmBaseFragment<FragmentMainBinding>() {
 		return false
 	}
 
-	private val qrScanUtil = QRScanUtil(this).apply {
-		registerScanActivityResult {
-			toast("扫描结果  == $it")
-		}
-	}
+	private val qrScanUtil = QRScanUtil(this)
+
+	private val activityResultHelper = ActivityResultHelper(this)
 
 	private val letterArray: List<String> by lazy {
 		val list = arrayListOf<String>()
@@ -63,7 +65,11 @@ class MainFragment : ViewBindingMvvmBaseFragment<FragmentMainBinding>() {
 				toast("你拒绝了权限请求呀")
 
 			}) {
-				qrScanUtil.launchDefault()
+				qrScanUtil.launchDefault(scanCancelAction = {
+					toast("取消扫码")
+				}) {
+					toast("扫描结果  == $it")
+				}
 			}
 		}
 
@@ -104,6 +110,22 @@ class MainFragment : ViewBindingMvvmBaseFragment<FragmentMainBinding>() {
 		})
 		testWebView.onClick {
 			this@MainFragment.navigateToWeb("http://192.168.3.18:9003")
+		}
+
+		gotoTest1.onClick {
+			activityResultHelper.launchActivity(TestActivity::class.java, callback = object : OnActivityResult {
+				override fun onResultOk(data: Intent?) {
+					toast(data?.getStringExtra("data") ?: "")
+				}
+			})
+		}
+
+		gotoTest2.onClick {
+			activityResultHelper.launchActivity(TestActivity2::class.java, callback = object : OnActivityResult {
+				override fun onResultOk(data: Intent?) {
+					toast(data?.getStringExtra("data") ?: "")
+				}
+			})
 		}
 	}
 

@@ -70,7 +70,7 @@ dependencies {
     implementation Deps.FancyToast.fancy_toast
     implementation Deps.AndroidX.security_crypto
     implementation Deps.Glide.glide
-    implementation Deps.ZXing.zxing_lite
+    api Deps.ZXing.zxing_lite
 
     api Deps.Banner.banner
 
