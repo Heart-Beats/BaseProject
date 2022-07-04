@@ -109,6 +109,17 @@ data class GetNetworkConnectTypeReturn(
 	var networkType: String? = null,
 )
 
+data class H5CallParam(
+	var phone: String? = null
+)
+
+data class ScanQRCodeReturn(
+	/**
+	 * 扫码识别成功时的对应二维码内容
+	 */
+	var qrContent: String? = null
+)
+
 
 @Parcelize
 data class Share2PlatformParam(

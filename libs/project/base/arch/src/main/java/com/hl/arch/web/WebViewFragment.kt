@@ -1,5 +1,6 @@
 package com.hl.arch.web
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
@@ -32,6 +33,8 @@ import com.hl.arch.web.helpers.logJs
 import com.hl.uikit.ProgressWebView
 import com.hl.uikit.gone
 import com.hl.uikit.visible
+import com.hl.utils.activityResult.ActivityResultHelper
+import com.hl.utils.activityResult.OnActivityResult
 import com.hl.utils.dp
 import com.hl.utils.dpInt
 import com.hl.utils.initInsetPadding
@@ -75,6 +78,9 @@ open class WebViewFragment : ViewBindingMvvmBaseFragment<FragmentWebViewBinding>
 	private lateinit var webView: ProgressWebView
 
 	private lateinit var webChromeClient: MyWebChromeClient
+
+
+	private val activityResultHelper = ActivityResultHelper(this)
 
 	override fun FragmentWebViewBinding.onViewCreated(savedInstanceState: Bundle?) {
 		val args = WebViewFragmentArgs.fromBundle(requireArguments())
@@ -299,6 +305,26 @@ open class WebViewFragment : ViewBindingMvvmBaseFragment<FragmentWebViewBinding>
 	 */
 	fun loadUrl(url: String) {
 		webView.loadUrl(url)
+	}
+
+	/**
+	 * 启动 Activity 并返回处理结果
+	 */
+	fun launchActivity(
+		launchActivityCls: Class<out Activity>,
+		callback: OnActivityResult,
+	) {
+		activityResultHelper.launchActivity(launchActivityCls, callback = callback)
+	}
+
+	/**
+	 * 启动 Intent 并返回处理结果
+	 */
+	fun launchIntent(
+		launchIntent: Intent,
+		callback: OnActivityResult,
+	) {
+		activityResultHelper.launchIntent(launchIntent, callback = callback)
 	}
 
 	override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

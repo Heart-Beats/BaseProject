@@ -71,6 +71,22 @@
                 android:text="测试优码APP-SDK"
                 android:textSize="24sp" />
 
+            <TextView
+                android:id="@+id/goto_test1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="前往测试1页面"
+                android:textSize="24sp" />
+
+            <TextView
+                android:id="@+id/goto_test2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="前往测试2页面"
+                android:textSize="24sp" />
+
         </LinearLayout>
 
         <com.jlertele.sidebar.SideBarView

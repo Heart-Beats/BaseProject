@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.content.IntentFilter
 import android.graphics.Color
+import android.net.Uri
 import android.webkit.WebView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
@@ -33,6 +34,9 @@ import com.hl.uikit.getStatusBarHeight
 import com.hl.umeng.sdk.MyUMShareListener
 import com.hl.umeng.sdk.UMShareUtil
 import com.hl.utils.*
+import com.hl.utils.activityResult.OnActivityResult
+import com.king.zxing.CameraScan
+import com.king.zxing.CaptureActivity
 import com.umeng.socialize.bean.SHARE_MEDIA
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.delay
@@ -370,7 +374,11 @@ class IStandSdkImpl(
 
 	override fun callPhone(handlerName: String) {
 		commonRegisterHandler(handlerName) { data, function ->
-
+			val h5Call = GsonUtil.fromJson<H5CallParam>(data)
+			val intent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + h5Call.phone))
+			intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+			currentFragment.startActivity(intent)
+			function.onCallBack(H5Return.success())
 		}
 	}
 
@@ -382,7 +390,20 @@ class IStandSdkImpl(
 
 	override fun scanQRCode(handlerName: String) {
 		commonRegisterHandler(handlerName) { data, function ->
+			val webViewFragment = currentFragment as WebViewFragment
 
+			webViewFragment.launchActivity(
+				CaptureActivity::class.java,
+				callback = object : OnActivityResult {
+					override fun onResultOk(data: Intent?) {
+						val scanQRCodeReturn = ScanQRCodeReturn(CameraScan.parseScanResult(data))
+						function.onCallBack(H5Return.success(scanQRCodeReturn))
+					}
+
+					override fun onResultCanceled(data: Intent?) {
+						function.onCallBack(H5Return.fail("取消扫码"))
+					}
+				})
 		}
 	}
 

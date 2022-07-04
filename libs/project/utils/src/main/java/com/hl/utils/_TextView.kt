@@ -6,6 +6,20 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
+fun TextView.timeDown(scope: CoroutineScope, count: Int, countFormatText: String = "%s", endAction: () -> Unit = {}) {
+	scope.launch {
+		var count = count
+		while (count > 0) {
+			text = String.format(countFormatText, count)
+			count--
+			delay(1000)
+			if (count == 0) {
+				endAction()
+			}
+		}
+	}
+}
+
 fun TextView.verifyCodeCountDown(scope: CoroutineScope, countFormatText: String = "已发送(%s)", endText: String = "重新获取") {
 	scope.launch {
 		var count = 60

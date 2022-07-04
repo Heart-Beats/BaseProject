@@ -12,11 +12,14 @@ object GsonUtil {
 	val gson = Gson()
 
 
+	@JvmStatic
 	inline fun <reified T> fromJson(json: String): T {
 		val type = TypeToken.get(T::class.java).type
 		return gson.fromJson(json, type)
 	}
 
+
+	@JvmStatic
 	fun toJson(any: Any): String {
 		return gson.toJson(any)
 	}
