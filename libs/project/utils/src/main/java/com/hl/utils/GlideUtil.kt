@@ -11,17 +11,9 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
 
-
-/**
- * Author txwang
- *
- * @version V1.0
- * Created by txwang on 2019/4/24.
- * Instruction :
- * @date: 2019-04-24 10:56
- */
 object GlideUtil {
 
+    @JvmOverloads
     @JvmStatic
     fun loadHead(context: Context, url: String?, imageView: ImageView, isGentleman: Boolean?) {
         val headImageHead = when {
@@ -35,6 +27,7 @@ object GlideUtil {
             .into(imageView)
     }
 
+    @JvmOverloads
     @JvmStatic
     fun loadTeam(context: Context, url: String?, imageView: ImageView) {
         Glide.with(context).load(url)
@@ -47,6 +40,7 @@ object GlideUtil {
         return !TextUtils.isEmpty(imgUrl) && imgUrl.matches(Regex("^data:image/(png|jpg|\\*);base64,.*$"))
     }
 
+    @JvmOverloads
     @JvmStatic
     fun load(
         context: Context,
@@ -72,6 +66,7 @@ object GlideUtil {
         Glide.with(context).load(url).apply(requestOptions).into(imageView)
     }
 
+    @JvmOverloads
     @JvmStatic
     fun load(context: Context, url: String, target: Target<Drawable>) {
         val drawable = ContextCompat.getDrawable(context, R.drawable.loading_img_small)
@@ -83,6 +78,7 @@ object GlideUtil {
         Glide.with(context).load(url).apply(requestOptions).into(target)
     }
 
+    @JvmOverloads
     @JvmStatic
     fun load(context: Context, drawableId: Int, imageView: ImageView, roundPx: Int = 0) {
         val drawable = ContextCompat.getDrawable(context, R.drawable.loading_img_small)
