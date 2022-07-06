@@ -36,6 +36,7 @@
 
         <!--标题字体大小（仅对居中显示的有效）-->
         <attr name="uikit_titleSize" format="dimension|reference" />
+
         <attr name="uikit_titleGravity">
             <enum name="center" value="0" />
             <enum name="start" value="1" />
@@ -43,11 +44,18 @@
 
         <!-- 设置 title 文字显示超长样式 -->
         <attr name="uikit_titleEllipsize" format="enum">
-            <enum name="start" value="0"/>
-            <enum name="middle" value="1"/>
-            <enum name="end" value="2"/>
-            <enum name="marquee" value="3"/>
+            <enum name="start" value="0" />
+            <enum name="middle" value="1" />
+            <enum name="end" value="2" />
+            <enum name="marquee" value="3" />
         </attr>
+
+        <attr name="uikit_subtitle" format="string|reference" />
+        <attr name="uikit_subtitleColor" format="color|reference" />
+        <attr name="uikit_subtitleIsBold" format="boolean" />
+
+        <!--副标题字体大小（仅对居中显示的有效）-->
+        <attr name="uikit_subtitleSize" format="dimension|reference" />
 
         <attr name="uikit_rightPaddingEnd" format="dimension|reference" />
         <attr name="uikit_rightSpacing" format="dimension|reference" />

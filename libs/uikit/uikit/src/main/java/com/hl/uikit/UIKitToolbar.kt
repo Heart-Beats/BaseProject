@@ -14,6 +14,7 @@ import android.view.Gravity
 import android.view.MenuItem
 import android.view.View
 import android.widget.ImageButton
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.annotation.GravityInt
 import androidx.appcompat.widget.*
@@ -31,10 +32,14 @@ class UIKitToolbar : Toolbar {
     var searchView: UIKitSearchBar? = null
 
     /**
+     * 居中标题的父级 Layout
+     */
+    private var centerTitleLayout: LinearLayout? = null
+
+    /**
      * 右边的 Text 和 Icon 之间的距离
      */
     private var mRightSpacing: Int = 0
-    private var mTitleTextSize: Int? = null
     private var mRightActionIconRes: Drawable? = null
     private var mRightTextSize: Int? = null
     private var mRightText: String? = null
@@ -47,15 +52,25 @@ class UIKitToolbar : Toolbar {
     private var mRightActionTextColor: ColorStateList? = null
     private var mRightActionImageColor: ColorStateList? = null
     private var rightActionIcon: ImageButton? = null
-    private var mTitle: CharSequence? = null
     private var rightActionTextView: TextView? = null
+
     private var mTitleGravity: Int = Gravity.START
+
+    private var mTitle: CharSequence? = null
     private var tvCenterTitle: TextView? = null
     private var mTitleTextAppearance: Int = 0
+    private var mTitleTextSize: Int? = null
     private var mTitleTextColor: ColorStateList? = null
     private var mTitleIsBold: Boolean = false
     private var titleMargin: Int = 15.dpInt
     private var titleEllipsize: TextUtils.TruncateAt = TextUtils.TruncateAt.MIDDLE
+
+    private var mSubTitle: CharSequence? = null
+    private var tvCenterSubTitle: TextView? = null
+    private var mSubTitleTextAppearance: Int = 0
+    private var mSubTitleTextSize: Int? = null
+    private var mSubTitleTextColor: ColorStateList? = null
+    private var mSubTitleIsBold: Boolean = false
 
     private var mConfigBuilder: ConfigBuilder<Any>? = null
 
@@ -161,6 +176,7 @@ class UIKitToolbar : Toolbar {
 
         titleMargin = barTypedArray.getDimensionPixelSize(R.styleable.UIKitToolbar_uikit_titleMargin, titleMargin)
 
+        /******************** 初始化标题  *************/
         val titleSize =
             barTypedArray.getDimensionPixelSize(R.styleable.UIKitToolbar_uikit_titleSize, -1)
         mTitleTextSize = if (titleSize > 0) titleSize else null
@@ -173,6 +189,20 @@ class UIKitToolbar : Toolbar {
         }
 
         setTitleBold(barTypedArray.getBoolean(R.styleable.UIKitToolbar_uikit_titleIsBold, mTitleIsBold))
+
+        /******************** 初始化副标题  *************/
+        val subtitleSize =
+            barTypedArray.getDimensionPixelSize(R.styleable.UIKitToolbar_uikit_subtitleSize, -1)
+        mSubTitleTextSize = if (subtitleSize > 0) subtitleSize else null
+
+        val subtitle = barTypedArray.getString(R.styleable.UIKitToolbar_uikit_subtitle)
+        setSubtitle(subtitle)
+
+        barTypedArray.getColorStateList(R.styleable.UIKitToolbar_uikit_subtitleColor)?.let {
+            setSubtitleTextColor(it)
+        }
+
+        setSubTitleBold(barTypedArray.getBoolean(R.styleable.UIKitToolbar_uikit_subtitleIsBold, mSubTitleIsBold))
 
         mRightPaddingEnd =
             barTypedArray.getDimensionPixelSize(R.styleable.UIKitToolbar_uikit_rightPaddingEnd, 0)
@@ -194,10 +224,15 @@ class UIKitToolbar : Toolbar {
         setRightActionIcon(icon = mRightActionIconRes)
         setRightActionText(mRightText)
 
+        //  从主题中获取 TextAppearance 相关属性设置
         val ta = TintTypedArray.obtainStyledAttributes(context, attrs, R.styleable.Toolbar, defStyleAttr, 0)
         mTitleTextAppearance = ta.getResourceId(R.styleable.Toolbar_titleTextAppearance, 0)
+        mSubTitleTextAppearance = ta.getResourceId(R.styleable.Toolbar_subtitleTextAppearance, 0)
         if (ta.hasValue(R.styleable.Toolbar_titleTextColor)) {
             setTitleTextColor(ta.getColorStateList(R.styleable.Toolbar_titleTextColor))
+        }
+        if (ta.hasValue(R.styleable.Toolbar_subtitleTextColor)) {
+            setSubtitleTextColor(ta.getColorStateList(R.styleable.Toolbar_subtitleTextColor))
         }
         ta.recycle()
     }
@@ -226,8 +261,21 @@ class UIKitToolbar : Toolbar {
         }
     }
 
+    override fun setSubtitle(subtitle: CharSequence?) {
+        mSubTitle = subtitle
+        if (isCenterGravity()) {
+            setCenterSubtitle(subtitle)
+        } else {
+            super.setSubtitle(subtitle)
+        }
+    }
+
     override fun getTitle(): CharSequence? {
         return mTitle
+    }
+
+    override fun getSubtitle(): CharSequence? {
+        return mSubTitle
     }
 
     private fun isCenterGravity(): Boolean {
@@ -245,12 +293,28 @@ class UIKitToolbar : Toolbar {
         }
     }
 
+    fun setSubTitleBold(isBold: Boolean) {
+        mSubTitleIsBold = isBold
+        if (isCenterGravity() && isBold) {
+            tvCenterSubTitle?.typeface = Typeface.DEFAULT_BOLD
+        }
+    }
+
     override fun setTitleTextColor(color: ColorStateList) {
         mTitleTextColor = color
         if (isCenterGravity()) {
             tvCenterTitle?.setTextColor(color)
         } else {
             super.setTitleTextColor(color)
+        }
+    }
+
+    override fun setSubtitleTextColor(color: ColorStateList) {
+        mSubTitleTextColor = color
+        if (isCenterGravity()) {
+            tvCenterSubTitle?.setTextColor(color)
+        } else {
+            super.setSubtitleTextColor(color)
         }
     }
 
@@ -263,12 +327,30 @@ class UIKitToolbar : Toolbar {
         }
     }
 
+    override fun setSubtitleTextColor(color: Int) {
+        mSubTitleTextColor = ColorStateList.valueOf(color)
+        if (isCenterGravity()) {
+            tvCenterSubTitle?.setTextColor(color)
+        } else {
+            super.setSubtitleTextColor(color)
+        }
+    }
+
     override fun setTitleTextAppearance(context: Context?, resId: Int) {
         mTitleTextAppearance = resId
         if (isCenterGravity()) {
             tvCenterTitle?.setTextAppearance(context, resId)
         } else {
             super.setTitleTextAppearance(context, resId)
+        }
+    }
+
+    override fun setSubtitleTextAppearance(context: Context?, resId: Int) {
+        mSubTitleTextAppearance = resId
+        if (isCenterGravity()) {
+            tvCenterSubTitle?.setTextAppearance(context, resId)
+        } else {
+            super.setSubtitleTextAppearance(context, resId)
         }
     }
 
@@ -395,11 +477,13 @@ class UIKitToolbar : Toolbar {
 
     private fun setCenterTitle(title: CharSequence?) {
         if (!title.isNullOrEmpty()) {
+            ensureInitCenterTitleLayout()
+
             if (tvCenterTitle == null) {
                 val lp = generateDefaultLayoutParams().apply {
                     this.marginStart = titleMargin
                     this.marginEnd = titleMargin
-                    this.gravity = Gravity.CENTER
+                    this.gravity = Gravity.CENTER_HORIZONTAL
                 }
                 tvCenterTitle = getTitleTextViewWithParams(lp)
                 if (mTitleTextAppearance != 0) {
@@ -414,30 +498,81 @@ class UIKitToolbar : Toolbar {
                 if (mTitleIsBold) {
                     tvCenterTitle?.typeface = Typeface.DEFAULT_BOLD
                 }
-                addView(tvCenterTitle)
+                centerTitleLayout?.addView(tvCenterTitle, 0)
             } else if (tvCenterTitle?.parent == null) {
-                addView(tvCenterTitle)
+                centerTitleLayout?.addView(tvCenterTitle, 0)
             }
         } else if (tvCenterTitle != null) {
-            removeView(tvCenterTitle)
+            centerTitleLayout?.removeView(tvCenterTitle)
         }
         tvCenterTitle?.text = title
     }
 
+    private fun ensureInitCenterTitleLayout() {
+        if (centerTitleLayout == null) {
+            val lp = generateDefaultLayoutParams().apply {
+                this.gravity = Gravity.CENTER
+            }
+            centerTitleLayout = LinearLayout(context).apply {
+                this.orientation = LinearLayout.VERTICAL
+                this.gravity = Gravity.CENTER_HORIZONTAL
+            }
+            addView(centerTitleLayout, lp)
+        } else if (centerTitleLayout?.parent == null) {
+            addView(centerTitleLayout)
+        }
+    }
+
+    private fun setCenterSubtitle(subtitle: CharSequence?) {
+        if (!subtitle.isNullOrEmpty()) {
+            ensureInitCenterTitleLayout()
+
+            if (tvCenterSubTitle == null) {
+                val lp = generateDefaultLayoutParams().apply {
+                    this.gravity = Gravity.CENTER_HORIZONTAL
+                }
+                tvCenterSubTitle = getTitleTextViewWithParams(lp, isSubTitle = true)
+                if (mSubTitleTextAppearance != 0) {
+                    tvCenterSubTitle?.setTextAppearance(context, mSubTitleTextAppearance)
+                }
+                mSubTitleTextColor?.let {
+                    setTitleTextColor(it)
+                }
+                mSubTitleTextSize?.toFloat()?.let { titleSize ->
+                    tvCenterSubTitle?.setTextSize(TypedValue.COMPLEX_UNIT_PX, titleSize)
+                }
+                if (mSubTitleIsBold) {
+                    tvCenterSubTitle?.typeface = Typeface.DEFAULT_BOLD
+                }
+                centerTitleLayout?.addView(tvCenterSubTitle)
+            } else if (tvCenterTitle?.parent == null) {
+                centerTitleLayout?.addView(tvCenterSubTitle)
+            }
+        } else if (tvCenterTitle != null) {
+            centerTitleLayout?.removeView(tvCenterSubTitle)
+        }
+        tvCenterSubTitle?.text = subtitle
+    }
+
     private fun getTitleTextViewWithParams(
         params: LayoutParams,
-        defStyleAttr: Int = android.R.attr.textViewStyle
+        defStyleAttr: Int = android.R.attr.textViewStyle,
+        isSubTitle: Boolean = false
     ): TextView {
         val textView = AppCompatTextView(context, null, defStyleAttr)
         textView.setSingleLine()
-        textView.ellipsize = titleEllipsize
 
-        if (titleEllipsize == TextUtils.TruncateAt.MARQUEE) {
-            textView.isFocusable = true
-            textView.isFocusableInTouchMode = true
-            // 重复循环
-            textView.marqueeRepeatLimit = -1
-            textView.requestFocus()
+        if (!isSubTitle) {
+            textView.ellipsize = titleEllipsize
+            if (titleEllipsize == TextUtils.TruncateAt.MARQUEE) {
+                textView.isFocusable = true
+                textView.isFocusableInTouchMode = true
+                // 重复循环
+                textView.marqueeRepeatLimit = -1
+                textView?.post {
+                    textView.requestFocus()
+                }
+            }
         }
 
         textView.layoutParams = params
