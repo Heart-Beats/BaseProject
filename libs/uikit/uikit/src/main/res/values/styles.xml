@@ -25,6 +25,10 @@
         <item name="uikit_titleMargin">0dp</item>
         <item name="uikit_titleSize">@dimen/uikit_font_size_6</item>
         <item name="uikit_titleColor">@color/uikit_color_3</item>
+        <item name="uikit_titleIsBold">false</item>
+        <item name="uikit_subtitleSize">@dimen/uikit_font_size_9</item>
+        <item name="uikit_subtitleColor">@color/uikit_color_3</item>
+        <item name="uikit_subtitleIsBold">false</item>
         <item name="uikit_rightTextSize">@dimen/uikit_font_size_8</item>
         <item name="uikit_rightTextColor">@color/uikit_color_1</item>
         <item name="uikit_rightPaddingEnd">15dp</item>
