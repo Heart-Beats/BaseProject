@@ -80,7 +80,9 @@ object Base64BitmapUtil {
      * @return
      */
     fun base64ToBitmap(base64Data: String?): Bitmap {
-        val bytes = Base64.decode(base64Data, Base64.DEFAULT)
+        // 首先用正则去除 base64 位头部
+        val baseString = base64Data?.replace(Regex("^data:image\\/\\w+;base64,"), "")
+        val bytes = Base64.decode(baseString, Base64.DEFAULT)
         return BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
     }
 

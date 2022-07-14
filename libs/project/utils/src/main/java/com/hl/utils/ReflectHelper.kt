@@ -54,7 +54,12 @@ class ReflectHelper<T>(private val clazz: Class<T>) {
     }
 
     /**
-     * 获取 clazz  的泛型参数
+     *   获取 clazz  的泛型参数
+     *
+     *  java 中有几种特殊情况，能够获取泛型对象的参数类型：
+     *       1、类中有 class 信息（类中有一个 Class 字段）
+     *       2、父类中有 class 信息（父类是泛型类，并指定了参数类型）
+     *       3、持有者中有 class 信息（是一个类的 Field、Method）
      */
     fun getGenericsType(): List<Class<Type>>? {
 
