@@ -1,5 +1,6 @@
 package com.hl.arch.web.sdk
 
+import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.content.IntentFilter
@@ -28,6 +29,8 @@ import com.hl.arch.web.WebViewFragmentArgs
 import com.hl.arch.web.bean.*
 import com.hl.arch.web.helpers.H5DataHelper
 import com.hl.arch.web.helpers.logJs
+import com.hl.arch.web.helpers.onFail
+import com.hl.arch.web.helpers.onSuccess
 import com.hl.arch.web.receiver.CallBackFunctionDataStore
 import com.hl.arch.web.receiver.CallBackFunctionHandlerReceiver
 import com.hl.uikit.getStatusBarHeight
@@ -37,6 +40,8 @@ import com.hl.utils.*
 import com.hl.utils.activityResult.OnActivityResult
 import com.king.zxing.CameraScan
 import com.king.zxing.CaptureActivity
+import com.lxj.xpopup.XPopup
+import com.lxj.xpopup.util.SmartGlideImageLoader
 import com.umeng.socialize.bean.SHARE_MEDIA
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.delay
@@ -104,7 +109,7 @@ class IStandSdkImpl(
 			val isWifi = if (NetworkUtils.isWifiConnected()) 1 else 0
 			val deviceInfo =
 				H5DeviceInfo(AndroidDeviceInfo(statusBarHeight = statusBarHeightDp.toInt(), isWifi = isWifi))
-			function.onCallBack(H5Return.success(deviceInfo))
+			function.onSuccess(deviceInfo)
 		}
 	}
 
@@ -120,13 +125,18 @@ class IStandSdkImpl(
 
 			logJs("h5NavigateBack", "开始")
 
-			// 获取栈顶的 Activity， 即当前的 Activity
-			val currentActivity = ActivityUtils.getTopActivity()
-			if (currentActivity.isWebViewContainerActivity()) {
-				currentActivity.finish()
-			} else if (currentActivity.isWebViewNavigationActivity()) {
-				logJs("h5NavigateBack", "开始回退")
-				findNavController().popBackStack()
+			// h5 页面本身可回退时， 作自身的回退， 不可回退时关闭原生页面
+			if (bridgeWebView.canGoBack()) {
+				bridgeWebView.goBack()
+			} else {
+				// 获取栈顶的 Activity， 即当前的 Activity
+				val currentActivity = ActivityUtils.getTopActivity()
+				if (currentActivity.isWebViewContainerActivity()) {
+					currentActivity.finish()
+				} else if (currentActivity.isWebViewNavigationActivity()) {
+					logJs("h5NavigateBack", "开始回退")
+					findNavController().popBackStack()
+				}
 			}
 		}
 
@@ -154,8 +164,8 @@ class IStandSdkImpl(
 
 			webView?.also {
 				it.reload()
-				function.onCallBack(H5Return.success("页面刷新成功"))
-			} ?: function.onCallBack(H5Return.fail("当前页面未找到 webView "))
+				function.onSuccess("页面刷新成功")
+			} ?: function.onFail("当前页面未找到 webView ")
 		}
 	}
 
@@ -190,7 +200,7 @@ class IStandSdkImpl(
 	override fun navigateTo(handlerName: String) {
 		commonRegisterHandler(handlerName) { data, function ->
 			gotoWebByContainerActivity(data)
-			function.onCallBack(H5Return.success())
+			function.onSuccess()
 		}
 	}
 
@@ -213,8 +223,8 @@ class IStandSdkImpl(
 			val h5SaveDataEntity = Gson().fromJson(data, H5SaveDataEntity::class.java)
 			h5SaveDataEntity.key?.also {
 				H5DataHelper.putData(it, h5SaveDataEntity.value)
-				function.onCallBack(H5Return.success("保存数据成功"))
-			} ?: function.onCallBack(H5Return.fail("key 不可为空"))
+				function.onSuccess("保存数据成功")
+			} ?: function.onFail("key 不可为空")
 		}
 	}
 
@@ -222,20 +232,20 @@ class IStandSdkImpl(
 		commonRegisterHandler(handlerName) { data, function ->
 			val h5DataEntity = Gson().fromJson(data, H5GetDataEntity::class.java)
 			if (h5DataEntity == null) {
-				function.onCallBack(H5Return.fail("h5 传输的数据异常"))
+				function.onFail("h5 传输的数据异常")
 				return@commonRegisterHandler
 			}
 
 			h5DataEntity.key?.also {
-				function.onCallBack(H5Return.success(H5GetDataReturn(H5DataHelper.getData(it))))
-			} ?: function.onCallBack(H5Return.fail("key 不可为空"))
+				function.onSuccess(H5GetDataReturn(H5DataHelper.getData(it)))
+			} ?: function.onFail("key 不可为空")
 		}
 	}
 
 	override fun clearH5Data(handlerName: String) {
 		commonRegisterHandler(handlerName) { _, function ->
 			H5DataHelper.clearData()
-			function.onCallBack(H5Return.success())
+			function.onSuccess()
 		}
 	}
 
@@ -256,7 +266,7 @@ class IStandSdkImpl(
 					bridgeWebView.findNavController().popBackStack()
 				}
 
-				function.onCallBack(H5Return.success())
+				function.onSuccess()
 			}
 		}
 	}
@@ -305,7 +315,7 @@ class IStandSdkImpl(
 					}
 				}
 
-				function.onCallBack(H5Return.success())
+				function.onSuccess()
 			}
 		}
 	}
@@ -323,7 +333,7 @@ class IStandSdkImpl(
 					}
 				}
 
-				function.onCallBack(H5Return.success())
+				function.onSuccess()
 			}
 		}
 	}
@@ -335,9 +345,9 @@ class IStandSdkImpl(
 					currentFragment.immersionBar {
 						statusBarColor(it)
 					}
-					function.onCallBack(H5Return.success())
+					function.onSuccess()
 				}
-			} ?: function.onCallBack(H5Return.fail("颜色值为 null"))
+			} ?: function.onFail("颜色值为 null")
 		}
 	}
 
@@ -350,7 +360,19 @@ class IStandSdkImpl(
 				NetworkUtils.NetworkType.NETWORK_ETHERNET, NetworkUtils.NetworkType.NETWORK_UNKNOWN -> "UNKNOWN"
 				else -> "NO"
 			}
-			function.onCallBack(H5Return.success(GetNetworkConnectTypeReturn(connectType)))
+			function.onSuccess(GetNetworkConnectTypeReturn(connectType))
+		}
+	}
+
+	override fun setWebView(handlerName: String) {
+		commonRegisterHandler(handlerName) { data, function ->
+			val h5SetWebViewParam = GsonUtil.fromJson<H5SetWebViewParam>(data)
+			try {
+				bridgeWebView.setBackgroundColor(Color.parseColor(h5SetWebViewParam.backgroundColor))
+				function.onCallBack(H5Return.success())
+			} catch (e: Exception) {
+				function.onCallBack(H5Return.fail(e.message))
+			}
 		}
 	}
 
@@ -362,13 +384,40 @@ class IStandSdkImpl(
 
 	override fun previewImage(handlerName: String) {
 		commonRegisterHandler(handlerName) { data, function ->
+			val previewImageParam = GsonUtil.fromJson<PreviewImageParam>(data)
 
+			XPopup.Builder(currentFragment.requireContext())
+				.isViewMode(true)
+				.asImageViewer(
+					null, previewImageParam.index, previewImageParam.urls, { popupView, position ->
+						// popupView.updateSrcView()
+					}, SmartGlideImageLoader()
+				)
+				.show()
+
+			function.onSuccess()
 		}
 	}
 
 	override fun savePhotoToAlbum(handlerName: String) {
 		commonRegisterHandler(handlerName) { data, function ->
+			val savePhotoToAlbumParam = GsonUtil.fromJson<SavePhotoToAlbumParam>(data)
+			currentFragment.reqPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE, deniedAction = {
+				function.onFail("获取存储权限失败")
+			}) {
+				currentFragment.lifecycleScope.launch {
+					val bitmap = BitmapUtil.getBitmapFromUrl(savePhotoToAlbumParam.fileUrl ?: "")
+					bitmap?.run {
+						val saveName = savePhotoToAlbumParam.fileName ?: "${getFormattedNowDateTime()}.png"
 
+						BitmapUtil.saveBitmap(attachActivity, this, saveName, failAction = {
+							function.onFail("保存图片失败")
+						}) {
+							function.onSuccess("保存图片成功")
+						}
+					} ?: function.onFail("获取图片失败")
+				}
+			}
 		}
 	}
 
@@ -378,7 +427,7 @@ class IStandSdkImpl(
 			val intent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + h5Call.phone))
 			intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
 			currentFragment.startActivity(intent)
-			function.onCallBack(H5Return.success())
+			function.onSuccess()
 		}
 	}
 
@@ -389,7 +438,7 @@ class IStandSdkImpl(
 	}
 
 	override fun scanQRCode(handlerName: String) {
-		commonRegisterHandler(handlerName) { data, function ->
+		commonRegisterHandler(handlerName) { _, function ->
 			val webViewFragment = currentFragment as WebViewFragment
 
 			webViewFragment.launchActivity(
@@ -397,11 +446,11 @@ class IStandSdkImpl(
 				callback = object : OnActivityResult {
 					override fun onResultOk(data: Intent?) {
 						val scanQRCodeReturn = ScanQRCodeReturn(CameraScan.parseScanResult(data))
-						function.onCallBack(H5Return.success(scanQRCodeReturn))
+						function.onSuccess(scanQRCodeReturn)
 					}
 
 					override fun onResultCanceled(data: Intent?) {
-						function.onCallBack(H5Return.fail("取消扫码"))
+						function.onFail("取消扫码")
 					}
 				})
 		}
@@ -415,15 +464,15 @@ class IStandSdkImpl(
 			val shareListener = object : MyUMShareListener() {
 
 				override fun onResult(platform: SHARE_MEDIA) {
-					function.onCallBack(H5Return.success("分享成功"))
+					function.onSuccess("分享成功")
 				}
 
 				override fun onError(platform: SHARE_MEDIA, t: Throwable) {
-					function.onCallBack(H5Return.fail("分享失败"))
+					function.onFail("分享失败")
 				}
 
 				override fun onCancel(platform: SHARE_MEDIA) {
-					function.onCallBack(H5Return.fail("分享取消"))
+					function.onFail("分享取消")
 				}
 			}
 
@@ -445,12 +494,12 @@ class IStandSdkImpl(
 	private fun doShareCustom(share2PlatformParam: Share2PlatformParam, function: CallBackFunction): Boolean {
 		return when (share2PlatformParam.type) {
 			"sms" -> {
-				share2PlatformParam?.smsContent?.run {
+				share2PlatformParam.smsContent?.run {
 					SmsHelper(attachActivity).sendMessage(this) {
 						if (it) {
-							function.onCallBack(H5Return.success("短信发送成功"))
+							function.onSuccess("短信发送成功")
 						} else {
-							function.onCallBack(H5Return.fail("短信发送失败"))
+							function.onFail("短信发送失败")
 						}
 					}
 				}
@@ -460,7 +509,7 @@ class IStandSdkImpl(
 
 			"copy" -> {
 				ClipboardHelper(attachActivity).copyText(share2PlatformParam.link)
-				function.onCallBack(H5Return.success("复制链接成功"))
+				function.onSuccess("复制链接成功")
 
 				true
 			}
