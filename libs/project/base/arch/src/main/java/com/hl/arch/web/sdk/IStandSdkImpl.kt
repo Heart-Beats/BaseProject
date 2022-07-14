@@ -227,7 +227,7 @@ class IStandSdkImpl(
 			}
 
 			h5DataEntity.key?.also {
-				function.onCallBack(H5Return.success(H5DataHelper.getData(it)))
+				function.onCallBack(H5Return.success(H5GetDataReturn(H5DataHelper.getData(it))))
 			} ?: function.onCallBack(H5Return.fail("key 不可为空"))
 		}
 	}
