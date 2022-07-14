@@ -64,6 +64,11 @@ interface IStandSdk : ISdk {
 	fun getNetworkConnectType(handlerName: String = Thread.currentThread().stackTrace[1].methodName)
 
 	/**
+	 *  设置 WebView
+	 */
+	fun setWebView(handlerName: String = Thread.currentThread().stackTrace[1].methodName)
+
+	/**
 	 * 获取位置信息
 	 */
 	fun getLocation(handlerName: String = Thread.currentThread().stackTrace[1].methodName)

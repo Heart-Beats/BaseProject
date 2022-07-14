@@ -116,6 +116,38 @@ data class GetNetworkConnectTypeReturn(
 	var networkType: String? = null,
 )
 
+data class H5SetWebViewParam(
+
+	/**
+	 *  背景颜色
+	 */
+	var backgroundColor: String
+)
+
+data class PreviewImageParam(
+	/**
+	 * 图片数组
+	 */
+	var urls: List<String>? = null,
+
+	/**
+	 * 当前索引
+	 */
+	var index: Int = 0
+)
+
+data class SavePhotoToAlbumParam(
+	/**
+	 * 文件链接地址
+	 */
+	var fileUrl: String? = null,
+
+	/**
+	 *  文件名称, 需携带后缀
+	 */
+	var fileName: String? = null
+)
+
 data class H5CallParam(
 	var phone: String? = null
 )
