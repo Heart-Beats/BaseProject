@@ -49,6 +49,13 @@ data class H5GetDataEntity(
 
 	)
 
+data class H5GetDataReturn(
+	/**
+	 * 数据的值
+	 */
+	var value: String?
+)
+
 data class H5NavigateToParam(
 	/**
 	 * H5页面的标题
