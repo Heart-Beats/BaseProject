@@ -286,6 +286,9 @@
     </style>
 
     <style name="UiKit.SearchBarStyle" parent="Widget.AppCompat.SearchView">
+        <!-- 加上白色背景，因为 SearchView 实际高度可能比填充的 layout 高 -->
+        <item name="android:background">@android:color/white</item>
+
         <!--修改整个SearchView的整个布局样式-->
         <item name="layout">@layout/uikit_search_bar_layout</item>
         <!--修改搜索区域的背景,即去除editText的下划线-->
@@ -297,7 +300,7 @@
         <!--修改搜索框左边的搜索按钮图标-->
         <item name="searchHintIcon">@drawable/uikit_icon_search</item>
         <!--修改搜索框提示文字-->
-        <item name="defaultQueryHint">搜索银行名称</item>
+        <item name="defaultQueryHint">搜索关键词</item>
         <!--修改打开搜索框的关闭按钮的图标-->
         <item name="closeIcon">@drawable/uikit_icon_search_close</item>
         <!--修改搜索框默认打开，搜索按钮图标在框外-->

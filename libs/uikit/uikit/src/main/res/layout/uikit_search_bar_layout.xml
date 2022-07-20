@@ -42,7 +42,7 @@
 
         <LinearLayout
             android:id="@+id/search_edit_frame"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:layoutDirection="locale"
@@ -66,7 +66,7 @@
             <!-- Inner layout contains the app icon, button(s) and EditText -->
             <LinearLayout
                 android:id="@+id/search_plate"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="1"
@@ -88,8 +88,8 @@
                     android:ellipsize="end"
                     android:imeOptions="actionSearch"
                     android:inputType="text|textAutoComplete|textNoSuggestions"
-                    android:paddingLeft="0dp"
-                    android:paddingRight="@dimen/abc_dropdownitem_text_padding_right"
+                    android:paddingStart="0dp"
+                    android:paddingEnd="@dimen/abc_dropdownitem_text_padding_right"
                     android:singleLine="true"
                     android:textColor="@color/uikit_color_3"
                     android:textColorHint="@color/uikit_color_4"

@@ -50,12 +50,13 @@ abstract class MvpBaseActivity<Presenter : MvpBasePresenter<out BaseView>> : Bas
     private var backView: View? = null
 
     public override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
         if (!getData(intent)) {
             ToastUtils.showShort(this, "无数据")
             finish()
             return
         }
+
+        super.onCreate(savedInstanceState)
 
         presenter = createPresenter()?.also {
             it.detachView(this)
