@@ -1,5 +1,5 @@
 def isPublishRelease = true
-def ARTIFACT_VERSION = '0.3.1'
+def ARTIFACT_VERSION = '0.3.2'
 
 ext {
     // 打包至 GitHub 配置
