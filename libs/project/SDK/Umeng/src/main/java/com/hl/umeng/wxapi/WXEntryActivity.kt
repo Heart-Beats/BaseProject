@@ -2,4 +2,4 @@ package com.hl.umeng.wxapi
 
 import com.umeng.socialize.weixin.view.WXCallbackActivity
 
-class WXEntryActivity : WXCallbackActivity()
+open class WXEntryActivity : WXCallbackActivity()
