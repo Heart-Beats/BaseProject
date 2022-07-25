@@ -118,7 +118,7 @@ open class MyWebChromeClient(val fragment: Fragment) : WebChromeClient() {
 			fragment.reqPermissions(*permissions) {
 				PictureSelector.create(fragment)
 					.openGallery(chooseMode)
-					.setMaxSelectNum(if (isMultipleChoose) 9 else 1)
+					.setMaxSelectNum(if (isMultipleChoose) 9999 else 1)
 					.setCompressEngine(MyCompressEngine())
 					.setImageEngine(GlideEngine.createGlideEngine())
 					.forResult(object : OnResultCallbackListener<LocalMedia> {

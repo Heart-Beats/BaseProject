@@ -14,7 +14,7 @@ abstract class ISdkImplProvider {
 	/**
 	 * 浏览器标识， 可用来区分是否在 APP 中打开
 	 */
-	fun provideUserAgent() = ""
+	open fun provideUserAgent() = ""
 
 	/**
 	 * H5 相关基本通用方法实现
