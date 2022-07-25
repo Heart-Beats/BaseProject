@@ -19,7 +19,6 @@ class AndroidBug5497Workaround constructor(activity: FragmentActivity) {
     private val contentContainer = activity.findViewById(android.R.id.content) as ViewGroup
     private val rootView = contentContainer.getChildAt(0)
     private val rootViewLayout = rootView.layoutParams as FrameLayout.LayoutParams
-    private val viewTreeObserver = rootView.viewTreeObserver
     private val listener = ViewTreeObserver.OnGlobalLayoutListener { possiblyResizeChildOfContent() }
 
     private val contentAreaOfWindowBounds = Rect()
@@ -27,12 +26,12 @@ class AndroidBug5497Workaround constructor(activity: FragmentActivity) {
 
     init {
         activity.lifecycle.addObserver(object : DefaultLifecycleObserver {
-            override fun onStart(owner: LifecycleOwner) {
-                viewTreeObserver.addOnGlobalLayoutListener(listener)
+            override fun onCreate(owner: LifecycleOwner) {
+                rootView.viewTreeObserver.addOnGlobalLayoutListener(listener)
             }
 
-            override fun onStop(owner: LifecycleOwner) {
-                viewTreeObserver.removeOnGlobalLayoutListener(listener)
+            override fun onDestroy(owner: LifecycleOwner) {
+                rootView.viewTreeObserver.removeOnGlobalLayoutListener(listener)
             }
         })
     }

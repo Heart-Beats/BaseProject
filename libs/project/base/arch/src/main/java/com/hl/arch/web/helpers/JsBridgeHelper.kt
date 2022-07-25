@@ -28,6 +28,8 @@ object JsBridgeHelper {
 		this.iSdkImplProvider = iSdkImplProvider
 	}
 
+	internal fun getUserAgent() = iSdkImplProvider?.provideUserAgent()
+
 	/**
 	 * 注册 H5 相关的调用方法
 	 */
