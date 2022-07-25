@@ -16,7 +16,6 @@ import android.webkit.WebView
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
-import com.blankj.utilcode.util.AppUtils
 import com.elvishew.xlog.XLog
 import com.gyf.immersionbar.ktx.hideStatusBar
 import com.gyf.immersionbar.ktx.immersionBar
@@ -92,6 +91,8 @@ open class WebViewFragment : ViewBindingMvvmBaseFragment<FragmentWebViewBinding>
 				initStatusBar()
 			}
 		}
+
+		// AndroidBug5497WorkaroundJava.assistActivity(requireActivity())
 
 		initWebView(args)
 
@@ -188,7 +189,10 @@ open class WebViewFragment : ViewBindingMvvmBaseFragment<FragmentWebViewBinding>
 	 */
 	open fun WebSettings.initWebSetting() {
 		this.javaScriptEnabled = true
-		this.userAgentString = "${this.userAgentString}-${AppUtils.getAppName()}"
+
+		val userAgent = JsBridgeHelper.getUserAgent()
+		val appUserAgent = if (userAgent.isNullOrBlank()) "" else "-${userAgent}"
+		this.userAgentString = "${this.userAgentString}${appUserAgent}"
 		this.domStorageEnabled = true
 		this.defaultTextEncodingName = "utf-8"
 		this.databaseEnabled = true

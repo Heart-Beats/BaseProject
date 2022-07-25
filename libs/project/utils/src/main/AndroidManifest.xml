@@ -15,8 +15,7 @@
     <!-- zxing-android-embedded 使用了 TextureView，因此需要硬件加速 -->
     <application
         android:hardwareAccelerated="true"
-        android:requestLegacyExternalStorage="true"
-        android:theme="@style/UiKit.AppTheme">
+        android:requestLegacyExternalStorage="true">
 
         <!-- zxing_lite 的默认扫码页面需要主动声明 -->
         <activity
