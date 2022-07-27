@@ -10,6 +10,16 @@ object FileUtil {
 
 	fun copyFile(srcPath: String, desPath: String): File? {
 		val outputFile = File(desPath)
+
+		// 文件不存在时创建文件
+		if (!outputFile.exists()) {
+			val parentFile = outputFile.parentFile
+			if (!parentFile.exists()) {
+				parentFile.mkdirs()
+			}
+			outputFile.createNewFile()
+		}
+
 		val bos = BufferedOutputStream(FileOutputStream(File(desPath)))
 
 		return if (copyFile(srcPath, bos)) outputFile else null
