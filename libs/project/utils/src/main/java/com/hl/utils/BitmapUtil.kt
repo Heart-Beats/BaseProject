@@ -48,7 +48,7 @@ object BitmapUtil {
         context: Context,
         bitmap: Bitmap,
         saveName: String,
-        failAction: () -> Unit = {},
+        failAction: (errorMsg: String) -> Unit = {},
         successAction: () -> Unit = {}
     ) {
         val saveFile = File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)?.absolutePath, saveName)
@@ -57,10 +57,18 @@ object BitmapUtil {
         }
 
         if (isSave) {
-            ScanFileActionUtil.scanMedia(context, saveFile.absolutePath)
-            successAction()
+            ScanFileActionUtil.scanMedia(context, saveFile.absolutePath,
+                scanResultCallBack = object : ScanResultCallBack {
+                    override fun onScanSuccess(scanFile: File) {
+                        successAction()
+                    }
+
+                    override fun onScanFail(errorMsg: String) {
+                        failAction(errorMsg)
+                    }
+                })
         } else {
-            failAction()
+            failAction("保存图片失败")
         }
     }
 }

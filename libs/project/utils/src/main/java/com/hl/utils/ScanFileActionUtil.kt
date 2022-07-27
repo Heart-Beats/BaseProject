@@ -1,14 +1,18 @@
 package com.hl.utils
 
+import android.Manifest
+import android.content.ContentResolver
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
+import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
-import androidx.collection.arraySetOf
+import androidx.fragment.app.FragmentActivity
 import com.blankj.utilcode.util.UriUtils
+import com.hl.uikit.reqPermissions
 import com.hl.utils.mimetype.MimeType
 import java.io.File
 import java.io.OutputStream
@@ -19,9 +23,27 @@ import java.util.*
  * @author  张磊  on  2022/04/09 at 17:32
  * Email: 913305160@qq.com
  */
+interface ScanResultCallBack {
+    /**
+     * 扫描插入图库成功
+     *
+     * @param scanFile 插入到图库的文件
+     */
+    fun onScanSuccess(scanFile: File)
+
+    /**
+     * 扫描插入图库失败
+     *
+     * @param  errorMsg 失败原因
+     */
+    fun onScanFail(errorMsg: String)
+}
+
 object ScanFileActionUtil {
 
     private const val TAG = "ScanFileActionUtil"
+
+    private var scanResultCallBack: ScanResultCallBack? = null
 
     /**
      * 扫描媒体文件到相册
@@ -42,9 +64,15 @@ object ScanFileActionUtil {
         createTime: Long = System.currentTimeMillis(),
         width: Int = 0,
         height: Int = 0,
-        duration: Long = 0
+        duration: Long = 0,
+        scanResultCallBack: ScanResultCallBack? = null
     ) {
-        if (!checkFile(mediaFilePath)) return
+        this.scanResultCallBack = scanResultCallBack
+
+        if (!checkFile(mediaFilePath)) {
+            scanResultCallBack?.onScanFail("$mediaFilePath 不存在")
+            return
+        }
 
         if (isSystemDcim(mediaFilePath)) {
             notifyScanDcimByPath(context, mediaFilePath)
@@ -66,7 +94,10 @@ object ScanFileActionUtil {
      * @param filePath 文件路径
      */
     private fun notifyScanDcimByPath(context: Context, filePath: String) {
-        if (!checkFile(filePath)) return
+        if (!checkFile(filePath)) {
+            scanResultCallBack?.onScanFail("$filePath 不存在")
+            return
+        }
         notifyScanDcimByUri(context, UriUtils.file2Uri(File(filePath)))
     }
 
@@ -79,6 +110,7 @@ object ScanFileActionUtil {
             this.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
         }
         context.sendBroadcast(intent)
+        scanResultCallBack?.onScanSuccess(UriUtils.uri2File(fileUri))
     }
 
 
@@ -119,7 +151,7 @@ object ScanFileActionUtil {
         height: Int = 0,
         duration: Long = 0
     ) {
-        val mediaUri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             val values = initCommonContentValues(File(mediaFilePath), createTime)
             val mimeTypeName = values.getAsString(MediaStore.MediaColumns.MIME_TYPE)
 
@@ -141,26 +173,78 @@ object ScanFileActionUtil {
             val uri = contentResolver.insert(externalContentUri, values)
 
             if (uri == null) {
-                Log.e(TAG, "插入${mediaFilePath}到图库失败.")
-                return
-            }
+                Log.e(TAG, "插入${mediaFilePath}到图库失败, 开始复制文件到公共目录再插入...")
 
-            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.Q) {
-                // 拷贝到指定 uri, 如果没有这步操作，android11不会在相册显示
-                try {
-                    val out: OutputStream = contentResolver.openOutputStream(uri) ?: return
-                    FileUtil.copyFile(mediaFilePath, out)
-                } catch (e: Exception) {
-                    Log.e(TAG, "拷贝${mediaFilePath}到图库失败.")
+                // 部分机型保存图片至私有目录会失败， 因此这里将相应文件复制到公共目录再去扫描
+                copyMediaFile2PublicDirectoryScan(context, mimeTypeName, mediaFilePath, contentResolver)
+            } else {
+                notifyOverstepQ(context, contentResolver, uri, mediaFilePath)
+            }
+        } else {
+            val mediaUri = UriUtils.file2Uri(File(mediaFilePath))
+            notifyScanDcimByUri(context, mediaUri)
+        }
+    }
+
+    private fun copyMediaFile2PublicDirectoryScan(
+        context: Context,
+        mimeTypeName: String,
+        mediaFilePath: String,
+        contentResolver: ContentResolver
+    ) {
+        if (context is FragmentActivity) {
+            context.reqPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE, deniedAction = {
+                scanResultCallBack?.onScanFail("拒绝权限，插入到图库失败")
+            }) {
+
+                val (srcFile, copyOutputFile, copyFile) = copyMediaFile2PublicDirectory(mimeTypeName, mediaFilePath)
+
+                if (copyFile == null) {
+                    scanResultCallBack?.onScanFail("拷贝${srcFile.absolutePath} 到 ${copyOutputFile.absolutePath} 失败")
+                } else {
+                    val mediaUri = UriUtils.file2Uri(File(mediaFilePath))
+                    notifyOverstepQ(context, contentResolver, mediaUri, copyFile.absolutePath)
                 }
             }
-
-            uri
         } else {
-            UriUtils.file2Uri(File(mediaFilePath))
+            scanResultCallBack?.onScanFail("context 非 FragmentActivity 类型")
+        }
+    }
+
+    private fun copyMediaFile2PublicDirectory(
+        mimeTypeName: String,
+        mediaFilePath: String
+    ): Triple<File, File, File?> {
+        val publicDirectory = when {
+            mimeTypeName.matches(Regex("image/.*")) -> Environment.DIRECTORY_PICTURES
+            mimeTypeName.matches(Regex("video/.*")) -> Environment.DIRECTORY_MOVIES
+            else -> Environment.DIRECTORY_DOWNLOADS
         }
 
-        notifyScanDcimByUri(context, mediaUri)
+        val srcFile = File(mediaFilePath)
+        val externalStoragePublicDirectory = Environment.getExternalStoragePublicDirectory(publicDirectory)
+        val copyOutputFile = File(externalStoragePublicDirectory, srcFile.name)
+        val copyFile = FileUtil.copyFile(mediaFilePath, copyOutputFile.absolutePath)
+        return Triple(srcFile, copyOutputFile, copyFile)
+    }
+
+    private fun notifyOverstepQ(
+        context: Context,
+        contentResolver: ContentResolver,
+        uri: Uri,
+        mediaFilePath: String
+    ) {
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.Q) {
+            // 拷贝到指定 uri, 如果没有这步操作，android11不会在相册显示
+            try {
+                val out: OutputStream = contentResolver.openOutputStream(uri) ?: return
+                FileUtil.copyFile(mediaFilePath, out)
+            } catch (e: Exception) {
+                Log.e(TAG, "拷贝${mediaFilePath}到图库失败.")
+            }
+        }
+
+        notifyScanDcimByUri(context, uri)
     }
 
     /**
@@ -233,5 +317,4 @@ object ScanFileActionUtil {
             System.currentTimeMillis()
         } else time
     }
-
 }
