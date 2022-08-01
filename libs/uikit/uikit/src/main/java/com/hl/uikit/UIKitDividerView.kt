@@ -103,11 +103,28 @@ class UIKitDividerView : View {
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
+        // 绘制的左边缘
+        val drawStart = paddingStart.toFloat()
+        // 绘制的右边缘
+        val drawEnd = width.toFloat() - paddingEnd.toFloat()
+        // 绘制的上边缘
+        val drawTop = paddingTop.toFloat()
+        // 绘制的下边缘
+        val drawBottom = height - paddingBottom.toFloat()
+
+        // 绘制的总宽度
+        val drawWidth = drawEnd - drawStart
+        // 绘制的总高度
+        val drawHeight = drawBottom - drawTop
+
+
         val drawLineCenter = dividerThickness / 2
         if (dividerOrientation == ORIENTATION_HORIZONTAL) {
-            canvas.drawLine(0F, drawLineCenter, width.toFloat(), drawLineCenter, paint)
+            val drawCenterY = drawTop + drawLineCenter
+            canvas.drawLine(drawStart, drawCenterY, drawStart + drawWidth, drawCenterY, paint)
         } else {
-            canvas.drawLine(drawLineCenter, 0F, drawLineCenter, height.toFloat(), paint)
+            val drawCenterX = drawStart + drawLineCenter
+            canvas.drawLine(drawCenterX, drawTop, drawCenterX, drawTop + drawHeight, paint)
         }
     }
 
