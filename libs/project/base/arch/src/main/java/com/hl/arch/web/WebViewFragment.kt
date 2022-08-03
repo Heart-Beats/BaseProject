@@ -82,7 +82,8 @@ open class WebViewFragment : ViewBindingMvvmBaseFragment<FragmentWebViewBinding>
 	private val activityResultHelper = ActivityResultHelper(this)
 
 	override fun FragmentWebViewBinding.onViewCreated(savedInstanceState: Bundle?) {
-		val args = WebViewFragmentArgs.fromBundle(requireArguments())
+		val arguments = buildArgs()?.build()?.toBundle() ?: requireArguments()
+		val args = WebViewFragmentArgs.fromBundle(arguments)
 
 		args.isNeedTitle.run {
 			if (this) {
@@ -176,6 +177,11 @@ open class WebViewFragment : ViewBindingMvvmBaseFragment<FragmentWebViewBinding>
 
 	override fun onFlowVMCreated(flowVM: FlowVM) {
 	}
+
+	/**
+	 * 重写此方法可构建初始化参数，设置载入的 url、标题、以及是否需要标题
+	 */
+	protected open fun buildArgs(): WebViewFragmentArgs.Builder? = null
 
 	/**
 	 * 重写此方法可实现加载页面时是否需要进度显示, 默认不需要
@@ -303,6 +309,14 @@ open class WebViewFragment : ViewBindingMvvmBaseFragment<FragmentWebViewBinding>
 		} else {
 			super.onBackPressed()
 		}
+
+
+	/**
+	 * 重新载入页面
+	 */
+	fun reload() {
+		webView.reload()
+	}
 
 	/**
 	 * 载入显示 url 对应的网页
