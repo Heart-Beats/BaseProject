@@ -566,12 +566,15 @@ class UIKitToolbar : Toolbar {
             textView.ellipsize = titleEllipsize
             if (titleEllipsize == TextUtils.TruncateAt.MARQUEE) {
                 textView.isFocusable = true
-                textView.isFocusableInTouchMode = true
                 // 重复循环
                 textView.marqueeRepeatLimit = -1
-                textView?.post {
-                    textView.requestFocus()
-                }
+                // 必须设置这个才有跑马灯效果
+                textView.isSelected = true
+
+                // textView.isFocusableInTouchMode = true
+                // textView?.post {
+                //     textView.requestFocus()
+                // }
             }
         }
 

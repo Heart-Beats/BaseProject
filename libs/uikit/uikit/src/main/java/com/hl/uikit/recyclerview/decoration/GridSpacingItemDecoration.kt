@@ -2,6 +2,7 @@ package com.hl.uikit.recyclerview.decoration
 
 import android.graphics.Rect
 import android.view.View
+import androidx.annotation.Px
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
@@ -9,10 +10,10 @@ import androidx.recyclerview.widget.RecyclerView
  * @author  张磊  on  2022/03/14 at 10:08
  * Email: 913305160@qq.com
  *
- * @param  spacing: 间隔
- * @param  includeEdge: 是否包含边缘
+ * @param  spacing: 网格之间的间隔距离
+ * @param  includeEdge: 边缘是否包含该间距
  */
-class GridSpacingItemDecoration(val spacing: Int, val includeEdge: Boolean) : RecyclerView.ItemDecoration() {
+class GridSpacingItemDecoration(@Px val spacing: Int, val includeEdge: Boolean = false) : RecyclerView.ItemDecoration() {
 
     override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
 

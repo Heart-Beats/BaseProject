@@ -21,6 +21,19 @@ abstract class BaseAbstractAdapter<T>(private var data: MutableList<T>) :
     open var onViewHolderInitListener: (viewHolder: ViewHolder, position: Int, itemData: T?) -> Unit = { _, _, _ -> }
     open var onBindItemListener: (viewHolder: ViewHolder, itemData: T?) -> Unit = { _, _ -> }
 
+    /**
+     * 创建 viewHolder 时的回调， 与 onViewHolderInitListener 任选其一即可
+     */
+    protected open fun onItemInit(viewHolder: ViewHolder, position: Int, itemData: T?) {
+    }
+
+
+    /**
+     * 绑定 viewHolder 时的回调， 与 onBindItemListener 任选其一即可
+     */
+    protected open fun onItemBind(viewHolder: ViewHolder, itemData: T?) {
+    }
+
     inner class ViewHolder(itemView: View, private val viewType: Int) : RecyclerView.ViewHolder(itemView) {
 
         /**
@@ -31,6 +44,7 @@ abstract class BaseAbstractAdapter<T>(private var data: MutableList<T>) :
             set(value) {
                 //重新设置 ViewHolder对应的数据时，同时更新监听方法的参数
                 onViewHolderInitListener(this, viewType, value)
+                onItemInit(this, viewType, value)
                 field = value
             }
 
@@ -64,6 +78,7 @@ abstract class BaseAbstractAdapter<T>(private var data: MutableList<T>) :
             holder.initData = data
         }
         onBindItemListener(holder, data)
+        onItemBind(holder, data)
     }
 
     /**
