@@ -11,6 +11,17 @@ import com.github.lzyzsd.jsbridge.BridgeWebView
 class ProgressWebView : BridgeWebView {
 
     private var isDisplay: Boolean = true
+        set(value) {
+            field = value
+            if (value) {
+                if (progressBar?.parent == null) {
+                    addView(progressBar)
+                }
+            } else {
+                removeView(progressBar)
+            }
+        }
+
     private var progressBar: ProgressBar? = null
 
     constructor(context: Context) : super(context) {
@@ -29,7 +40,8 @@ class ProgressWebView : BridgeWebView {
         progressBar = ProgressBar(context, null, android.R.attr.progressBarStyleHorizontal)
         progressBar?.layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, 6, 0, 0)
         progressBar?.progressDrawable = ContextCompat.getDrawable(context, R.drawable.uikit_progress_webview_top)
-        addView(progressBar)
+
+        setProgressDisplay(isDisplay)
         webChromeClient = WebChromeClient()
     }
 

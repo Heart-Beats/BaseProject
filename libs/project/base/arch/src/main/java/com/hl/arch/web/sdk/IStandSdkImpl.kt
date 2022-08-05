@@ -21,6 +21,7 @@ import com.github.lzyzsd.jsbridge.BridgeWebView
 import com.github.lzyzsd.jsbridge.CallBackFunction
 import com.google.gson.Gson
 import com.gyf.immersionbar.ktx.immersionBar
+import com.hjq.http.listener.OnDownloadListener
 import com.hl.arch.mvvm.activity.FragmentContainerActivity
 import com.hl.arch.mvvm.activity.startFragment
 import com.hl.arch.web.H5Constants
@@ -34,10 +35,12 @@ import com.hl.arch.web.helpers.onSuccess
 import com.hl.arch.web.receiver.CallBackFunctionDataStore
 import com.hl.arch.web.receiver.CallBackFunctionHandlerReceiver
 import com.hl.uikit.getStatusBarHeight
+import com.hl.uikit.toast
 import com.hl.umeng.sdk.MyUMShareListener
 import com.hl.umeng.sdk.UMShareUtil
 import com.hl.utils.*
 import com.hl.utils.activityResult.OnActivityResult
+import com.hl.utils.previewFie.PreviewFileActivity
 import com.king.zxing.CameraScan
 import com.king.zxing.CaptureActivity
 import com.lxj.xpopup.XPopup
@@ -46,6 +49,7 @@ import com.umeng.socialize.bean.SHARE_MEDIA
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.io.File
 
 /**
  * @author  张磊  on  2022/06/13 at 15:14
@@ -431,9 +435,46 @@ class IStandSdkImpl(
 		}
 	}
 
-	override fun downLoadFile(handlerName: String) {
+	override fun downloadFile(handlerName: String) {
 		commonRegisterHandler(handlerName) { data, function ->
+			val downLoadFileParam = GsonUtil.fromJson<DownLoadFileParam>(data)
+			DownloadFileUtil.startDownLoad(
+				currentFragment,
+				downLoadFileParam.fileUrl,
+				false,
+				object : OnDownloadListener {
+					override fun onStart(file: File?) {}
 
+					override fun onProgress(file: File?, progress: Int) {}
+
+					override fun onComplete(file: File?) {
+						function.onSuccess(file?.absolutePath)
+					}
+
+					override fun onError(file: File?, e: Exception?) {
+						function.onFail(e?.message)
+					}
+
+					override fun onEnd(file: File?) {
+					}
+				})
+		}
+	}
+
+	override fun previewFile(handlerName: String) {
+		commonRegisterHandler(handlerName) { data, function ->
+			val previewFileParam = GsonUtil.fromJson<PreviewFileParam>(data)
+			val filename = previewFileParam.filename
+			val fileUrl = previewFileParam.fileUrl
+			if (filename == null || fileUrl == null) {
+				currentFragment.toast("预览文件名或文件链接地址不可为空！")
+
+				function.onFail()
+			} else {
+				PreviewFileActivity.start(currentFragment.requireContext(), filename, fileUrl)
+
+				function.onSuccess()
+			}
 		}
 	}
 
