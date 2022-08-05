@@ -91,7 +91,12 @@ interface IStandSdk : ISdk {
 	/**
 	 *  保存/下载文件
 	 */
-	fun downLoadFile(handlerName: String = Thread.currentThread().stackTrace[1].methodName)
+	fun downloadFile(handlerName: String = Thread.currentThread().stackTrace[1].methodName)
+
+	/**
+	 *  文件预览
+	 */
+	fun previewFile(handlerName: String = Thread.currentThread().stackTrace[1].methodName)
 
 	/**
 	 *  扫描二维码

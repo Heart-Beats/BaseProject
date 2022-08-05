@@ -6,28 +6,28 @@ import androidx.fragment.app.Fragment
 
 fun Fragment.toast(resId: Int, duration: Int = Toast.LENGTH_SHORT) {
     if (!ToastUtils.isInitialized) {
-        ToastUtils.init(requireContext().applicationContext)
+        requireContext().toastInit()
     }
     ToastUtils.show(textRes = resId, duration = duration)
 }
 
 fun Fragment.toast(text: CharSequence, duration: Int = Toast.LENGTH_SHORT) {
     if (!ToastUtils.isInitialized) {
-        ToastUtils.init(requireContext().applicationContext)
+        requireContext().toastInit()
     }
     ToastUtils.show(text, duration)
 }
 
 fun Context.toast(resId: Int, duration: Int = Toast.LENGTH_SHORT) {
     if (!ToastUtils.isInitialized) {
-        ToastUtils.init(applicationContext)
+        toastInit()
     }
     ToastUtils.show(textRes = resId, duration = duration)
 }
 
 fun Context.toast(text: CharSequence, duration: Int = Toast.LENGTH_SHORT) {
     if (!ToastUtils.isInitialized) {
-        ToastUtils.init(applicationContext)
+        toastInit()
     }
     ToastUtils.show(text, duration)
 }
@@ -38,7 +38,7 @@ fun Fragment.toastFailure(textRes: Int, duration: Int = Toast.LENGTH_SHORT) {
 
 fun Context.toastFailure(textRes: Int, duration: Int = Toast.LENGTH_SHORT) {
     if (!ToastUtils.isInitialized) {
-        ToastUtils.init(applicationContext)
+        toastInit()
     }
     ToastUtils.show(
         iconRes = R.drawable.uikit_ic_toast_fail,
@@ -53,7 +53,7 @@ fun Fragment.toastFailure(text: CharSequence, duration: Int = Toast.LENGTH_SHORT
 
 fun Context.toastFailure(text: CharSequence, duration: Int = Toast.LENGTH_SHORT) {
     if (!ToastUtils.isInitialized) {
-        ToastUtils.init(applicationContext)
+        toastInit()
     }
     ToastUtils.show(iconRes = R.drawable.uikit_ic_toast_fail, text = text, duration = duration)
 }
@@ -64,7 +64,7 @@ fun Fragment.toastSuccess(textRes: Int, duration: Int = Toast.LENGTH_SHORT) {
 
 fun Context.toastSuccess(textRes: Int, duration: Int = Toast.LENGTH_SHORT) {
     if (!ToastUtils.isInitialized) {
-        ToastUtils.init(applicationContext)
+        toastInit()
     }
     ToastUtils.show(
         iconRes = R.drawable.uikit_ic_toast_success,

@@ -53,5 +53,14 @@
         </provider>
         <!--  x5 中需要使用到的  FileProvider  -->
 
+        <provider
+            android:name=".UtilsFileProvider"
+            android:authorities="${applicationId}.hlutil.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true" >
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/public_file_paths" />
+        </provider>
     </application>
 </manifest>

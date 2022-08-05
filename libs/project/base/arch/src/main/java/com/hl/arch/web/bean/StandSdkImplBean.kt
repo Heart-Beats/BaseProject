@@ -152,6 +152,30 @@ data class H5CallParam(
 	var phone: String? = null
 )
 
+data class DownLoadFileParam(
+	/**
+	 * 文件地址
+	 */
+	var fileUrl: String = "",
+
+	/**
+	 *  文件名称, 需携带后缀
+	 */
+	var fileName: String? = null
+)
+
+data class PreviewFileParam(
+	/**
+	 * 文件地址
+	 */
+	var fileUrl: String? = null,
+
+	/**
+	 *  文件名称, 需携带后缀
+	 */
+	var filename: String? = null
+)
+
 data class ScanQRCodeReturn(
 	/**
 	 * 扫码识别成功时的对应二维码内容
