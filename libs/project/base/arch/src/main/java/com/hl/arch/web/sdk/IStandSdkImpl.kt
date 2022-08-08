@@ -35,7 +35,6 @@ import com.hl.arch.web.helpers.onSuccess
 import com.hl.arch.web.receiver.CallBackFunctionDataStore
 import com.hl.arch.web.receiver.CallBackFunctionHandlerReceiver
 import com.hl.uikit.getStatusBarHeight
-import com.hl.uikit.toast
 import com.hl.umeng.sdk.MyUMShareListener
 import com.hl.umeng.sdk.UMShareUtil
 import com.hl.utils.*
@@ -438,16 +437,22 @@ class IStandSdkImpl(
 	override fun downloadFile(handlerName: String) {
 		commonRegisterHandler(handlerName) { data, function ->
 			val downLoadFileParam = GsonUtil.fromJson<DownLoadFileParam>(data)
+			if (!downLoadFileParam.fileUrl.startsWith("http")) {
+				function.onFail("文件下载地址有误！")
+				return@commonRegisterHandler
+			}
+
 			DownloadFileUtil.startDownLoad(
 				currentFragment,
 				downLoadFileParam.fileUrl,
-				false,
-				object : OnDownloadListener {
+				downLoadFileParam.fileName,
+				listener = object : OnDownloadListener {
 					override fun onStart(file: File?) {}
 
 					override fun onProgress(file: File?, progress: Int) {}
 
 					override fun onComplete(file: File?) {
+						ScanFileActionUtil.scanMedia(currentFragment.requireContext(), file?.absolutePath ?: "")
 						function.onSuccess(file?.absolutePath)
 					}
 
@@ -464,12 +469,10 @@ class IStandSdkImpl(
 	override fun previewFile(handlerName: String) {
 		commonRegisterHandler(handlerName) { data, function ->
 			val previewFileParam = GsonUtil.fromJson<PreviewFileParam>(data)
-			val filename = previewFileParam.filename
+			val filename = previewFileParam.fileName
 			val fileUrl = previewFileParam.fileUrl
 			if (filename == null || fileUrl == null) {
-				currentFragment.toast("预览文件名或文件链接地址不可为空！")
-
-				function.onFail()
+				function.onFail("预览文件名或文件链接地址不可为空！")
 			} else {
 				PreviewFileActivity.start(currentFragment.requireContext(), filename, fileUrl)
 

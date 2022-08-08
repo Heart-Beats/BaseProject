@@ -173,7 +173,7 @@ data class PreviewFileParam(
 	/**
 	 *  文件名称, 需携带后缀
 	 */
-	var filename: String? = null
+	var fileName: String? = null
 )
 
 data class ScanQRCodeReturn(

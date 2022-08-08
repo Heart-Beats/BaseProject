@@ -35,10 +35,11 @@ object DownloadFileUtil {
 	fun startDownLoad(
 		lifecycleOwner: LifecycleOwner,
 		fileUrl: String,
-		isSave2AppDir: Boolean,
+		fileName: String? = null,
+		isSave2AppDir: Boolean = true,
 		listener: OnDownloadListener
 	) {
-		val cacheFile = getCacheFile(isSave2AppDir, fileUrl)
+		val cacheFile = getCacheFile(isSave2AppDir, fileUrl, fileName)
 
 		if (!isSave2AppDir) {
 			reqPermissions2Download(lifecycleOwner, fileUrl, cacheFile, listener)
@@ -143,11 +144,11 @@ object DownloadFileUtil {
 			.start()
 	}
 
-	private fun getCacheFile(isSave2AppDir: Boolean, fileUrl: String): File {
+	private fun getCacheFile(isSave2AppDir: Boolean, fileUrl: String, fileName: String?): File {
 		val downloads = Environment.DIRECTORY_DOWNLOADS
 		val saveDir = if (isSave2AppDir) BaseUtil.app.getExternalFilesDir(downloads)
 		else Environment.getExternalStoragePublicDirectory(downloads)
-		val fileName = fileUrl.substringAfterLast("/")
+		val fileName = fileName ?: fileUrl.substringAfterLast("/")
 		return File(saveDir, fileName)
 	}
 
