@@ -32,6 +32,7 @@
         <item name="uikit_rightTextSize">@dimen/uikit_font_size_8</item>
         <item name="uikit_rightTextColor">@color/uikit_color_1</item>
         <item name="uikit_rightPaddingEnd">15dp</item>
+        <item name="uikit_rightSpacing">5dp</item>
         <item name="navigationIcon">@drawable/uikit_icon_arrow_left</item>
     </style>
 
