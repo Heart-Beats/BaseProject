@@ -57,7 +57,17 @@ class MainFragment : ViewBindingMvvmBaseFragment<FragmentMainBinding>() {
 	}
 
 	override fun FragmentMainBinding.onViewCreated(savedInstanceState: Bundle?) {
-		uikitToolbar.title = "主页面主页面主页面主页面主页面主页面主页面主页面主页面主页面主页面(1237)"
+		uikitToolbar.title = "主页面主页面主页面主页面123"
+		uikitToolbar.setRightActionListener {
+			toast("点击了布局文件中的操作按钮")
+		}
+
+		uikitToolbar.addRightActionText("测试") {
+			toast("点击测试")
+		}
+		uikitToolbar.addRightActionIcon(com.hl.uikit.R.drawable.uikit_ic_select_up) {
+			toast("点击了后续添加的图标")
+		}
 
 		testScanQrcode.onClick {
 

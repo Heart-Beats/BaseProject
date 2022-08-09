@@ -13,14 +13,15 @@ import android.util.TypedValue
 import android.view.Gravity
 import android.view.MenuItem
 import android.view.View
-import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.annotation.GravityInt
-import androidx.appcompat.widget.*
+import androidx.appcompat.widget.AppCompatTextView
+import androidx.appcompat.widget.SearchView
+import androidx.appcompat.widget.TintTypedArray
+import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
-import androidx.core.view.updatePaddingRelative
 import com.hl.uikit.search.UIKitSearchBar
 import kotlinx.android.synthetic.main.uikit_toolbar_search.view.*
 import kotlin.reflect.KProperty1
@@ -37,6 +38,16 @@ class UIKitToolbar : Toolbar {
     private var centerTitleLayout: LinearLayout? = null
 
     /**
+     * 右边操作的父级 Layout
+     */
+    private var rightActionLayout: LinearLayout? = null
+
+    /**
+     * 右边当前的操作 View 集合
+     */
+    private var rightActionTextViewMap = hashMapOf<String, TextView>()
+
+    /**
      * 右边的 Text 和 Icon 之间的距离
      */
     private var mRightSpacing: Int = 0
@@ -51,8 +62,6 @@ class UIKitToolbar : Toolbar {
     private var mBackgroundColor: Int? = null
     private var mRightActionTextColor: ColorStateList? = null
     private var mRightActionImageColor: ColorStateList? = null
-    private var rightActionIcon: ImageButton? = null
-    private var rightActionTextView: TextView? = null
 
     private var mTitleGravity: Int = Gravity.START
 
@@ -221,8 +230,9 @@ class UIKitToolbar : Toolbar {
         mRightActionImageColor =
             barTypedArray.getColorStateList(R.styleable.UIKitToolbar_uikit_rightImageColor)
         mRightActionIconRes = barTypedArray.getDrawable(R.styleable.UIKitToolbar_uikit_rightImage)
-        setRightActionIcon(icon = mRightActionIconRes)
-        setRightActionText(mRightText)
+        // setRightActionIcon(icon = mRightActionIconRes)
+        // setRightActionText(mRightText)
+        setRightAction(MenuAction(menuIcon = mRightActionIconRes, menuText = mRightText))
 
         //  从主题中获取 TextAppearance 相关属性设置
         val ta = TintTypedArray.obtainStyledAttributes(context, attrs, R.styleable.Toolbar, defStyleAttr, 0)
@@ -354,6 +364,18 @@ class UIKitToolbar : Toolbar {
         }
     }
 
+    /**
+     * 设置右边操作按钮的点击时间
+     *
+     * 注意： 该操作会将通过 addRightAction 添加的操作按钮都移除， 将布局文件中设置的操作按钮重新添加
+     */
+    fun setRightActionListener(listener: (view: View) -> Unit) {
+        setRightAction(MenuAction(mRightActionIconRes, mRightText, listener))
+    }
+
+    /**
+     * 设置图标形式的操作按钮
+     */
     fun setRightActionIcon(resId: Int, listener: (view: View) -> Unit = {}) {
         val drawable = if (resId != 0) {
             ContextCompat.getDrawable(context, resId)
@@ -363,116 +385,202 @@ class UIKitToolbar : Toolbar {
         setRightActionIcon(drawable, listener)
     }
 
+    /**
+     * 设置图标形式的操作按钮
+     */
     fun setRightActionIcon(icon: Drawable?, listener: (view: View) -> Unit = {}) {
-        if (icon != null) {
-            if (rightActionIcon == null) {
-                val lp = generateDefaultLayoutParams()
-                lp.gravity = GravityCompat.END or Gravity.CENTER_VERTICAL
-                rightActionIcon = AppCompatImageButton(context, null, 0)
-                rightActionIcon?.updatePaddingRelative(end = mRightPaddingEnd)
-                val color = mRightActionImageColor
-                color?.let { imageColor ->
-                    rightActionIcon?.setImageTintList(imageColor)
-                }
-                rightActionIcon?.layoutParams = lp
-                addView(rightActionIcon)
-            } else if (rightActionIcon?.parent == null) {
-                addView(rightActionIcon)
-            }
-            rightActionIcon?.setImageDrawable(icon)
-            rightActionIcon?.onClick(listener)
-        } else if (rightActionIcon != null) {
-            removeView(rightActionIcon)
-        }
-        updatePaddingEnd()
+        setRightAction(MenuAction(icon, null, listener))
     }
 
-    override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
-        super.onLayout(changed, l, t, r, b)
-
-        // rightActionIcon 和 rightActionTextView 是有可能创建出来后没显示（此时 isShown == false），
-        // 这时更新 PaddingEnd 会无效, 因此布局时更新 PaddingEnd
-        updatePaddingEnd()
+    /**
+     * 添加图标形式的操作按钮
+     */
+    fun addRightActionIcon(resId: Int, listener: (view: View) -> Unit = {}) {
+        val drawable = if (resId != 0) {
+            ContextCompat.getDrawable(context, resId)
+        } else {
+            null
+        }
+        addRightActionIcon(drawable, listener)
     }
 
-    private fun updatePaddingEnd() {
-        when {
-            rightActionIcon?.isShown == true && rightActionTextView?.isShown == true -> {
-                rightActionTextView?.updatePaddingRelative(end = mRightSpacing)
-                rightActionIcon?.updatePaddingRelative(end = mRightPaddingEnd)
-            }
-            rightActionIcon?.isShown == true -> {
-                rightActionIcon?.updatePaddingRelative(end = mRightPaddingEnd)
-            }
-            rightActionTextView?.isShown == true -> {
-                rightActionTextView?.updatePaddingRelative(end = mRightPaddingEnd)
-            }
-        }
+    /**
+     * 添加图标形式的操作按钮
+     */
+    fun addRightActionIcon(icon: Drawable?, listener: (view: View) -> Unit = {}) {
+        addRightAction(MenuAction(icon, null, listener))
+    }
 
-        // 加入 isInEditMode 用来控制编辑模式时实时更新 mRightPaddingEnd
-        if (isInEditMode) {
-            when {
-                rightActionIcon != null && rightActionTextView != null -> {
-                    rightActionTextView?.updatePaddingRelative(end = mRightSpacing)
-                    rightActionIcon?.updatePaddingRelative(end = mRightPaddingEnd)
-                }
-                rightActionIcon != null -> {
-                    rightActionIcon?.updatePaddingRelative(end = mRightPaddingEnd)
-                }
-                rightActionTextView != null -> {
-                    rightActionTextView?.updatePaddingRelative(end = mRightPaddingEnd)
-                }
+
+    /**
+     * 确保右边操作按钮的父布局存在
+     */
+    private fun ensureInitRightActionLayout() {
+        if (rightActionLayout == null) {
+            val lp = generateDefaultLayoutParams().apply {
+                this.gravity = Gravity.END
+                this.marginEnd = mRightPaddingEnd
             }
+            rightActionLayout = LinearLayout(context).apply {
+                this.orientation = LinearLayout.HORIZONTAL
+                this.gravity = Gravity.CENTER_VERTICAL
+            }
+            addView(rightActionLayout, lp)
+        } else if (rightActionLayout?.parent == null) {
+            addView(rightActionLayout)
         }
     }
 
-    fun setRightActionListener(listener: (view: View) -> Unit) {
-        rightActionTextView?.onClick(listener)
-        rightActionIcon?.onClick(listener)
-    }
 
-    fun setRightActionText(text: CharSequence?, listener: ((view: View) -> Unit)? = null) {
-        if (!text.isNullOrEmpty()) {
+    /**
+     * 添加右边的操作按钮
+     */
+    fun addRightAction(menuAction: MenuAction, space: Int = mRightSpacing) {
+        ensureInitRightActionLayout()
+
+        val menuText = menuAction.menuText
+        val menuIcon = menuAction.menuIcon
+        val menuAction = menuAction.menuAction
+
+        val key = menuText?.toString() ?: menuIcon?.hashCode()?.toString() ?: ""
+
+        var rightActionTextView: TextView? = null
+        if (!menuText.isNullOrEmpty() || menuIcon != null) {
             if (rightActionTextView == null) {
-                val lp = generateDefaultLayoutParams()
-                lp.gravity = GravityCompat.END or Gravity.CENTER_VERTICAL
-                rightActionTextView = getTextViewWithParams(lp, 0)
+                val lp = generateDefaultLayoutParams().apply {
+                    this.gravity = GravityCompat.END or Gravity.CENTER_VERTICAL
+
+                    if (rightActionLayout?.childCount != 0) {
+                        // 已有操作按钮时添加间距
+                        this.marginStart = space
+                    }
+                }
+                rightActionTextView = getTextViewWithParams(lp, 0, menuIcon)
                 mRightTextSize?.toFloat()?.let { textSize ->
                     rightActionTextView?.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize)
                 }
                 mRightActionTextColor?.let { textColor ->
                     rightActionTextView?.setTextColor(textColor)
                 }
-                addView(rightActionTextView)
+                rightActionLayout?.addView(rightActionTextView)
+
+                rightActionTextViewMap[key] = rightActionTextView
             } else if (rightActionTextView?.parent == null) {
-                addView(rightActionTextView)
+                rightActionLayout?.addView(rightActionTextView)
+
+                rightActionTextViewMap[key] = rightActionTextView
             }
-        } else if (rightActionTextView != null) {
-            removeView(rightActionTextView)
+        } else {
+            rightActionLayout?.removeView(rightActionTextView)
+
+            rightActionTextViewMap.remove(key)
         }
-        rightActionTextView?.text = text
-        listener?.run {
+        menuText?.run {
+            rightActionTextView?.text = this
+        }
+        menuIcon?.intrinsicHeight?.run {
+            if (menuText == null) {
+                rightActionTextView?.height = this
+            }
+        }
+
+        menuAction?.run {
             rightActionTextView?.onClick(this)
         }
-        updatePaddingEnd()
     }
 
-    fun setRightActionTextColor(color: Int) {
+    /**
+     * 设置右边的操作按钮（唯一按钮）
+     */
+    fun setRightAction(menuAction: MenuAction) {
+        ensureInitRightActionLayout()
+        rightActionLayout?.removeAllViews()
+        rightActionTextViewMap.clear()
+        addRightAction(menuAction)
+    }
+
+    /**
+     * 添加文字描述的操作按钮
+     */
+    fun addRightActionText(text: CharSequence?, listener: (view: View) -> Unit = {}) {
+        addRightAction(MenuAction(null, text, listener))
+    }
+
+    /**
+     * 设置文字描述的操作按钮
+     */
+    fun setRightActionText(text: CharSequence?, listener: (view: View) -> Unit = {}) {
+        setRightAction(MenuAction(null, text, listener))
+    }
+
+
+    /**
+     * 设置操作按钮的文字颜色
+     *
+     * @param color 颜色
+     * @param changeText   需要更改的按钮的文字, 为 null 时更改所有按钮文字颜色
+     */
+    @JvmOverloads
+    fun setRightActionTextColor(color: Int, changeText: String? = null) {
         mRightActionTextColor = ColorStateList.valueOf(color)
-        rightActionTextView?.setTextColor(color)
+
+        rightActionTextViewMap.forEach { key, rightActionTextView ->
+            changeText?.also {
+                if (key == changeText) {
+                    rightActionTextView?.setTextColor(color)
+                }
+            } ?: rightActionTextView?.setTextColor(color)
+        }
     }
 
-    fun setRightActionTextColor(color: ColorStateList) {
+    /**
+     * 设置操作按钮的文字颜色
+     *
+     * @param color 颜色
+     * @param changeText   需要更改的按钮的文字, 为 null 时更改所有按钮文字颜色
+     */
+    @JvmOverloads
+    fun setRightActionTextColor(color: ColorStateList, changeText: String? = null) {
         mRightActionTextColor = color
-        rightActionTextView?.setTextColor(color)
+
+        rightActionTextViewMap.forEach { key, rightActionTextView ->
+            changeText?.also {
+                if (key == changeText) {
+                    rightActionTextView?.setTextColor(color)
+                }
+            } ?: rightActionTextView?.setTextColor(color)
+        }
     }
 
+
+    /**
+     * 获取最右边的操作按钮
+     */
     fun getRightActionTextView(): TextView? {
-        return rightActionTextView
+        return getAllRightActionTextViews().lastOrNull()
     }
 
+
+    /**
+     * 获取所有操作按钮的集合
+     */
+    fun getAllRightActionTextViews(): List<TextView> {
+        return rightActionTextViewMap.values.toList()
+    }
+
+    /**
+     * 获取最右边操作按钮的文字描述
+     */
     fun getRightActionText(): String {
-        return rightActionTextView?.text?.toString() ?: ""
+        return getAllRightActionTextViews().lastOrNull()?.text?.toString() ?: ""
+    }
+
+    /**
+     * 获取操作按钮的文字描述集合
+     */
+    fun getAllRightActionTexts(): List<String> {
+        val rightActionTextViews = getAllRightActionTextViews()
+        return rightActionTextViews.map { it.text.toString() }
     }
 
     private fun setCenterTitle(title: CharSequence?) {
@@ -508,6 +616,9 @@ class UIKitToolbar : Toolbar {
         tvCenterTitle?.text = title
     }
 
+    /**
+     * 确保居中标题的父布局存在
+     */
     private fun ensureInitCenterTitleLayout() {
         if (centerTitleLayout == null) {
             val lp = generateDefaultLayoutParams().apply {
@@ -584,14 +695,40 @@ class UIKitToolbar : Toolbar {
 
     private fun getTextViewWithParams(
         params: LayoutParams,
-        defStyleAttr: Int = android.R.attr.textViewStyle
+        defStyleAttr: Int = android.R.attr.textViewStyle,
+        menuIcon: Drawable?
     ): TextView {
         val textView = AppCompatTextView(context, null, defStyleAttr)
         textView.setSingleLine()
         textView.ellipsize = TextUtils.TruncateAt.MIDDLE
         textView.layoutParams = params
+
+        if (menuIcon != null) {
+
+            menuIcon?.setBounds(0, 0, menuIcon?.intrinsicWidth, menuIcon?.intrinsicHeight)
+            textView.setCompoundDrawablesRelative(null, menuIcon, null, null)
+            textView.compoundDrawableTintList = mRightActionImageColor
+            // textView.compoundDrawablePadding = 2.dpInt
+        }
         return textView
     }
+
+    data class MenuAction(
+        /**
+         * 图标
+         */
+        val menuIcon: Drawable? = null,
+
+        /**
+         * 文字
+         */
+        val menuText: CharSequence? = null,
+
+        /**
+         * 点击回调
+         */
+        val menuAction: (view: View) -> Unit = {}
+    )
 }
 
 class ConfigBuilder<T> {
