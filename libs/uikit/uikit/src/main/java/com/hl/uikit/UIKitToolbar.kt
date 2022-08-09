@@ -22,6 +22,7 @@ import androidx.appcompat.widget.TintTypedArray
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
+import androidx.core.view.updatePadding
 import com.hl.uikit.search.UIKitSearchBar
 import kotlinx.android.synthetic.main.uikit_toolbar_search.view.*
 import kotlin.reflect.KProperty1
@@ -416,8 +417,14 @@ class UIKitToolbar : Toolbar {
      * 确保右边操作按钮的父布局存在
      */
     private fun ensureInitRightActionLayout() {
+        //view未进行绘制之前手动测量大小
+        val width = MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED)
+        val height = MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED)
+        measure(width, height)
+
         if (rightActionLayout == null) {
-            val lp = generateDefaultLayoutParams().apply {
+            val lp = LayoutParams(LayoutParams.WRAP_CONTENT, measuredHeight).apply {
+                // 设置 rightActionLayout 的总高度为 toolbar 高度
                 this.gravity = Gravity.END
                 this.marginEnd = mRightPaddingEnd
             }
@@ -478,14 +485,23 @@ class UIKitToolbar : Toolbar {
         menuText?.run {
             rightActionTextView?.text = this
         }
-        menuIcon?.intrinsicHeight?.run {
-            if (menuText == null) {
-                rightActionTextView?.height = this
-            }
-        }
 
         menuAction?.run {
             rightActionTextView?.onClick(this)
+        }
+
+        rightActionTextView?.post {
+            if (menuText != null) {
+                val verticalPadding = ((rightActionLayout?.height ?: 0) - rightActionTextView.height) / 2
+                rightActionTextView.updatePadding(top = verticalPadding, bottom = verticalPadding)
+            } else {
+                // 仅有图标时更新 padding 以及显示的大小
+                menuIcon?.intrinsicHeight?.run {
+                    val verticalPadding = ((rightActionLayout?.height ?: 0) - this) / 2
+                    rightActionTextView.height = this + verticalPadding * 2
+                    rightActionTextView?.updatePadding(top = verticalPadding, bottom = verticalPadding)
+                }
+            }
         }
     }
 
@@ -698,7 +714,9 @@ class UIKitToolbar : Toolbar {
         defStyleAttr: Int = android.R.attr.textViewStyle,
         menuIcon: Drawable?
     ): TextView {
-        val textView = AppCompatTextView(context, null, defStyleAttr)
+        val textView = AppCompatTextView(context, null, defStyleAttr).apply {
+            this.gravity = Gravity.CENTER
+        }
         textView.setSingleLine()
         textView.ellipsize = TextUtils.TruncateAt.MIDDLE
         textView.layoutParams = params
