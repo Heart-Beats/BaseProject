@@ -30,5 +30,5 @@ interface BaseView {
 
     fun showMsg(msg: String)
 
-    fun getContext(): Context
+    fun getAttachContext(): Context
 }

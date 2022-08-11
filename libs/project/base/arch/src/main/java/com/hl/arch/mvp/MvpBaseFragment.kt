@@ -61,7 +61,7 @@ abstract class MvpBaseFragment<Presenter : MvpBasePresenter<out BaseView>> : Bas
         ToastUtils.showShort(requireContext(), msg)
     }
 
-    override fun getContext(): Context {
+    override fun getAttachContext(): Context {
         return requireActivity()
     }
 }

@@ -2,8 +2,18 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".TestActivity">
+
+    <com.hl.uikit.UIKitToolbar
+        android:id="@+id/uikit_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:uikit_rightImage="@drawable/icon_more_dot"
+        app:uikit_titleEllipsize="marquee"
+        app:uikit_titleMargin="15dp" />
 
     <TextView
         android:id="@+id/test_scan_qrcode"
