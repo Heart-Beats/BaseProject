@@ -15,5 +15,7 @@ class TestActivity2 : ViewBindingBaseActivity<ActivityTest2Binding>() {
 	}
 
 	override fun ActivityTest2Binding.onViewCreated(savedInstanceState: Bundle?) {
+		uikitToolbar.title="测试长度测试长度测试长度测试长度测试长度测试长度测试长度"
+		uikitToolbar.addRightActionText("按钮1")
 	}
 }

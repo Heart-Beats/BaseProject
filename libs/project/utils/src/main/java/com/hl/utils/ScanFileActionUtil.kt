@@ -9,13 +9,11 @@ import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
-import android.util.Log
 import androidx.fragment.app.FragmentActivity
 import com.blankj.utilcode.util.UriUtils
 import com.hl.uikit.reqPermissions
 import com.hl.utils.mimetype.MimeType
 import java.io.File
-import java.io.OutputStream
 import java.util.*
 
 
@@ -37,6 +35,13 @@ interface ScanResultCallBack {
      * @param  errorMsg 失败原因
      */
     fun onScanFail(errorMsg: String)
+
+    /**
+     * 扫描插入图库中的相关提示信息
+     *
+     * @param  msg 提示信息
+     */
+    fun onScanInfo(msg: String) {}
 }
 
 object ScanFileActionUtil {
@@ -109,6 +114,8 @@ object ScanFileActionUtil {
         val intent = Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, fileUri).apply {
             this.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
         }
+
+        scanResultCallBack?.onScanInfo("开始通知图库刷新 ${fileUri}")
         context.sendBroadcast(intent)
         scanResultCallBack?.onScanSuccess(UriUtils.uri2File(fileUri))
     }
@@ -169,11 +176,13 @@ object ScanFileActionUtil {
                 else -> MediaStore.Files.getContentUri("external")
             }
 
+            scanResultCallBack?.onScanInfo("开始向 ($externalContentUri) 中插入 ($values)")
+
             val contentResolver = context.applicationContext.contentResolver
             val uri = contentResolver.insert(externalContentUri, values)
 
             if (uri == null) {
-                Log.e(TAG, "插入${mediaFilePath}到图库失败, 开始复制文件到公共目录再插入...")
+                scanResultCallBack?.onScanInfo("插入${mediaFilePath}到图库失败, 开始复制文件到公共目录再插入...")
 
                 // 部分机型保存图片至私有目录会失败， 因此这里将相应文件复制到公共目录再去扫描
                 copyMediaFile2PublicDirectoryScan(context, mimeTypeName, mediaFilePath, contentResolver)
@@ -202,7 +211,8 @@ object ScanFileActionUtil {
                 if (copyFile == null) {
                     scanResultCallBack?.onScanFail("拷贝${srcFile.absolutePath} 到 ${copyOutputFile.absolutePath} 失败")
                 } else {
-                    val mediaUri = UriUtils.file2Uri(File(mediaFilePath))
+                    scanResultCallBack?.onScanInfo("拷贝${srcFile.absolutePath} 到 ${copyOutputFile.absolutePath} 成功")
+                    val mediaUri = UriUtils.file2Uri(copyFile)
                     notifyOverstepQ(context, contentResolver, mediaUri, copyFile.absolutePath)
                 }
             }
@@ -235,12 +245,13 @@ object ScanFileActionUtil {
         mediaFilePath: String
     ) {
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.Q) {
-            // 拷贝到指定 uri, 如果没有这步操作，android11不会在相册显示
+            // 拷贝到指定 uri, 如果没有这步操作，android11以上无法在相册显示
             try {
-                val out: OutputStream = contentResolver.openOutputStream(uri) ?: return
-                FileUtil.copyFile(mediaFilePath, out)
+                contentResolver.openOutputStream(uri)?.also {
+                    FileUtil.copyFile(mediaFilePath, it)
+                } ?: scanResultCallBack?.onScanInfo("notifyOverstepQ  调用 openOutputStream($uri) 返回 null")
             } catch (e: Exception) {
-                Log.e(TAG, "拷贝${mediaFilePath}到图库失败.")
+                scanResultCallBack?.onScanInfo("拷贝${mediaFilePath}到${uri} 异常.")
             }
         }
 

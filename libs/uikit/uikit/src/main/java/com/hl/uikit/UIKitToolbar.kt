@@ -503,6 +503,15 @@ class UIKitToolbar : Toolbar {
                 }
             }
         }
+
+        if (isInEditMode) {
+            // 预览模式下当仅有图标，设置 rightActionTextView 与图标等高即居中
+            if (menuText == null) {
+                menuIcon?.intrinsicHeight?.run {
+                    rightActionTextView?.height = this
+                }
+            }
+        }
     }
 
     /**

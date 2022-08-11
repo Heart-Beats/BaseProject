@@ -256,5 +256,5 @@ abstract class MvpBaseActivity<Presenter : MvpBasePresenter<out BaseView>> : Bas
     }
 
 
-    override fun getContext() = this
+    override fun getAttachContext() = this
 }

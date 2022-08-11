@@ -4,8 +4,8 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Environment
-import android.util.Log
 import com.blankj.utilcode.util.ImageUtils
+import com.elvishew.xlog.XLog
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
@@ -20,8 +20,6 @@ import java.net.URL
  */
 object BitmapUtil {
 
-    private const val TAG = "BitmapUtil"
-
     suspend fun getBitmapFromUrl(imageUrl: String): Bitmap? {
         return withContext(Dispatchers.IO) {
             var bitmap: Bitmap?
@@ -33,9 +31,9 @@ object BitmapUtil {
                 conn.connect()
                 `is` = conn.inputStream
                 bitmap = BitmapFactory.decodeStream(`is`)
-                Log.d(TAG, "image download finished. ---- $imageUrl")
+                XLog.d("image download finished. ---- $imageUrl")
             } catch (e: Exception) {
-                Log.e(TAG, "get bitmap fail !", e)
+                XLog.d("get bitmap fail !", e)
                 bitmap = null
             } finally {
                 `is`?.close()
@@ -65,6 +63,10 @@ object BitmapUtil {
 
                     override fun onScanFail(errorMsg: String) {
                         failAction(errorMsg)
+                    }
+
+                    override fun onScanInfo(msg: String) {
+                        XLog.d("onScanInfo: $msg")
                     }
                 })
         } else {
