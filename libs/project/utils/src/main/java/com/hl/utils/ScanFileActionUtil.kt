@@ -5,6 +5,7 @@ import android.content.ContentResolver
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
+import android.media.MediaScannerConnection
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
@@ -13,6 +14,8 @@ import androidx.fragment.app.FragmentActivity
 import com.blankj.utilcode.util.UriUtils
 import com.hl.uikit.reqPermissions
 import com.hl.utils.mimetype.MimeType
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 import java.io.File
 import java.util.*
 
@@ -46,9 +49,84 @@ interface ScanResultCallBack {
 
 object ScanFileActionUtil {
 
-    private const val TAG = "ScanFileActionUtil"
-
     private var scanResultCallBack: ScanResultCallBack? = null
+
+    /**
+     *  部分机型保存图片至私有目录会失败， 因此这里将相应文件复制到公共目录再去扫描
+     */
+    @JvmStatic
+    fun scanMedia2Public(
+        context: Context,
+        vararg mediaFilePathS: String,
+        scanResultCallBack: ScanResultCallBack? = null
+    ) {
+        this.scanResultCallBack = scanResultCallBack
+
+        if (context is FragmentActivity) {
+            context.reqPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE, deniedAction = {
+                scanResultCallBack?.onScanFail("拒绝权限，插入到图库失败")
+            }) {
+
+                mediaFilePathS.forEach {
+                    val (srcFile, copyOutputFile, copyFile) = copyMediaFile2PublicDirectory(it)
+                    if (copyFile == null) {
+                        scanResultCallBack?.onScanFail("拷贝${srcFile.absolutePath} 到 ${copyOutputFile.absolutePath} 失败")
+                    } else {
+                        scanResultCallBack?.onScanInfo("拷贝${srcFile.absolutePath} 到 ${copyOutputFile.absolutePath} 成功")
+                        scanMediaToGallery(context, copyFile.absolutePath)
+                    }
+                }
+            }
+        } else {
+            scanResultCallBack?.onScanFail("context 非 FragmentActivity 类型")
+        }
+    }
+
+    /**
+     * 拷贝媒体文件到公共目录下
+     */
+    private fun copyMediaFile2PublicDirectory(mediaFilePath: String): Triple<File, File, File?> {
+        val mimeTypeName = MimeType.getByExtension(File(mediaFilePath).extension)?.mMimeTypeName ?: ""
+
+        val publicDirectory = when {
+            mimeTypeName.matches(Regex("image/.*")) -> Environment.DIRECTORY_PICTURES
+            mimeTypeName.matches(Regex("video/.*")) -> Environment.DIRECTORY_MOVIES
+            else -> Environment.DIRECTORY_DOWNLOADS
+        }
+
+        val srcFile = File(mediaFilePath)
+        val externalStoragePublicDirectory = Environment.getExternalStoragePublicDirectory(publicDirectory)
+
+        var copyOutputFile: File
+        var copyFile: File?
+        if (srcFile.startsWith(externalStoragePublicDirectory)) {
+            // 当前媒体文件在公共目录下无需拷贝操作
+            copyOutputFile = srcFile
+            copyFile = srcFile
+        } else {
+            copyOutputFile = File(externalStoragePublicDirectory, srcFile.name)
+            copyFile = FileUtil.copyFile(mediaFilePath, copyOutputFile.absolutePath)
+        }
+
+        return Triple(srcFile, copyOutputFile, copyFile)
+    }
+
+    /**
+     *   使用 MediaScannerConnection 把文件插入到系统图库
+     *   @param  filePaths           文件路径数组, 不可为应用私有目录路径，否则会添加图库失败
+     */
+    private fun scanMediaToGallery(context: Context, vararg filePaths: String) {
+        MediaScannerConnection.scanFile(context, filePaths, null) { path, uri ->
+            MainScope().launch {
+                if (uri != null) {
+                    scanResultCallBack?.onScanSuccess(File(path))
+                } else {
+                    scanResultCallBack?.onScanFail("扫描插入图库失败：文件路径 == $path")
+                }
+            }
+        }
+    }
+
 
     /**
      * 扫描媒体文件到相册
@@ -115,7 +193,7 @@ object ScanFileActionUtil {
             this.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
         }
 
-        scanResultCallBack?.onScanInfo("开始通知图库刷新 ${fileUri}")
+        scanResultCallBack?.onScanInfo("开始通知图库刷新 $fileUri")
         context.sendBroadcast(intent)
         scanResultCallBack?.onScanSuccess(UriUtils.uri2File(fileUri))
     }
@@ -184,8 +262,7 @@ object ScanFileActionUtil {
             if (uri == null) {
                 scanResultCallBack?.onScanInfo("插入${mediaFilePath}到图库失败, 开始复制文件到公共目录再插入...")
 
-                // 部分机型保存图片至私有目录会失败， 因此这里将相应文件复制到公共目录再去扫描
-                copyMediaFile2PublicDirectoryScan(context, mimeTypeName, mediaFilePath, contentResolver)
+                scanMedia2Public(context, mediaFilePath)
             } else {
                 notifyOverstepQ(context, contentResolver, uri, mediaFilePath)
             }
@@ -193,49 +270,6 @@ object ScanFileActionUtil {
             val mediaUri = UriUtils.file2Uri(File(mediaFilePath))
             notifyScanDcimByUri(context, mediaUri)
         }
-    }
-
-    private fun copyMediaFile2PublicDirectoryScan(
-        context: Context,
-        mimeTypeName: String,
-        mediaFilePath: String,
-        contentResolver: ContentResolver
-    ) {
-        if (context is FragmentActivity) {
-            context.reqPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE, deniedAction = {
-                scanResultCallBack?.onScanFail("拒绝权限，插入到图库失败")
-            }) {
-
-                val (srcFile, copyOutputFile, copyFile) = copyMediaFile2PublicDirectory(mimeTypeName, mediaFilePath)
-
-                if (copyFile == null) {
-                    scanResultCallBack?.onScanFail("拷贝${srcFile.absolutePath} 到 ${copyOutputFile.absolutePath} 失败")
-                } else {
-                    scanResultCallBack?.onScanInfo("拷贝${srcFile.absolutePath} 到 ${copyOutputFile.absolutePath} 成功")
-                    val mediaUri = UriUtils.file2Uri(copyFile)
-                    notifyOverstepQ(context, contentResolver, mediaUri, copyFile.absolutePath)
-                }
-            }
-        } else {
-            scanResultCallBack?.onScanFail("context 非 FragmentActivity 类型")
-        }
-    }
-
-    private fun copyMediaFile2PublicDirectory(
-        mimeTypeName: String,
-        mediaFilePath: String
-    ): Triple<File, File, File?> {
-        val publicDirectory = when {
-            mimeTypeName.matches(Regex("image/.*")) -> Environment.DIRECTORY_PICTURES
-            mimeTypeName.matches(Regex("video/.*")) -> Environment.DIRECTORY_MOVIES
-            else -> Environment.DIRECTORY_DOWNLOADS
-        }
-
-        val srcFile = File(mediaFilePath)
-        val externalStoragePublicDirectory = Environment.getExternalStoragePublicDirectory(publicDirectory)
-        val copyOutputFile = File(externalStoragePublicDirectory, srcFile.name)
-        val copyFile = FileUtil.copyFile(mediaFilePath, copyOutputFile.absolutePath)
-        return Triple(srcFile, copyOutputFile, copyFile)
     }
 
     private fun notifyOverstepQ(
