@@ -11,7 +11,11 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.graphics.ColorUtils
 import androidx.lifecycle.MutableLiveData
+import androidx.palette.graphics.Palette
+import com.blankj.utilcode.util.ImageUtils
+import com.elvishew.xlog.XLog
 import com.gyf.immersionbar.ImmersionBar
 import com.gyf.immersionbar.ktx.immersionBar
 import com.hl.arch.R
@@ -19,6 +23,7 @@ import com.hl.arch.utils.getColorByRes
 import com.hl.arch.utils.initInsetPadding
 import com.hl.arch.utils.setSafeValue
 import com.hl.arch.utils.traverseFindFirstViewByType
+
 
 abstract class BaseActivity : AppCompatActivity() {
 
@@ -32,6 +37,8 @@ abstract class BaseActivity : AppCompatActivity() {
 
     @JvmField
     protected var toolbar: Toolbar? = null
+
+    protected lateinit var immersionBar: ImmersionBar
 
     abstract fun onViewCreated(savedInstanceState: Bundle?)
 
@@ -79,6 +86,20 @@ abstract class BaseActivity : AppCompatActivity() {
         Log.d(TAG, "onResume:  =====> $this")
     }
 
+    /**
+     * @param percent   透明度
+     * @param rgb   RGB值
+     * @return 最终设置过透明度的颜色值
+     */
+    protected open fun getTranslucentColor(percent: Float, rgb: Int): Int {
+        val blue = Color.blue(rgb)
+        val green = Color.green(rgb)
+        val red = Color.red(rgb)
+        var alpha = Color.alpha(rgb)
+        alpha = Math.round(alpha * percent)
+        return Color.argb(alpha, red, green, blue)
+    }
+
     override fun onPause() {
         super.onPause()
         Log.d(TAG, "onPause:  =====> $this")
@@ -120,6 +141,8 @@ abstract class BaseActivity : AppCompatActivity() {
 
         // 默认状态栏与标题栏同色，深色字体， 导航栏白色深色字体
         immersionBar {
+            immersionBar = this
+
             fitsSystemWindows(false)
             statusBarDarkFont(true)
 

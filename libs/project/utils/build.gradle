@@ -94,4 +94,5 @@ dependencies {
     api Deps.PickSelector.file_picker
     api Deps.Camera.camera
 
+    api Deps.AndroidX.palette_Ktx
 }

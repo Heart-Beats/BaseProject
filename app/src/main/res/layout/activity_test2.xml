@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".TestActivity">
+    tools:context=".TestActivity2">
 
     <com.hl.uikit.UIKitToolbar
         android:id="@+id/uikit_toolbar"
@@ -15,11 +15,47 @@
         app:uikit_titleEllipsize="marquee"
         app:uikit_titleMargin="15dp" />
 
-    <TextView
-        android:id="@+id/test_scan_qrcode"
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:id="@+id/content_layout"
         android:layout_height="wrap_content"
-        android:text="测试2页面数据"
-        android:textSize="35dp" />
+        android:layout_width="match_parent"
+        android:orientation="vertical">
 
+        <TextView
+            android:id="@+id/test_scan_qrcode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="测试2页面数据"
+            android:textSize="35dp" />
+
+        <RadioGroup
+            android:id="@+id/radio_group"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/dp_10"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/radio_button_dark"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="深色图片背景" />
+
+            <RadioButton
+                android:id="@+id/radio_button_light"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="浅色图片背景" />
+        </RadioGroup>
+
+        <TextView
+            android:id="@+id/test_palette"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/dp_10"
+            android:text="进行图片分析" />
+
+    </LinearLayout>
 </LinearLayout>

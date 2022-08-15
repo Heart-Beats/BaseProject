@@ -119,7 +119,7 @@ class MainFragment : ViewBindingMvvmBaseFragment<FragmentMainBinding>() {
 			}
 		})
 		testWebView.onClick {
-			this@MainFragment.navigateToWeb("http://192.168.3.18:9003", "测试 SDK", true)
+			this@MainFragment.navigateToWeb("http://192.168.3.18:9003", "测试 SDK", false)
 		}
 
 		gotoTest1.onClick {
