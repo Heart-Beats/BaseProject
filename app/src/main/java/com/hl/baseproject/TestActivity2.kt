@@ -4,6 +4,10 @@ import android.content.Intent
 import android.os.Bundle
 import com.hl.arch.mvvm.activity.ViewBindingBaseActivity
 import com.hl.baseproject.databinding.ActivityTest2Binding
+import com.hl.uikit.onClick
+import com.hl.uikit.toast
+import com.hl.utils.PaletteUtil
+import com.hl.utils.toBitmap
 
 class TestActivity2 : ViewBindingBaseActivity<ActivityTest2Binding>() {
 
@@ -15,7 +19,29 @@ class TestActivity2 : ViewBindingBaseActivity<ActivityTest2Binding>() {
 	}
 
 	override fun ActivityTest2Binding.onViewCreated(savedInstanceState: Bundle?) {
-		uikitToolbar.title="测试长度测试长度测试长度测试长度测试长度测试长度测试长度"
+		uikitToolbar.title = "测试长度测试长度测试长度测试长度测试长度测试长度测试长度"
 		uikitToolbar.addRightActionText("按钮1")
+
+		radioGroup.setOnCheckedChangeListener { _, checkedId ->
+			if (checkedId == radioButtonDark.id) {
+				contentLayout.setBackgroundResource(R.drawable.dark_image)
+			} else {
+				contentLayout.setBackgroundResource(R.drawable.light_image)
+			}
+		}
+		radioGroup.check(radioButtonDark.id)
+
+		testPalette.onClick {
+			contentLayout.toBitmap()?.run {
+				PaletteUtil.getColorFromBitmap(this) { rgb, _, _, isLight ->
+					toast("是否为深色的图片 == ${!isLight}")
+
+					immersionBar.apply {
+						statusBarColorInt(rgb)
+						statusBarDarkFont(isLight)
+					}.init()
+				}
+			}
+		}
 	}
 }

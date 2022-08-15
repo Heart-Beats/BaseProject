@@ -344,6 +344,7 @@ project.afterEvaluate {
 
                     setDependencyNode(root, 'compile', 'me.rosuh', 'AndroidFilePicker', Versions.ANDROID_FILE_PICKER)
                     setDependencyNode(root, 'compile', 'cjt.library.wheel', 'camera', Versions.CAMERA)
+                    setDependencyNode(root, 'compile', 'androidx.palette', 'palette-ktx', Versions.PALETTE)
 
                     setScm(root)
                 }

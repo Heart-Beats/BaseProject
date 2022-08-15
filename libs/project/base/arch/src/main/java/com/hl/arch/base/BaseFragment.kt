@@ -40,6 +40,7 @@ abstract class BaseFragment : Fragment() {
     @JvmField
     protected var toolbar: Toolbar? = null
 
+    protected lateinit var immersionBar: ImmersionBar
 
     /**
      * Fragment 销毁视图时保存页面数据至  arguments
@@ -103,11 +104,14 @@ abstract class BaseFragment : Fragment() {
      */
     protected fun setStatusBarImmerseFromView(statusBarView: View, immersionBarBlock: ImmersionBar.() -> Unit = {}) {
         initInsetPadding(top = false)
-        immersionBar {
-            statusBarView(statusBarView)
-            statusBarDarkFont(false)
-            transparentStatusBar()
-            immersionBarBlock()
+
+        if (::immersionBar.isInitialized) {
+            immersionBar.apply {
+                statusBarView(statusBarView)
+                statusBarDarkFont(false)
+                transparentStatusBar()
+                immersionBarBlock()
+            }
         }
     }
 
@@ -117,6 +121,8 @@ abstract class BaseFragment : Fragment() {
 
         // 默认状态栏与标题栏同色，深色字体， 导航栏白色深色字体
         immersionBar {
+            immersionBar = this
+
             fitsSystemWindows(false)
             statusBarDarkFont(true)
 

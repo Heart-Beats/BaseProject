@@ -5,6 +5,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Environment
+import android.view.View
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
 import com.blankj.utilcode.util.ImageUtils
@@ -23,6 +24,11 @@ import java.net.URL
  * @author  张磊  on  2022/04/09 at 15:57
  * Email: 913305160@qq.com
  */
+
+fun View.toBitmap(): Bitmap? {
+    return ImageUtils.view2Bitmap(this)
+}
+
 object BitmapUtil {
 
     suspend fun getBitmapFromUrl(imageUrl: String): Bitmap? {

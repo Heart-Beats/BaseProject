@@ -39,6 +39,8 @@ android {
 }
 
 dependencies {
+    api project(path: ':base-app-res')
+    api project(path: ':utils')
 
     api Deps.AndroidX.core_ktx
     api Deps.AndroidX.appcompat
@@ -64,6 +66,4 @@ dependencies {
     api Deps.Popup.x_popup
     api Deps.UtilCodeX.utilcodex
     api Deps.JsBridge.jsbridge
-    api project(path: ':base-app-res')
-    api project(path: ':utils')
 }

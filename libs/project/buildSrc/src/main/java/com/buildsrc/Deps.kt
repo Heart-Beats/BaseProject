@@ -16,6 +16,7 @@ internal object Versions {
     const val RECYCLERVIEW = "1.2.1"
     const val DATA_BINDING = "7.0.4"
     const val CAMERA_X = "1.1.0-beta01"
+    const val PALETTE = "1.0.0"
 
     const val LIFECYCLE = "2.4.0"
     const val NAV_VERSION = "2.4.0-rc01"
@@ -98,6 +99,9 @@ class Deps {
         const val camera_lifecycle = "androidx.camera:camera-lifecycle:${Versions.CAMERA_X}"
         const val camera_view = "androidx.camera:camera-view:${Versions.CAMERA_X}"
         const val camera_extensions = "androidx.camera:camera-extensions:${Versions.CAMERA_X}"
+
+        const val palette ="androidx.palette:palette:${Versions.PALETTE}"
+        const val palette_Ktx ="androidx.palette:palette-ktx:${Versions.PALETTE}"
     }
 
     object Lifecycle {
