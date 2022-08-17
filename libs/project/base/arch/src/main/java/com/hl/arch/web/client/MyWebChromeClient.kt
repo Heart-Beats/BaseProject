@@ -11,9 +11,11 @@ import android.webkit.WebChromeClient
 import android.webkit.WebView
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
+import com.hl.arch.web.WebViewFragment
 import com.hl.arch.web.helpers.logJs
 import com.hl.uikit.image.pictureselector.GlideEngine
 import com.hl.uikit.image.pictureselector.MyCompressEngine
+import com.hl.utils.activityResult.OnActivityResult
 import com.hl.utils.file2Uri
 import com.hl.utils.reqPermissions
 import com.luck.picture.lib.basic.PictureSelector
@@ -107,6 +109,17 @@ open class MyWebChromeClient(val fragment: Fragment) : WebChromeClient() {
 					//i.putExtra(Intent.EXTRA_MIME_TYPES, acceptTypes)
 					intent.type = "*/*"
 					fragment.startActivityForResult(intent, REQUEST_CODE_SELECT_FILE)
+
+					// val webViewFragment = fragment as? WebViewFragment
+					// webViewFragment?.launchIntent(intent, object : OnActivityResult {
+					// 	override fun onResultOk(data: Intent?) {
+					// 		onActivityResult(REQUEST_CODE_SELECT_FILE, Activity.RESULT_OK, data)
+					// 	}
+					//
+					// 	override fun onResultCanceled(data: Intent?) {
+					// 		onActivityResult(REQUEST_CODE_SELECT_FILE, Activity.RESULT_CANCELED, data)
+					// 	}
+					// })
 				}
 			}
 		}
@@ -123,7 +136,8 @@ open class MyWebChromeClient(val fragment: Fragment) : WebChromeClient() {
 					.setImageEngine(GlideEngine.createGlideEngine())
 					.forResult(object : OnResultCallbackListener<LocalMedia> {
 						override fun onResult(result: ArrayList<LocalMedia>?) {
-							val availableUris = result?.map { file2Uri(fragment.requireContext(), it.availablePath) }
+							val availableUris =
+								result?.map { file2Uri(fragment.requireContext(), it.compressPath ?: it.realPath) }
 
 							logJs("请求${operaType}", "${operaType}成功：结果 == $availableUris")
 							availableUris?.run {
