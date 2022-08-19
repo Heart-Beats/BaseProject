@@ -4,6 +4,7 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.os.Build
+import com.blankj.utilcode.util.ClipboardUtils
 
 /**
  * @author  张磊  on  2022/06/16 at 20:52
@@ -21,7 +22,7 @@ class ClipboardHelper(context: Context) {
 	 * 设置内容到剪切板
 	 */
 	fun copyText(text: CharSequence?) {
-		cm.setPrimaryClip(ClipData.newPlainText(null, text))
+		ClipboardUtils.copyText(text)
 	}
 
 	/**
@@ -49,5 +50,12 @@ class ClipboardHelper(context: Context) {
 				""
 			}
 		} ?: ""
+	}
+
+	/**
+	 * 获取剪切板内容
+	 */
+	fun getText(): CharSequence {
+		return ClipboardUtils.getText()
 	}
 }
