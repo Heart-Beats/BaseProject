@@ -11,8 +11,19 @@ fun Date.toFormatString(destPattern: String): String {
     return format.format(this)
 }
 
+fun Date.toCalendar(): Calendar {
+    val date = this
+    return Calendar.getInstance().apply {
+        this.time = date
+    }
+}
+
 fun Calendar.toFormatString(destPattern: String): String {
     return time.toFormatString(destPattern)
+}
+
+fun Calendar.toDate(): Date {
+    return this.toFormatString(srcPattern).toDate(srcPattern)
 }
 
 fun Calendar?.copyNewCalendar(): Calendar? {
@@ -39,11 +50,17 @@ fun String.toDate(srcPattern: String): Date {
     return format.parse(this)
 }
 
+/**
+ * 设置分钟为 0
+ */
 fun Calendar.toMinuteFirst(): Calendar {
     set(Calendar.SECOND, 0)
     return this
 }
 
+/**
+ * 设置分钟为 59
+ */
 fun Calendar.toMinuteLast(): Calendar {
     set(Calendar.SECOND, 59)
     return this
@@ -54,7 +71,7 @@ fun Calendar.toMinuteLast(): Calendar {
  */
 fun Calendar.toDayLast(): Calendar {
     set(Calendar.HOUR_OF_DAY, 23)
-    set(Calendar.MINUTE, 59)
+    toMinuteLast()
     set(Calendar.SECOND, 59)
     return this
 }
@@ -64,7 +81,7 @@ fun Calendar.toDayLast(): Calendar {
  */
 fun Calendar.toDayFirst(): Calendar {
     set(Calendar.HOUR_OF_DAY, 0)
-    set(Calendar.MINUTE, 0)
+    toMinuteFirst()
     set(Calendar.SECOND, 0)
     return this
 }
@@ -90,7 +107,8 @@ fun Calendar.toMonthLast(): Calendar {
 
 const val srcPattern = "yyyy-MM-dd HH:mm:ss.SSS"
 
-val nowDateTime = ::getFormattedNowDateTime
+
+val nowDateTimeString = ::getFormattedNowDateTime
 
 /**
  * 获取当前日期时间
@@ -101,25 +119,16 @@ fun getFormattedNowDateTime(): String {
     return Calendar.getInstance().toFormatString(srcPattern)
 }
 
-fun Calendar.getTAFormatDateTime(): String {
-    return toFormatString("yyyy-MM-dd HH:mm:ss.SSS")
-}
-
-fun Date.toCalendar(): Calendar {
-    val date = this
-    return Calendar.getInstance().apply {
-        this.time = date
-    }
-}
-
-fun Calendar.toDate(): Date {
-    return this.toFormatString(srcPattern).toDate(srcPattern)
-}
-
+/**
+ * 当前日期与指定日期的相差小时数
+ */
 infix fun Date.differHours(other: Date): Float {
     return (this.time - other.time) / (60 * 60 * 1000f)
 }
 
+/**
+ * 比较当前日期与指定日期时间差 > 指定值
+ */
 fun Date.compareValueTo(otherDate: Date, betweenValue: Long, unit: TimeUnit): Boolean {
     return if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
         val thisLocalDateTime = LocalDateTime.from(this.toInstant().atZone(ZoneId.systemDefault()))

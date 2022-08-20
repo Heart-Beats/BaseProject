@@ -75,7 +75,7 @@ open class MyBridgeWebViewClient(val webView: BridgeWebView) : BridgeWebViewClie
 		val reasonPhrase = errorResponse?.reasonPhrase
 
 		if (request?.isForMainFrame == true) {
-			XLog.d("页面请求失败：errorCode = $errorStatusCode, description = $reasonPhrase, failingUrl =$failingUrl")
+			XLog.d("网页请求失败：errorCode = $errorStatusCode, description = $reasonPhrase, failingUrl =$failingUrl")
 
 			onReceivedError(view, errorStatusCode, reasonPhrase, failingUrl)
 		}
@@ -86,7 +86,7 @@ open class MyBridgeWebViewClient(val webView: BridgeWebView) : BridgeWebViewClie
 	 */
 	@Deprecated("Deprecated in Java")
 	override fun onReceivedError(view: WebView?, errorCode: Int, description: String?, failingUrl: String?) {
-		XLog.d("页面加载失败：errorCode = $errorCode, description = $description, failingUrl = $failingUrl")
+		XLog.d("网页加载失败：errorCode = $errorCode, description = $description, failingUrl = $failingUrl")
 
 		isPageLoadFail = true
 	}
