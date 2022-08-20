@@ -19,6 +19,14 @@ import java.util.*
 object XLogUtil {
 
 	/**
+	 * 默认 XLog 日志保存文件夹的路径： sdcard/Android/data/包名/files/XLog
+	 */
+	private val defaultLogFolderPath by lazy {
+		val externalFilesDir = BaseUtil.app.getExternalFilesDir(null)
+		File(externalFilesDir, "XLog").absolutePath
+	}
+
+	/**
 	 * 日志文件最大的大小，默认 10M , 超过即触发备份
 	 */
 	private const val logFileMaxSize = 10L * 1024 * 1024
@@ -38,29 +46,40 @@ object XLogUtil {
 	 */
 	private val defaultFileNameGenerator = MyDateFileNameGenerator()
 
+	/**
+	 *  默认的备份策略
+	 */
 	private val defaultBackupStrategy = FileSizeBackupStrategy2(logFileMaxSize, logFileMaxBackCount)
 
+
+	/**
+	 *  默认的清理
+	 */
 	private val defaultCleanStrategy = FileLastModifiedCleanStrategy(logFileMaxSaveTime)
 
 
 	/**
+	 * 日志文件保存目录
+	 */
+	var logFolderFile = File(defaultLogFolderPath)
+
+
+	/**
+	 * @param  logFolderPath      日志输出的目录
+	 * @param  FileNameGenerator  日志文件名称生成器
+	 * @param  backupStrategy     日志文件备份策略
+	 * @param  cleanStrategy      日志文件清理策略
 	 *
 	 */
 	fun getFilePrinter(
-		logFolderPath: String? = null,
+		logFolderPath: String = defaultLogFolderPath,
 		fileNameGenerator: FileNameGenerator = defaultFileNameGenerator,
 		backupStrategy: BackupStrategy = defaultBackupStrategy,
 		cleanStrategy: CleanStrategy = defaultCleanStrategy
 	): FilePrinter {
+		logFolderFile = File(logFolderPath)
 
-		val xLogFolderPath = if (logFolderPath == null) {
-			val externalFilesDir = BaseUtil.app.getExternalFilesDir(null)
-			File(externalFilesDir, "XLog").absolutePath
-		} else {
-			logFolderPath
-		}
-
-		return FilePrinter.Builder(xLogFolderPath) // 指定保存日志文件的路径
+		return FilePrinter.Builder(logFolderPath) // 指定保存日志文件的路径
 			.fileNameGenerator(fileNameGenerator) // 指定日志文件名生成器，默认为 ChangelessFileNameGenerator("log")
 			.backupStrategy(backupStrategy) // 指定日志文件备份策略，默认为 FileSizeBackupStrategy(1024 * 1024)
 			.cleanStrategy(cleanStrategy) // 指定日志文件清除策略，默认为 NeverCleanStrategy()
