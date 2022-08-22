@@ -4,15 +4,17 @@ import com.buildsrc.Versions
  *  编译本地相关项目
  */
 task buildSdk() {
-    dependsOn gradle.includedBuild('uikit').task(':uikit:assemble')
-    dependsOn gradle.includedBuild('uikit').task(':uikit-res:assemble')
+    dependsOn gradle.includedBuild('uikit').task(':uikit:assembleRelease')
+    dependsOn gradle.includedBuild('uikit').task(':uikit-res:assembleRelease')
 
-    dependsOn gradle.includedBuild('project').task(':base-api:assemble')
-    dependsOn gradle.includedBuild('project').task(':base-app-res:assemble')
-    dependsOn gradle.includedBuild('project').task(':base-arch:assemble')
-    dependsOn gradle.includedBuild('project').task(':utils:assemble')
-    dependsOn gradle.includedBuild('project').task(':SDK:Pay:assemble')
-    dependsOn gradle.includedBuild('project').task(':SDK:Umeng:assemble')
+    dependsOn gradle.includedBuild('project').task(':base-api:assembleRelease')
+    dependsOn gradle.includedBuild('project').task(':base-app-res:assembleRelease')
+    dependsOn gradle.includedBuild('project').task(':base-arch:assembleRelease')
+    dependsOn gradle.includedBuild('project').task(':utils:assembleRelease')
+
+    dependsOn gradle.includedBuild('project').task(':SDK:Pay:assembleRelease')
+    dependsOn gradle.includedBuild('project').task(':SDK:Umeng:assembleRelease')
+    dependsOn gradle.includedBuild('project').task(':SDK:TencentCloud:assembleRelease')
 }
 
 //引入配置设置
@@ -399,6 +401,30 @@ project.afterEvaluate {
                     setDependencyNode(root, 'compile', 'com.umeng.umsdk', 'share-board', '7.1.7')
                     setDependencyNode(root, 'compile', 'com.umeng.umsdk', 'share-wx', '7.1.7')
                     setDependencyNode(root, 'compile', 'com.tencent.mm.opensdk', 'wechat-sdk-android-without-mta', Versions.WEI_XIN_OPEN_SDK)
+
+                    setScm(root)
+                }
+            }
+
+            TencentCloud(MavenPublication) {
+                def moduleName = 'TencentCloud'
+                def publishModuleName = 'tencent-cloud'
+
+                def modulePath = "$libProjectPath/SDK/$moduleName"
+
+                groupId myGroupId
+                artifactId publishModuleName
+                version getPublicationVersion()
+                artifact("$modulePath/build/outputs/aar/${moduleName}-release.aar")
+                artifact sourceAar(publishModuleName, modulePath)
+
+                pom.withXml {
+                    def root = asNode()
+
+                    setDependencyNode(root, 'compile', 'androidx.core', 'core-ktx', Versions.CORE_KTX)
+                    setDependencyNode(root, 'compile', 'androidx.appcompat', 'appcompat', Versions.APPCOMPAT)
+
+                    setDependencyNode(root, 'compile', 'com.qcloud.cos', 'cos-android-lite', Versions.TENCENT_COS)
 
                     setScm(root)
                 }

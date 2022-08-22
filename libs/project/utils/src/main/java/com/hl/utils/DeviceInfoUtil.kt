@@ -8,6 +8,7 @@ import android.provider.Settings
 import android.telephony.TelephonyManager
 import androidx.annotation.RequiresApi
 import androidx.annotation.RequiresPermission
+import com.blankj.utilcode.util.NetworkUtils
 import java.lang.reflect.Method
 import java.util.*
 
@@ -207,10 +208,10 @@ object DeviceInfoUtil {
 						${getDeviceHeight(context)}
 				
 				4. 是否联网:
-						${NetworkUtil.isConnected(context)}
+						${NetworkUtils.isConnected()}
 				
 				5. 网络类型:
-						${NetworkUtil.getNetworkInfo(context)}
+						${NetworkUtils.getNetworkType()}
 				
 				6. 系统默认语言:
 						${getDeviceDefaultLanguage()}
@@ -268,6 +269,9 @@ enum class DeviceInfo(val manufacturer: String, val brandName: String) {
 	SAMSUNG("samsung", "三星")
 }
 
+/**
+ * 获取设备制造商名称
+ */
 fun getDeviceByManufacturer(manufacturer: String): DeviceInfo? {
 	return DeviceInfo.values().find {
 		it.manufacturer == manufacturer.toLowerCase()
