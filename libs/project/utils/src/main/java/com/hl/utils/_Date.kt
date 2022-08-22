@@ -6,7 +6,9 @@ import java.time.ZoneId
 import java.time.temporal.ChronoUnit
 import java.util.*
 
-fun Date.toFormatString(destPattern: String): String {
+const val srcPattern = "yyyy-MM-dd HH:mm:ss.SSS"
+
+fun Date.toFormatString(destPattern: String = srcPattern): String {
     val format = SimpleDateFormat(destPattern, Locale.ENGLISH)
     return format.format(this)
 }
@@ -18,7 +20,7 @@ fun Date.toCalendar(): Calendar {
     }
 }
 
-fun Calendar.toFormatString(destPattern: String): String {
+fun Calendar.toFormatString(destPattern: String= srcPattern): String {
     return time.toFormatString(destPattern)
 }
 
@@ -104,8 +106,6 @@ fun Calendar.toMonthLast(): Calendar {
     toDayLast()
     return this
 }
-
-const val srcPattern = "yyyy-MM-dd HH:mm:ss.SSS"
 
 
 val nowDateTimeString = ::getFormattedNowDateTime

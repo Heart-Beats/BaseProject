@@ -3,7 +3,12 @@ package com.hl.baseproject
 import android.app.Application
 import android.content.Context
 import android.util.Log
+import com.elvishew.xlog.LogConfiguration
+import com.elvishew.xlog.LogLevel
 import com.elvishew.xlog.XLog
+import com.elvishew.xlog.printer.AndroidPrinter
+import com.hl.utils.DeviceInfoUtil
+import com.hl.utils.XLogUtil
 import com.tencent.smtt.export.external.TbsCoreSettings
 import com.tencent.smtt.sdk.QbSdk
 import com.tencent.smtt.sdk.TbsListener
@@ -20,9 +25,29 @@ class MyApplication : Application() {
 
 		val debug = BuildConfig.DEBUG
 
+		initXlog(debug)
+
 		initX5(this, debug)
 
 		SDKInitHelper.preInitSdk(this)
+
+		val deviceAllInfo = DeviceInfoUtil.getDeviceAllInfo(this)
+		XLog.d("运行设备信息-------------->\n $deviceAllInfo")
+	}
+
+	private fun initXlog(isPrintLog: Boolean) {
+		val logConfig = LogConfiguration.Builder()
+			.tag("X-LOG")
+			.logLevel(if (isPrintLog) LogLevel.ALL else LogLevel.INFO)
+			.enableStackTrace(1)
+			.addInterceptor {
+				// 添加日志拦截器
+				it
+			}
+			.build()
+
+		val filePrinter = XLogUtil.getFilePrinter(fileName = "log.txt")
+		XLog.init(logConfig, AndroidPrinter(), filePrinter)
 	}
 
 	private fun initX5(context: Context, isPrintLog: Boolean) {

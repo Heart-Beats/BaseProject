@@ -78,7 +78,10 @@ dependencies {
 
     implementation Deps.LetterSlideBar.side_bar
 
-    implementation  "com.hl:base-arch"
-    implementation  "com.hl:uikit"
-    implementation  "com.hl:utils"
+    implementation "com.hl:base-arch"
+    implementation "com.hl:uikit"
+    implementation "com.hl:utils"
+
+    def hl_version = '0.5.0'
+    implementation "com.hl:tencent-cloud:${hl_version}"
 }

@@ -60,6 +60,7 @@ internal object Versions {
     const val GSY_VIDEO_PLAYER = "v8.2.0-release-jitpack"
     const val WEI_XIN_OPEN_SDK = "+"
     const val TBS_SDK = "44181"
+    const val TENCENT_COS = "5.9.+"
     const val UPDATE_APP_UTILSX = "2.3.0"
     const val LOTTIE = "5.0.3"
     const val WAVE_SIDE_BAR = "1.3"
@@ -427,6 +428,8 @@ class Deps {
             "com.tencent.mm.opensdk:wechat-sdk-android-without-mta:${Versions.WEI_XIN_OPEN_SDK}"
 
         const val tbs_sdk = "com.tencent.tbs:tbssdk:${Versions.TBS_SDK}"
+
+        const val cos_android_lite = "com.qcloud.cos:cos-android-lite:${Versions.TENCENT_COS}"
     }
 
     object Update {
