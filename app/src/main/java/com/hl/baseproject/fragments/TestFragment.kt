@@ -65,7 +65,10 @@ class TestFragment : ViewBindingMvvmBaseFragment<FragmentTestBinding>() {
 		}
 
 		testUploadLog.onClick {
-			TencentCosUtil.init(requireContext(), "", "", "")
+			TencentCosUtil.init(
+				requireContext(), "REPLACED",
+				"REPLACED", "REPLACED"
+			)
 
 			val date = Date().toFormatString("yyyy-MM-dd")
 			val logFile = XLogUtil.logFile
