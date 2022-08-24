@@ -8,6 +8,7 @@ import com.elvishew.xlog.LogLevel
 import com.elvishew.xlog.XLog
 import com.elvishew.xlog.printer.AndroidPrinter
 import com.hl.utils.DeviceInfoUtil
+import com.hl.utils.XLogInitUtil
 import com.hl.utils.XLogUtil
 import com.tencent.smtt.export.external.TbsCoreSettings
 import com.tencent.smtt.sdk.QbSdk
@@ -25,7 +26,9 @@ class MyApplication : Application() {
 
 		val debug = BuildConfig.DEBUG
 
-		initXlog(debug)
+		XLogInitUtil.init {
+			this.isPrintLog = debug
+		}
 
 		initX5(this, debug)
 
@@ -46,7 +49,7 @@ class MyApplication : Application() {
 			}
 			.build()
 
-		val filePrinter = XLogUtil.getFilePrinter(fileName = "log.txt")
+		val filePrinter = XLogUtil.getFilePrinter()
 		XLog.init(logConfig, AndroidPrinter(), filePrinter)
 	}
 
