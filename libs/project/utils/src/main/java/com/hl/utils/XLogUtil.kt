@@ -23,7 +23,7 @@ object XLogUtil {
 	/**
 	 * 默认 XLog 日志保存文件夹的路径： sdcard/Android/data/包名/files/XLog
 	 */
-	private val defaultLogFolderPath by lazy {
+	val defaultLogFolderPath by lazy {
 		val externalFilesDir = BaseUtil.app.getExternalFilesDir(null)
 		File(externalFilesDir, "XLog").absolutePath
 	}
@@ -108,7 +108,7 @@ object XLogUtil {
 	/**
 	 *  获取固定日志文件名称的日志文件输出器
 	 */
-	fun getFilePrinter(
+	fun getFilePrinterByName(
 		logFolderPath: String = defaultLogFolderPath,
 		fileName: String = "log.txt",
 		backupStrategy: BackupStrategy = defaultBackupStrategy,
