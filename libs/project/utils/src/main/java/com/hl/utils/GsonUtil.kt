@@ -20,7 +20,7 @@ object GsonUtil {
 
 
 	@JvmStatic
-	fun toJson(any: Any): String {
+	fun toJson(any: Any?): String {
 		return gson.toJson(any)
 	}
 }
