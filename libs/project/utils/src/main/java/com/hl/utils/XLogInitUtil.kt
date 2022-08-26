@@ -44,10 +44,36 @@ object XLogInitUtil {
 
 
 	/**
-	 * @param logFileMinUploadMB 日志文件最小上传大小, 单位: MB
+	 * @param isWrite2File          是否需要写入日志到文件
+	 * @param logFileMinUploadMB    日志文件最小上传大小, 单位: MB
 	 * @param onUploadFiles        需要上传的日志文件集合
 	 */
-	fun initWithWriteFile(logFileMinUploadMB: Long = 5L, onUploadFiles: (List<File>) -> Unit = {}) {
+	fun initWithWriteFile(
+		isWrite2File: Boolean = true,
+		logFileMinUploadMB: Long = 5L,
+		onUploadFiles: (List<File>) -> Unit = {}
+	) {
+		val triple = getFilePrinter(logFileMinUploadMB)
+		var lastLogFileName = triple.first
+		val parentFile = triple.second
+		val filePrinter = triple.third
+
+		// 初始化 X-Log
+		init {
+			this.filePrinter = if (isWrite2File) filePrinter else null
+		}
+
+		// 仅有日志写入文件时，才通知需要上传的文件
+		if (isWrite2File) {
+			val uploadFiles = parentFile.listFiles(FileFilter {
+				it.name != lastLogFileName
+			})?.toList()
+
+			onUploadFiles(uploadFiles ?: listOf())
+		}
+	}
+
+	private fun getFilePrinter(logFileMinUploadMB: Long): Triple<String, File, FilePrinter> {
 		val nowDate = Date().toFormatString("yyyy-MM-dd")
 		val defaultLogFileName = "${nowDate}_log.txt"
 
@@ -86,20 +112,10 @@ object XLogInitUtil {
 			cleanStrategy = NeverCleanStrategy()
 		)
 
-		// 初始化 X-Log
-		init {
-			this.filePrinter = filePrinter
-		}
-
 		sharedPreferences.edit {
 			this.putString(LAST_WRITE_X_LOG_FILE_NAME_KEY, lastLogFileName)
 		}
-
-		val uploadFiles = parentFile.listFiles(FileFilter {
-			it.name != lastLogFileName
-		})?.toList()
-
-		onUploadFiles(uploadFiles ?: listOf())
+		return Triple(lastLogFileName, parentFile, filePrinter)
 	}
 }
 

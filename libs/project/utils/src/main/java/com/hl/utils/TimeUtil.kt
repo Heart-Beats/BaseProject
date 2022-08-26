@@ -38,7 +38,7 @@ object TimeUtil {
 	 *
 	 */
 	@JvmStatic
-	fun calculateCountTime(countTime: Long): String {
+	fun calculateCountTime2String(countTime: Long): String {
 		val (hours, minutes, seconds) = calculateMills2HMS(countTime)
 		return if (hours > 0) {
 			String.format("%02d:%02d:%02d", hours, minutes, seconds)
@@ -79,7 +79,7 @@ object TimeUtil {
 					delay(1 * 1000)
 					countTime += interval
 				}
-				action(countTime, calculateCountTime(countTime))
+				action(countTime, calculateCountTime2String(countTime))
 			}
 		}
 	}

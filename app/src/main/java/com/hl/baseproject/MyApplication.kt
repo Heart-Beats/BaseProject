@@ -10,6 +10,7 @@ import com.elvishew.xlog.printer.AndroidPrinter
 import com.hl.utils.DeviceInfoUtil
 import com.hl.utils.XLogInitUtil
 import com.hl.utils.XLogUtil
+import com.hl.utils.isMainProcess
 import com.tencent.smtt.export.external.TbsCoreSettings
 import com.tencent.smtt.sdk.QbSdk
 import com.tencent.smtt.sdk.TbsListener
@@ -24,18 +25,20 @@ class MyApplication : Application() {
 	override fun onCreate() {
 		super.onCreate()
 
-		val debug = BuildConfig.DEBUG
+		if (isMainProcess()) {
+			val debug = BuildConfig.DEBUG
 
-		XLogInitUtil.init {
-			this.isPrintLog = debug
+			XLogInitUtil.init {
+				this.isPrintLog = debug
+			}
+
+			initX5(this, debug)
+
+			SDKInitHelper.preInitSdk(this)
+
+			val deviceAllInfo = DeviceInfoUtil.getDeviceAllInfo(this)
+			XLog.d("运行设备信息-------------->\n $deviceAllInfo")
 		}
-
-		initX5(this, debug)
-
-		SDKInitHelper.preInitSdk(this)
-
-		val deviceAllInfo = DeviceInfoUtil.getDeviceAllInfo(this)
-		XLog.d("运行设备信息-------------->\n $deviceAllInfo")
 	}
 
 	private fun initXlog(isPrintLog: Boolean) {
