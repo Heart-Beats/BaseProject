@@ -1,6 +1,6 @@
 package com.hl.arch.web.bean
 
-import com.google.gson.Gson
+import com.hl.utils.GsonUtil
 
 /**
  * @author  张磊  on  2022/06/13 at 16:32
@@ -13,7 +13,7 @@ data class H5ReturnBean<T>(
 	var data: T
 ) {
 	fun toJsonString(): String {
-		return Gson().toJson(this)
+		return GsonUtil.toJson(this)
 	}
 }
 
@@ -26,7 +26,7 @@ object H5Return {
 
 	@JvmStatic
 	fun fail(): String {
-		return fail("")
+		return fail("操作失败")
 	}
 
 	@JvmStatic
@@ -35,7 +35,7 @@ object H5Return {
 	}
 
 	@JvmStatic
-	fun <T> fail(data: T): String {
-		return H5ReturnBean("fail", "操作失败", data).toJsonString()
+	fun <T> fail(msg: T): String {
+		return H5ReturnBean("fail", GsonUtil.toJson(msg), "").toJsonString()
 	}
 }

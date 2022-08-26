@@ -130,10 +130,14 @@ class MediaPlayerHelper(private val seekBar: SeekBar? = null, private val playLi
 	fun resume() {
 		XLog.d("开始播放")
 
-		mediaPlayer.start()
+		try {
+			mediaPlayer.start()
 
-		// 开始计时任务
-		starTiming()
+			// 开始计时任务
+			starTiming()
+		} catch (e: Exception) {
+			XLog.e("开始播放 异常", e)
+		}
 	}
 
 	/**
@@ -182,13 +186,17 @@ class MediaPlayerHelper(private val seekBar: SeekBar? = null, private val playLi
 	fun pause() {
 		XLog.d("暂停播放")
 
-		mediaPlayer.pause()
+		try {
+			mediaPlayer.pause()
 
-		// 取消计时
-		stopTiming()
+			// 取消计时
+			stopTiming()
 
-		handler.post {
-			playListener?.onPause()
+			handler.post {
+				playListener?.onPause()
+			}
+		} catch (e: Exception) {
+			XLog.e("暂停播放", e)
 		}
 	}
 
@@ -197,30 +205,58 @@ class MediaPlayerHelper(private val seekBar: SeekBar? = null, private val playLi
 	 */
 	fun stop() {
 		XLog.d("停止播放")
+		try {
+			mediaPlayer.stop()
+			mediaPlayer.release()
 
-		mediaPlayer.stop()
-		mediaPlayer.release()
+			// 取消计时
+			stopTiming()
 
-		// 取消计时
-		stopTiming()
-
-		handler.post {
-			playListener?.onStop()
+			handler.post {
+				playListener?.onStop()
+			}
+		} catch (e: Exception) {
+			XLog.e("停止播放异常", e)
 		}
+	}
+
+
+	/**
+	 * 当前是否正在播放
+	 */
+	fun isPalying(): Boolean {
+		val playing = try {
+			mediaPlayer.isPlaying
+		} catch (e: Exception) {
+			XLog.e("获取当前播放状态出错", e)
+			false
+		}
+		XLog.d("当前是否正在播放  == ${playing}")
+		return playing
 	}
 
 	/**
 	 * 获取当前播放时长，  单位： ms
 	 */
 	private fun getCurrentPosition(): Long {
-		return mediaPlayer.currentPosition.toLong()
+		try {
+			return mediaPlayer.currentPosition.toLong()
+		} catch (e: Exception) {
+			XLog.e("获取当前播放位置出错", e)
+			return 0
+		}
 	}
 
 	/**
 	 * 获取当前播放媒体文件的总时长,  单位： ms
 	 */
 	private fun getTotalDuration(): Long {
-		return mediaPlayer.duration.toLong()
+		try {
+			return mediaPlayer.duration.toLong()
+		} catch (e: Exception) {
+			XLog.e("获取当前播放总时长出错", e)
+			return 0
+		}
 	}
 
 	/**
