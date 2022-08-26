@@ -15,11 +15,15 @@ import com.hl.tencentcloud.cos.TransferListener
 import com.hl.uikit.onClick
 import com.hl.uikit.toast
 import com.hl.utils.BitmapUtil
+import com.hl.utils.TimeUtil
 import com.hl.utils.XLogUtil
+import com.hl.utils.media.MediaPlayerHelper
+import com.hl.utils.media.OnPlayListener
 import com.hl.utils.span.dsl.buildSpannableString
 import com.hl.utils.toFormatString
 import com.tencent.cos.xml.transfer.TransferState
 import java.util.*
+
 
 class TestFragment : ViewBindingMvvmBaseFragment<FragmentTestBinding>() {
 
@@ -100,6 +104,30 @@ class TestFragment : ViewBindingMvvmBaseFragment<FragmentTestBinding>() {
 						XLog.e("传输状态: transferState==${transferState}")
 					}
 				})
+		}
+
+		testPlayAudio.onClick {
+			val url =
+				"https://dl.stream.qqmusic.qq.com/C400002JIJje3z9Tuw.m4a?guid=7562095510&vkey=213887751AFE24DE490EA14902589A1403CBBBA0A7A2C2D9DD1DE40F1601DF57DD6DDBD4BE02276A0F39638958474AD54169B11D2C76E443&uin=913305160&fromtag=120032"
+
+			val mediaPlayerHelper = MediaPlayerHelper(musicSeekBar, object : OnPlayListener {
+				override fun onPrepareStart(currentPosition: Long, totalDuration: Long) {
+					currentTime.text = TimeUtil.calculateCountTime2String(currentPosition)
+					totalTime.text = TimeUtil.calculateCountTime2String(totalDuration)
+				}
+
+				override fun onProgress(currentPosition: Long, totalDuration: Long, currentProgress: Int) {
+					currentTime.text = TimeUtil.calculateCountTime2String(currentPosition)
+					totalTime.text = TimeUtil.calculateCountTime2String(totalDuration)
+				}
+
+				override fun onSeekComplete(currentPosition: Long) {
+					currentTime.text = TimeUtil.calculateCountTime2String(currentPosition)
+				}
+			})
+			mediaPlayerHelper.playUrl(url)
+
+			// mediaPlayerHelper.playRes(requireContext(), R.raw.summer)
 		}
 	}
 }

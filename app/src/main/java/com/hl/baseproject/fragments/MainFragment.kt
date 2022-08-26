@@ -43,10 +43,8 @@ class MainFragment : ViewBindingMvvmBaseFragment<FragmentMainBinding>() {
 	private val activityResultHelper = ActivityResultHelper(this)
 
 	private val letterArray: List<String> by lazy {
-		val list = arrayListOf<String>()
-		for (char in 'A'..'C') {
-			list.add(char.toString())
-		}
+		val list = ('A'..'C').map { it.toString() }.toMutableList()
+		list.add("#")
 		list
 	}
 
