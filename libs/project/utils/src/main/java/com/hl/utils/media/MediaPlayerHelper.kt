@@ -100,7 +100,7 @@ class MediaPlayerHelper(private val seekBar: SeekBar? = null, private val playLi
 						mediaPlayer.seekTo((getTotalDuration() * percent).toInt())
 
 						if (!mediaPlayer.isPlaying) {
-							resume()
+							play()
 						}
 					}
 				}
@@ -125,27 +125,11 @@ class MediaPlayerHelper(private val seekBar: SeekBar? = null, private val playLi
 	}
 
 	/**
-	 * 恢复播放， 对于 pause 或者 onCompletion 时有效
-	 */
-	fun resume() {
-		XLog.d("开始播放")
-
-		try {
-			mediaPlayer.start()
-
-			// 开始计时任务
-			starTiming()
-		} catch (e: Exception) {
-			XLog.e("开始播放 异常", e)
-		}
-	}
-
-	/**
-	 * 开始播放
+	 *  准备开始播放
 	 *
 	 * @param url 媒体文件的路径，或者想播放的流的 http/rtsp URL
 	 */
-	fun playUrl(url: String) {
+	fun preparePlayUrl(url: String) {
 		XLog.d("开始准备播放， url == $url")
 
 		try {
@@ -158,11 +142,11 @@ class MediaPlayerHelper(private val seekBar: SeekBar? = null, private val playLi
 	}
 
 	/**
-	 * 开始播放
+	 * 准备开始播放
 	 *
 	 * @param rawId  raw 目录下的媒体文件
 	 */
-	fun playRes(context: Context, rawId: Int) {
+	fun preparePlayRes(context: Context, rawId: Int) {
 		XLog.d("开始准备播放， resId == $rawId")
 
 		try {
@@ -177,6 +161,22 @@ class MediaPlayerHelper(private val seekBar: SeekBar? = null, private val playLi
 			mediaPlayer.prepare() // prepare 对于本地文件同步加载
 		} catch (e: Exception) {
 			XLog.e("mediaPlayer 准备播放异常", e)
+		}
+	}
+
+	/**
+	 * 开始播放， 对于 pause 或者 onCompletion 时有效
+	 */
+	fun play() {
+		XLog.d("开始播放")
+
+		try {
+			mediaPlayer.start()
+
+			// 开始计时任务
+			starTiming()
+		} catch (e: Exception) {
+			XLog.e("开始播放 异常", e)
 		}
 	}
 
@@ -266,6 +266,13 @@ class MediaPlayerHelper(private val seekBar: SeekBar? = null, private val playLi
 		return getCurrentPosition() * 100 / getTotalDuration()
 	}
 
+	/**
+	 * 获取 mediaPlayer  对象
+	 */
+	fun getMediaPlayer(): MediaPlayer {
+		return mediaPlayer
+	}
+
 
 	// 播放准备
 	override fun onPrepared(player: MediaPlayer) {
@@ -274,10 +281,8 @@ class MediaPlayerHelper(private val seekBar: SeekBar? = null, private val playLi
 			playListener?.onPrepareStart(getCurrentPosition(), getTotalDuration())
 		}
 
-		player.start()
-
-		// 开始计时任务
-		starTiming()
+		// 不进行自动播放，由用户自己控制
+		// play()
 	}
 
 	// 目前无法收到播放完成的回调，通过进度判断手动发出通知
