@@ -125,7 +125,7 @@ class TestFragment : ViewBindingMvvmBaseFragment<FragmentTestBinding>() {
 					currentTime.text = TimeUtil.calculateCountTime2String(currentPosition)
 				}
 			})
-			mediaPlayerHelper.playUrl(url)
+			mediaPlayerHelper.preparePlayUrl(url)
 
 			// mediaPlayerHelper.playRes(requireContext(), R.raw.summer)
 		}
