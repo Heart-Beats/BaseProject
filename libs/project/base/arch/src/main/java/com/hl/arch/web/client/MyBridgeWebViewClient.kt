@@ -45,6 +45,8 @@ open class MyBridgeWebViewClient(val webView: BridgeWebView) : BridgeWebViewClie
 	}
 
 	override fun onPageFinished(view: WebView?, url: String?) {
+		super.onPageFinished(view, url)
+
 		XLog.d("页面加载结束， url == $url")
 
 		if (isPageLoadFail) {

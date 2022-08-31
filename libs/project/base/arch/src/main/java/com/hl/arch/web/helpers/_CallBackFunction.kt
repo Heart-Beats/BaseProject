@@ -21,5 +21,5 @@ fun CallBackFunction.onSuccess() {
 }
 
 fun CallBackFunction.onFail() {
-	this.onFail("操作失败")
+	this.onFail("")
 }

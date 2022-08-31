@@ -10,6 +10,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.text.TextPaint
 import android.view.View
+import android.view.ViewGroup
 import android.webkit.WebResourceRequest
 import android.webkit.WebSettings
 import android.webkit.WebView
@@ -206,6 +207,9 @@ open class WebViewFragment : ViewBindingMvvmBaseFragment<FragmentWebViewBinding>
 		this.loadWithOverviewMode = true
 		this.displayZoomControls = true
 		this.cacheMode = WebSettings.LOAD_DEFAULT
+
+		//设置是否开启密码保存功能，不建议开启，默认已经做了处理，存在盗取密码的危险
+		this.savePassword = false
 	}
 
 	/**
@@ -309,6 +313,34 @@ open class WebViewFragment : ViewBindingMvvmBaseFragment<FragmentWebViewBinding>
 		} else {
 			super.onBackPressed()
 		}
+
+
+
+	override fun onResume() {
+		super.onResume()
+		webView.settings.javaScriptEnabled = true
+	}
+
+	override fun onStop() {
+		super.onStop()
+		// WebView在后台的时候, 此时关闭js交互， 避免后台无法释放 js 导致发热耗电
+		webView.settings.javaScriptEnabled = false
+	}
+
+	override fun onDestroy() {
+		//有音频播放的 web 页面的销毁逻辑： 在关闭了Activity时，如果 Webview 的音乐或视频，还在播放。就必须销毁 Webview
+		//但是注意：webview 调用 destory 时,webview 仍绑定在 Activity 上，这是由于构建 webview 时传入了该 Activity 的 context 对象
+		//因此需要先从父容器中移除webview,然后再销毁webview:
+
+		val parent = webView.getParent() as ViewGroup
+		if (parent != null) {
+			parent.removeView(webView)
+		}
+		webView.removeAllViews()
+		webView.destroy()
+
+		super.onDestroy()
+	}
 
 
 	/**
