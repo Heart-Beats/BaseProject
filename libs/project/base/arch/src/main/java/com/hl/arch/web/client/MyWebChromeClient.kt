@@ -2,26 +2,28 @@ package com.hl.arch.web.client
 
 import android.Manifest
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
+import android.location.LocationManager
 import android.net.Uri
 import android.os.Build
+import android.provider.Settings
 import android.webkit.GeolocationPermissions
 import android.webkit.ValueCallback
 import android.webkit.WebChromeClient
 import android.webkit.WebView
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
-import com.hl.arch.web.WebViewFragment
 import com.hl.arch.web.helpers.logJs
 import com.hl.uikit.image.pictureselector.GlideEngine
 import com.hl.uikit.image.pictureselector.MyCompressEngine
-import com.hl.utils.activityResult.OnActivityResult
 import com.hl.utils.file2Uri
 import com.hl.utils.reqPermissions
 import com.luck.picture.lib.basic.PictureSelector
 import com.luck.picture.lib.config.SelectMimeType
 import com.luck.picture.lib.entity.LocalMedia
 import com.luck.picture.lib.interfaces.OnResultCallbackListener
+
 
 /**
  * @author  张磊  on  2021/12/21 at 12:07

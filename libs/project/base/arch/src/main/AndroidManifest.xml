@@ -4,6 +4,10 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <!-- WebViewFragment 进行定位时使用 -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
     <!-- requestLegacyExternalStorage: 禁用分区存储, 但在 Android 11 会忽略该字段，强制开启分区存储-->
     <application
         android:requestLegacyExternalStorage="true">
