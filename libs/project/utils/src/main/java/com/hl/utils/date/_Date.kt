@@ -1,5 +1,6 @@
-package com.hl.utils
+package com.hl.utils.date
 
+import com.hl.utils.toFormatString
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -20,91 +21,10 @@ fun Date.toCalendar(): Calendar {
     }
 }
 
-fun Calendar.toFormatString(destPattern: String= srcPattern): String {
-    return time.toFormatString(destPattern)
-}
-
-fun Calendar.toDate(): Date {
-    return this.toFormatString(srcPattern).toDate(srcPattern)
-}
-
-fun Calendar?.copyNewCalendar(): Calendar? {
-    if (this == null) return null
-    return Calendar.getInstance().apply {
-        timeInMillis = this@copyNewCalendar.timeInMillis
-    }
-}
-
-fun String.toCalendar(srcPattern: String): Calendar? {
-    val date = try {
-        toDate(srcPattern)
-    } catch (e: Exception) {
-        e.printStackTrace()
-        return null
-    }
-    return Calendar.getInstance().apply {
-        time = date
-    }
-}
 
 fun String.toDate(srcPattern: String): Date {
     val format = SimpleDateFormat(srcPattern, Locale.ENGLISH)
     return format.parse(this)
-}
-
-/**
- * 设置分钟为 0
- */
-fun Calendar.toMinuteFirst(): Calendar {
-    set(Calendar.SECOND, 0)
-    return this
-}
-
-/**
- * 设置分钟为 59
- */
-fun Calendar.toMinuteLast(): Calendar {
-    set(Calendar.SECOND, 59)
-    return this
-}
-
-/**
- * 设置为一天的最后时刻
- */
-fun Calendar.toDayLast(): Calendar {
-    set(Calendar.HOUR_OF_DAY, 23)
-    toMinuteLast()
-    set(Calendar.SECOND, 59)
-    return this
-}
-
-/**
- * 设置为一天的开始时刻
- */
-fun Calendar.toDayFirst(): Calendar {
-    set(Calendar.HOUR_OF_DAY, 0)
-    toMinuteFirst()
-    set(Calendar.SECOND, 0)
-    return this
-}
-
-/**
- * 设置为一个月的开始时刻
- */
-fun Calendar.toMonthFirst(): Calendar {
-    set(Calendar.DAY_OF_MONTH, 1)
-    toDayFirst()
-    return this
-}
-
-/**
- * 设置为一个月的最后时刻
- */
-fun Calendar.toMonthLast(): Calendar {
-    val max = getActualMaximum(Calendar.DAY_OF_MONTH)
-    set(Calendar.DAY_OF_MONTH, max)
-    toDayLast()
-    return this
 }
 
 

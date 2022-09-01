@@ -17,6 +17,7 @@ import com.hl.uikit.toast
 import com.hl.utils.BitmapUtil
 import com.hl.utils.TimeUtil
 import com.hl.utils.XLogUtil
+import com.hl.utils.date.toFormatString
 import com.hl.utils.media.MediaPlayerHelper
 import com.hl.utils.media.OnPlayListener
 import com.hl.utils.span.dsl.buildSpannableString

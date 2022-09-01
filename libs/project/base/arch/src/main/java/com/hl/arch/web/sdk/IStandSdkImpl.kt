@@ -39,6 +39,7 @@ import com.hl.umeng.sdk.MyUMShareListener
 import com.hl.umeng.sdk.UMShareUtil
 import com.hl.utils.*
 import com.hl.utils.activityResult.OnActivityResult
+import com.hl.utils.date.getFormattedNowDateTime
 import com.hl.utils.previewFie.PreviewFileActivity
 import com.king.zxing.CameraScan
 import com.king.zxing.CaptureActivity

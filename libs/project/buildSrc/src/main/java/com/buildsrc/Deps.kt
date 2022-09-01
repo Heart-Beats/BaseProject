@@ -14,7 +14,7 @@ internal object Versions {
     const val FRAGMENT = "1.4.0"
     const val SECURITY_CRYPTO = "1.0.0"
     const val RECYCLERVIEW = "1.2.1"
-    const val DATA_BINDING = "7.0.4"
+    const val DATA_BINDING = "7.2.2"
     const val CAMERA_X = "1.1.0-beta01"
     const val PALETTE = "1.0.0"
 
