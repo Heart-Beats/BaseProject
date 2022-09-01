@@ -9,6 +9,7 @@ import com.elvishew.xlog.internal.DefaultsFactory
 import com.elvishew.xlog.printer.file.FilePrinter
 import com.elvishew.xlog.printer.file.backup.NeverBackupStrategy
 import com.elvishew.xlog.printer.file.clean.NeverCleanStrategy
+import com.hl.utils.date.toFormatString
 import java.io.File
 import java.io.FileFilter
 import java.util.*

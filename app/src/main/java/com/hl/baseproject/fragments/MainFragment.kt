@@ -7,6 +7,7 @@ import android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
 import android.content.res.Configuration
 import android.os.Bundle
 import androidx.fragment.app.Fragment
+import com.elvishew.xlog.XLog
 import com.github.lzyzsd.jsbridge.BridgeHandler
 import com.github.lzyzsd.jsbridge.BridgeWebView
 import com.hl.arch.mvvm.fragment.ViewBindingMvvmBaseFragment
@@ -26,6 +27,7 @@ import com.hl.utils.activityResult.ActivityResultHelper
 import com.hl.utils.activityResult.OnActivityResult
 import com.hl.utils.camera.CaptureFeature
 import com.hl.utils.camera.MyCaptureActivity
+import com.hl.utils.date.LunarUtil
 import com.hl.utils.previewFie.PreviewFileActivity
 import com.hl.utils.qrcode.QRScanUtil
 import com.hl.utils.reqPermissions
