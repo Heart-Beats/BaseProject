@@ -24,4 +24,15 @@
         app:spanCount="5"
         tools:listitem="@layout/item_text" />
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/test_recycler_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="@dimen/dp_20"
+        android:background="@color/palegreen"
+        android:orientation="vertical"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:spanCount="5"
+        tools:listitem="@layout/item_text_2" />
 </LinearLayout>

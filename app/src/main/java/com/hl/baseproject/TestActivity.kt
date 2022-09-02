@@ -12,6 +12,7 @@ import com.hl.arch.mvvm.activity.ViewBindingBaseActivity
 import com.hl.baseproject.databinding.ActivityTestBinding
 import com.hl.uikit.dpInt
 import com.hl.uikit.recyclerview.decoration.GridSpaceItemDecoration
+import com.hl.uikit.recyclerview.decoration.RecyclerViewDividerDecoration
 import com.hl.utils.setItemDecoration
 import kotlin.math.roundToInt
 
@@ -24,6 +25,8 @@ class TestActivity : ViewBindingBaseActivity<ActivityTestBinding>() {
 		}
 
 		this.textRecyclerView.init(data)
+
+		this.testRecyclerView.init2(data)
 	}
 
 	private fun RecyclerView.init(data: MutableList<String>) {
@@ -38,6 +41,21 @@ class TestActivity : ViewBindingBaseActivity<ActivityTestBinding>() {
 		this.adapter = adapter
 		this.layoutManager = MyGridLayoutManager(context, 5)
 		this.setItemDecoration(GridSpaceItemDecoration(10.dpInt, 20.dpInt))
+	}
+
+	private fun RecyclerView.init2(data: MutableList<String>) {
+		val adapter = object : BaseAbstractAdapter<String>(data) {
+			override val itemLayout: Int = R.layout.item_text_2
+
+			override fun onItemBind(viewHolder: ViewHolder, itemData: String?) {
+				viewHolder.getView<TextView>(R.id.item_text)?.text = itemData
+			}
+		}
+
+		this.adapter = adapter
+		this.setItemDecoration(RecyclerViewDividerDecoration().apply {
+			this.dividerSpace = 20.dpInt
+		})
 	}
 
 	override fun onBackPressed() {

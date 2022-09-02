@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/item_text"
+    android:layout_width="@dimen/dp_100"
+    android:layout_height="wrap_content"
+    android:background="@color/uikit_colorPrimary"
+    android:gravity="center"
+    android:padding="@dimen/dp_10"
+    android:textColor="@color/white"
+    tools:text="测试文本">
+
+</TextView>
