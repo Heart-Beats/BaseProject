@@ -19,12 +19,11 @@ class ActivityResultHelper(private val activityResultCaller: ActivityResultCalle
 
 	private lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
 
-	private val activityResultCallbackMap = hashMapOf<Class<out Activity>, OnActivityResult>()
+	private val activityResultCallbackMap = hashMapOf<String, OnActivityResult>()
 
 	init {
 		registerActivityResultLauncher()
 	}
-
 
 	/**
 	 * 必须在 activity 的 onCreate中或之前调用此方法
@@ -33,11 +32,10 @@ class ActivityResultHelper(private val activityResultCaller: ActivityResultCalle
 		activityResultLauncher =
 			activityResultCaller.registerForActivityResult(MyStartActivityForResult()) { activityResult ->
 
-				activityResultCallbackMap.forEach { (launchActivityCls, onActivityResult) ->
+				activityResultCallbackMap.forEach { (identifier, onActivityResult) ->
 
 					// 找到对应启动时的 Activity, 返回处理结果
-					if (activityResult.data?.component?.className == launchActivityCls.name) {
-
+					if (activityResult.data?.identifier == identifier) {
 						when (val resultCode = activityResult.resultCode) {
 							Activity.RESULT_OK -> onActivityResult.onResultOk(activityResult.data)
 							Activity.RESULT_CANCELED -> onActivityResult.onResultCanceled(activityResult.data)
@@ -84,10 +82,11 @@ class ActivityResultHelper(private val activityResultCaller: ActivityResultCalle
 		activityOptionsCompat: ActivityOptionsCompat? = null,
 		callback: OnActivityResult,
 	) {
-		launchIntent.component?.also {
-			val launchActivityCls = Class.forName(it.className)
-			activityResultCallbackMap[launchActivityCls as Class<out Activity>] = callback
-		} ?: throw IllegalStateException("Intent 必须指定一个 component")
+
+		// 使用 launchIntent 的 hashCode 作为其唯一标识
+		val intentHashCode = launchIntent.hashCode().toString()
+		launchIntent.identifier = intentHashCode
+		activityResultCallbackMap[intentHashCode] = callback
 
 		activityResultLauncher.launch(launchIntent, activityOptionsCompat)
 	}
