@@ -431,4 +431,13 @@
             <enum name="Full" value="1" />
         </attr>
     </declare-styleable>
+
+    <declare-styleable name="UIKitSideBarView">
+        <attr format="reference" name="uikit_sideTextColor"/>
+        <attr format="reference" name="uikit_sidePressedTextColor"/>
+        <attr format="reference" name="uikit_sidePressedTextBgColor"/>
+        <attr format="dimension" name="uikit_sideItemHeight"/>
+        <attr format="dimension" name="uikit_sideItemSpacing"/>
+        <attr format="dimension" name="uikit_sideTextSize"/>
+    </declare-styleable>
 </resources>

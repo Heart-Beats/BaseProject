@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.drawable.Drawable
 import android.text.TextUtils
 import android.widget.ImageView
+import androidx.annotation.DrawableRes
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DecodeFormat
@@ -27,30 +28,56 @@ object GlideUtil {
             .into(imageView)
     }
 
-    @JvmOverloads
-    @JvmStatic
-    fun loadTeam(context: Context, url: String?, imageView: ImageView) {
-        Glide.with(context).load(url)
-            .placeholder(context.resources.getDrawable(R.drawable.icon_team_logo))
-            .error(context.resources.getDrawable(R.drawable.icon_team_logo))
-            .into(imageView)
-    }
 
     private fun isBase64Img(imgUrl: String): Boolean {
         return !TextUtils.isEmpty(imgUrl) && imgUrl.matches(Regex("^data:image/(png|jpg|\\*);base64,.*$"))
     }
 
+    /**
+     * 加载网络图片
+     *
+     * @param context
+     * @param url                      图片链接
+     * @param imageView                显示的 ImageView
+     * @param placeholderResId         占位图资源 ID
+     * @param roundPx                  圆角大小
+     * @param requestOptionsBlock      可定制化选项
+     */
     @JvmOverloads
     @JvmStatic
     fun load(
         context: Context,
         url: String?,
         imageView: ImageView,
-        placeholderResId: Int = R.drawable.loading_img_small,
-        roundPx: Int = 0
+        @DrawableRes placeholderResId: Int = R.drawable.loading_img_small,
+        roundPx: Int = 0,
+        requestOptionsBlock: RequestOptions.() -> Unit = {}
     ) {
         val drawable = ContextCompat.getDrawable(context, placeholderResId)
+        load(context, url, imageView, drawable, roundPx, requestOptionsBlock)
+    }
 
+
+    /**
+     * 加载网络图片
+     *
+     * @param context
+     * @param url                      图片链接
+     * @param imageView                显示的 ImageView
+     * @param placeholderResId         占位图
+     * @param roundPx                  圆角大小
+     * @param requestOptionsBlock      可定制化选项
+     */
+    @JvmOverloads
+    @JvmStatic
+    fun load(
+        context: Context,
+        url: String?,
+        imageView: ImageView,
+        drawable: Drawable?,
+        roundPx: Int = 0,
+        requestOptionsBlock: RequestOptions.() -> Unit = {}
+    ) {
         val requestOptions = RequestOptions()
             .placeholder(drawable)
             .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)   //关键代码，加载原始大小
@@ -61,9 +88,42 @@ object GlideUtil {
                 if (roundPx > 0) {
                     transform(RoundedCorners(roundPx))
                 }
-            }
+            }.apply(requestOptionsBlock)
 
         Glide.with(context).load(url).apply(requestOptions).into(imageView)
+    }
+
+    /**
+     * 加载本地图片
+     *
+     * @param context
+     * @param drawableId               加载图片的 ID
+     * @param imageView                显示的 ImageView
+     * @param roundPx                  圆角大小
+     * @param requestOptionsBlock      可定制化选项
+     */
+    @JvmOverloads
+    @JvmStatic
+    fun load(
+        context: Context,
+        drawableId: Int,
+        imageView: ImageView,
+        roundPx: Int = 0,
+        requestOptionsBlock: RequestOptions.() -> Unit = {}
+    ) {
+        val drawable = ContextCompat.getDrawable(context, R.drawable.loading_img_small)
+
+        val requestOptions = RequestOptions()
+            .placeholder(drawable)
+            .error(drawable)
+            .fallback(drawable)
+            .apply {
+                if (roundPx > 0) {
+                    transform(RoundedCorners(roundPx))
+                }
+            }.apply(requestOptionsBlock)
+
+        Glide.with(context).load(drawableId).apply(requestOptions).into(imageView)
     }
 
     @JvmOverloads
@@ -76,23 +136,5 @@ object GlideUtil {
             .error(drawable)
             .fallback(drawable)
         Glide.with(context).load(url).apply(requestOptions).into(target)
-    }
-
-    @JvmOverloads
-    @JvmStatic
-    fun load(context: Context, drawableId: Int, imageView: ImageView, roundPx: Int = 0) {
-        val drawable = ContextCompat.getDrawable(context, R.drawable.loading_img_small)
-
-        val requestOptions = RequestOptions()
-            .placeholder(drawable)
-            .error(drawable)
-            .fallback(drawable)
-            .apply {
-                if (roundPx > 0) {
-                    transform(RoundedCorners(roundPx))
-                }
-            }
-
-        Glide.with(context).load(drawableId).apply(requestOptions).into(imageView)
     }
 }

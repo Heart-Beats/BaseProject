@@ -7,15 +7,25 @@ import android.util.TypedValue
 import android.view.View
 import android.widget.TextView
 
-fun View.onClick(listener: (View) -> Unit) {
+/**
+ * 点击事件去除重复点击
+ */
+fun View.onClick(interval: Long, listener: (View) -> Unit) {
     setOnClickListener {
         val time = it.getTag(R.id.uikit_view_click_time)?.toString()?.toLongOrNull()
         val currentTime = System.currentTimeMillis()
-        if (time == null || currentTime - time > 500) {
+        if (time == null || currentTime - time > interval) {
             it.setTag(R.id.uikit_view_click_time, currentTime)
             listener.invoke(it)
         }
     }
+}
+
+/**
+ * 点击事件去除重复点击， 默认 500 ms
+ */
+fun View.onClick(listener: (View) -> Unit) {
+    this.onClick(500, listener)
 }
 
 fun View.getStatusBarHeight(): Int {
