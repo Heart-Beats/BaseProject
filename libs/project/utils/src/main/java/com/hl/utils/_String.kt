@@ -1,8 +1,6 @@
 package com.hl.utils
 
 import android.net.Uri
-import java.text.SimpleDateFormat
-import java.util.*
 
 /**
  * 身份证号脱敏
@@ -47,40 +45,44 @@ fun String.coverPhoneNo(): String {
     }
 }
 
+
+/**
+ * 按 3-4-4 格式化手机号
+ *
+ * @param separator  分隔符
+ * @return           格式化后的电话号码
+ */
+fun String.formatPhoneBy344(separator: Char = '-'): String {
+    val formattedNumber: String
+    val formattingNumber = StringBuilder()
+    if (this.isNotEmpty()) {
+        //插入分隔符
+        for (i in 0 until this.length) {
+            // 手机号的格式化为344(xxx xxxx xxxx),所以只在第 4，9 的位置插入分隔符
+            if (i == 3 || i == 8 || this[i] != separator) {
+                formattingNumber.append(this[i])
+                //是否是包含空格的长度
+                val isSpaceIndex = formattingNumber.length == 4 || formattingNumber.length == 9
+                //最后一个字符是否为空格，
+                val isLastSpace = formattingNumber[formattingNumber.length - 1] != separator
+                //最后一个字符不为空格
+                if (isSpaceIndex && isLastSpace) {
+                    //在最后位置插入空格
+                    formattingNumber.insert(formattingNumber.length - 1, separator)
+                }
+            }
+        }
+    }
+    formattedNumber = formattingNumber.toString()
+    return formattedNumber
+}
+
 fun String?.getLastPathSegment(): String {
     if (this == null) {
         return ""
     }
     val uri = Uri.parse(this)
     return uri.lastPathSegment ?: ""
-}
-
-fun String?.formatDate(srcPattern: String): Date? {
-    if (this.isNullOrEmpty()) {
-        return null
-    }
-    val patternLength = srcPattern.length
-    val srcFormat = SimpleDateFormat(srcPattern, Locale.ENGLISH)
-    val source = if (patternLength < length) {
-        substring(0, patternLength)
-    } else {
-        this
-    }
-    return try {
-        srcFormat.parse(source)
-    } catch (e: Exception) {
-        null
-    }
-}
-
-fun String.formatDateString(srcPattern: String, destPattern: String): String {
-    val destFormat = SimpleDateFormat(destPattern, Locale.ENGLISH)
-    return try {
-        val date = formatDate(srcPattern)
-        destFormat.format(date)
-    } catch (e: Exception) {
-        ""
-    }
 }
 
 /**

@@ -76,8 +76,6 @@ dependencies {
     implementation Deps.AndroidX.constraint_layout
     implementation Deps.Material.material
 
-    implementation Deps.LetterSlideBar.side_bar
-
     implementation "com.hl:base-arch"
     implementation "com.hl:uikit"
     implementation "com.hl:utils"

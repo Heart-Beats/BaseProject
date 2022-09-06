@@ -1,11 +1,14 @@
 package com.hl.utils
 
-import android.graphics.Color
+import android.graphics.Paint
 import android.widget.TextView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
+/**
+ * 倒计时
+ */
 fun TextView.timeDown(scope: CoroutineScope, count: Int, countFormatText: String = "%s", endAction: () -> Unit = {}) {
 	scope.launch {
 		var count = count
@@ -20,6 +23,9 @@ fun TextView.timeDown(scope: CoroutineScope, count: Int, countFormatText: String
 	}
 }
 
+/**
+ * 验证码格式的倒计时
+ */
 fun TextView.verifyCodeCountDown(scope: CoroutineScope, countFormatText: String = "已发送(%s)", endText: String = "重新获取") {
 	scope.launch {
 		var count = 60
@@ -36,11 +42,11 @@ fun TextView.verifyCodeCountDown(scope: CoroutineScope, countFormatText: String 
 	}
 }
 
-fun TextView.setCompareTextColor(percent: Double) {
-	val colorString = when {
-		percent.toInt() == 0 -> "#ff333333"
-		percent > 0 -> "#ffff3b30"
-		else -> "#ff00b578"
-	}
-	setTextColor(Color.parseColor(colorString))
+/**
+ * 给 TextView 添加下划线
+ */
+fun TextView.addUnderline() {
+	val textPaint = this.paint
+	textPaint.flags = Paint.UNDERLINE_TEXT_FLAG //下划线
+	textPaint.isAntiAlias = true //抗锯齿
 }

@@ -70,7 +70,7 @@ abstract class BaseFragment : Fragment() {
         super.onSaveInstanceState(outState)
 
         // saveFragmentInstanceState = parentFragmentManager.saveFragmentInstanceState(this)
-        Log.d(TAG, "onSaveInstanceState: ${this} 保存的数据 == ${outState}")
+        Log.d(TAG, "onSaveInstanceState: $this 保存的数据 == $outState")
     }
 
     fun setInitialFromSavedState() {
@@ -116,6 +116,8 @@ abstract class BaseFragment : Fragment() {
     }
 
     protected open fun updateSystemBar() {
+        Log.d(TAG, "updateSystemBar =====> $this, 更新状态栏为默认配置")
+
         //默认设置根布局上方 padding 为状态栏高度
         initInsetPadding(top = true)
 
@@ -238,6 +240,7 @@ abstract class BaseFragment : Fragment() {
     protected open fun isActivityMainPage() = true
 
 
+    @Deprecated("Deprecated in Java")
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         Log.d(TAG, "onActivityCreated =====> $this")
