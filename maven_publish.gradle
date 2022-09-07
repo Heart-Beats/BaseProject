@@ -469,8 +469,8 @@ project.afterEvaluate {
                 url 'http://maven.pm.youmatech.com/repository/maven-releases/'
 
                 credentials {
-                    username = 'youmaAdmin'
-                    password = '0JjlsIO6BV'
+                    username = YOUMA_MAVEN_USER
+                    password = YOUMA_MAVEN_PWD
                 }
 
                 allowInsecureProtocol = true
