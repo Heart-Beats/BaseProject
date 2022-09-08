@@ -39,7 +39,7 @@ object ToastUtils {
         duration: Int = Toast.LENGTH_SHORT,
         onFinished: () -> Unit = {}
     ) {
-        show(iconRes, context?.getString(textRes) ?: "", duration, onFinished)
+        show(iconRes, context.getString(textRes), duration, onFinished)
     }
 
     fun show(
