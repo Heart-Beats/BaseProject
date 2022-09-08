@@ -3,6 +3,7 @@ package com.hl.uikit
 import android.content.Context
 import android.util.AttributeSet
 import android.view.View
+import android.view.ViewGroup
 import android.webkit.WebView
 import android.widget.ProgressBar
 import androidx.core.content.ContextCompat
@@ -38,7 +39,7 @@ class ProgressWebView : BridgeWebView {
 
     private fun init(context: Context) {
         progressBar = ProgressBar(context, null, android.R.attr.progressBarStyleHorizontal)
-        progressBar?.layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, 6, 0, 0)
+        progressBar?.layoutParams = LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 6)
         progressBar?.progressDrawable = ContextCompat.getDrawable(context, R.drawable.uikit_progress_webview_top)
 
         setProgressDisplay(isDisplay)

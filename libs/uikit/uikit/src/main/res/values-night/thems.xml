@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- MaterialComponents 主题后加个 Bridge， 就只会对 material 下的组件生效，
+                            不加会将默认的 Button 转为 MaterialButton，以此类推 -->
+    <!--<style name="UiKit" parent="Theme.MaterialComponents.DayNight.NoActionBar.Bridge" />-->
+
+    <!--<style name="UiKit.AppTheme" parent="UiKit">-->
+
+    <!--    <item name="colorPrimary">@color/uikit_colorPrimary</item>-->
+    <!--    <item name="colorPrimaryDark">@color/uikit_colorPrimaryDark</item>-->
+    <!--    <item name="android:textColorPrimary">@color/uikit_textColorPrimary</item>-->
+    <!--    <item name="windowActionBar">false</item>-->
+    <!--    <item name="windowNoTitle">true</item>-->
+    <!--    <item name="android:windowBackground">@color/uikit_backgroundColor</item>-->
+    <!--    <item name="android:windowTranslucentStatus">true</item>-->
+    <!--    <item name="android:windowDisablePreview">true</item>-->
+
+    <!--    <item name="uikit_toolbarStyle">@style/UiKit.ToolbarStyle</item>-->
+    <!--    <item name="uikit_formGroupStyle">@style/UiKit.FormGroupStyle</item>-->
+    <!--    <item name="uikit_formItemStyle">@style/UiKit.FormItemStyle</item>-->
+    <!--    <item name="uikit_formHeaderActionTextStyle">@style/UiKit.FormHeaderActionTextStyle</item>-->
+    <!--    <item name="uikit_formItemLabelStyle">@style/UiKit.FormItemLabelStyle</item>-->
+    <!--    <item name="uikit_formItemTextStyle">@style/UiKit.FormItemTextStyle</item>-->
+    <!--    <item name="uikit_formItemInputStyle">@style/UiKit.FormItemInputStyle</item>-->
+    <!--    <item name="uikit_formItemTextVerifyCodeStyle">@style/UiKit.FormItemTextVerifyCodeStyle</item>-->
+    <!--    <item name="uikit_formItemInputSmsCodeStyle">@style/UiKit.FormItemInputSmsCodeStyle</item>-->
+    <!--    <item name="uikit_formItemToggleButtonStyle">@style/UiKit.FormItemToggleButtonStyle</item>-->
+    <!--    <item name="uikit_formItemVerticalTextStyle">@style/UiKit.FormItemVerticalTextStyle</item>-->
+    <!--    <item name="uikit_positiveButtonStyle">@style/UiKit.PositiveButtonStyle</item>-->
+    <!--    <item name="uikit_strokeButtonStyle">@style/UiKit.StrokeButtonStyle</item>-->
+    <!--    <item name="uikit_dividerViewStyle">@style/UiKit.DividerViewStyle</item>-->
+    <!--    <item name="uikit_dividerColor">@color/uikit_dividerColor</item>-->
+    <!--    <item name="uikit_alert_positive_text_color">@color/uikit_alert_positive_text_color</item>-->
+    <!--    <item name="uikit_alert_negative_text_color">@color/uikit_alert_negative_text_color</item>-->
+    <!--    <item name="uikit_commonButtonStyle">@style/UiKit.CommonButtonStyle</item>-->
+    <!--    <item name="uikit_searchBarStyle">@style/UiKit.SearchBarStyle</item>-->
+    <!--    <item name="uikit_optionsPickerViewStyle">@style/UiKit.OptionsPickerViewStyle</item>-->
+    <!--    <item name="uikit_optionRadioStyle">@style/UiKit.OptionRadioStyle</item>-->
+    <!--    <item name="uikit_textAreaStyle">@style/UiKit.TextAreaStyle</item>-->
+    <!--    <item name="uikit_progressImageViewStyle">@style/UiKit.ProgressImageViewStyle</item>-->
+    <!--    <item name="uikit_uploadPicImageGridLayout">@style/UiKit.UploadPicImageGridLayout</item>-->
+    <!--</style>-->
+
+</resources>
