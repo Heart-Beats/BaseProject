@@ -87,6 +87,13 @@
                 android:text="前往测试2页面"
                 android:textSize="24sp" />
 
+            <TextView
+                android:id="@+id/start_shadow_plugin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="启动 Shadow 插件"
+                android:textSize="24sp" />
         </LinearLayout>
 
         <com.hl.uikit.sidebar.UIKitSideBarView

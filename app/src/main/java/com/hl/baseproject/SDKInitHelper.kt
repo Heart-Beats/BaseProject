@@ -1,13 +1,16 @@
 package com.hl.baseproject
 
-import android.app.Application
 import android.content.Context
+import android.util.Log
 import com.elvishew.xlog.XLog
-import com.umeng.analytics.MobclickAgent
+import com.hl.shadow.Shadow
+import com.hl.shadow.logger.LogLevel
+import com.hl.utils.XLogInitUtil
+import com.tencent.smtt.export.external.TbsCoreSettings
+import com.tencent.smtt.sdk.QbSdk
+import com.tencent.smtt.sdk.TbsListener
+import com.tencent.smtt.utils.TbsLogClient
 import com.umeng.commonsdk.UMConfigure
-import com.umeng.message.IUmengRegisterCallback
-import com.umeng.message.PushAgent
-import com.umeng.socialize.PlatformConfig
 
 /**
  * @author  张磊  on  2022/06/15 at 11:31
@@ -18,73 +21,19 @@ object SDKInitHelper {
 	fun initSdk(context: Context) {
 		val applicationContext = context.applicationContext
 
+		val debug = BuildConfig.DEBUG
+
+		XLogInitUtil.init {
+			this.isPrintLog = debug
+		}
+
+		initX5(context, debug)
+
 		initUM(applicationContext)
+
+		initShadow()
 	}
 
-	fun preInitSdk(application: Application) {
-		// 预初始化友盟
-		preInitUM(application)
-	}
-
-	private fun preInitUM(application: Application) {
-
-		setPlatformConfigAppKeys()
-
-		// 在此处调用基础组件包提供的初始化函数 相应信息可在应用管理 -> 应用信息 中找到 http://message.umeng.com/list/apps
-		// 参数三：渠道名称；
-		// 参数四：设备类型，必须参数，传参数为UMConfigure.DEVICE_TYPE_PHONE则表示手机；传参数为UMConfigure.DEVICE_TYPE_BOX则表示盒子；默认为手机；
-		// 参数五：Push推送业务的secret 填充Umeng Message Secret对应信息（需替换）
-		UMConfigure.setLogEnabled(BuildConfig.DEBUG)
-		//HuaWeiRegister.register(this);
-		val appKey: String = BuildConfig.umengAppKey
-		val secretKey: String = BuildConfig.umengSecretKey
-
-		// 友盟预初始化，不会采集设备信息，也不会向友盟后台上报数据
-		UMConfigure.preInit(application, appKey, "Umeng")
-
-		// 选用AUTO页面采集模式
-		MobclickAgent.setPageCollectionMode(MobclickAgent.PageMode.AUTO)
-
-		// 当 AndroidManifest.xml 中 package值和 appId (应用包名) 不一致时，需要在初始化前设置资源包名
-		PushAgent.getInstance(application).resourcePackageName = BuildConfig.APPLICATION_ID
-
-		//获取消息推送代理示例
-		val mPushAgent = PushAgent.getInstance(application)
-		//注册推送服务，每次调用register方法都会回调该接口
-		mPushAgent.register(object : IUmengRegisterCallback {
-			override fun onSuccess(deviceToken: String) {
-				//注册成功会返回deviceToken deviceToken是推送消息的唯一标志
-				XLog.d("友盟deviceToken：$deviceToken")
-			}
-
-			override fun onFailure(s: String, s1: String) {
-				XLog.d("友盟deviceToken失败：$s$s1")
-			}
-		})
-		PushAgent.getInstance(application).onAppStart()
-	}
-
-	private fun setPlatformConfigAppKeys() {
-
-		PlatformConfig.setWeixin(BuildConfig.wxAppKey, BuildConfig.wxSecretKey)
-		PlatformConfig.setWXFileProvider("${BuildConfig.APPLICATION_ID}.fileprovider")
-
-		// QQ设置
-		PlatformConfig.setQQZone(BuildConfig.qqAppKey, BuildConfig.qqSecretKey)
-		PlatformConfig.setQQFileProvider("${BuildConfig.APPLICATION_ID}.fileprovider")
-
-		// 企业微信设置
-		PlatformConfig.setWXWork(
-			BuildConfig.wxWorkAppKey,
-			BuildConfig.wxWorkSecretKey,
-			"1000002",
-			"wwauthac6ffb259ff6f66a000002"
-		)
-		PlatformConfig.setWXWorkFileProvider("${BuildConfig.APPLICATION_ID}.fileprovider")
-
-		// 支付宝设置
-		PlatformConfig.setAlipay(BuildConfig.aliPayAppKey)
-	}
 
 	/**
 	 * 直接初始化友盟
@@ -95,4 +44,75 @@ object SDKInitHelper {
 		UMConfigure.init(applicationContext, umengAppKey, "Umeng", UMConfigure.DEVICE_TYPE_PHONE, umengSecretKey)
 	}
 
+
+	private fun initX5(context: Context, isPrintLog: Boolean) {
+		// 首次初始化冷启动优化, TBS内核首次使用和加载时，ART虚拟机会将Dex文件转为Oat，该过程由系统底层触发且耗时较长，
+		// 很容易引起anr问题，解决方法是使用TBS的 ”dex2oat优化方案“。
+
+		// 在调用TBS初始化、创建WebView之前进行如下配置
+		val map: HashMap<String, Any> = HashMap()
+		map[TbsCoreSettings.TBS_SETTINGS_USE_SPEEDY_CLASSLOADER] = true
+		map[TbsCoreSettings.TBS_SETTINGS_USE_DEXLOADER_SERVICE] = true
+		QbSdk.initTbsSettings(map)
+		// 支持移动数据进行初始化下载
+		QbSdk.setDownloadWithoutWifi(true)
+
+		if (isPrintLog) {
+			QbSdk.setTbsLogClient(object : TbsLogClient(context) {
+				override fun i(tag: String?, msg: String?) {
+					Log.i(tag, msg ?: "")
+				}
+
+				override fun e(tag: String?, msg: String?) {
+					Log.e(tag, msg ?: "")
+				}
+
+				override fun w(tag: String?, msg: String?) {
+					Log.w(tag, msg ?: "")
+				}
+
+				override fun d(tag: String?, msg: String?) {
+					Log.d(tag, msg ?: "")
+				}
+
+				override fun v(tag: String?, msg: String?) {
+					Log.v(tag, msg ?: "")
+				}
+			})
+		}
+
+		QbSdk.setTbsListener(object : TbsListener {
+			override fun onDownloadFinish(i: Int) {
+				//tbs内核下载完成回调
+				XLog.d("X5core tbs内核下载完成")
+			}
+
+			override fun onInstallFinish(i: Int) {
+				//内核安装完成回调，
+				XLog.d("X5core tbs内核安装完成")
+			}
+
+			override fun onDownloadProgress(i: Int) {
+				//下载进度监听
+				XLog.d("X5core tbs内核正在下载中----->$i")
+			}
+		})
+
+		QbSdk.initX5Environment(context, object : QbSdk.PreInitCallback {
+			override fun onCoreInitFinished() {
+				XLog.d("X5core x5加载结束")
+			}
+
+			override fun onViewInitFinished(b: Boolean) {
+				XLog.d("X5core x5加载结束$b")
+			}
+		})
+	}
+
+	fun initShadow() {
+		val logLevel = if (BuildConfig.DEBUG) LogLevel.DEBUG else LogLevel.INFO
+		Shadow.initShadowLog(logLevel, { logLevel: LogLevel, message: String, t: Throwable? ->
+
+		})
+	}
 }

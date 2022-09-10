@@ -15,6 +15,9 @@ task buildSdk() {
     dependsOn gradle.includedBuild('project').task(':SDK:Pay:assembleRelease')
     dependsOn gradle.includedBuild('project').task(':SDK:Umeng:assembleRelease')
     dependsOn gradle.includedBuild('project').task(':SDK:TencentCloud:assembleRelease')
+
+    dependsOn gradle.includedBuild('project').task(':SDK:shadow-lib:assemble')
+    dependsOn gradle.includedBuild('project').task(':SDK:shadow-init:assembleRelease')
 }
 
 //引入配置设置
@@ -425,6 +428,55 @@ project.afterEvaluate {
                     setDependencyNode(root, 'compile', 'androidx.appcompat', 'appcompat', Versions.APPCOMPAT)
 
                     setDependencyNode(root, 'compile', 'com.qcloud.cos', 'cos-android-lite', Versions.TENCENT_COS)
+
+                    setScm(root)
+                }
+            }
+
+            shadowLib(MavenPublication) {
+                def moduleName = 'shadow-lib'
+                def publishModuleName = 'shadow-lib'
+
+                def modulePath = "$libProjectPath/SDK/Shadow/$moduleName"
+
+                groupId myGroupId
+                artifactId publishModuleName
+                version getPublicationVersion()
+
+                // 非 aar 包的相关路径定义
+                artifact("$modulePath/build/libs/${moduleName}.jar")
+                artifact sourceAar(publishModuleName, modulePath)
+
+                pom.withXml {
+                    def root = asNode()
+
+                    setDependencyNode(root, 'compile', 'org.jetbrains.kotlin', 'kotlin-stdlib', Versions.KOTLIN)
+
+                    setScm(root)
+                }
+            }
+
+            shadowInit(MavenPublication) {
+                def moduleName = 'shadow-init'
+                def publishModuleName = 'shadow-init'
+
+                def modulePath = "$libProjectPath/SDK/Shadow/$moduleName"
+
+                groupId myGroupId
+                artifactId publishModuleName
+                version getPublicationVersion()
+                artifact("$modulePath/build/outputs/aar/${moduleName}-release.aar")
+                artifact sourceAar(publishModuleName, modulePath)
+
+                pom.withXml {
+                    def root = asNode()
+
+                    setDependencyNode(root, 'compile', 'org.jetbrains.kotlin', 'kotlin-stdlib', Versions.KOTLIN)
+                    setDependencyNode(root, 'compile', myGroupId, 'shadow-lib', getPublicationVersion())
+
+                    setDependencyNode(root, 'compile', 'com.tencent.shadow.dynamic', 'host', Versions.SHADOW)
+                    setDependencyNode(root, 'compile', 'com.tencent.shadow.core', 'activity-container', Versions.SHADOW)
+                    setDependencyNode(root, 'compile', 'com.tencent.shadow.dynamic', 'manager', Versions.SHADOW)
 
                     setScm(root)
                 }
