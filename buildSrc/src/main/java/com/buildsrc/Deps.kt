@@ -66,6 +66,7 @@ internal object Versions {
     const val WAVE_SIDE_BAR = "1.3"
     const val SIDE_BAR = "1.0.0"
     const val ANDROID_AUTO_SIZE = "v1.2.1"
+    const val SHADOW = "2.2.1"
 }
 
 class Deps {
@@ -465,5 +466,19 @@ class Deps {
      */
     object AndroidAutoSize {
         const val android_auto_size = "com.github.JessYanCoding:AndroidAutoSize:${Versions.ANDROID_AUTO_SIZE}"
+    }
+
+    /**
+     * 腾讯开源的插件框架
+     *
+     * 地址： https://github.com/Tencent/Shadow
+     */
+    object Shadow {
+        const val host = "com.tencent.shadow.dynamic:host:${Versions.SHADOW}"
+        const val activity_container = "com.tencent.shadow.core:activity-container:${Versions.SHADOW}"
+        const val manager = "com.tencent.shadow.dynamic:manager:${Versions.SHADOW}"
+        const val common = "com.tencent.shadow.core:common:${Versions.SHADOW}"
+        const val loader = "com.tencent.shadow.core:loader:${Versions.SHADOW}"
+        const val loader_impl = "com.tencent.shadow.dynamic:loader-impl:${Versions.SHADOW}"
     }
 }

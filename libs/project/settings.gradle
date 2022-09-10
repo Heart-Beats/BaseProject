@@ -10,15 +10,22 @@ pluginManagement {
     }
 }
 
+
 dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    /**
+     * FAIL_ON_PROJECT_REPOS:  如果设置此模式，则在项目中直接或通过插件直接声明的任何存储库都将触发构建错误
+     * PREFER_PROJECT:         如果设置此模式，则在项目上声明的任何存储库会覆盖设置中声明的存储库
+     * PREFER_SETTINGS：       如果设置此模式，则项目中使用的存储库只会以设置中声明的为准
+     */
+    repositoriesMode.set(RepositoriesMode.PREFER_PROJECT)
+
     repositories {
-        maven { url 'https://maven.aliyun.com/repository/public' }
+        mavenLocal()
+        maven { url 'https://maven.aliyun.com/repository/public' } // central 和 jcenter 的聚合仓
         maven { url 'https://maven.aliyun.com/repository/google' }
         maven { url 'https://jitpack.io' }
-        mavenLocal()
-        google()
-        mavenCentral()
+        //        google()
+        //        mavenCentral()
     }
 }
 
@@ -42,4 +49,14 @@ def includeBase() {
 
 def includeSDK() {
     include ':SDK:Umeng', ':SDK:Pay', ':libs-aar', ':SDK:TencentCloud'
+
+    includeShadow()
+}
+
+def includeShadow() {
+    include ':SDK:shadow-plugin-manager',':SDK:shadow-lib', ':SDK:shadow-init'
+
+    project(':SDK:shadow-plugin-manager').projectDir = file('./SDK/Shadow/plugin-manager')
+    project(':SDK:shadow-lib').projectDir = file('./SDK/Shadow/shadow-lib')
+    project(':SDK:shadow-init').projectDir = file('./SDK/Shadow/shadow-init')
 }

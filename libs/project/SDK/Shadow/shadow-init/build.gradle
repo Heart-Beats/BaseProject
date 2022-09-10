@@ -1,0 +1,71 @@
+import com.buildsrc.AndroidVersions
+import com.buildsrc.Deps
+
+plugins {
+    id 'com.android.library'
+    id 'kotlin-android'
+}
+
+android {
+    compileSdk = AndroidVersions.COMPILE_SDK
+
+    defaultConfig {
+        minSdk = AndroidVersions.MIN_SDK
+        targetSdk = AndroidVersions.TARGET_SDK
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles 'consumer-rules.pro'
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+    kotlinOptions {
+        jvmTarget = '11'
+    }
+}
+
+repositories {
+    maven { url 'https://maven.aliyun.com/repository/public' }
+    maven { url 'https://maven.aliyun.com/repository/google' }
+
+    maven {
+        name = "GitHubPackages"
+        url "https://maven.pkg.github.com/tencent/shadow"
+        //一个只读账号兼容Github Packages暂时不支持匿名下载
+        //https://github.community/t/download-from-github-package-registry-without-authentication/14407
+        credentials {
+            username = 'readonlypat'
+            password = '\u0067hp_s3VOOZnLf1bTyvHWblPfaessrVYyEU4JdNbs'
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar', '*.aar'], dir: 'libs')
+
+    api project(path: ':SDK:shadow-lib')
+
+    implementation Deps.Kotlin.kotlin_stdlib
+
+    api Deps.Shadow.host
+    api Deps.Shadow.activity_container
+
+    api Deps.Shadow.manager
+
+    def shadow_version = '2.2.1'
+    compileOnly "com.tencent.shadow.core:common:$shadow_version"
+
+    // 下面这些依赖主要用于方便调试，compileOnly 编译时可见，不会打包到 apk
+    compileOnly "com.tencent.shadow.core:loader:$shadow_version"
+    compileOnly "com.tencent.shadow.dynamic:loader-impl:$shadow_version"
+}
+

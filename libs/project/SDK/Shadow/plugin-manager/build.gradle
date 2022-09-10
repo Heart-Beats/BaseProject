@@ -1,0 +1,101 @@
+import com.buildsrc.Deps
+
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+    id 'kotlin-kapt'
+}
+
+android {
+    compileSdkVersion 30
+    buildToolsVersion "30.0.3"
+
+    defaultConfig {
+        applicationId "com.hl.shadow.pluginmanager"
+        minSdkVersion 16
+        targetSdkVersion 30
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+
+    applicationVariants.all { variant ->
+        variant.outputs.all {
+            def buildType = variant.buildType.name
+
+            //获取当前时间的"YYYY-MM-dd"格式。
+            // def createTime = new Date().format("YYYY-MM-dd", java.util.TimeZone.getTimeZone("GMT+08:00"))
+
+            def fileName = "My-PluginManager_${buildType}.apk"
+            outputFileName = fileName
+
+            def outputDirectory = new File(buildDir, buildType)
+
+            println("Manager 打包输出至 ---------> ${outputDirectory.absolutePath}${File.separator}${outputFileName}")
+            variant.getPackageApplicationProvider().get().outputDirectory = outputDirectory
+
+            def allTask = tasks.findAll {
+                it.name.startsWith('assemble') && (it.name.endsWith("Debug") || it.name.endsWith("Release"))
+            }
+
+            // 给相关打包程序添加复制任务
+            allTask.each {
+                it.doLast {
+                    println "正在将${fileName}拷贝至 App 资源目录下"
+                    // 复制至 app 资源目录下
+                    copy {
+                        from "${outputDirectory.absolutePath}${File.separator}${outputFileName}"
+                        into "../../../../../app/src/main/assets/plugins "
+                    }
+                }
+            }
+        }
+    }
+}
+
+repositories {
+    maven { url 'https://maven.aliyun.com/repository/public' }
+    maven { url 'https://maven.aliyun.com/repository/google' }
+
+    maven {
+        name = "GitHubPackages"
+        url "https://maven.pkg.github.com/tencent/shadow"
+        //一个只读账号兼容Github Packages暂时不支持匿名下载
+        //https://github.community/t/download-from-github-package-registry-without-authentication/14407
+        credentials {
+            username = 'readonlypat'
+            password = '\u0067hp_s3VOOZnLf1bTyvHWblPfaessrVYyEU4JdNbs'
+        }
+    }
+}
+
+dependencies {
+    implementation project(path: ':SDK:shadow-lib')
+
+    implementation Deps.Kotlin.kotlin_stdlib
+
+    api Deps.Shadow.host
+    api Deps.Shadow.activity_container
+
+    api Deps.Shadow.manager
+
+    compileOnly Deps.Shadow.common
+    // 下面这些依赖主要用于方便调试，compileOnly 编译时可见，不会打包到 apk
+    compileOnly Deps.Shadow.loader
+    compileOnly Deps.Shadow.loader_impl
+}

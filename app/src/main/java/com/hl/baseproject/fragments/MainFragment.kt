@@ -1,11 +1,14 @@
 package com.hl.baseproject.fragments
 
+import android.Manifest
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
 import android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
 import android.content.res.Configuration
 import android.os.Bundle
+import android.view.View
 import androidx.fragment.app.Fragment
 import com.github.lzyzsd.jsbridge.BridgeHandler
 import com.github.lzyzsd.jsbridge.BridgeWebView
@@ -19,6 +22,8 @@ import com.hl.arch.web.sdk.ISdkImplProvider
 import com.hl.baseproject.TestActivity
 import com.hl.baseproject.TestActivity2
 import com.hl.baseproject.databinding.FragmentMainBinding
+import com.hl.shadow.Shadow
+import com.hl.shadow.lib.ShadowConstants
 import com.hl.uikit.onClick
 import com.hl.uikit.toast
 import com.hl.utils.ProxyHandler
@@ -26,10 +31,14 @@ import com.hl.utils.activityResult.ActivityResultHelper
 import com.hl.utils.activityResult.OnActivityResult
 import com.hl.utils.camera.CaptureFeature
 import com.hl.utils.camera.MyCaptureActivity
+import com.hl.utils.copyAssets2Path
 import com.hl.utils.previewFie.PreviewFileActivity
 import com.hl.utils.qrcode.QRScanUtil
 import com.hl.utils.reqPermissions
 import com.hl.utils.setImmersiveSystemBar
+import com.lxj.xpopup.XPopup
+import com.tencent.shadow.dynamic.host.EnterCallback
+import java.io.File
 
 
 class MainFragment : ViewBindingMvvmBaseFragment<FragmentMainBinding>() {
@@ -136,6 +145,10 @@ class MainFragment : ViewBindingMvvmBaseFragment<FragmentMainBinding>() {
 				}
 			})
 		}
+
+		startShadowPlugin.onClick {
+			showSelectShadowPluginDialog()
+		}
 	}
 
 
@@ -154,6 +167,121 @@ class MainFragment : ViewBindingMvvmBaseFragment<FragmentMainBinding>() {
 		if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
 			toast("拍摄后路径 == $captureFilePath")
 		}
+	}
+
+	private fun showSelectShadowPluginDialog() {
+		val items = listOf(
+			"启动 SunFlower 插件",
+			"启动自定义测试插件",
+			"启动依赖库的Service",
+			"启动自定义Service",
+			"启动自定义IntentService",
+		)
+
+		XPopup.Builder(requireContext()).asCenterList("启动 Shadow 插件", items.toTypedArray()) { position, _ ->
+
+			val bundle = Bundle().apply {
+				//  插件 zip 的路径
+				val pluginSavePath =
+					File(requireContext().getExternalFilesDir(null), "plugins/plugin-release.zip").absolutePath
+				val pluginZipPath =
+					requireContext().copyAssets2Path("plugins/plugin-release.zip", pluginSavePath)
+
+				putString(ShadowConstants.KEY_PLUGIN_ZIP_PATH, pluginZipPath)
+			}
+
+			when (position) {
+				0 -> {
+					//启动插件中的对应的 Activity
+					bundle.putString(
+						ShadowConstants.KEY_CLASSNAME,
+						"com.google.samples.apps.sunflower.GardenActivity"
+					)
+
+					// partKey 每个插件都有自己的 partKey 用来区分多个插件，需要与插件打包脚本中的 packagePlugin{ partKey xxx} 一致
+					bundle.putString(ShadowConstants.KEY_PLUGIN_PART_KEY, "sunflower")
+					bundle.putLong(ShadowConstants.KEY_FROM_ID, ShadowConstants.FROM_ID_START_ACTIVITY)
+				}
+				1 -> {
+					bundle.putString(ShadowConstants.KEY_CLASSNAME, "com.hl.myplugin.MainActivity")
+					bundle.putString(ShadowConstants.KEY_PLUGIN_PART_KEY, "test")
+					bundle.putLong(ShadowConstants.KEY_FROM_ID, ShadowConstants.FROM_ID_START_ACTIVITY)
+				}
+				2 -> {
+					bundle.putString(
+						ShadowConstants.KEY_CLASSNAME,
+						"com.tsinglink.android.update.CheckUpdateIntentService"
+					)
+					bundle.putString(ShadowConstants.KEY_PLUGIN_PART_KEY, "test")
+					bundle.putLong(ShadowConstants.KEY_FROM_ID, ShadowConstants.FROM_ID_CALL_SERVICE)
+					bundle.putString(
+						ShadowConstants.KEY_INTENT_ACTION,
+						"com.tsinglink.android.update.ACTION_START_DOWNLOAD"
+					)
+					bundle.putBundle(ShadowConstants.KEY_EXTRAS, Bundle().apply {
+						this.putString(
+							"com.tsinglink.android.update.extra.DOWNLOAD_URL", "http://down.qq" +
+									".com/qqweb/QQ_1/android_apk/Androidqq_8.4.10.4875_537065980.apk"
+						)
+					})
+				}
+				3 -> {
+					bundle.putString(ShadowConstants.KEY_CLASSNAME, "com.hl.myplugin.TestService")
+					bundle.putString(ShadowConstants.KEY_PLUGIN_PART_KEY, "test")
+					bundle.putLong(ShadowConstants.KEY_FROM_ID, ShadowConstants.FROM_ID_CALL_SERVICE)
+				}
+				4 -> {
+
+					// val receiver: ResultReceiver = TestResultReceiver(Handler(Looper.getMainLooper()))
+					//
+					// bundle.putString(ShadowConstants.KEY_CLASSNAME, "com.hl.myplugin.TestIntentService")
+					// bundle.putString(ShadowConstants.KEY_PLUGIN_PART_KEY, "test")
+					// bundle.putLong(ShadowConstants.KEY_FROM_ID, ShadowConstants.FROM_ID_CALL_SERVICE)
+					//
+					// bundle.putString(
+					// 	ShadowConstants.KEY_INTENT_ACTION,
+					// 	"com.hl.myplugin.action.FOO"
+					// )
+					// bundle.putBundle(ShadowConstants.KEY_EXTRAS, Bundle().apply {
+					// 	this.putString("com.hl.myplugin.extra.PARAM1", "我是参数1")
+					// 	this.putParcelable("com.hl.myplugin.extra.PARAM2", receiver)
+					// })
+				}
+			}
+
+			if (bundle.getBundle(ShadowConstants.KEY_EXTRAS) == null) {
+				bundle.putBundle(ShadowConstants.KEY_EXTRAS, Bundle().apply {
+					this.putString("测试数据", "我是宿主传过来的数据")
+				})
+			}
+
+			val permissions = arrayOf(
+				Manifest.permission.READ_EXTERNAL_STORAGE,
+				Manifest.permission.WRITE_EXTERNAL_STORAGE
+			)
+			this@MainFragment.reqPermissions(*permissions, allGrantedAction = {
+				startShadowPlugin(requireContext(), bundle)
+			})
+		}.show()
+	}
+
+	private fun startShadowPlugin(context: Context, bundle: Bundle) {
+		val pluginManager = Shadow.getMyPluginManager(context)
+
+		/**
+		 * context context
+		 * formId  标识本次请求的来源位置，用于区分入口
+		 * bundle  参数列表, 建议在参数列表加入自己的验证
+		 * callback 用于从PluginManager实现中返回View
+		 */
+		pluginManager?.enter(context, bundle.getLong(ShadowConstants.KEY_FROM_ID), bundle, object : EnterCallback {
+			override fun onShowLoadingView(view: View?) {}
+			override fun onCloseLoadingView() {}
+			override fun onEnterComplete() {
+				// 启动成功
+				toast("启动成功")
+			}
+		})
 	}
 
 }
