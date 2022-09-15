@@ -61,11 +61,10 @@ dependencies {
 
     api Deps.Shadow.manager
 
-    def shadow_version = '2.2.1'
-    compileOnly "com.tencent.shadow.core:common:$shadow_version"
 
+    compileOnly Deps.Shadow.common
     // 下面这些依赖主要用于方便调试，compileOnly 编译时可见，不会打包到 apk
-    compileOnly "com.tencent.shadow.core:loader:$shadow_version"
-    compileOnly "com.tencent.shadow.dynamic:loader-impl:$shadow_version"
+    compileOnly Deps.Shadow.loader
+    compileOnly Deps.Shadow.loader_impl
 }
 

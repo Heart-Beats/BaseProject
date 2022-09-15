@@ -20,6 +20,7 @@ import java.io.IOException
 import java.util.*
 import java.util.concurrent.*
 
+
 /**
  * @author 张磊  on  2021/04/08 at 17:22
  * Email: 913305160@qq.com
@@ -57,9 +58,9 @@ class MyPluginManager(context: Context?) : PluginManagerThatUseDynamicLoader(con
 	/**
 	 * @return demo插件so的abi
 	 */
-	override fun getAbi(): String {
-		return ShadowConstants.ABI
-	}
+	// override fun getAbi(): String {
+	// 	return ShadowConstants.ABI
+	// }
 
 	/**
 	 * @return 宿主中注册的PluginProcessService实现的类名
@@ -208,7 +209,7 @@ class MyPluginManager(context: Context?) : PluginManagerThatUseDynamicLoader(con
 	private fun installPlugin(zip: String, hash: String?, odex: Boolean): InstalledPlugin {
 		val pluginConfig = installPluginFromZip(File(zip), hash)
 		val uuid = pluginConfig.UUID
-		val futures: MutableList<Future<Any?>> = LinkedList()
+		val futures: MutableList<Future<out Any?>> = LinkedList()
 
 		if (pluginConfig.runTime != null && pluginConfig.pluginLoader != null) {
 			val odexRuntime = mFixedPool.submit<Any?> {
@@ -223,13 +224,22 @@ class MyPluginManager(context: Context?) : PluginManagerThatUseDynamicLoader(con
 			futures.add(odexLoader)
 		}
 
+		val extractSoFutures: MutableList<Future<android.util.Pair<String, String>>> = LinkedList()
 		for ((partKey, value) in pluginConfig.plugins) {
 			val apkFile = value.file
-			val extractSo = mFixedPool.submit<Any?> {
-				extractSo(uuid, partKey, apkFile)
-				null
-			}
+			// val extractSo = mFixedPool.submit<Any?> {
+			// 	extractSo(uuid, partKey, apkFile)
+			// 	null
+			// }
+
+			val extractSo = mFixedPool.submit(
+				Callable<android.util.Pair<String, String>> {
+					extractSo(uuid, partKey, apkFile)
+				})
+
 			futures.add(extractSo)
+			extractSoFutures.add(extractSo)
+
 			if (odex) {
 				val odexPlugin = mFixedPool.submit<Any?> {
 					oDexPlugin(uuid, partKey, apkFile)
@@ -241,7 +251,14 @@ class MyPluginManager(context: Context?) : PluginManagerThatUseDynamicLoader(con
 		for (future in futures) {
 			future.get()
 		}
-		onInstallCompleted(pluginConfig)
+
+		val soDirMap: MutableMap<String, String> = HashMap()
+		for (future in extractSoFutures) {
+			val pair = future.get()
+			soDirMap[pair.first] = pair.second
+		}
+
+		onInstallCompleted(pluginConfig, soDirMap)
 		return getInstalledPlugins(1)[0]
 	}
 
