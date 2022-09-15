@@ -20,11 +20,15 @@ import java.io.IOException
 import java.util.*
 import java.util.concurrent.*
 
+
 /**
  * @author 张磊  on  2021/04/08 at 17:22
  * Email: 913305160@qq.com
  */
 class MyPluginManager(context: Context?) : PluginManagerThatUseDynamicLoader(context) {
+	companion object {
+		private const val TAG = "MyPluginManager"
+	}
 
 	private val installPluginExecutorService: ExecutorService = ThreadPoolExecutor(1,
 		1,
@@ -32,7 +36,7 @@ class MyPluginManager(context: Context?) : PluginManagerThatUseDynamicLoader(con
 		TimeUnit.SECONDS,
 		ArrayBlockingQueue(Short.MAX_VALUE.toInt()),
 		{ r: Runnable? -> Thread(r, "安装插件线程") }) { r: Runnable?, executor: ThreadPoolExecutor? ->
-		Log.e(TAG, String.format("%s 已满载，拒绝执行任务 %s", executor, r))
+		Log.e(TAG, "$executor 已满载，拒绝执行任务 $r")
 	}
 
 	private val mFixedPool: ExecutorService = ThreadPoolExecutor(4,
@@ -41,7 +45,7 @@ class MyPluginManager(context: Context?) : PluginManagerThatUseDynamicLoader(con
 		TimeUnit.SECONDS,
 		ArrayBlockingQueue(Short.MAX_VALUE.toInt()),
 		{ r: Runnable? -> Thread(r, "解压插件线程") }) { r: Runnable?, executor: ThreadPoolExecutor? ->
-		Log.e(TAG, String.format("%s 已满载，拒绝执行任务 %s", executor, r))
+		Log.e(TAG, "$executor 已满载，拒绝执行任务 $r")
 	}
 
 	/**
@@ -54,9 +58,9 @@ class MyPluginManager(context: Context?) : PluginManagerThatUseDynamicLoader(con
 	/**
 	 * @return demo插件so的abi
 	 */
-	override fun getAbi(): String {
-		return ShadowConstants.ABI
-	}
+	// override fun getAbi(): String {
+	// 	return ShadowConstants.ABI
+	// }
 
 	/**
 	 * @return 宿主中注册的PluginProcessService实现的类名
@@ -73,7 +77,7 @@ class MyPluginManager(context: Context?) : PluginManagerThatUseDynamicLoader(con
 	 * @param callback 用于从PluginManager实现中返回View
 	 */
 	override fun enter(context: Context, fromId: Long, bundle: Bundle, callback: EnterCallback?) {
-		Log.d(TAG, """enter: 开始进入插件 -------------- \n formId == $fromId，传入bundle == $bundle""")
+		Log.d(TAG, "enter: 开始进入插件 -------------- \n formId == $fromId，传入bundle == $bundle")
 
 		// 插件 zip 包地址，可以直接写在这里，也用Bundle可以传进来
 		val pluginZipPath = bundle.getString(ShadowConstants.KEY_PLUGIN_ZIP_PATH) ?: return
@@ -167,6 +171,8 @@ class MyPluginManager(context: Context?) : PluginManagerThatUseDynamicLoader(con
 			}
 
 			val finalServiceConnection = serviceConnection
+
+			Log.d(TAG, "launchPluginService: 开始绑定插件中的 Service, ServiceName == $className")
 			val callSuccess = mPluginLoader.bindPluginService(pluginIntent, object : PluginServiceConnection {
 				override fun onServiceConnected(componentName: ComponentName, iBinder: IBinder) {
 					// 在这里实现AIDL进行通信操作
@@ -184,11 +190,11 @@ class MyPluginManager(context: Context?) : PluginManagerThatUseDynamicLoader(con
 			if (!callSuccess) {
 				throw RuntimeException("bind service 失败, ServiceName ==$className")
 			} else {
-				Log.d(TAG, "enter: bindPluginService 成功, ServiceName == $className")
+				Log.d(TAG, "launchPluginService: bindPluginService 成功, ServiceName == $className")
 				mPluginLoader.startPluginService(pluginIntent)
 			}
 		} catch (e: Exception) {
-			Log.e(TAG, "enter: bindPluginService 失败, ServiceName == $className", e)
+			Log.e(TAG, "launchPluginService: bindPluginService 失败, ServiceName == $className", e)
 		}
 	}
 
@@ -203,7 +209,7 @@ class MyPluginManager(context: Context?) : PluginManagerThatUseDynamicLoader(con
 	private fun installPlugin(zip: String, hash: String?, odex: Boolean): InstalledPlugin {
 		val pluginConfig = installPluginFromZip(File(zip), hash)
 		val uuid = pluginConfig.UUID
-		val futures: MutableList<Future<Any?>> = LinkedList()
+		val futures: MutableList<Future<out Any?>> = LinkedList()
 
 		if (pluginConfig.runTime != null && pluginConfig.pluginLoader != null) {
 			val odexRuntime = mFixedPool.submit<Any?> {
@@ -218,13 +224,22 @@ class MyPluginManager(context: Context?) : PluginManagerThatUseDynamicLoader(con
 			futures.add(odexLoader)
 		}
 
+		val extractSoFutures: MutableList<Future<android.util.Pair<String, String>>> = LinkedList()
 		for ((partKey, value) in pluginConfig.plugins) {
 			val apkFile = value.file
-			val extractSo = mFixedPool.submit<Any?> {
-				extractSo(uuid, partKey, apkFile)
-				null
-			}
+			// val extractSo = mFixedPool.submit<Any?> {
+			// 	extractSo(uuid, partKey, apkFile)
+			// 	null
+			// }
+
+			val extractSo = mFixedPool.submit(
+				Callable<android.util.Pair<String, String>> {
+					extractSo(uuid, partKey, apkFile)
+				})
+
 			futures.add(extractSo)
+			extractSoFutures.add(extractSo)
+
 			if (odex) {
 				val odexPlugin = mFixedPool.submit<Any?> {
 					oDexPlugin(uuid, partKey, apkFile)
@@ -236,7 +251,14 @@ class MyPluginManager(context: Context?) : PluginManagerThatUseDynamicLoader(con
 		for (future in futures) {
 			future.get()
 		}
-		onInstallCompleted(pluginConfig)
+
+		val soDirMap: MutableMap<String, String> = HashMap()
+		for (future in extractSoFutures) {
+			val pair = future.get()
+			soDirMap[pair.first] = pair.second
+		}
+
+		onInstallCompleted(pluginConfig, soDirMap)
 		return getInstalledPlugins(1)[0]
 	}
 
@@ -309,9 +331,5 @@ class MyPluginManager(context: Context?) : PluginManagerThatUseDynamicLoader(con
 		Log.d(TAG, "载入 Loader -------------------")
 		loadPluginLoader(uuid)
 		Log.d(TAG, "--------------- Loader  加载结束")
-	}
-
-	companion object {
-		private const val TAG = "MyPluginManager"
 	}
 }
