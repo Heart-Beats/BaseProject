@@ -113,9 +113,9 @@ dependencies {
     implementation "com.hl:uikit"
     implementation "com.hl:utils"
 
-//    def hl_version = '0.5.0'
-//    implementation "com.hl:tencent-cloud:${hl_version}"
+    //    def hlVersion = '0.5.9'
+    //    implementation "com.hl:tencent-cloud:${hlVersion}"
 
     implementation 'com.hl:TencentCloud'
-    implementation 'com.hl:shadow-init'
+    implementation "com.hl:shadow-init"
 }

@@ -173,6 +173,7 @@ class MainFragment : ViewBindingMvvmBaseFragment<FragmentMainBinding>() {
 		val items = listOf(
 			"启动 SunFlower 插件",
 			"启动自定义测试插件",
+			"启动优码测试插件",
 			"启动依赖库的Service",
 			"启动自定义Service",
 			"启动自定义IntentService",
@@ -181,7 +182,7 @@ class MainFragment : ViewBindingMvvmBaseFragment<FragmentMainBinding>() {
 		XPopup.Builder(requireContext()).asCenterList("启动 Shadow 插件", items.toTypedArray()) { position, _ ->
 
 			val bundle = Bundle().apply {
-				//  插件 zip 的路径
+				// 插件 zip 的路径
 				val pluginSavePath =
 					File(requireContext().getExternalFilesDir(null), "plugins/plugin-release.zip").absolutePath
 				val pluginZipPath =
@@ -208,6 +209,24 @@ class MainFragment : ViewBindingMvvmBaseFragment<FragmentMainBinding>() {
 					bundle.putLong(ShadowConstants.KEY_FROM_ID, ShadowConstants.FROM_ID_START_ACTIVITY)
 				}
 				2 -> {
+					val pluginSavePath =
+						File(
+							requireContext().getExternalFilesDir(null),
+							"plugins/plugin-cjsxt-release.zip"
+						).absolutePath
+					val pluginZipPath =
+						requireContext().copyAssets2Path("plugins/plugin-cjsxt-release.zip", pluginSavePath)
+					bundle.putString(ShadowConstants.KEY_PLUGIN_ZIP_PATH, pluginZipPath)
+
+					bundle.apply {
+						putString(ShadowConstants.KEY_CLASSNAME, "com.youma.cjspro.moudle.login.LoginActivity")
+
+						// partKey 每个插件都有自己的 partKey 用来区分多个插件，需要与插件打包脚本中的 packagePlugin{ partKey xxx} 一致
+						putString(ShadowConstants.KEY_PLUGIN_PART_KEY, "cjsxt")
+					}
+					bundle.putLong(ShadowConstants.KEY_FROM_ID, ShadowConstants.FROM_ID_START_ACTIVITY)
+				}
+				3 -> {
 					bundle.putString(
 						ShadowConstants.KEY_CLASSNAME,
 						"com.tsinglink.android.update.CheckUpdateIntentService"
@@ -225,12 +244,12 @@ class MainFragment : ViewBindingMvvmBaseFragment<FragmentMainBinding>() {
 						)
 					})
 				}
-				3 -> {
+				4 -> {
 					bundle.putString(ShadowConstants.KEY_CLASSNAME, "com.hl.myplugin.TestService")
 					bundle.putString(ShadowConstants.KEY_PLUGIN_PART_KEY, "test")
 					bundle.putLong(ShadowConstants.KEY_FROM_ID, ShadowConstants.FROM_ID_CALL_SERVICE)
 				}
-				4 -> {
+				5 -> {
 
 					// val receiver: ResultReceiver = TestResultReceiver(Handler(Looper.getMainLooper()))
 					//
