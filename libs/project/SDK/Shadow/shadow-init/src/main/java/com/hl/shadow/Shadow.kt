@@ -5,11 +5,12 @@ import com.hl.shadow.logger.AndroidLoggerFactory
 import com.hl.shadow.logger.LogLevel
 import com.hl.shadow.logger.OnShadowLog
 import com.hl.shadow.managerupdater.MyPluginManagerUpdater
-import com.hl.shadow.pluginmanager.MyPluginManager
 import com.tencent.shadow.core.common.LoggerFactory
 import com.tencent.shadow.dynamic.host.DynamicPluginManager
 import com.tencent.shadow.dynamic.host.PluginManager
 import com.tencent.shadow.dynamic.host.PluginManagerImpl
+import com.hl.shadow.pluginmanager.MyPluginManager
+import com.tencent.shadow.dynamic.manager.MyDynamicUuidPluginManager
 import java.io.File
 import java.util.concurrent.Future
 

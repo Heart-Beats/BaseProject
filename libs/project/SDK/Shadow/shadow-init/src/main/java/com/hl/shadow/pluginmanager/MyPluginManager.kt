@@ -25,7 +25,7 @@ import java.util.concurrent.*
  * @author 张磊  on  2021/04/08 at 17:22
  * Email: 913305160@qq.com
  */
-class MyPluginManager(context: Context?) : PluginManagerThatUseDynamicLoader(context) {
+open class MyPluginManager(context: Context) : PluginManagerThatUseDynamicLoader(context) {
 	companion object {
 		private const val TAG = "MyPluginManager"
 	}
@@ -65,8 +65,8 @@ class MyPluginManager(context: Context?) : PluginManagerThatUseDynamicLoader(con
 	/**
 	 * @return 宿主中注册的PluginProcessService实现的类名
 	 */
-	private fun getPluginProcessServiceName(): String {
-		return ShadowConstants.PLUGIN_PROCESS_SERVICE_NAME
+	protected open fun getPluginProcessServiceName(): String {
+		return ShadowConstants.MAIN_PLUGIN_PROCESS_SERVICE_NAME
 	}
 
 
@@ -81,7 +81,7 @@ class MyPluginManager(context: Context?) : PluginManagerThatUseDynamicLoader(con
 
 		// 插件 zip 包地址，可以直接写在这里，也用Bundle可以传进来
 		val pluginZipPath = bundle.getString(ShadowConstants.KEY_PLUGIN_ZIP_PATH) ?: return
-		val partKey = bundle.getString(ShadowConstants.KEY_PLUGIN_PART_KEY)
+		val partKey = bundle.getString(ShadowConstants.KEY_PLUGIN_PART_KEY, "")
 		val className = bundle.getString(ShadowConstants.KEY_CLASSNAME)
 		val intentAction = bundle.getString(ShadowConstants.KEY_INTENT_ACTION)
 		val extras = bundle.getBundle(ShadowConstants.KEY_EXTRAS)
@@ -115,7 +115,7 @@ class MyPluginManager(context: Context?) : PluginManagerThatUseDynamicLoader(con
 		context: Context,
 		callback: EnterCallback?,
 		pluginZipPath: String,
-		partKey: String?,
+		partKey: String,
 		className: String,
 		intentAction: String?,
 		extras: Bundle?
@@ -146,7 +146,7 @@ class MyPluginManager(context: Context?) : PluginManagerThatUseDynamicLoader(con
 	private fun launchPluginService(
 		context: Context,
 		pluginZipPath: String,
-		partKey: String?,
+		partKey: String,
 		className: String,
 		intentAction: String?,
 		extras: Bundle?
@@ -227,11 +227,6 @@ class MyPluginManager(context: Context?) : PluginManagerThatUseDynamicLoader(con
 		val extractSoFutures: MutableList<Future<android.util.Pair<String, String>>> = LinkedList()
 		for ((partKey, value) in pluginConfig.plugins) {
 			val apkFile = value.file
-			// val extractSo = mFixedPool.submit<Any?> {
-			// 	extractSo(uuid, partKey, apkFile)
-			// 	null
-			// }
-
 			val extractSo = mFixedPool.submit(
 				Callable<android.util.Pair<String, String>> {
 					extractSo(uuid, partKey, apkFile)
@@ -258,7 +253,9 @@ class MyPluginManager(context: Context?) : PluginManagerThatUseDynamicLoader(con
 			soDirMap[pair.first] = pair.second
 		}
 
+		// 该方法每次执行会将插件相关的数据写入数据库，同时会更新 uuid 的插件安装时间作为所有相同 uuid 的插件的安装时间
 		onInstallCompleted(pluginConfig, soDirMap)
+
 		return getInstalledPlugins(1)[0]
 	}
 
@@ -270,7 +267,7 @@ class MyPluginManager(context: Context?) : PluginManagerThatUseDynamicLoader(con
 	 * @param pluginIntent    需要打开的 activity 对应的 intent
 	 */
 	@Throws(RemoteException::class, TimeoutException::class, FailedException::class)
-	private fun startPluginActivity(installedPlugin: InstalledPlugin, partKey: String?, pluginIntent: Intent?) {
+	private fun startPluginActivity(installedPlugin: InstalledPlugin, partKey: String, pluginIntent: Intent?) {
 		val intent = convertActivityIntent(installedPlugin, partKey, pluginIntent)
 		intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
 		mPluginLoader.startActivityInPluginProcess(intent)
@@ -279,7 +276,7 @@ class MyPluginManager(context: Context?) : PluginManagerThatUseDynamicLoader(con
 	@Throws(RemoteException::class, TimeoutException::class, FailedException::class)
 	private fun convertActivityIntent(
 		installedPlugin: InstalledPlugin,
-		partKey: String?,
+		partKey: String,
 		pluginIntent: Intent?
 	): Intent {
 		loadPlugin(installedPlugin.UUID, partKey)
@@ -296,13 +293,15 @@ class MyPluginManager(context: Context?) : PluginManagerThatUseDynamicLoader(con
 	 * appComponentFactory
 	 */
 	@Throws(RemoteException::class, TimeoutException::class, FailedException::class)
-	private fun loadPlugin(uuid: String, partKey: String?) {
+	private fun loadPlugin(uuid: String, partKey: String) {
+		Log.d(TAG, "loadPlugin ------> uuid=${uuid}, partKey=${partKey}")
+
 		loadPluginLoaderAndRuntime(uuid)
 		val map = mPluginLoader.loadedPlugin
 
 		Log.d(TAG, "载入 Plugin ---------------")
 		if (!map.containsKey(partKey)) {
-			mPluginLoader.loadPlugin(partKey)
+			startLoadPlugin(uuid, partKey)
 		}
 		Log.d(TAG, "--------------- Plugin  加载结束")
 
@@ -314,6 +313,8 @@ class MyPluginManager(context: Context?) : PluginManagerThatUseDynamicLoader(con
 
 	@Throws(RemoteException::class, TimeoutException::class, FailedException::class)
 	private fun loadPluginLoaderAndRuntime(uuid: String) {
+		Log.d(TAG, "loadPluginLoaderAndRuntime: uuid=$uuid")
+
 		if (mPpsController == null) {
 			val pluginProcessServiceName: String = getPluginProcessServiceName()
 
@@ -325,11 +326,17 @@ class MyPluginManager(context: Context?) : PluginManagerThatUseDynamicLoader(con
 		}
 
 		Log.d(TAG, "载入 RunTime ---------------")
-		loadRunTime(uuid)
+		loadRunTime(uuid)    // runtime 已加载之后不会进行重新加载， 即 PluginProcessService 的 mUuid 不会被更改
 		Log.d(TAG, "--------------- RunTime  加载结束")
 
 		Log.d(TAG, "载入 Loader -------------------")
-		loadPluginLoader(uuid)
+		loadPluginLoader(uuid)   // Loader 已加载之后不会进行重新加载, 即 PluginProcessService 的 mUuid 不会被更改
 		Log.d(TAG, "--------------- Loader  加载结束")
+	}
+
+	protected open fun startLoadPlugin(uuid: String, partKey: String) {
+		Log.d(TAG, "startLoadPlugin() called with: uuid = $uuid, partKey = $partKey")
+
+		mPluginLoader.loadPlugin(partKey)
 	}
 }
