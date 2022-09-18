@@ -66,7 +66,7 @@ class MyPluginManager(context: Context?) : PluginManagerThatUseDynamicLoader(con
 	 * @return 宿主中注册的PluginProcessService实现的类名
 	 */
 	private fun getPluginProcessServiceName(): String {
-		return ShadowConstants.PLUGIN_PROCESS_SERVICE_NAME
+		return ShadowConstants.MAIN_PLUGIN_PROCESS_SERVICE_NAME
 	}
 
 

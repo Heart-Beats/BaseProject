@@ -732,7 +732,7 @@ class UIKitToolbar : Toolbar {
 
         if (menuIcon != null) {
 
-            menuIcon?.setBounds(0, 0, menuIcon?.intrinsicWidth, menuIcon?.intrinsicHeight)
+            menuIcon?.setBounds(0, 0, menuIcon?.intrinsicWidth ?: 0, menuIcon?.intrinsicHeight ?: 0)
             textView.setCompoundDrawablesRelative(null, menuIcon, null, null)
             textView.compoundDrawableTintList = mRightActionImageColor
             // textView.compoundDrawablePadding = 2.dpInt

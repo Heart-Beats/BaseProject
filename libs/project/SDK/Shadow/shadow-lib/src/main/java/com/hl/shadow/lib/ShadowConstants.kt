@@ -13,10 +13,16 @@ object ShadowConstants {
 	const val ABI = ""
 
 	/**
-	 * 宿主中注册的PluginProcessService实现的类名
+	 * 宿主中注册的PluginProcessService实现的类名, 该 PPS 为示例代码中的简易实现，不可更改其中对应插件包的 UUID
 	 */
-	const val PLUGIN_PROCESS_SERVICE_NAME =
-		"com.hl.shadow.MainPluginProcessService"
+	const val MAIN_PLUGIN_PROCESS_SERVICE_NAME =
+		"com.hl.shadow.pps.MainPluginProcessService"
+
+	/**
+	 * 宿主中注册的PluginProcessService实现的类名, 该 PPS 为自定义实现，可更改其中对应插件包的 UUID
+	 */
+	const val DYNAMIC_UUID_PLUGIN_PROCESS_SERVICE_NAME =
+		"com.hl.shadow.pps.DynamicUuidPluginProcessService"
 
 	/**
 	 * 插件 apk/zip 路径

@@ -4,13 +4,14 @@ import android.os.Bundle
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
-import kotlinx.android.synthetic.main.uikit_bottom_base_dialog_fragment.*
+import androidx.core.content.ContextCompat
 import com.hl.uikit.R
+import com.hl.uikit.dialog.BottomDialogFragment
+import com.hl.uikit.flowlayout.FilterTagAdapter
 import com.hl.uikit.flowlayout.FlowLayout
 import com.hl.uikit.flowlayout.TagAdapter
 import com.hl.uikit.flowlayout.TagFlowLayout
-import com.hl.uikit.dialog.BottomDialogFragment
-import com.hl.uikit.flowlayout.FilterTagAdapter
+import kotlinx.android.synthetic.main.uikit_bottom_base_dialog_fragment.*
 
 
 /**
@@ -145,9 +146,7 @@ class FilterDialogFragment : BottomDialogFragment {
         flowLayout.getChildAt(position).findViewById<LinearLayout>(R.id.ll_item)
                 .setBackgroundResource(R.drawable.uikit_shape_bg_filtrate_selected)
         (flowLayout.getChildAt(position).findViewById(R.id.tv) as TextView).setTextColor(
-                resources?.getColor(
-                        R.color.uikit_main_color
-                )
+            ContextCompat.getColor(requireContext(), R.color.uikit_main_color)
         )
     }
 

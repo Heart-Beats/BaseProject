@@ -55,6 +55,7 @@ dependencies {
     api project(path: ':SDK:shadow-lib')
 
     implementation Deps.Kotlin.kotlin_stdlib
+    implementation Deps.Json.gson
 
     api Deps.Shadow.host
     api Deps.Shadow.activity_container
