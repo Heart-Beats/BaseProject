@@ -29,7 +29,7 @@ internal object Versions {
     const val NIM = "8.5.1"
     const val RETROFIT = "2.9.0"
     const val OKHTTP = "4.2.2"
-    const val EASY_HTTP = "11.0"
+    const val EASY_HTTP = "11.2"
     const val IMMERSION_BAR = "3.2.2"
     const val EVENT_BUS = "3.3.1"
     const val RX_JAVA_3 = "3.1.3"
