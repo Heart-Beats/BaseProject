@@ -28,7 +28,6 @@ open class MyBridgeWebViewClient(val webView: BridgeWebView) : BridgeWebViewClie
 		var decodeUrl = url
 		try {
 			decodeUrl = URLDecoder.decode(decodeUrl, "UTF-8")
-			XLog.d("shouldOverrideUrlLoading:  decodeUrl == $decodeUrl")
 		} catch (e: UnsupportedEncodingException) {
 			XLog.d("shouldOverrideUrlLoading: ", e)
 		}

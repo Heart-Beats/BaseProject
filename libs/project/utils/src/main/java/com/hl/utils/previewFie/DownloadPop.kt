@@ -46,16 +46,19 @@ class DownloadPop(private val fragmentActivity: FragmentActivity, private val do
 
     private fun startDownload(downloadProgressBar: ProgressBar) {
         EasyHttp
-            .download(fragmentActivity).method(HttpMethod.GET)
+            .download(fragmentActivity)
+            .method(HttpMethod.GET)
             .file(getDownLoadFile())
             .tag(downloadUrl)
             .url(downloadUrl)
             .listener(object : OnDownloadListener {
                 override fun onStart(file: File?) {
-                    XLog.d("开始下载文件 ----------------> $file")
+                    XLog.d("开始下载文件 ----------------> $downloadUrl")
                 }
 
                 override fun onProgress(file: File?, progress: Int) {
+                    XLog.d("文件下载中 ----------------> $progress")
+
                     downloadProgressBar.progress = progress
                 }
 
