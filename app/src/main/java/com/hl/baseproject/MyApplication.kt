@@ -29,7 +29,7 @@ class MyApplication : Application() {
 			val deviceAllInfo = DeviceInfoUtil.getDeviceAllInfo(this)
 			XLog.d("运行设备信息-------------->\n $deviceAllInfo")
 
-		} else if (this.isProcess(":plugin")) {
+		} else if (this.isProcess(":plugin") || this.isProcess(":pluginTest") || this.isProcess(":pluginZKY")) {
 			println("当前为插件进程--------------------")
 
 			// if (BuildConfig.DEBUG) {

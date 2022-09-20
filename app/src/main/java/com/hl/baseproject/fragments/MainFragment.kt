@@ -22,6 +22,7 @@ import com.hl.arch.web.sdk.ISdkImplProvider
 import com.hl.baseproject.TestActivity
 import com.hl.baseproject.TestActivity2
 import com.hl.baseproject.databinding.FragmentMainBinding
+import com.hl.baseproject.shadow.pps.TestPluginProcessService
 import com.hl.shadow.Shadow
 import com.hl.shadow.lib.ShadowConstants
 import com.hl.uikit.onClick
@@ -173,7 +174,7 @@ class MainFragment : ViewBindingMvvmBaseFragment<FragmentMainBinding>() {
 		val items = listOf(
 			"启动 SunFlower 插件",
 			"启动自定义测试插件",
-			"启动优码测试插件",
+			"启动优码智客云插件",
 			"启动依赖库的Service",
 			"启动自定义Service",
 			"启动自定义IntentService",
@@ -184,9 +185,9 @@ class MainFragment : ViewBindingMvvmBaseFragment<FragmentMainBinding>() {
 			val bundle = Bundle().apply {
 				// 插件 zip 的路径
 				val pluginSavePath =
-					File(requireContext().getExternalFilesDir(null), "plugins/plugin-release.zip").absolutePath
+					File(requireContext().getExternalFilesDir(null), "plugins/plugin-test-release.zip").absolutePath
 				val pluginZipPath =
-					requireContext().copyAssets2Path("plugins/plugin-release.zip", pluginSavePath)
+					requireContext().copyAssets2Path("plugins/plugin-test-release.zip", pluginSavePath)
 
 				putString(ShadowConstants.KEY_PLUGIN_ZIP_PATH, pluginZipPath)
 			}
@@ -212,17 +213,20 @@ class MainFragment : ViewBindingMvvmBaseFragment<FragmentMainBinding>() {
 					val pluginSavePath =
 						File(
 							requireContext().getExternalFilesDir(null),
-							"plugins/plugin-cjsxt-release.zip"
+							"plugins/plugin-zky-release.zip"
 						).absolutePath
 					val pluginZipPath =
-						requireContext().copyAssets2Path("plugins/plugin-cjsxt-release.zip", pluginSavePath)
+						requireContext().copyAssets2Path("plugins/plugin-zky-release.zip", pluginSavePath)
 					bundle.putString(ShadowConstants.KEY_PLUGIN_ZIP_PATH, pluginZipPath)
 
 					bundle.apply {
-						putString(ShadowConstants.KEY_CLASSNAME, "com.youma.cjspro.moudle.login.LoginActivity")
+						putString(
+							ShadowConstants.KEY_CLASSNAME,
+							"com.example.txwang.yidongyanfang.moudle.login.LoginActivity"
+						)
 
 						// partKey 每个插件都有自己的 partKey 用来区分多个插件，需要与插件打包脚本中的 packagePlugin{ partKey xxx} 一致
-						putString(ShadowConstants.KEY_PLUGIN_PART_KEY, "cjsxt")
+						putString(ShadowConstants.KEY_PLUGIN_PART_KEY, "zky")
 					}
 					bundle.putLong(ShadowConstants.KEY_FROM_ID, ShadowConstants.FROM_ID_START_ACTIVITY)
 				}
@@ -279,7 +283,9 @@ class MainFragment : ViewBindingMvvmBaseFragment<FragmentMainBinding>() {
 				Manifest.permission.WRITE_EXTERNAL_STORAGE
 			)
 			this@MainFragment.reqPermissions(*permissions, allGrantedAction = {
-				startShadowPlugin(requireContext(), bundle)
+				// startShadowPlugin(requireContext(), bundle)
+
+				startShadowPluginInProcess(requireContext(), bundle)
 			})
 		}.show()
 	}
@@ -303,4 +309,37 @@ class MainFragment : ViewBindingMvvmBaseFragment<FragmentMainBinding>() {
 		})
 	}
 
+
+	private fun startShadowPluginInProcess(context: Context, bundle: Bundle) {
+		val pluginPartKey = bundle.getString(ShadowConstants.KEY_PLUGIN_PART_KEY)
+		val (managerName, ppsName) = when (pluginPartKey) {
+			"sunflower", "test" -> Pair("plugin-manager", TestPluginProcessService::class.java.name)
+			"zky" -> Pair("${pluginPartKey}-manager", TestPluginProcessService::class.java.name)
+			else -> Pair("plugin-manager", TestPluginProcessService::class.java.name)
+		}
+
+		val pluginManager = Shadow.getProcessPluginManager(context, managerName, ppsName)
+
+		/**
+		 * context context
+		 * formId  标识本次请求的来源位置，用于区分入口
+		 * bundle  参数列表, 建议在参数列表加入自己的验证
+		 * callback 用于从PluginManager实现中返回View
+		 */
+		pluginManager?.enter(context, bundle.getLong(ShadowConstants.KEY_FROM_ID), bundle, object : EnterCallback {
+
+			override fun onShowLoadingView(view: View?) {
+				onShowLoading("")
+			}
+
+			override fun onCloseLoadingView() {
+				onDismissLoading()
+			}
+
+			override fun onEnterComplete() {
+				// 启动成功
+				toast("启动成功")
+			}
+		})
+	}
 }

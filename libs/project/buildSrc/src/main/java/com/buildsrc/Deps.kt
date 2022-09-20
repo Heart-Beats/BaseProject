@@ -53,6 +53,7 @@ internal object Versions {
     const val SMART_REFRESH_LAYOUT = "2.0.5"
     const val PICTURE_SELECTOR = "v3.0.6"
     const val ANDROID_FILE_PICKER = "0.75"
+    const val SHAPE_VIEW = "8.5"
     const val CALENDAR_VIEW = "3.7.1"
     const val FLOW_LAYOUT = "1.1.2"
     const val CAMERA = "1.1.9"
@@ -398,12 +399,17 @@ class Deps {
         const val file_picker = "me.rosuh:AndroidFilePicker:${Versions.ANDROID_FILE_PICKER}"
     }
 
-    object CalendarView {
+    /**
+     * 三方 UI 库
+     */
+    object UiThirty {
+
+        // 快速实现相关 view  Shape 框架, github 地址：https://github.com/getActivity/ShapeView
+        const val shape_view = "com.github.getActivity:ShapeView:${Versions.SHAPE_VIEW}"
+
         // 可高度定制化的日历组件， github 地址：https://github.com/huanghaibin-dev/CalendarView
         const val calendar_view = "com.haibin:calendarview:${Versions.CALENDAR_VIEW}"
-    }
 
-    object FlowLayout {
         const val flow_layout = "com.hyman:flowlayout-lib:${Versions.FLOW_LAYOUT}"
     }
 

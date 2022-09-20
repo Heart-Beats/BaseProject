@@ -25,13 +25,15 @@
             android:name=".MainActivity"
             android:configChanges="keyboard|orientation|screenSize"
             android:exported="true"
-            android:screenOrientation="fullSensor">
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity> <!-- 微信的 SDK 限制了回调类包名必须是${applicationId}.wxapi, 因此这里使用 activity-alias 标签 -->
+        </activity>
+
+        <!-- 微信的 SDK 限制了回调类包名必须是${applicationId}.wxapi, 因此这里使用 activity-alias 标签 -->
         <!-- 微信分享 -->
         <activity-alias
             android:name=".wxapi.WXEntryActivity"
@@ -41,6 +43,14 @@
             android:targetActivity="com.hl.umeng.wxapi.WXEntryActivity"
             android:taskAffinity="${applicationId}"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+
+        <service
+            android:name=".shadow.pps.TestPluginProcessService"
+            android:process=":pluginTest" />
+
+        <service
+            android:name=".shadow.pps.ZKYPluginProcessService"
+            android:process=":pluginZKY" />
     </application>
 
 </manifest>
