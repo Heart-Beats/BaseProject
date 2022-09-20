@@ -87,4 +87,5 @@ dependencies {
     implementation('com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer:v8.1.9-release-jitpack')
 
     api('com.github.lzyzsd:jsbridge:1.0.4')
+    api('com.github.getActivity:ShapeView:8.5')
 }

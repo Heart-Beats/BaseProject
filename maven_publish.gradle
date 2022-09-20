@@ -196,6 +196,7 @@ project.afterEvaluate {
                     setDependencyNode(root, 'compile', 'com.guolindev.permissionx', 'permissionx', Versions.PERMISSION_X)
                     setDependencyNode(root, 'compile', 'com.github.CarGuo.GSYVideoPlayer', 'GSYVideoPlayer', Versions.GSY_VIDEO_PLAYER)
                     setDependencyNode(root, 'compile', 'com.github.lzyzsd', 'jsbridge', Versions.JS_BRIDGE)
+                    setDependencyNode(root, 'compile', 'com.github.getActivity', 'ShapeView', Versions.SHAPE_VIEW)
                     setScm(root)
                 }
             }
