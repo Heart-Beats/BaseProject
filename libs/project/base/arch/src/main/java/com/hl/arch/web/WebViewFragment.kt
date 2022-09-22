@@ -429,3 +429,7 @@ fun FragmentActivity.navigateToWeb(url: String, title: String? = null, isNeedTit
 fun Context.navigateToWeb(url: String, title: String? = null, isNeedTitle: Boolean = false) {
 	WebViewFragment.startNewPage(this, url, title, isNeedTitle)
 }
+
+fun View.navigateToWeb(url: String, title: String? = null, isNeedTitle: Boolean = false) {
+	WebViewFragment.startNewPage(this.context, url, title, isNeedTitle)
+}

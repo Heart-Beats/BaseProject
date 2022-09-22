@@ -5,13 +5,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.hl.arch.adapters.diffcallback.MyDiffCallback
 
 /**
  * @Author  张磊  on  2020/11/16 at 12:33
  * Email: 913305160@qq.com
  */
-abstract class BaseAbstractAdapter<T>(private var data: MutableList<T>) :
-    RecyclerView.Adapter<BaseAbstractAdapter<T>.ViewHolder>() {
+abstract class BaseAbstractAdapter<T>(private var adapterData: MutableList<T>) : RecyclerView.Adapter<BaseAbstractAdapter<T>.ViewHolder>(), IDataOperate<T> {
 
     open var headerView: View? = null
     open var footerView: View? = null
@@ -92,23 +92,23 @@ abstract class BaseAbstractAdapter<T>(private var data: MutableList<T>) :
                 null
             } else {
                 //正常的ViewHolder处理
-                data[position - 1]
+                adapterData[position - 1]
             }
         } else {
             if (headerView == null && footerView == null) {
                 //头尾布局都不存在时的处理
-                data[position]
+                adapterData[position]
             } else if (headerView != null) {
                 //仅头布局存在时
                 if (position == 0) {
                     null
                 } else {
-                    data[position - 1]
+                    adapterData[position - 1]
                 }
             } else if (footerView != null) {
                 //仅尾布局存在时
                 if (position < itemCount - 1) {
-                    data[position]
+                    adapterData[position]
                 } else {
                     null
                 }
@@ -117,25 +117,27 @@ abstract class BaseAbstractAdapter<T>(private var data: MutableList<T>) :
     }
 
     override fun getItemCount(): Int {
-        return data.size + if (headerView == null) 0 else 1 + if (footerView == null) 0 else 1
+        return adapterData.size + if (headerView == null) 0 else 1 + if (footerView == null) 0 else 1
     }
 
     /**
      * 向列表尾部插入数据
      */
-    fun insertData(vararg addDatas: T) {
-        val lastDataSize = data.size
-        this.data.addAll(addDatas)
-        notifyItemRangeInserted(lastDataSize, addDatas.size)
+    override fun insertData(vararg addData: T) {
+        val lastDataSize = adapterData.size
+        this.adapterData.addAll(addData)
+        notifyItemRangeInserted(lastDataSize, addData.size)
     }
 
     /**
      *  删除数据
      */
-    fun removeData(vararg removeDatas: T) {
-        for (removeData in removeDatas) {
-            val removeIndex = this.data.indexOf(removeData)
-            this.data.remove(removeData)
+    override fun removeData(vararg removeData: T) {
+        removeData.forEach {
+            val removeIndex = this.adapterData.indexOf(it)
+            this.adapterData.remove(it)
+
+            // 通知指定位置数据移除
             notifyItemRemoved(removeIndex)
         }
     }
@@ -143,55 +145,29 @@ abstract class BaseAbstractAdapter<T>(private var data: MutableList<T>) :
     /**
      * 更新当前的数据
      */
-    fun updateData(newData: MutableList<T>) {
-        val myDiffCallback = MyDiffCallback(data, newData)
+    override fun updateData(newData: List<T>) {
+        val myDiffCallback = MyDiffCallback(adapterData, newData)
         DiffUtil.calculateDiff(myDiffCallback, true).dispatchUpdatesTo(this)
-        this.data = newData
+        this.adapterData = newData.toMutableList()
     }
 
 
     /**
      * 获取当前的数据
      */
-    fun getData(): MutableList<T> {
-        return this.data
+    override fun getData(): MutableList<T> {
+        return this.adapterData
     }
 
-    fun modifyFirstFind2NotifyItemChanged(findCondition: (T) -> Boolean, findCallAction: T.() -> Unit = {}) {
-        data?.firstOrNull { findCondition(it) }?.run {
-            this.findCallAction()
-            notifyItemChanged(data.indexOf(this))
-        }
-    }
-
-    private class MyDiffCallback<T>(val oldList: List<T>, val newList: List<T>) : DiffUtil.Callback() {
-
-        /**
-         * 旧数据的size
-         */
-        override fun getOldListSize() = oldList.size
-
-        /**
-         * 新数据的size
-         */
-        override fun getNewListSize() = newList.size
-
-
-        /**
-         * 这个方法自由定制 ，
-         * 在对比数据的时候会被调用
-         * 返回 true 被判断为同一个 item
-         */
-        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int) = true
-
-
-        /**
-         * areItemsTheSame 方法返回 true 时，
-         * 这个方法才会被 diff 调用
-         * 返回 true 就证明内容相同
-         */
-        override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-            return oldList[oldItemPosition] == newList[newItemPosition]
+    /**
+     * 修改符合条件的所有数据
+     */
+    fun modifyDataByCondition(condition: (T) -> Boolean, modifyAction: T.() -> Unit = {}) {
+        adapterData.forEachIndexed { index, item ->
+            if (condition(item)) {
+                item.modifyAction()
+                notifyItemChanged(index)
+            }
         }
     }
 

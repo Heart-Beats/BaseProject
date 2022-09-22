@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.fragment.app.Fragment
 import com.hl.arch.R
 import com.hl.arch.databinding.ActivityFragmentContainerBinding
@@ -51,5 +52,9 @@ fun Activity.startFragment(fragmentClass: Class<out Fragment>, extras: Bundle? =
 
 fun Fragment.startFragment(fragmentClass: Class<out Fragment>, extras: Bundle? = null) {
     requireActivity().startFragment(fragmentClass, extras)
+}
+
+fun View.startFragment(fragmentClass: Class<out Fragment>, extras: Bundle? = null) {
+    this.context.startFragment(fragmentClass, FragmentContainerActivity::class.java, extras)
 }
 
