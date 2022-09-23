@@ -43,9 +43,7 @@ abstract class BaseMultiAdapter<T>(private var adapterData: MutableList<T>) : Re
 		val itemProvider = itemProviders[viewType]
 
 		val itemView = LayoutInflater.from(parent.context).inflate(itemProvider.layoutId, parent, false)
-		return MultiViewHolder(itemProvider, itemView).apply {
-			this.onCreateView()
-		}
+		return MultiViewHolder(itemProvider, this, itemView)
 	}
 
 	override fun onBindViewHolder(holder: BaseViewHolder<T>, position: Int) {
