@@ -1,18 +1,27 @@
 package com.hl.arch.adapters.viewholder
 
 import android.view.View
-import com.elvishew.xlog.XLog
+import com.hl.arch.adapters.BaseMultiAdapter
 import com.hl.arch.adapters.itemprovider.BaseItemProvider
 
 /**
  * @author  张磊  on  2022/09/22 at 16:03
  * Email: 913305160@qq.com
  */
-open class MultiViewHolder<T>(protected val baseItemProvider: BaseItemProvider<T>, itemView: View) :
-	BaseViewHolder<T>(itemView) {
+open class MultiViewHolder<T>(
+	private val baseItemProvider: BaseItemProvider<T>,
+	adapter: BaseMultiAdapter<T>, itemView: View
+) : BaseViewHolder<T>(adapter, itemView) {
+
+	init {
+		onItemInit()
+	}
 
 
-	override fun onCreateView() {
+	/**
+	 * 通知 ViewHolder 已完成创建,  需要初始化完成后主动调用
+	 */
+	private fun onItemInit() {
 		baseItemProvider.onItemInit(this)
 	}
 
@@ -23,5 +32,13 @@ open class MultiViewHolder<T>(protected val baseItemProvider: BaseItemProvider<T
 
 	override fun onBindView(itemData: T, payloads: MutableList<Any>) {
 		baseItemProvider.onItemBind(this, itemData, payloads)
+	}
+
+	override fun onItemClick(itemView: View, position: Int, itemData: T) {
+		baseItemProvider.onItemClick(itemView, position, itemData)
+	}
+
+	override fun onItemLongClick(itemView: View, position: Int, itemData: T) {
+		baseItemProvider.onItemLongClick(itemView, position, itemData)
 	}
 }
