@@ -3,12 +3,12 @@ package com.hl.baseproject
 import android.app.Application
 import android.os.Build
 import android.webkit.WebView
+import com.blankj.utilcode.util.ProcessUtils
 import com.elvishew.xlog.XLog
 import com.hl.shadow.logger.AndroidLoggerFactory
 import com.hl.shadow.logger.LogLevel
 import com.hl.utils.DeviceInfoUtil
 import com.hl.utils.isMainProcess
-import com.hl.utils.isProcess
 import com.tencent.shadow.core.common.LoggerFactory
 import com.tencent.shadow.dynamic.host.DynamicRuntime
 
@@ -29,7 +29,7 @@ class MyApplication : Application() {
 			val deviceAllInfo = DeviceInfoUtil.getDeviceAllInfo(this)
 			XLog.d("运行设备信息-------------->\n $deviceAllInfo")
 
-		} else if (this.isProcess(":plugin") || this.isProcess(":pluginTest") || this.isProcess(":pluginZKY")) {
+		} else if (isPluginProcess()) {
 			println("当前为插件进程--------------------")
 
 			// if (BuildConfig.DEBUG) {
@@ -56,5 +56,15 @@ class MyApplication : Application() {
 				WebView.setDataDirectorySuffix("plugins")
 			}
 		}
+	}
+
+	private fun isPluginProcess(): Boolean {
+		val currentProcessName = ProcessUtils.getCurrentProcessName()
+		val splitNames = currentProcessName.split(":")
+		if (splitNames.size > 1) {
+			val processName = splitNames[1]
+			return processName.startsWith("plugin")
+		}
+		return false
 	}
 }

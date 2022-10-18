@@ -67,7 +67,7 @@ internal object Versions {
     const val WAVE_SIDE_BAR = "1.3"
     const val SIDE_BAR = "1.0.0"
     const val ANDROID_AUTO_SIZE = "v1.2.1"
-    const val SHADOW = "2.3.0"
+    const val SHADOW = "local-a12772c9-SNAPSHOT"
 }
 
 class Deps {
@@ -481,8 +481,10 @@ class Deps {
      */
     object Shadow {
         const val host = "com.tencent.shadow.dynamic:host:${Versions.SHADOW}"
+        const val host_multi_loader_ext = "com.tencent.shadow.dynamic:host-multi-loader-ext:${Versions.SHADOW}"
         const val activity_container = "com.tencent.shadow.core:activity-container:${Versions.SHADOW}"
         const val manager = "com.tencent.shadow.dynamic:manager:${Versions.SHADOW}"
+        const val manager_multi_loader_ext = "com.tencent.shadow.dynamic:manager-multi-loader-ext:${Versions.SHADOW}"
         const val common = "com.tencent.shadow.core:common:${Versions.SHADOW}"
         const val loader = "com.tencent.shadow.core:loader:${Versions.SHADOW}"
         const val loader_impl = "com.tencent.shadow.dynamic:loader-impl:${Versions.SHADOW}"

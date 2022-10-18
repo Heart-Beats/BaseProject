@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".fragments.ShadowPluginFragment">
+
+    <com.hl.uikit.UIKitToolbar
+        android:id="@+id/uikit_toolbar"
+        android:layout_width="match_parent"
+        app:uikit_title="Shadow 插件化测试"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/start_shadow_plugin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="启动 Shadow 插件"
+        android:textSize="24sp" />
+
+</LinearLayout>

@@ -410,9 +410,9 @@
 
     <declare-styleable name="UIKitRatingBar">
         <!--尺寸值-->
-        <attr name="uikit_starImageSize" format="dimension" />
+        <attr name="uikit_starImageSize" format="dimension|reference" />
         <!--星星间距-->
-        <attr name="uikit_starPadding" format="dimension" />
+        <attr name="uikit_starPadding" format="dimension|reference" />
         <!--星星总数-->
         <attr name="uikit_starCount" format="integer" />
         <!--空白的星星资源文件值-->
@@ -433,11 +433,12 @@
     </declare-styleable>
 
     <declare-styleable name="UIKitSideBarView">
-        <attr format="reference" name="uikit_sideTextColor"/>
-        <attr format="reference" name="uikit_sidePressedTextColor"/>
-        <attr format="reference" name="uikit_sidePressedTextBgColor"/>
-        <attr format="dimension" name="uikit_sideItemHeight"/>
-        <attr format="dimension" name="uikit_sideItemSpacing"/>
-        <attr format="dimension" name="uikit_sideTextSize"/>
+        <attr name="uikit_sideTextColor" format="reference|color" />
+        <attr name="uikit_sidePressedTextColor" format="reference|color" />
+        <attr name="uikit_sidePressedTextBgColor" format="reference|color" />
+        <attr name="uikit_sideItemHeight" format="reference|dimension" />
+        <attr name="uikit_sideItemSpacing" format="reference|dimension" />
+        <attr name="uikit_sideTextSize" format="reference|dimension" />
+        <attr name="uikit_sideLetters" format="reference|string" />
     </declare-styleable>
 </resources>

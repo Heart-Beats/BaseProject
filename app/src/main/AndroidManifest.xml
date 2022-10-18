@@ -51,6 +51,63 @@
         <service
             android:name=".shadow.pps.ZKYPluginProcessService"
             android:process=":pluginZKY" />
+
+        <!--dynamic activity 注册
+            注意 configChanges 需要全注册
+            theme需要注册成透明
+         -->
+
+        <activity
+            android:name="com.hl.my_runtime.PluginDefaultProxyActivity"
+            android:configChanges="mcc|mnc|locale|touchscreen|keyboard|keyboardHidden|navigation|screenLayout|fontScale|uiMode|orientation|screenSize|smallestScreenSize|layoutDirection"
+            android:hardwareAccelerated="true"
+            android:launchMode="standard"
+            android:multiprocess="true"
+            android:process=":pluginMulti"
+            android:screenOrientation="portrait"
+            android:theme="@style/PluginContainerActivity"
+            tools:replace="process" />
+
+        <activity
+            android:name="com.hl.my_runtime.PluginSingleInstanceProxyActivity"
+            android:configChanges="mcc|mnc|locale|touchscreen|keyboard|keyboardHidden|navigation|screenLayout|fontScale|uiMode|orientation|screenSize|smallestScreenSize|layoutDirection"
+            android:hardwareAccelerated="true"
+            android:launchMode="singleInstance"
+            android:multiprocess="true"
+            android:process=":pluginMulti"
+            android:screenOrientation="portrait"
+            android:theme="@style/PluginContainerActivity"
+            tools:replace="process" />
+
+        <activity
+            android:name="com.hl.my_runtime.PluginSingleTaskProxyActivity"
+            android:configChanges="mcc|mnc|locale|touchscreen|keyboard|keyboardHidden|navigation|screenLayout|fontScale|uiMode|orientation|screenSize|smallestScreenSize|layoutDirection"
+            android:hardwareAccelerated="true"
+            android:launchMode="singleTask"
+            android:multiprocess="true"
+            android:process=":pluginMulti"
+            android:screenOrientation="portrait"
+            android:theme="@style/PluginContainerActivity"
+            tools:replace="process" />
+
+        <activity
+            android:name="com.hl.my_runtime.CJSXTPluginProxyActivity"
+            android:configChanges="mcc|mnc|locale|touchscreen|keyboard|keyboardHidden|navigation|screenLayout|fontScale|uiMode|orientation|screenSize|smallestScreenSize|layoutDirection"
+            android:hardwareAccelerated="true"
+            android:launchMode="standard"
+            android:multiprocess="true"
+            android:process=":pluginMulti"
+            android:screenOrientation="portrait"
+            android:theme="@style/PluginContainerActivity"
+            tools:replace="process" />
+        <!--dynamic activity注册 end -->
+
+        <provider
+            android:name="com.tencent.shadow.core.runtime.container.PluginContainerContentProvider"
+            android:authorities="${applicationId}.contentprovider.authority.dynamic"
+            android:multiprocess="true"
+            android:process=":pluginMulti"
+            tools:replace="process" />
     </application>
 
 </manifest>
