@@ -5,13 +5,13 @@ import com.hl.shadow.logger.AndroidLoggerFactory
 import com.hl.shadow.logger.LogLevel
 import com.hl.shadow.logger.OnShadowLog
 import com.hl.shadow.managerupdater.MyPluginManagerUpdater
+import com.hl.shadow.pluginmanager.MyMultiLoaderPluginManager
 import com.hl.shadow.pluginmanager.MyPluginManager
 import com.hl.shadow.pluginmanager.ProcessPluginManager
 import com.tencent.shadow.core.common.LoggerFactory
 import com.tencent.shadow.dynamic.host.DynamicPluginManager
 import com.tencent.shadow.dynamic.host.PluginManager
 import com.tencent.shadow.dynamic.host.PluginManagerImpl
-import com.tencent.shadow.dynamic.host.PluginProcessService
 import java.io.File
 import java.util.concurrent.Future
 
@@ -36,7 +36,12 @@ object Shadow {
 
 
 	/**
-	 * 多进程 PluginManager 的映射
+	 * 静态实现的插件管理类, 其可使用一个 PPS 加载多个插件包
+	 */
+	private val multiLoaderPluginManagerMap = mutableMapOf<String, MyMultiLoaderPluginManager>()
+
+	/**
+	 * 多进程 PluginManager 的映射, 加载的插件包与 PPS 一一对应
 	 */
 	private val processPluginManagerMap = mutableMapOf<String, ProcessPluginManager>()
 
@@ -73,13 +78,15 @@ object Shadow {
 		return pluginManagerImpl
 	}
 
+
 	/**
-	 * 获取静态的 PluginManager， 无需动态 APK 进行加载
+	 * 获取静态的 PluginManager， 可通过一个 PPS 去加载不同的插件包， 无需动态 APK 进行加载
 	 *
 	 * @param  context           上下文对象
+	 * @param  pluginName        区分不同插件包的唯一标识
 	 * @return PluginManager
 	 */
-	fun getProcessPluginManager(context: Context, managerName: String, ppsName: String): PluginManager? {
+	fun getMultiPluginManager(context: Context, pluginName: String): PluginManager? {
 		androidLoggerFactory?.run {
 			try {
 				LoggerFactory.getILoggerFactory()
@@ -88,12 +95,36 @@ object Shadow {
 			}
 		} ?: throw ExceptionInInitializerError("请先调用 initShadowLog 方法初始化 LoggerFactory")
 
-		if (processPluginManagerMap[managerName] == null) {
-			val processPluginManager = ProcessPluginManager(context, managerName, ppsName)
-			processPluginManagerMap[managerName] = processPluginManager
+		if (multiLoaderPluginManagerMap[pluginName] == null) {            // 动态获取是通过反射机制获取的
+			// val className = "com.tencent.shadow.dynamic.impl.ManagerFactoryImpl"
+			// val newInstance = Class.forName(className).newInstance()
+			// pluginManagerImpl = ManagerFactory::class.cast(newInstance).buildManager(context)
+			val multiLoaderPluginManager = MyMultiLoaderPluginManager(context, pluginName)
+			multiLoaderPluginManagerMap[pluginName] = multiLoaderPluginManager
 		}
+		return multiLoaderPluginManagerMap[pluginName]
+	}
 
-		return processPluginManagerMap[managerName]
+	/**
+	 * 获取静态的 PluginManager， 可通过参数启动不同的 PPS， 无需动态 APK 进行加载,  性能开销最大不推荐使用
+	 *
+	 * @param  context           上下文对象
+	 * @return PluginManager
+	 */
+	fun getProcessPluginManager(context: Context, ppsName: String): PluginManager? {
+		androidLoggerFactory?.run {
+			try {
+				LoggerFactory.getILoggerFactory()
+			} catch (e: Exception) {
+				LoggerFactory.setILoggerFactory(this)
+			}
+		} ?: throw ExceptionInInitializerError("请先调用 initShadowLog 方法初始化 LoggerFactory")
+
+		if (processPluginManagerMap[ppsName] == null) {
+			val processPluginManager = ProcessPluginManager(context, ppsName)
+			processPluginManagerMap[ppsName] = processPluginManager
+		}
+		return processPluginManagerMap[ppsName]
 	}
 
 

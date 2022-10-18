@@ -55,8 +55,8 @@
             android:process=":plugin" />
 
         <service
-            android:name=".pps.DynamicUuidPluginProcessService"
-            android:process=":plugin" />
+            android:name=".pps.MyMultiLoaderPluginProcessService"
+            android:process=":pluginMulti" />
     </application>
 
 </manifest>

@@ -1,9 +1,7 @@
 package com.hl.utils
 
-import android.app.ActivityManager
-import android.app.Application
 import android.content.Context
-import android.os.Process
+import com.blankj.utilcode.util.ProcessUtils
 
 /**
  * @author  张磊  on  2021/05/20 at 10:00
@@ -11,15 +9,7 @@ import android.os.Process
  */
 
 fun Context.isProcess(processName: String): Boolean {
-	var currentProcessName = ""
-	val manager = this.getSystemService(Application.ACTIVITY_SERVICE) as ActivityManager
-	for (processInfo in manager.runningAppProcesses) {
-		if (processInfo.pid == Process.myPid()) {
-			currentProcessName = processInfo.processName
-			break
-		}
-	}
-
+	val currentProcessName = ProcessUtils.getCurrentProcessName()
 	return currentProcessName.endsWith(processName)
 }
 

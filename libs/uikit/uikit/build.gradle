@@ -70,8 +70,9 @@ dependencies {
     implementation "com.google.android.material:material:1.5.0"
 
     //github 地址 ：https://github.com/zyyoona7/WheelPicker
-    implementation 'com.github.zyyoona7:wheelview:1.0.7'
-    implementation 'com.github.zyyoona7:pickerview:1.0.9'
+    def wheel_picker_version='1.0.9'
+    implementation "com.github.zyyoona7:wheelview:${wheel_picker_version}"
+    implementation "com.github.zyyoona7:pickerview:${wheel_picker_version}"
 
     //github 地址 ：https://github.com/airbnb/lottie-android
     implementation('com.airbnb.android:lottie:5.0.3')

@@ -20,10 +20,6 @@ import com.tencent.shadow.dynamic.host.DynamicUuidPpsController
  * Email: 913305160@qq.com
  */
 class MyDynamicUuidPluginManager(context: Context) : MyPluginManager(context) {
-    companion object {
-        private const val TAG = "MyDynamicUuidPluginMana"
-    }
-
 
     override fun getPluginProcessServiceName(): String {
         return ShadowConstants.DYNAMIC_UUID_PLUGIN_PROCESS_SERVICE_NAME

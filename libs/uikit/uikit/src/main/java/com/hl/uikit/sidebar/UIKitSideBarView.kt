@@ -67,8 +67,7 @@ class UIKitSideBarView : View {
 	/**
 	 * 侧边栏菜单内容
 	 */
-	private var letters: List<String> =
-		ArrayList()
+	private var letters: List<String> = ArrayList()
 
 	/**
 	 * View宽度
@@ -98,7 +97,7 @@ class UIKitSideBarView : View {
 	 */
 	private var onSideBarListener: OnSideBarListener? = null
 
-	constructor(context: Context?) : super(context, null)
+	constructor(context: Context) : this(context, null)
 
 	@JvmOverloads
 	constructor(
@@ -144,6 +143,9 @@ class UIKitSideBarView : View {
 		itemSpacing = array.getDimensionPixelOffset(R.styleable.UIKitSideBarView_uikit_sideItemSpacing, 10)
 		textSize = array.getDimensionPixelOffset(R.styleable.UIKitSideBarView_uikit_sideTextSize, 13)
 		itemHeight = array.getDimensionPixelOffset(R.styleable.UIKitSideBarView_uikit_sideItemHeight, textSize)
+		letters = array.getString(R.styleable.UIKitSideBarView_uikit_sideLetters)?.run {
+			this.toCharArray().map { it.toString() }
+		} ?: letters
 		itemHeight += itemSpacing
 		array.recycle()
 	}
@@ -161,15 +163,6 @@ class UIKitSideBarView : View {
 		bgPaint!!.isAntiAlias = true
 		bgPaint!!.isDither = true
 		bgPaint!!.style = Paint.Style.FILL
-	}
-
-	override fun onFinishInflate() {
-		super.onFinishInflate()
-		if (isInEditMode) {
-			// 供预览时查看
-			val letters = ('A'..'G').map { it.toString() }
-			setLetters(letters)
-		}
 	}
 
 	override fun onDraw(canvas: Canvas) {
@@ -274,7 +267,7 @@ class UIKitSideBarView : View {
 	}
 
 	/**
-	 * 根据Latter数量动态更新控件高度
+	 * 根据 Letter数量动态更新控件高度
 	 */
 	private fun updateViewHeight() {
 		val layoutParams = layoutParams

@@ -479,6 +479,9 @@ project.afterEvaluate {
                     setDependencyNode(root, 'compile', 'com.tencent.shadow.core', 'activity-container', Versions.SHADOW)
                     setDependencyNode(root, 'compile', 'com.tencent.shadow.dynamic', 'manager', Versions.SHADOW)
 
+                    setDependencyNode(root, 'compile', 'com.tencent.shadow.dynamic', 'host-multi-loader-ext', Versions.SHADOW)
+                    setDependencyNode(root, 'compile', 'com.tencent.shadow.dynamic', 'manager-multi-loader-ext', Versions.SHADOW)
+
                     setScm(root)
                 }
             }
