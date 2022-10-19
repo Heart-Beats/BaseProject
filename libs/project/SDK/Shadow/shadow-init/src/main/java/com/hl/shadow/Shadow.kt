@@ -8,6 +8,7 @@ import com.hl.shadow.managerupdater.MyPluginManagerUpdater
 import com.hl.shadow.pluginmanager.MyMultiLoaderPluginManager
 import com.hl.shadow.pluginmanager.MyPluginManager
 import com.hl.shadow.pluginmanager.ProcessPluginManager
+import com.hl.shadow.pluginmanager.ProcessPluginManager2
 import com.tencent.shadow.core.common.LoggerFactory
 import com.tencent.shadow.dynamic.host.DynamicPluginManager
 import com.tencent.shadow.dynamic.host.PluginManager
@@ -124,6 +125,29 @@ object Shadow {
 			val processPluginManager = ProcessPluginManager(context, ppsName)
 			processPluginManagerMap[ppsName] = processPluginManager
 		}
+		return processPluginManagerMap[ppsName]
+	}
+
+	/**
+	 * 获取静态的 PluginManager， 无需动态 APK 进行加载
+	 *
+	 * @param  context           上下文对象
+	 * @return PluginManager
+	 */
+	fun getProcessPluginManager2(context: Context, managerName: String, ppsName: String): PluginManager? {
+		androidLoggerFactory?.run {
+			try {
+				LoggerFactory.getILoggerFactory()
+			} catch (e: Exception) {
+				LoggerFactory.setILoggerFactory(this)
+			}
+		} ?: throw ExceptionInInitializerError("请先调用 initShadowLog 方法初始化 LoggerFactory")
+
+		if (processPluginManagerMap[ppsName] == null) {
+			val processPluginManager = ProcessPluginManager2(context, managerName, ppsName)
+			processPluginManagerMap[ppsName] = processPluginManager
+		}
+
 		return processPluginManagerMap[ppsName]
 	}
 

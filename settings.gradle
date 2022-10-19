@@ -1,4 +1,6 @@
 import java.nio.file.Files
+import java.util.regex.Matcher
+import java.util.regex.Pattern
 
 pluginManagement {
     repositories {
@@ -55,13 +57,27 @@ gradle.projectsLoaded {
     }
 }
 
+def getCurrentFlavor(Project project) {
+    Gradle gradle = project.getGradle()
+    String tskReqStr = gradle.getStartParameter().getTaskRequests().toString()
+    Pattern pattern = Pattern.compile("(assemble|generate|bundle)(.*?)(Release|Debug)")
+    Matcher matcher = pattern.matcher(tskReqStr)
+    String channel = ""
+    if (matcher.find()) {
+        channel = matcher.group(2).toLowerCase()
+    }
+    return channel
+}
+
 gradle.addProjectEvaluationListener(new ProjectEvaluationListener() {
     void beforeEvaluate(Project project) {
         println "${project} -------------> beforeEvaluate"
+        println "currentFlavor -------------> ${getCurrentFlavor(project)}"
     }
 
     void afterEvaluate(Project project, ProjectState state) {
         println "${project} -------------> afterEvaluate"
+        println "currentFlavor -------------> ${getCurrentFlavor(project)}"
     }
 })
 
