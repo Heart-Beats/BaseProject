@@ -36,7 +36,7 @@ internal object Versions {
     const val RX_ANDROID = "3.0.0"
     const val FANCY_TOAST = "2.0.1"
     const val GLIDE = "4.12.0"
-    const val PERMISSION_X = "1.6.2"
+    const val PERMISSION_X = "1.7.1"
     const val GSON = "2.8.9"
     const val FAST_JSON = "1.1.72.android"
     const val BUTTER_KNIFE = "10.2.1"
