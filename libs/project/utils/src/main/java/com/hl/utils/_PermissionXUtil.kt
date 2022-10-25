@@ -18,7 +18,7 @@ val permissionsList = arrayOf(
 )
 
 fun FragmentActivity.reqPermissions(
-    vararg permissions: String = com.hl.uikit.permissionsList,
+    vararg permissions: String = permissionsList,
     needExplainRequestReason: Boolean = false,
     deniedAction: (List<String>) -> Unit = {},
     allGrantedAction: (List<String>) -> Unit = {},
@@ -47,15 +47,30 @@ fun FragmentActivity.reqPermissions(
 }
 
 fun Fragment.reqPermissions(
-    vararg permissions: String = com.hl.uikit.permissionsList,
+    vararg permissions: String = permissionsList,
     needExplainRequestReason: Boolean = false,
     deniedAction: (List<String>) -> Unit = {},
     allGrantedAction: (List<String>) -> Unit = {}
 ) {
-    requireActivity().reqPermissions(
-        *permissions,
-        needExplainRequestReason = needExplainRequestReason,
-        allGrantedAction = allGrantedAction,
-        deniedAction = deniedAction
-    )
+    PermissionX.init(this)
+        .permissions(*permissions)
+        .apply {
+            if (needExplainRequestReason) this.explainReasonBeforeRequest
+        }
+        .onExplainRequestReason { scope, deniedList ->
+            // 用户请求权限之前触发，用于解释获取权限原因，必须调用 explainReasonBeforeRequest() 才会触发
+            val message = "本应用需要您同意以下权限才可正常使用"
+            scope.showRequestReasonDialog(deniedList, message, "确定", "取消")
+        }
+        .onForwardToSettings { scope, deniedList ->
+            // 用户拒绝权限后再次请求触发
+            scope.showForwardToSettingsDialog(deniedList, "您需要在设置中手动允许以下必要的权限", "确定", "取消")
+        }
+        .request { allGranted, grantedList, deniedList ->
+            if (allGranted) {
+                allGrantedAction(grantedList)
+            } else {
+                deniedAction(deniedList)
+            }
+        }
 }

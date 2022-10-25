@@ -6,8 +6,8 @@ import com.hl.arch.loading.loadingPopupWeakReference
 import com.hl.arch.mvvm.PublicResp
 import com.hl.arch.mvvm.api.event.RequestStateEvent
 import com.hl.arch.mvvm.api.event.UiEvent
-import com.hl.arch.mvvm.apiRespRepeatSafeCollect
-import com.hl.arch.mvvm.repeatSafeCollect
+import com.hl.arch.utils.apiRespRepeatSafeCollect
+import com.hl.arch.utils.repeatSafeCollect
 import com.hl.arch.mvvm.vm.FlowVM
 import com.hl.arch.mvvm.vm.LiveDataVM
 import com.hl.arch.utils.onceLastObserve
