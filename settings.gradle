@@ -4,13 +4,12 @@ import java.util.regex.Pattern
 
 pluginManagement {
     repositories {
+        mavenCentral()
         maven { url 'https://maven.aliyun.com/repository/public' }
         maven { url 'https://maven.aliyun.com/repository/google' }
         maven { url = 'https://maven.aliyun.com/repository/gradle-plugin' }
         maven { url 'https://jitpack.io' }
         gradlePluginPortal()
-        google()
-        mavenCentral()
     }
 }
 dependencyResolutionManagement {
@@ -23,11 +22,10 @@ dependencyResolutionManagement {
 
     repositories {
         mavenLocal()
+        mavenCentral()
         maven { url 'https://maven.aliyun.com/repository/public' } // central 和 jcenter 的聚合仓
         maven { url 'https://maven.aliyun.com/repository/google' }
         maven { url 'https://jitpack.io' }
-        //        google()
-        //        mavenCentral()
     }
 }
 

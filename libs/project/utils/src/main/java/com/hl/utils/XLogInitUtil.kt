@@ -83,7 +83,7 @@ object XLogInitUtil {
 			?: defaultLogFileName
 
 		// 上次写入日志文件的日期非当前日期，使用当前日期写入日志文件
-		if (lastLogFileName.startsWith(nowDate)) {
+		if (!lastLogFileName.startsWith(nowDate)) {
 			lastLogFileName = defaultLogFileName
 		}
 
