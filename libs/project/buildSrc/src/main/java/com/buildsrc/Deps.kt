@@ -19,7 +19,7 @@ internal object Versions {
     const val PALETTE = "1.0.0"
 
     const val LIFECYCLE = "2.4.0"
-    const val NAV_VERSION = "2.4.0-rc01"
+    const val NAV_VERSION = "2.5.3"
 
     const val MATERIAL = "1.4.0"
 

@@ -6,7 +6,7 @@ plugins {
     id 'org.jetbrains.kotlin.android'
 }
 
-apply from: "build_config.gradle"
+apply from: "../commonGradle/build_config.gradle"
 
 android {
     signingConfigs {

@@ -146,7 +146,7 @@ object RetrofitManager {
 
     //获取Hostname Verifier
     private fun getHostnameVerifier(): HostnameVerifier {
-        return HostnameVerifier { s, sslSession -> //未真正校检服务器端证书域名
+        return HostnameVerifier { _, _ -> //未真正校检服务器端证书域名
             true
         }
     }
