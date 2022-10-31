@@ -41,6 +41,7 @@ android {
 dependencies {
     api project(path: ':base-app-res')
     api project(path: ':utils')
+    api project(path: ':SDK:Umeng')
 
     api Deps.AndroidX.core_ktx
     api Deps.AndroidX.appcompat
