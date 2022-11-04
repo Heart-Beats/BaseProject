@@ -540,7 +540,7 @@ class IStandSdkImpl(
 		return when (share2PlatformParam.type) {
 			"sms" -> {
 				share2PlatformParam.smsContent?.run {
-					SmsHelper(attachActivity).sendMessage(this) {
+					SmsHelper(attachActivity).sendMessage(this, share2PlatformParam.phoneNumber) {
 						if (it) {
 							function.onSuccess("短信发送成功")
 						} else {

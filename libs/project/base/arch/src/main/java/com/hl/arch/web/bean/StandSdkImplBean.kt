@@ -214,7 +214,12 @@ data class Share2PlatformParam(
 	/**
 	 * 短信内容，当 type 为 sms 时使用
 	 */
-	var smsContent: String? = null
+	var smsContent: String? = null,
+
+	/**
+	 * 需要发送人的手机号码
+	 */
+	var phoneNumber: String? = null
 ) : Parcelable {
 
 	fun convert2SharePlatformParam(): SharePlatformParam {
