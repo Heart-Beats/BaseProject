@@ -323,8 +323,10 @@ open class WebViewFragment : ViewBindingMvvmBaseFragment<FragmentWebViewBinding>
 
 	override fun onStop() {
 		super.onStop()
+
+		// 注意不能关闭 JS 交互，否则标签选择图片或文件非系统选择器会有问题
 		// WebView在后台的时候, 此时关闭js交互， 避免后台无法释放 js 导致发热耗电
-		webView.settings.javaScriptEnabled = false
+		// webView.settings.javaScriptEnabled = false
 	}
 
 	override fun onDestroy() {
