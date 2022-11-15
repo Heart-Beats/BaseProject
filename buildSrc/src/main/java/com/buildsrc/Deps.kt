@@ -45,7 +45,7 @@ internal object Versions {
     const val X_POPUP = "2.7.5"
     const val ZXING = "2.2.8"
     const val ZXING_LITE = "2.1.1"
-    const val UTIL_CODE_X = "1.31.0"
+    const val UTIL_CODE_X = "1.31.1"
     const val SHORTCUT_BADGER = "1.1.22"
     const val PHOTO_VIEW = "latest.release"
     const val BANNER = "2.2.2"
