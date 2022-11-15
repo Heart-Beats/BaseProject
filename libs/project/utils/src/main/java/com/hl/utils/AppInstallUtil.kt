@@ -14,7 +14,7 @@ import java.io.File
  * @author  张磊  on  2021/10/28 at 19:18
  * Email: 913305160@qq.com
  */
-object AppUtil {
+object AppInstallUtil {
 
 	val REQ_INSTALL_PERMISSION = 1000
 

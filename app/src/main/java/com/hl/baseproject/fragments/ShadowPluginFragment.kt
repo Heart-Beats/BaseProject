@@ -4,6 +4,8 @@ import android.Manifest
 import android.content.Context
 import android.os.Bundle
 import android.view.View
+import com.blankj.utilcode.util.FileUtils
+import com.elvishew.xlog.XLog
 import com.hl.baseproject.databinding.FragmentShadowPluginBinding
 import com.hl.baseproject.fragments.base.BaseFragment
 import com.hl.baseproject.shadow.pps.TestPluginProcessService
@@ -12,10 +14,12 @@ import com.hl.shadow.Shadow
 import com.hl.shadow.lib.ShadowConstants
 import com.hl.uikit.onClick
 import com.hl.uikit.toast
+import com.hl.utils.AppSizeUtil
 import com.hl.utils.copyAssets2Path
 import com.hl.utils.reqPermissions
 import com.lxj.xpopup.XPopup
 import com.tencent.shadow.dynamic.host.EnterCallback
+import kotlinx.coroutines.NonDisposableHandle.parent
 import java.io.File
 
 /**
@@ -23,6 +27,25 @@ import java.io.File
  * Email: 913305160@qq.com
  */
 class ShadowPluginFragment : BaseFragment<FragmentShadowPluginBinding>() {
+
+	override fun onResume() {
+		super.onResume()
+
+		XLog.d("onResume")
+
+		AppSizeUtil.getSize(requireContext()) { cacheSize, dataSize, codeSize ->
+			val appSize = cacheSize + dataSize + codeSize
+			viewBinding?.displayCacheSize?.text = AppSizeUtil.getFormatSize(appSize)
+		}
+
+		val shadowPluginManagerParentDir = File(requireContext().filesDir, "ShadowPluginManager")
+		val mPluginUnpackedDir = File(shadowPluginManagerParentDir, "UnpackedPlugin")
+		XLog.d(mPluginUnpackedDir)
+
+		FileUtils.listFilesInDir(mPluginUnpackedDir).forEach {
+			XLog.d("子文件 == $it,   大小 == ${FileUtils.getSize(it)}")
+		}
+	}
 
 	override fun FragmentShadowPluginBinding.onViewCreated(savedInstanceState: Bundle?) {
 		startShadowPlugin.onClick {

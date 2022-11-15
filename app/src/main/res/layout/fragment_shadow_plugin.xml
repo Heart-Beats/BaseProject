@@ -13,6 +13,27 @@
         app:uikit_title="Shadow 插件化测试"
         android:layout_height="wrap_content" />
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="应用大小："
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/display_cache_size"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:textSize="20sp"
+            tools:text="20MB" />
+
+    </LinearLayout>
+
     <TextView
         android:id="@+id/start_shadow_plugin"
         android:layout_width="wrap_content"
