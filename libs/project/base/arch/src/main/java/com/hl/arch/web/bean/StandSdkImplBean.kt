@@ -19,7 +19,7 @@ data class AndroidDeviceInfo(
 	/**
 	 * 系统类型： 0:Android  1: IOS
 	 */
-	val systemPlatform: Int = 0,
+	val system: String = "Android",
 
 	/**
 	 * 是否处于 Wifi 状态: 0-非 wifi 1-wifi
