@@ -10,6 +10,8 @@ import com.hl.arch.adapters.diffcallback.MyDiffCallback
 /**
  * @Author  张磊  on  2020/11/16 at 12:33
  * Email: 913305160@qq.com
+ *
+ * 目前使用 ItemDragCallBack 拖拽排序有问题 @see[com.hl.arch.adapters.drag.ItemDragCallBack]
  */
 abstract class BaseAbstractAdapter<T>(private var adapterData: MutableList<T>) : RecyclerView.Adapter<BaseAbstractAdapter<T>.ViewHolder>(), IDataOperate<T> {
 

@@ -30,7 +30,7 @@ abstract class BaseItemProvider<T> {
 	/**
 	 * 刷新 ViewHolder 的整体视图数据，
 	 */
-	abstract fun onItemBind(holder: BaseViewHolder<T>, itemData: T)
+	abstract fun onItemBind(viewHolder: BaseViewHolder<T>, itemData: T)
 
 	/**
 	 * 刷新 ViewHolder 的视图上的局部数据，
