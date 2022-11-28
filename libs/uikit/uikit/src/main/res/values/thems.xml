@@ -11,7 +11,11 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:windowBackground">@color/uikit_backgroundColor</item>
+
+        <!--状态栏显示成半透明的状态, 布局会拓展到系统栏的后面-->
         <item name="android:windowTranslucentStatus">true</item>
+
+        <!--禁用 window 的预览动画， 确保应用启动时无白屏 -->
         <item name="android:windowDisablePreview">true</item>
 
         <item name="uikit_toolbarStyle">@style/UiKit.ToolbarStyle</item>
