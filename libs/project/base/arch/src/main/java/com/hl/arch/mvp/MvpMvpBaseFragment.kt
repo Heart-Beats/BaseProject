@@ -14,7 +14,7 @@ import com.hl.arch.base.BaseFragment
  * @param <Presenter>
  * @author 91330
 </Presenter> */
-abstract class MvpBaseFragment<Presenter : MvpBasePresenter<out BaseView>> : BaseFragment(), BaseView {
+abstract class MvpMvpBaseFragment<Presenter : MvpBasePresenter<out MvpBaseView>> : BaseFragment(), MvpBaseView {
 
     protected val TAG = this.javaClass.simpleName
 

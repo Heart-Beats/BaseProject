@@ -5,7 +5,7 @@ import android.content.Context
 /**
  * BaseView 是应用中所有UiView的顶级抽象类，适合抽取UiView的公共方法和属性
  */
-interface BaseView {
+interface MvpBaseView {
     /**
      * showLoading 方法主要用于页面请求数据时显示加载状态
      */
