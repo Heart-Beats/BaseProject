@@ -28,7 +28,7 @@ import com.hl.arch.base.BaseActivity
  * @Version : 1.0
  * @date : 2019.3.5
  */
-abstract class MvpMvpBaseActivity<Presenter : MvpBasePresenter<out MvpBaseView>> : BaseActivity(), MvpBaseView {
+abstract class MvpBaseActivity<Presenter : MvpBasePresenter<out MvpBaseView>> : BaseActivity(), MvpBaseView {
 
     protected val TAG = this.javaClass.simpleName
     protected lateinit var menuIV: ImageView
