@@ -1,6 +1,5 @@
 package com.hl.arch.mvvm.activity
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -44,10 +43,6 @@ fun Context.startFragment(
 
 fun Context.startFragment(fragmentClass: Class<out Fragment>, extras: Bundle? = null) {
     this.startFragment(fragmentClass, FragmentContainerActivity::class.java, extras)
-}
-
-fun Activity.startFragment(fragmentClass: Class<out Fragment>, extras: Bundle? = null) {
-    (this as Context).startFragment(fragmentClass, extras)
 }
 
 fun Fragment.startFragment(fragmentClass: Class<out Fragment>, extras: Bundle? = null) {
