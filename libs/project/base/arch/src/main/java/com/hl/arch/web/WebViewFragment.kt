@@ -16,7 +16,6 @@ import android.webkit.WebSettings
 import android.webkit.WebView
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import com.elvishew.xlog.XLog
 import com.gyf.immersionbar.ktx.hideStatusBar
 import com.gyf.immersionbar.ktx.immersionBar
@@ -53,13 +52,6 @@ open class WebViewFragment : ViewBindingMvvmBaseFragment<FragmentWebViewBinding>
 			title: String? = null, isNeedTitle: Boolean = false
 		) {
 			startNewPage(currentFragment.requireActivity(), url, title, isNeedTitle)
-		}
-
-		fun startNewPage(
-			currentActivity: FragmentActivity, url: String,
-			title: String? = null, isNeedTitle: Boolean = false
-		) {
-			startNewPage(currentActivity as Context, url, title, isNeedTitle)
 		}
 
 		fun startNewPage(
@@ -413,14 +405,6 @@ open class WebViewFragment : ViewBindingMvvmBaseFragment<FragmentWebViewBinding>
  * 打开新的 Web 页面， 会开启新的 Activity
  */
 fun Fragment.navigateToWeb(url: String, title: String? = null, isNeedTitle: Boolean = false) {
-	WebViewFragment.startNewPage(this, url, title, isNeedTitle)
-}
-
-/**
- * 非 Navigation 框架下使用
- * 打开新的 Web 页面， 会开启新的 Activity
- */
-fun FragmentActivity.navigateToWeb(url: String, title: String? = null, isNeedTitle: Boolean = false) {
 	WebViewFragment.startNewPage(this, url, title, isNeedTitle)
 }
 
