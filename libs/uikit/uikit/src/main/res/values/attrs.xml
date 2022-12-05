@@ -118,6 +118,8 @@
         <attr name="uikit_formLabelBold" format="boolean" />
         <attr name="uikit_formLabelMarginEnd" format="dimension|reference" />
         <attr name="uikit_formLeftIcon" format="reference" />
+        <attr name="uikit_formLeftIconMarginEnd" format="dimension|reference" />
+
         <!--子标签，字符串类型，以","分隔, 如： "1,2,3" 会被解析为["1","2","3"]-->
         <attr name="uikit_formChildLabel" format="string|reference" />
         <attr name="uikit_formChildLabelSize" format="dimension|reference" />

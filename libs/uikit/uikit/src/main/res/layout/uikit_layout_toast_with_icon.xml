@@ -9,13 +9,16 @@
 
 
     <ImageView
+        android:layout_marginTop="25dp"
         android:id="@+id/imageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"/>
+        android:tag="toast_icon"
+        tools:srcCompat="@drawable/uikit_ic_toast_success" />
 
     <TextView
         android:id="@+id/textView"
+        android:tag="toast_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"

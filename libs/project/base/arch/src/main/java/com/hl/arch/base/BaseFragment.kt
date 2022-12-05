@@ -103,6 +103,8 @@ abstract class BaseFragment : Fragment() {
      * @param immersionBarBlock 使用 immersionBar 对状态栏的后续设置
      */
     protected fun setStatusBarImmerseFromView(statusBarView: View, immersionBarBlock: ImmersionBar.() -> Unit = {}) {
+        Log.d(TAG, "setStatusBarImmerseFromView =====> 开始设置沉浸式状态栏， statusBarView == ${statusBarView}")
+
         initInsetPadding(top = false)
 
         if (::immersionBar.isInitialized) {
@@ -111,7 +113,7 @@ abstract class BaseFragment : Fragment() {
                 statusBarDarkFont(false)
                 transparentStatusBar()
                 immersionBarBlock()
-            }
+            }.init()
         }
     }
 

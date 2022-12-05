@@ -72,13 +72,13 @@ fun View.visibleOrGone(show: Boolean) {
 }
 
 
-val Int.dpInt
+internal val Int.dpInt
     get() = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, this.toFloat(), Resources.getSystem().displayMetrics)
         .toInt()
 
-val Float.dp
+internal val Float.dp
     get() = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, this, Resources.getSystem().displayMetrics)
 
-val Float.sp
+internal val Float.sp
     get() = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, this, Resources.getSystem().displayMetrics)
 
