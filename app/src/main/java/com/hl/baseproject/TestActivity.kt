@@ -10,9 +10,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.hl.arch.adapters.BaseAbstractAdapter
 import com.hl.arch.mvvm.activity.ViewBindingBaseActivity
 import com.hl.baseproject.databinding.ActivityTestBinding
-import com.hl.uikit.dpInt
 import com.hl.uikit.recyclerview.decoration.GridSpaceItemDecoration
 import com.hl.uikit.recyclerview.decoration.RecyclerViewDividerDecoration
+import com.hl.utils.dpInt
 import com.hl.utils.setItemDecoration
 import kotlin.math.roundToInt
 

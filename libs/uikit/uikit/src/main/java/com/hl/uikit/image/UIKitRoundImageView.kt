@@ -5,15 +5,11 @@ import android.graphics.*
 import android.os.Build
 import android.util.AttributeSet
 import androidx.annotation.ColorInt
+import androidx.annotation.Px
 import androidx.appcompat.widget.AppCompatImageView
 import com.hl.uikit.R
+import com.hl.uikit.dpInt
 
-/**
- * create by chenyu
- * on 2021/1/8
- * https://github.com/SheHuan/NiceImageView
- * https://www.jianshu.com/p/9016ecf1d213
- */
 class UIKitRoundImageView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
@@ -21,29 +17,66 @@ class UIKitRoundImageView @JvmOverloads constructor(
 ) : AppCompatImageView(
     context, attrs, defStyleAttr
 ) {
-    // 是否显示为圆形，如果为圆形则设置的corner无效
+    /**
+     *  是否显示为圆形，如果为圆形则设置的corner无效
+     */
     private var isCircle = false
 
-    private var isCoverSrc // border、inner_border是否覆盖图片
-            = false
-    private var borderWidth // 边框宽度
-            = 0
-    private var borderColor = Color.WHITE // 边框颜色
-    private var innerBorderWidth // 内层边框宽度
-            = 0
-    private var innerBorderColor = Color.WHITE // 内层边框充色
-    private var cornerRadius // 统一设置圆角半径，优先级高于单独设置每个角的半径
-            = 0
-    private var cornerTopLeftRadius // 左上角圆角半径
-            = 0
-    private var cornerTopRightRadius // 右上角圆角半径
-            = 0
-    private var cornerBottomLeftRadius // 左下角圆角半径
-            = 0
-    private var cornerBottomRightRadius // 右下角圆角半径
-            = 0
-    private var maskColor // 遮罩颜色
-            = 0
+    /**
+     * border、inner_border是否覆盖图片
+     */
+    private var isCoverSrc = true
+
+    /**
+     * 边框宽度
+     */
+    private var borderWidth = 0.dpInt
+
+    /**
+     * 边框颜色
+     */
+    private var borderColor = Color.WHITE
+
+    /**
+     * 内层边框宽度
+     */
+    private var innerBorderWidth = 0.dpInt
+
+    /**
+     * 内层边框充色
+     */
+    private var innerBorderColor = Color.WHITE
+
+    /**
+     * 统一设置圆角半径，优先级高于单独设置每个角的半径
+     */
+    private var cornerRadius = 0.dpInt
+
+    /**
+     * 左上角圆角半径
+     */
+    private var cornerTopLeftRadius = 0.dpInt
+
+    /**
+     * 右上角圆角半径
+     */
+    private var cornerTopRightRadius = 0.dpInt
+
+    /**
+     * 左下角圆角半径
+     */
+    private var cornerBottomLeftRadius = 0.dpInt
+
+    /**
+     * 右下角圆角半径
+     */
+    private var cornerBottomRightRadius = 0.dpInt
+
+    /**
+     * 遮罩颜色
+     */
+    private var maskColor = 0
+
     private var xfermode: Xfermode? = null
 
     private var currentWidth = 0
@@ -52,15 +85,86 @@ class UIKitRoundImageView @JvmOverloads constructor(
     private val borderRadii: FloatArray
     private val srcRadii: FloatArray
 
-    private var srcRectF // 图片占的矩形区域
-            : RectF
-    private val borderRectF // 边框的矩形区域
-            : RectF
+    /**
+     *  图片占的矩形区域
+     */
+    private var srcRectF: RectF
+
+    /**
+     * 边框的矩形区域
+     */
+    private val borderRectF: RectF
+
     private val paint: Paint
-    private val path // 用来裁剪图片的ptah
-            : Path
-    private var srcPath // 图片区域大小的path
-            : Path? = null
+
+    /**
+     *  用来裁剪图片的ptah
+     */
+    private val path: Path
+
+    /**
+     * 图片区域大小的path
+     */
+    private var srcPath: Path? = null
+
+    init {
+        val ta = context.obtainStyledAttributes(attrs, R.styleable.UIKitRoundImageView, 0, 0)
+        for (i in 0 until ta.indexCount) {
+            when (val attr = ta.getIndex(i)) {
+                R.styleable.UIKitRoundImageView_uikit_is_cover_src -> {
+                    isCoverSrc = ta.getBoolean(attr, isCoverSrc)
+                }
+                R.styleable.UIKitRoundImageView_uikit_is_circle -> {
+                    isCircle = ta.getBoolean(attr, isCircle)
+                }
+                R.styleable.UIKitRoundImageView_uikit_border_width -> {
+                    borderWidth = ta.getDimensionPixelSize(attr, borderWidth)
+                }
+                R.styleable.UIKitRoundImageView_uikit_border_color -> {
+                    borderColor = ta.getColor(attr, borderColor)
+                }
+                R.styleable.UIKitRoundImageView_uikit_inner_border_width -> {
+                    innerBorderWidth = ta.getDimensionPixelSize(attr, innerBorderWidth)
+                }
+                R.styleable.UIKitRoundImageView_uikit_inner_border_color -> {
+                    innerBorderColor = ta.getColor(attr, innerBorderColor)
+                }
+                R.styleable.UIKitRoundImageView_uikit_corner_radius -> {
+                    cornerRadius = ta.getDimensionPixelSize(attr, cornerRadius)
+                }
+                R.styleable.UIKitRoundImageView_uikit_corner_top_left_radius -> {
+                    cornerTopLeftRadius = ta.getDimensionPixelSize(attr, cornerTopLeftRadius)
+                }
+                R.styleable.UIKitRoundImageView_uikit_corner_top_right_radius -> {
+                    cornerTopRightRadius = ta.getDimensionPixelSize(attr, cornerTopRightRadius)
+                }
+                R.styleable.UIKitRoundImageView_uikit_corner_bottom_left_radius -> {
+                    cornerBottomLeftRadius = ta.getDimensionPixelSize(attr, cornerBottomLeftRadius)
+                }
+                R.styleable.UIKitRoundImageView_uikit_corner_bottom_right_radius -> {
+                    cornerBottomRightRadius = ta.getDimensionPixelSize(attr, cornerBottomRightRadius)
+                }
+                R.styleable.UIKitRoundImageView_uikit_mask_color -> {
+                    maskColor = ta.getColor(attr, maskColor)
+                }
+            }
+        }
+        ta.recycle()
+        borderRadii = FloatArray(8)
+        srcRadii = FloatArray(8)
+        borderRectF = RectF()
+        srcRectF = RectF()
+        paint = Paint()
+        path = Path()
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.O_MR1) {
+            xfermode = PorterDuffXfermode(PorterDuff.Mode.DST_IN)
+        } else {
+            xfermode = PorterDuffXfermode(PorterDuff.Mode.DST_OUT)
+            srcPath = Path()
+        }
+        calculateRadii()
+        clearInnerBorderWidth()
+    }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
@@ -240,8 +344,8 @@ class UIKitRoundImageView @JvmOverloads constructor(
         invalidate()
     }
 
-    fun setBorderWidth(borderWidth: Int) {
-        this.borderWidth = dp2px(context, borderWidth.toFloat())
+    fun setBorderWidth(@Px borderWidth: Int) {
+        this.borderWidth = borderWidth
         calculateRadiiAndRectF(false)
     }
 
@@ -250,8 +354,8 @@ class UIKitRoundImageView @JvmOverloads constructor(
         invalidate()
     }
 
-    fun setInnerBorderWidth(innerBorderWidth: Int) {
-        this.innerBorderWidth = dp2px(context, innerBorderWidth.toFloat())
+    fun setInnerBorderWidth(@Px innerBorderWidth: Int) {
+        this.innerBorderWidth = innerBorderWidth
         clearInnerBorderWidth()
         invalidate()
     }
@@ -261,99 +365,33 @@ class UIKitRoundImageView @JvmOverloads constructor(
         invalidate()
     }
 
-    fun setCornerRadius(cornerRadius: Int) {
-        this.cornerRadius = dp2px(context, cornerRadius.toFloat())
+    fun setCornerRadius(@Px cornerRadius: Int) {
+        this.cornerRadius = cornerRadius
         calculateRadiiAndRectF(false)
     }
 
-    fun setCornerTopLeftRadius(cornerTopLeftRadius: Int) {
-        this.cornerTopLeftRadius = dp2px(context, cornerTopLeftRadius.toFloat())
+    fun setCornerTopLeftRadius(@Px cornerTopLeftRadius: Int) {
+        this.cornerTopLeftRadius = cornerTopLeftRadius
         calculateRadiiAndRectF(true)
     }
 
-    fun setCornerTopRightRadius(cornerTopRightRadius: Int) {
-        this.cornerTopRightRadius = dp2px(context, cornerTopRightRadius.toFloat())
+    fun setCornerTopRightRadius(@Px cornerTopRightRadius: Int) {
+        this.cornerTopRightRadius = cornerTopRightRadius
         calculateRadiiAndRectF(true)
     }
 
-    fun setCornerBottomLeftRadius(cornerBottomLeftRadius: Int) {
-        this.cornerBottomLeftRadius = dp2px(context, cornerBottomLeftRadius.toFloat())
+    fun setCornerBottomLeftRadius(@Px cornerBottomLeftRadius: Int) {
+        this.cornerBottomLeftRadius = cornerBottomLeftRadius
         calculateRadiiAndRectF(true)
     }
 
-    fun setCornerBottomRightRadius(cornerBottomRightRadius: Int) {
-        this.cornerBottomRightRadius = dp2px(context, cornerBottomRightRadius.toFloat())
+    fun setCornerBottomRightRadius(@Px cornerBottomRightRadius: Int) {
+        this.cornerBottomRightRadius = cornerBottomRightRadius
         calculateRadiiAndRectF(true)
     }
 
     fun setMaskColor(@ColorInt maskColor: Int) {
         this.maskColor = maskColor
         invalidate()
-    }
-
-    companion object {
-        fun dp2px(context: Context, dipValue: Float): Int {
-            val scale = context.resources.displayMetrics.density
-            return (dipValue * scale + 0.5f).toInt()
-        }
-    }
-
-    init {
-        val ta = context.obtainStyledAttributes(attrs, R.styleable.UIKitRoundImageView, 0, 0)
-        for (i in 0 until ta.indexCount) {
-            when (val attr = ta.getIndex(i)) {
-                R.styleable.UIKitRoundImageView_uikit_is_cover_src -> {
-                    isCoverSrc = ta.getBoolean(attr, isCoverSrc)
-                }
-                R.styleable.UIKitRoundImageView_uikit_is_circle -> {
-                    isCircle = ta.getBoolean(attr, isCircle)
-                }
-                R.styleable.UIKitRoundImageView_uikit_border_width -> {
-                    borderWidth = ta.getDimensionPixelSize(attr, borderWidth)
-                }
-                R.styleable.UIKitRoundImageView_uikit_border_color -> {
-                    borderColor = ta.getColor(attr, borderColor)
-                }
-                R.styleable.UIKitRoundImageView_uikit_inner_border_width -> {
-                    innerBorderWidth = ta.getDimensionPixelSize(attr, innerBorderWidth)
-                }
-                R.styleable.UIKitRoundImageView_uikit_inner_border_color -> {
-                    innerBorderColor = ta.getColor(attr, innerBorderColor)
-                }
-                R.styleable.UIKitRoundImageView_uikit_corner_radius -> {
-                    cornerRadius = ta.getDimensionPixelSize(attr, cornerRadius)
-                }
-                R.styleable.UIKitRoundImageView_uikit_corner_top_left_radius -> {
-                    cornerTopLeftRadius = ta.getDimensionPixelSize(attr, cornerTopLeftRadius)
-                }
-                R.styleable.UIKitRoundImageView_uikit_corner_top_right_radius -> {
-                    cornerTopRightRadius = ta.getDimensionPixelSize(attr, cornerTopRightRadius)
-                }
-                R.styleable.UIKitRoundImageView_uikit_corner_bottom_left_radius -> {
-                    cornerBottomLeftRadius = ta.getDimensionPixelSize(attr, cornerBottomLeftRadius)
-                }
-                R.styleable.UIKitRoundImageView_uikit_corner_bottom_right_radius -> {
-                    cornerBottomRightRadius = ta.getDimensionPixelSize(attr, cornerBottomRightRadius)
-                }
-                R.styleable.UIKitRoundImageView_uikit_mask_color -> {
-                    maskColor = ta.getColor(attr, maskColor)
-                }
-            }
-        }
-        ta.recycle()
-        borderRadii = FloatArray(8)
-        srcRadii = FloatArray(8)
-        borderRectF = RectF()
-        srcRectF = RectF()
-        paint = Paint()
-        path = Path()
-        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.O_MR1) {
-            xfermode = PorterDuffXfermode(PorterDuff.Mode.DST_IN)
-        } else {
-            xfermode = PorterDuffXfermode(PorterDuff.Mode.DST_OUT)
-            srcPath = Path()
-        }
-        calculateRadii()
-        clearInnerBorderWidth()
     }
 }

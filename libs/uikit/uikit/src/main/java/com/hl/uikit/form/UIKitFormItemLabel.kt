@@ -42,6 +42,7 @@ abstract class UIKitFormItemLabel : UIKitFormItemView {
 
     private var ivLeftIcon: ImageView? = null
     private var mLeftIcon: Drawable? = null
+    private var mLeftIconMarginEnd: Int = 8.dpInt
 
     private var mTagText: CharSequence? = null
     private var mTagTextColor: Int = Color.RED
@@ -88,9 +89,12 @@ abstract class UIKitFormItemLabel : UIKitFormItemView {
             mLabelSize =
                 it.getDimensionPixelSize(R.styleable.UIKitFormItemLabel_uikit_formLabelSize, mLabelSize)
             mLabelMarginEnd =
-                it.getDimensionPixelSize(R.styleable.UIKitFormItemLabel_uikit_formLabelMarginEnd, 30)
+                it.getDimensionPixelSize(R.styleable.UIKitFormItemLabel_uikit_formLabelMarginEnd, mLabelMarginEnd)
             mLabelColor = it.getColorStateList(R.styleable.UIKitFormItemLabel_uikit_formLabelColor)
             mLeftIcon = it.getDrawable(R.styleable.UIKitFormItemLabel_uikit_formLeftIcon)
+            mLeftIconMarginEnd =
+                it.getDimensionPixelSize(R.styleable.UIKitFormItemLabel_uikit_formLeftIconMarginEnd, mLeftIconMarginEnd)
+
             it.getString(R.styleable.UIKitFormItemLabel_uikit_formChildLabel)?.run {
                 mChildLabel = this.split(",")
             }
@@ -274,9 +278,8 @@ abstract class UIKitFormItemLabel : UIKitFormItemView {
         val index = 0
         if (icon != null) {
             if (ivLeftIcon == null) {
-                val dp8 = 8.dpInt
                 val lp = generateDefaultLayoutParams()
-                lp.marginEnd = dp8
+                lp.marginEnd = mLeftIconMarginEnd
                 ivLeftIcon = AppCompatImageView(context, null)
                 addView(ivLeftIcon, index, lp)
             } else if (ivLeftIcon?.parent == null) {

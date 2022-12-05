@@ -41,8 +41,7 @@ internal object Versions {
     const val FAST_JSON = "1.1.72.android"
     const val BUTTER_KNIFE = "10.2.1"
     const val BRVAH = "3.0.7"
-    const val BASE_POPUP = "3.1.8"
-    const val X_POPUP = "2.7.5"
+    const val X_POPUP = "2.9.16"
     const val ZXING = "2.2.8"
     const val ZXING_LITE = "2.1.1"
     const val UTIL_CODE_X = "1.31.1"
@@ -268,7 +267,6 @@ class Deps {
     }
 
     object Popup {
-        const val base_popup = "io.github.razerdp:BasePopup:${Versions.BASE_POPUP}"
         const val x_popup = "com.github.li-xiaojun:XPopup:${Versions.X_POPUP}"
     }
 

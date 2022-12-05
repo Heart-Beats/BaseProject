@@ -1,0 +1,11 @@
+Properties loadLocalProperties() {
+	File file = file('local.properties')
+	if (file.exists()) {
+		//加载资源
+		InputStream inputStream = file.newDataInputStream();
+		Properties properties = new Properties()
+		properties.load(inputStream)
+
+		return properties
+	}
+}

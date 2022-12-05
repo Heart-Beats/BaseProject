@@ -11,11 +11,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import androidx.core.graphics.ColorUtils
 import androidx.lifecycle.MutableLiveData
-import androidx.palette.graphics.Palette
-import com.blankj.utilcode.util.ImageUtils
-import com.elvishew.xlog.XLog
 import com.gyf.immersionbar.ImmersionBar
 import com.gyf.immersionbar.ktx.immersionBar
 import com.hl.arch.R
@@ -136,6 +132,8 @@ abstract class BaseActivity : AppCompatActivity() {
     }
 
     protected open fun updateSystemBar() {
+        Log.d(TAG, "updateSystemBar =====> $this, 更新状态栏为默认配置")
+
         //默认设置根布局上方 padding 为状态栏高度
         initInsetPadding(top = true)
 
@@ -174,12 +172,16 @@ abstract class BaseActivity : AppCompatActivity() {
      * @param immersionBarBlock 使用 immersionBar 对状态栏的后续设置
      */
     protected fun setStatusBarImmerseFromView(statusBarView: View, immersionBarBlock: ImmersionBar.() -> Unit = {}) {
+        Log.d(TAG, "setStatusBarImmerseFromView =====> 开始设置沉浸式状态栏， statusBarView == ${statusBarView}")
+
         initInsetPadding(top = false)
-        immersionBar {
-            statusBarView(statusBarView)
-            statusBarDarkFont(false)
-            transparentStatusBar()
-            immersionBarBlock()
+        if (::immersionBar.isInitialized) {
+            immersionBar.apply {
+                statusBarView(statusBarView)
+                statusBarDarkFont(false)
+                transparentStatusBar()
+                immersionBarBlock()
+            }.init()
         }
     }
 

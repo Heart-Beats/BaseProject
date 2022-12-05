@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import com.hl.arch.R
 import com.hl.arch.databinding.ActivityFragmentContainerBinding
@@ -30,7 +31,7 @@ private const val DESTINATION_ARGUMENTS = "目标画面参数"
 
 fun Context.startFragment(
     fragmentClass: Class<out Fragment>,
-    containerActivityClass: Class<in FragmentContainerActivity>,
+    containerActivityClass: Class<out FragmentContainerActivity>,
     extras: Bundle? = null
 ) {
     val intent = Intent(this, containerActivityClass)
@@ -50,6 +51,18 @@ fun Fragment.startFragment(fragmentClass: Class<out Fragment>, extras: Bundle? =
 }
 
 fun View.startFragment(fragmentClass: Class<out Fragment>, extras: Bundle? = null) {
-    this.context.startFragment(fragmentClass, FragmentContainerActivity::class.java, extras)
+    this.context.startFragment(fragmentClass, extras)
+}
+
+inline fun <reified T : Fragment> Context.startFragment(argumentsBlock: Bundle.() -> Unit = {}) {
+    this.startFragment(T::class.java, FragmentContainerActivity::class.java, bundleOf().apply(argumentsBlock))
+}
+
+inline fun <reified T : Fragment> Fragment.startFragment(argumentsBlock: Bundle.() -> Unit = {}) {
+    requireActivity().startFragment<T>(argumentsBlock)
+}
+
+inline fun <reified T : Fragment> View.startFragment(argumentsBlock: Bundle.() -> Unit = {}) {
+    this.context.startFragment<T>(argumentsBlock)
 }
 
