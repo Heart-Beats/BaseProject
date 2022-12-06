@@ -11,6 +11,7 @@ import com.hjq.http.ssl.HttpSslFactory
 import okhttp3.OkHttpClient
 import okhttp3.Response
 import java.lang.reflect.Type
+import kotlin.concurrent.thread
 
 /**
  * @author  张磊  on  2022/08/05 at 17:10
@@ -26,7 +27,10 @@ object BaseUtil {
 
 		initXlog(debug)
 
-		initEasyHttp("https://www.baidu.com/", debug)
+		// 异步初始化相关库
+		thread {
+			initEasyHttp("https://www.baidu.com/", debug)
+		}
 	}
 
 
@@ -35,10 +39,6 @@ object BaseUtil {
 			.tag("X-LOG")
 			.logLevel(if (isPrintLog) LogLevel.ALL else LogLevel.INFO)
 			.enableStackTrace(1)
-			.addInterceptor {
-				// 添加日志拦截器
-				it
-			}
 			.build()
 		XLog.init(logConfig)
 	}

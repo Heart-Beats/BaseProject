@@ -46,11 +46,13 @@ android {
 
 dependencies {
     api 'com.hl:uikit'
+    api project(path: ':base-app-res')
 
     testImplementation Deps.Test.junit
     androidTestImplementation Deps.Test.junit_ext
     androidTestImplementation Deps.Test.espresso_core
 
+    implementation Deps.AndroidX.startup
     implementation Deps.AndroidX.core_ktx
     implementation Deps.AndroidX.appcompat
     implementation Deps.AndroidX.activity
@@ -81,7 +83,6 @@ dependencies {
     api Deps.UtilCodeX.utilcodex
     api Deps.GSYVideoPlayer.gsy_video_player
 
-    api project(path: ':base-app-res')
     api Deps.XLog.xlog
     api Deps.Tencent.tbs_sdk
     api Deps.Okhttp.easy_http
