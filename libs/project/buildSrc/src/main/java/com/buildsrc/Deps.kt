@@ -17,6 +17,7 @@ internal object Versions {
     const val DATA_BINDING = "7.2.2"
     const val CAMERA_X = "1.1.0-beta01"
     const val PALETTE = "1.0.0"
+    const val STARTUP = "1.1.1"
 
     const val LIFECYCLE = "2.4.0"
     const val NAV_VERSION = "2.5.3"
@@ -102,8 +103,10 @@ class Deps {
         const val camera_view = "androidx.camera:camera-view:${Versions.CAMERA_X}"
         const val camera_extensions = "androidx.camera:camera-extensions:${Versions.CAMERA_X}"
 
-        const val palette ="androidx.palette:palette:${Versions.PALETTE}"
-        const val palette_Ktx ="androidx.palette:palette-ktx:${Versions.PALETTE}"
+        const val palette = "androidx.palette:palette:${Versions.PALETTE}"
+        const val palette_Ktx = "androidx.palette:palette-ktx:${Versions.PALETTE}"
+
+        const val startup = "androidx.startup:startup-runtime:${Versions.STARTUP}"
     }
 
     object Lifecycle {

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.hl.utils">
 
     <uses-permission android:name="android.permission.GET_PACKAGE_SIZE" />
@@ -55,14 +56,18 @@
         </provider>
         <!--  x5 中需要使用到的  FileProvider  -->
 
+
+        <!-- 使用 startup 完成初始化并进行启动优化-->
         <provider
-            android:name=".UtilsFileProvider"
-            android:authorities="${applicationId}.hlutil.fileprovider"
+            android:name="androidx.startup.InitializationProvider"
+            android:authorities="${applicationId}.androidx-startup"
             android:exported="false"
-            android:grantUriPermissions="true" >
+            tools:node="merge">
+
+            <!--可使用  tools:node="remove" 标签移除 Initializer 的初始化或者 startup -->
             <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/public_file_paths" />
+                android:name="com.hl.utils.UtilsInitializer"
+                android:value="androidx.startup" />
         </provider>
     </application>
 </manifest>

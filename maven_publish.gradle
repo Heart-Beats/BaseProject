@@ -313,7 +313,9 @@ project.afterEvaluate {
                 pom.withXml {
                     def root = asNode()
                     setDependencyNode(root, 'compile', myGroupId, 'uikit', getPublicationVersion())
+                    setDependencyNode(root, 'compile', myGroupId, 'base-app-res', getPublicationVersion())
 
+                    setDependencyNode(root, 'compile', 'androidx.startup', 'startup-runtime', Versions.STARTUP)
                     setDependencyNode(root, 'compile', 'androidx.core', 'core-ktx', Versions.CORE_KTX)
                     setDependencyNode(root, 'compile', 'androidx.appcompat', 'appcompat', Versions.APPCOMPAT)
                     setDependencyNode(root, 'compile', 'androidx.activity', 'activity', Versions.ACTIVITY)
@@ -339,7 +341,6 @@ project.afterEvaluate {
                     setDependencyNode(root, 'compile', 'com.blankj', 'utilcodex', Versions.UTIL_CODE_X)
                     setDependencyNode(root, 'compile', 'com.github.CarGuo.GSYVideoPlayer', 'GSYVideoPlayer', Versions.GSY_VIDEO_PLAYER)
 
-                    setDependencyNode(root, 'compile', myGroupId, 'base-app-res', getPublicationVersion())
                     setDependencyNode(root, 'compile', 'com.elvishew', 'xlog', Versions.XLOG)
                     setDependencyNode(root, 'compile', 'com.tencent.tbs', 'tbssdk', Versions.TBS_SDK)
                     setDependencyNode(root, 'compile', 'com.github.getActivity', 'EasyHttp', Versions.EASY_HTTP)
