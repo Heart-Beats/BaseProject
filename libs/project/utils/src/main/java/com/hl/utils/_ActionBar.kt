@@ -8,7 +8,7 @@ import android.content.res.TypedArray
  * Email: 913305160@qq.com
  */
 
-fun Context.getActionBarSize(): Int {
+fun Context.getActionBarHeight(): Int {
 	val styledAttributes: TypedArray = this.theme.obtainStyledAttributes(intArrayOf(android.R.attr.actionBarSize))
 	val actionBarSize = styledAttributes.getDimension(0, 0f).toInt()
 	styledAttributes.recycle()

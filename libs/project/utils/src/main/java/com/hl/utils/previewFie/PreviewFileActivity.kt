@@ -11,7 +11,6 @@ import android.util.Log
 import android.view.MenuInflater
 import android.view.View
 import androidx.appcompat.widget.PopupMenu
-import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
 import com.elvishew.xlog.XLog
@@ -28,7 +27,6 @@ import com.hl.utils.*
 import com.hl.utils.mimetype.MimeType
 import com.hl.utils.previewFie.superFileView.DocView
 import com.hl.utils.videoplayer.initPlayer
-import com.permissionx.guolindev.PermissionX
 import kotlinx.android.synthetic.main.activity_preview_file.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -209,34 +207,29 @@ class PreviewFileActivity : FragmentActivity() {
     }
 
     private fun openWithX5(fileUrl: String) {
-        PermissionX.init(this)
-            .permissions(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE)
-            .request { allGranted: Boolean, _: List<String?>?, _: List<String?>? ->
-                if (allGranted) {
-                    mDocView = findViewById(R.id.mSuperFileView)
+        reqPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE, deniedAction = {
+            toast("请授予相关权限")
+        }) {
+            mDocView = findViewById(R.id.mSuperFileView)
 
-                    // 设置打开失败时的处理
-                    mDocView?.openFailedAction = { openFile ->
-                        preview_file_content.gone()
-                        no_support_file_container.visible()
+            // 设置打开失败时的处理
+            mDocView?.openFailedAction = { openFile ->
+                preview_file_content.gone()
+                no_support_file_container.visible()
 
-                        replaceFragment(R.id.no_support_file_container, NoSupportFileFragment().apply {
-                            this.arguments = bundleOf(NoSupportFileFragment.NO_SUPPORT_FILE_KEY to openFile)
-                        })
-                    }
-
-                    if (!TextUtils.isEmpty(fileUrl)) {
-                        Log.e(TAG, "需要使用 X5 预览的文件path:$fileUrl")
-
-                        getFilePathAndShowFile(mDocView!!)
-                    } else {
-                        toast("请提供预览文件链接")
-                    }
-                } else {
-                    toast("请授予相关权限")
+                replaceFragment<NoSupportFileFragment>(R.id.no_support_file_container) {
+                    this.putSerializable(NoSupportFileFragment.NO_SUPPORT_FILE_KEY, openFile)
                 }
             }
 
+            if (!TextUtils.isEmpty(fileUrl)) {
+                Log.e(TAG, "需要使用 X5 预览的文件path:$fileUrl")
+
+                getFilePathAndShowFile(mDocView!!)
+            } else {
+                toast("请提供预览文件链接")
+            }
+        }
     }
 
 
