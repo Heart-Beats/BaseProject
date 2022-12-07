@@ -8,6 +8,8 @@ import com.hl.baseproject.databinding.ActivityMainBinding
 import com.hl.baseproject.fragments.MainFragment
 import com.hl.baseproject.fragments.TestFragment
 import com.hl.uikit.onClick
+import com.hl.utils.GrayUtil
+import com.hl.utils.apply2gray
 
 
 class MainActivity : ViewBindingBaseActivity<ActivityMainBinding>() {
