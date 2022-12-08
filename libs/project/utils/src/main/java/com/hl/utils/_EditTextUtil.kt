@@ -5,8 +5,8 @@ import android.text.Selection
 import android.text.TextWatcher
 import android.text.method.HideReturnsTransformationMethod
 import android.text.method.PasswordTransformationMethod
+import android.widget.CompoundButton
 import android.widget.EditText
-import android.widget.ToggleButton
 
 /**
  * @author  张磊  on  2021/06/07 at 9:38
@@ -122,16 +122,28 @@ fun formatBankCardText(text: CharSequence): CharSequence {
 	}
 }
 
+/**
+ * 是否显示或隐藏密码
+ */
+fun EditText.displayOrHidePassword(isDisplay: Boolean) {
+	if (isDisplay) {
+		this.transformationMethod = HideReturnsTransformationMethod.getInstance()
+	} else {
+		this.transformationMethod = PasswordTransformationMethod.getInstance()
+	}
+}
 
-fun EditText.attachDisplayPWToggleButton(switchButton: ToggleButton) {
-	switchButton.setOnCheckedChangeListener { _, isChecked ->
+/**
+ * EditText 与 CompoundButton 关联切换显示 明文/密码
+ *
+ * 常用的 CompoundButton 子类： [android.widget.ToggleButton]、[android.widget.CheckBox]、
+ *   [android.widget.RadioButton]、[android.widget.Switch]
+ */
+fun EditText.attachDisplayPWCompoundButton(compoundButton: CompoundButton) {
+	compoundButton.setOnCheckedChangeListener { _, isChecked ->
 		val start = this.selectionStart
 		val end = this.selectionEnd
-		if (isChecked) {
-			this.transformationMethod = HideReturnsTransformationMethod.getInstance()
-		} else {
-			this.transformationMethod = PasswordTransformationMethod.getInstance()
-		}
+		this.displayOrHidePassword(isChecked)
 		this.setSelection(start, end)
 	}
 }
