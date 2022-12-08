@@ -4,8 +4,8 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import com.blankj.utilcode.util.ActivityUtils
-import com.lxj.xpopup.impl.LoadingPopupView
 import com.hl.arch.utils.createPop
+import com.lxj.xpopup.impl.LoadingPopupView
 import java.lang.ref.WeakReference
 
 /**
@@ -21,11 +21,11 @@ private var loadingPopup: LoadingPopupView? = null
             val topActivity = ActivityUtils.getTopActivity() as FragmentActivity
 
             field = LoadingPopupView(topActivity, 0).createPop {
+                // 该 loading 弹窗需要复用
+                this.isDestroyOnDismiss(false)
                 this.dismissOnBackPressed(false)
                 this.dismissOnTouchOutside(false)
                 this.hasShadowBg(false)
-                // ViewMode 下不会更改状态栏的效果
-                this.isViewMode(true)
             }
 
             val activityLifecycle = topActivity.lifecycle

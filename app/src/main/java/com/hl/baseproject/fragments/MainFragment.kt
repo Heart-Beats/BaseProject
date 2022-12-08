@@ -7,7 +7,6 @@ import android.content.pm.ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
 import android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
 import android.content.res.Configuration
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import com.github.lzyzsd.jsbridge.BridgeHandler
 import com.github.lzyzsd.jsbridge.BridgeWebView
@@ -22,15 +21,17 @@ import com.hl.baseproject.databinding.FragmentMainBinding
 import com.hl.baseproject.fragments.base.BaseFragment
 import com.hl.uikit.onClick
 import com.hl.uikit.toast
-import com.hl.utils.*
+import com.hl.utils.ProxyHandler
 import com.hl.utils.activityResult.ActivityResultHelper
 import com.hl.utils.activityResult.OnActivityResult
 import com.hl.utils.camera.CaptureFeature
 import com.hl.utils.camera.MyCaptureActivity
 import com.hl.utils.previewFie.PreviewFileActivity
 import com.hl.utils.qrcode.QRScanUtil
-import dalvik.system.PathClassLoader
-import java.io.File
+import com.hl.utils.reqPermissions
+import com.hl.utils.setImmersiveSystemBar
+import com.lxj.xpopup.XPopup
+import com.lxj.xpopup.interfaces.OnSelectListener
 
 
 class MainFragment : BaseFragment<FragmentMainBinding>() {
@@ -52,7 +53,18 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
 	override fun FragmentMainBinding.onViewCreated(savedInstanceState: Bundle?) {
 		uikitToolbar.title = "主页面主页面主页面主页面123"
 		uikitToolbar.setRightActionListener {
-			toast("点击了布局文件中的操作按钮")
+			// toast("点击了布局文件中的操作按钮")
+
+			val menus = arrayOf("菜单1", "菜单2", "菜单3")
+			XPopup.Builder(requireContext())
+				.isViewMode(true)
+				.atView(it)
+				.asAttachList(menus, null, object : OnSelectListener {
+					override fun onSelect(position: Int, text: String?) {
+						toast("$text")
+					}
+				})
+				.show()
 		}
 
 		uikitToolbar.addRightActionText("测试") {

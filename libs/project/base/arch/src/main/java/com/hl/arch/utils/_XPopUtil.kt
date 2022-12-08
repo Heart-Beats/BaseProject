@@ -15,7 +15,7 @@ internal fun <T : BasePopupView> T.showPop(popOptions: XPopup.Builder.() -> Unit
 
 internal fun <T : BasePopupView> T.createPop(popOptions: XPopup.Builder.() -> Unit = {}): T {
     return XPopup.Builder(this.context)
-        .isViewMode(true)
+        .isViewMode(true)  // ViewMode 下不会更改状态栏的效果
         .isDestroyOnDismiss(true)  //对于只使用一次的弹窗，推荐设置这个
         .apply(popOptions)
         .asCustom(this) as T
