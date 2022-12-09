@@ -8,7 +8,6 @@ import com.elvishew.xlog.XLog
 import com.hl.shadow.logger.AndroidLoggerFactory
 import com.hl.shadow.logger.LogLevel
 import com.hl.utils.DeviceInfoUtil
-import com.hl.utils.apply2gray
 import com.hl.utils.isMainProcess
 import com.tencent.shadow.core.common.LoggerFactory
 import com.tencent.shadow.dynamic.host.DynamicRuntime
