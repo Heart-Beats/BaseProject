@@ -3,11 +3,14 @@ package com.hl.utils.activityResult
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import androidx.activity.result.ActivityResultCaller
 import androidx.activity.result.ActivityResultLauncher
+import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityOptionsCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import com.hl.utils.BuildVersionUtil
 
 /**
  * @author  张磊  on  2022/07/04 at 10:47
@@ -34,12 +37,21 @@ class ActivityResultHelper(private val activityResultCaller: ActivityResultCalle
 
 				activityResultCallbackMap.forEach { (identifier, onActivityResult) ->
 
+					val dataIntent = activityResult.data
+
+					val intentIdentifier = if (BuildVersionUtil.isOver10()) {
+						// Android 10 以上可直接设置获取 intent 的标识符， 以下通过 bundle 进行传输
+						dataIntent?.identifier
+					} else {
+						dataIntent?.getStringExtra(MyStartActivityForResult.INTENT_IDENTIFIER_KEY)
+					}
+
 					// 找到对应启动时的 Activity, 返回处理结果
-					if (activityResult.data?.identifier == identifier) {
+					if (intentIdentifier == identifier) {
 						when (val resultCode = activityResult.resultCode) {
-							Activity.RESULT_OK -> onActivityResult.onResultOk(activityResult.data)
-							Activity.RESULT_CANCELED -> onActivityResult.onResultCanceled(activityResult.data)
-							else -> onActivityResult.onResultOther(resultCode, activityResult.data)
+							Activity.RESULT_OK -> onActivityResult.onResultOk(dataIntent)
+							Activity.RESULT_CANCELED -> onActivityResult.onResultCanceled(dataIntent)
+							else -> onActivityResult.onResultOther(resultCode, dataIntent)
 						}
 						return@forEach
 					}
@@ -85,7 +97,13 @@ class ActivityResultHelper(private val activityResultCaller: ActivityResultCalle
 
 		// 使用 launchIntent 的 hashCode 作为其唯一标识
 		val intentHashCode = launchIntent.hashCode().toString()
-		launchIntent.identifier = intentHashCode
+
+		// Android 10 以上可直接设置获取 intent 的标识符， 以下通过 bundle 进行传输
+		if (BuildVersionUtil.isOver10()) {
+			launchIntent.identifier = intentHashCode
+		} else {
+			launchIntent.putExtra(MyStartActivityForResult.INTENT_IDENTIFIER_KEY, intentHashCode)
+		}
 		activityResultCallbackMap[intentHashCode] = callback
 
 		activityResultLauncher.launch(launchIntent, activityOptionsCompat)
