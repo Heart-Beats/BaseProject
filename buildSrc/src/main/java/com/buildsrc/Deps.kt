@@ -67,7 +67,8 @@ internal object Versions {
     const val WAVE_SIDE_BAR = "1.3"
     const val SIDE_BAR = "1.0.0"
     const val ANDROID_AUTO_SIZE = "v1.2.1"
-    const val SHADOW = "local-a12772c9-SNAPSHOT"
+    // const val SHADOW = "local-a12772c9-SNAPSHOT"
+    const val SHADOW = "2.3.0"
 }
 
 class Deps {
