@@ -39,7 +39,6 @@ android {
 }
 
 dependencies {
-    api project(path: ':base-app-res')
     api project(path: ':utils')
     api project(path: ':SDK:Umeng')
 
