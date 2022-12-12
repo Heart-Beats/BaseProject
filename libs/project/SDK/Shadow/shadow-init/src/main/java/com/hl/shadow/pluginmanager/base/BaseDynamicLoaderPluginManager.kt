@@ -150,7 +150,7 @@ abstract class BaseDynamicLoaderPluginManager(context: Context) : PluginManagerT
 		try {
 			//这个调用是阻塞的
 			val installedPlugin = installPlugin(pluginZipPath, null, true)
-			loadPlugin(installedPlugin.UUID, partKey)
+			loadPlugin(installedPlugin.UUID, partKey, getPluginDependsOnList(installedPlugin, partKey))
 			val pluginIntent = Intent(intentAction)
 			pluginIntent.setClassName(context.packageName, className)
 			if (extras != null) {
@@ -192,6 +192,19 @@ abstract class BaseDynamicLoaderPluginManager(context: Context) : PluginManagerT
 		} catch (e: Exception) {
 			Log.e(TAG, "launchPluginService: bindPluginService 失败, ServiceName == $className", e)
 		}
+	}
+
+	/**
+	 * 获取安装插件的依赖插件列表
+	 */
+	private fun getPluginDependsOnList(installedPlugin: InstalledPlugin, partKey: String): MutableList<String> {
+		val dependsOnList = mutableListOf<String>()
+		if (installedPlugin.hasPart(partKey)) {
+			val dependsOn = installedPlugin.getPlugin(partKey).dependsOn
+			dependsOnList.addAll(dependsOn)
+		}
+
+		return dependsOnList
 	}
 
 	/**
@@ -275,7 +288,8 @@ abstract class BaseDynamicLoaderPluginManager(context: Context) : PluginManagerT
 		partKey: String,
 		pluginIntent: Intent?
 	): Intent {
-		loadPlugin(installedPlugin.UUID, partKey)
+		val dependsOnList = getPluginDependsOnList(installedPlugin, partKey)
+		loadPlugin(installedPlugin.UUID, partKey, dependsOnList)
 		return mPluginLoader.convertActivityIntent(pluginIntent)
 	}
 
@@ -289,10 +303,12 @@ abstract class BaseDynamicLoaderPluginManager(context: Context) : PluginManagerT
 	 * appComponentFactory
 	 */
 	@Throws(RemoteException::class, TimeoutException::class, FailedException::class)
-	private fun loadPlugin(uuid: String, partKey: String) {
+	private fun loadPlugin(uuid: String, partKey: String, dependsOnList: MutableList<String>) {
 		Log.d(TAG, "loadPlugin ------> uuid=${uuid}, partKey=${partKey}")
 
 		loadPluginLoaderAndRuntime(uuid)
+
+		startLoadDependPlugins(uuid, partKey, dependsOnList)
 
 		startLoadPlugin(uuid, partKey)
 	}
@@ -335,6 +351,28 @@ abstract class BaseDynamicLoaderPluginManager(context: Context) : PluginManagerT
 		Log.d(TAG, "--------------- Loader  加载结束")
 	}
 
+	/**
+	 * 加载依赖的插件包
+	 */
+	private fun startLoadDependPlugins(uuid: String, partKey: String, dependsOnList: MutableList<String>) {
+		val logIdentity = "uuid=$uuid"
+		Log.d(
+			TAG,
+			"startLoadDependsOnPlugin: 开始加载插件包 $logIdentity 中的插件( partKey-${partKey}) 的依赖 --------- ${dependsOnList}"
+		)
+
+		dependsOnList.forEach {
+			startLoadPlugin(uuid, it)
+		}
+	}
+
+	/**
+	 * 开始加载插件
+	 *
+	 * @param uuid           插件包的 UUID
+	 * @param partKey        启动插件的 partKey
+	 * @param dependsOnList  启动插件的 dependsOn
+	 */
 	protected open fun startLoadPlugin(uuid: String, partKey: String) {
 		Log.d(TAG, "载入 Plugin ---------------")
 		val logIdentity = "uuid=$uuid"
