@@ -26,6 +26,7 @@ import com.hl.uikit.visible
 import com.hl.utils.*
 import com.hl.utils.mimetype.MimeType
 import com.hl.utils.previewFie.superFileView.DocView
+import com.hl.utils.share.OpenFileUtil
 import com.hl.utils.videoplayer.initPlayer
 import kotlinx.android.synthetic.main.activity_preview_file.*
 import kotlinx.coroutines.Dispatchers
