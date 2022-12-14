@@ -32,6 +32,11 @@ android {
 	}
 }
 
+repositories {
+	mavenCentral()
+	google()
+}
+
 dependencies {
 	implementation(fileTree("libs", { include("*.jar", "*.aar") }))
 
