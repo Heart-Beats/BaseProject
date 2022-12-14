@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.blankj.utilcode.util.AppUtils
 import com.hl.uikit.onClick
-import com.hl.utils.OpenFileUtil
+import com.hl.utils.share.OpenFileUtil
 import com.hl.utils.R
 import kotlinx.android.synthetic.main.fragment_no_support_file.*
 import java.io.File

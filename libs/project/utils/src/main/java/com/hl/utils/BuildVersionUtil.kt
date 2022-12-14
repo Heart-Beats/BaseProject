@@ -20,6 +20,22 @@ object BuildVersionUtil {
 
 
 	/**
+	 * 是否 Android 12 及以上
+	 */
+	@JvmStatic
+	fun isOver12(): Boolean {
+		return Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
+	}
+
+	/**
+	 * 是否 Android 11  及以上
+	 */
+	@JvmStatic
+	fun isOver11(): Boolean {
+		return Build.VERSION.SDK_INT >= Build.VERSION_CODES.R
+	}
+
+	/**
 	 * 是否 Android 10  及以上
 	 */
 	@JvmStatic

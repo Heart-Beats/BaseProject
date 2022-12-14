@@ -112,6 +112,7 @@ open class MyWebChromeClient(val fragment: Fragment) : WebChromeClient() {
 					intent.type = "*/*"
 					fragment.startActivityForResult(intent, REQUEST_CODE_SELECT_FILE)
 
+					// todo launchIntent 这种方式需要查看一下是否可行
 					// val webViewFragment = fragment as? WebViewFragment
 					// webViewFragment?.launchIntent(intent, object : OnActivityResult {
 					// 	override fun onResultOk(data: Intent?) {
