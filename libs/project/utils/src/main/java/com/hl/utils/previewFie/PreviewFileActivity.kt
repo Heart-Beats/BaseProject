@@ -29,11 +29,7 @@ import com.hl.utils.previewFie.superFileView.DocView
 import com.hl.utils.share.OpenFileUtil
 import com.hl.utils.videoplayer.initPlayer
 import kotlinx.android.synthetic.main.activity_preview_file.*
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import okhttp3.OkHttpClient
-import okhttp3.Request
 import java.io.File
 import java.util.*
 
@@ -258,7 +254,7 @@ class PreviewFileActivity : FragmentActivity() {
 
     private fun downLoadFromNet(url: String, mDocView: DocView) {
         lifecycleScope.launch {
-            val downloadFileLength = getDownloadFileLength(url)
+            val downloadFileLength = url.getHttpContentLength()
 
             Log.e(TAG, "downLoadFromNet: 下载文件总大小 == $downloadFileLength")
 
@@ -314,23 +310,6 @@ class PreviewFileActivity : FragmentActivity() {
                     }
                 })
                 .start()
-        }
-    }
-
-    private suspend fun getDownloadFileLength(url: String): Long {
-        return try {
-            withContext(Dispatchers.IO) {
-                val request = Request.Builder()
-                    .url(url)
-                    .head()
-                    .build()
-
-                OkHttpClient().newCall(request).execute().header("Content-Length")?.toLongOrNull() ?: 0
-            }
-        } catch (e: Exception) {
-            XLog.e(e)
-
-            0
         }
     }
 

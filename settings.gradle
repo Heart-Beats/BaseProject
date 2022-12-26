@@ -27,6 +27,15 @@ dependencyResolutionManagement {
         maven { url 'https://maven.aliyun.com/repository/google' }
         maven { url 'https://jitpack.io' }
     }
+
+    versionCatalogs {
+        // 默认创建的 libs 进行配置
+        libs {
+            //            from("com.hl.catalog:catalog:1.0.0")
+
+            //            alias('retrofit').to('com.squareup.retrofit2:retrofit:2.9.0')
+        }
+    }
 }
 
 rootProject.name = "BaseProject"

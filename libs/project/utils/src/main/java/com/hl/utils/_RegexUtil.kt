@@ -1,6 +1,14 @@
 package com.hl.utils
 
 import java.util.*
+import java.util.regex.Pattern
+
+fun String.isUrl(): Boolean {
+    val regex =
+        "^(http(s)?:\\/\\/)[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+(:[0-9]{1,5})?[-a-zA-Z0-9()@:%_\\\\\\+\\.~#?&//=]*\$"
+    return Pattern.compile(regex).matcher(this).matches()
+    // return this.contains("http") || this.contains("https")
+}
 
 fun String.isPhoneNum(): Boolean {
     /*

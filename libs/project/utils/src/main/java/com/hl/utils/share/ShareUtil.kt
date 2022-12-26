@@ -92,7 +92,8 @@ object ShareUtil {
      * 设置分享的数据类型
      */
     private fun Intent.setShareType(shareFiles: List<File>) {
-        val mimeTypes = shareFiles.map { //获取分享文件的类型, 默认使用 "image/jpeg", 通常用于分享图片，但也可以用于分享任何类型的二进制内容
+        val mimeTypes = shareFiles.map {
+            //获取分享文件的类型, 默认使用 "image/jpeg", 通常用于分享图片，但也可以用于分享任何类型的二进制内容
             MimeType.getByExtension(it.extension) ?: MimeType.JPEG
         }
 
@@ -104,7 +105,8 @@ object ShareUtil {
             else -> {
                 if (mimeTypes.isSingle()) {
                     this.type = mimeTypes.single().mMimeTypeName
-                } else { // 这时接收方应注册支持的文件扩展名
+                } else {
+                    // 这时接收方应注册支持的文件扩展名
                     this.type = "*/*"
                 }
             }
