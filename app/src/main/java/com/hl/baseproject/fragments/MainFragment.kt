@@ -7,9 +7,6 @@ import android.content.pm.ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
 import android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
 import android.content.res.Configuration
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.github.lzyzsd.jsbridge.BridgeHandler
 import com.github.lzyzsd.jsbridge.BridgeWebView
@@ -24,13 +21,16 @@ import com.hl.baseproject.databinding.FragmentMainBinding
 import com.hl.baseproject.fragments.base.BaseFragment
 import com.hl.uikit.onClick
 import com.hl.uikit.toast
-import com.hl.utils.*
+import com.hl.utils.ProxyHandler
 import com.hl.utils.activityResult.ActivityResultHelper
 import com.hl.utils.activityResult.OnActivityResult
+import com.hl.utils.apply2CancelGray
 import com.hl.utils.camera.CaptureFeature
 import com.hl.utils.camera.MyCaptureActivity
 import com.hl.utils.previewFie.PreviewFileActivity
 import com.hl.utils.qrcode.QRScanUtil
+import com.hl.utils.reqPermissions
+import com.hl.utils.setImmersiveSystemBar
 import com.lxj.xpopup.XPopup
 import com.lxj.xpopup.interfaces.OnSelectListener
 

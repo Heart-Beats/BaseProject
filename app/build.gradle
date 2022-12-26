@@ -114,6 +114,6 @@ dependencies {
     //    def hlVersion = '0.5.9'
     //    implementation "com.hl:tencent-cloud:${hlVersion}"
 
-    implementation 'com.hl:TencentCloud'
+//    implementation 'com.hl:TencentCloud'
     implementation "com.hl:shadow-init"
 }

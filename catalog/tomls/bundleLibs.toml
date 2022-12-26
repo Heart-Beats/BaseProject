@@ -1,0 +1,17 @@
+# 声明依赖组, 可直接依赖组中定义所有库
+[bundles]
+
+# 测试相关
+androidTest = ["junit", "androidx-test-ext-junit", "androidx-test-espresso-core"]
+
+projectBase =[]
+
+# cameraX
+cameraX = ["androidx_camera_core", "androidx_camera_camera2", "androidx_camera_lifecycle", "androidx_camera_view", "androidx_camera_extensions"]
+
+# palette 取色板
+palette = ["androidx_palette", "androidx_palette_ktx"]
+
+#lifecycle
+lifecycle = []
+

@@ -12,10 +12,10 @@ import android.widget.TextView
  */
 fun View.onClick(interval: Long, listener: (View) -> Unit) {
     setOnClickListener {
-        val time = it.getTag(R.id.uikit_view_click_time)?.toString()?.toLongOrNull()
+        val time = it.getTag(it.id)?.toString()?.toLongOrNull()
         val currentTime = System.currentTimeMillis()
         if (time == null || currentTime - time > interval) {
-            it.setTag(R.id.uikit_view_click_time, currentTime)
+            it.setTag(it.id, currentTime)
             listener.invoke(it)
         }
     }

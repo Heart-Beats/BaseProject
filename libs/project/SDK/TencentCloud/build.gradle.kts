@@ -38,7 +38,9 @@ repositories {
 }
 
 dependencies {
-	implementation(fileTree("libs", { include("*.jar", "*.aar") }))
+	implementation(fileTree("libs") {
+		include("*.jar", "*.aar")
+	})
 
 	implementation(Deps.AndroidX.core_ktx)
 	implementation(Deps.AndroidX.appcompat)

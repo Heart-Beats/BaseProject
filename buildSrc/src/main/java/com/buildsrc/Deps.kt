@@ -9,13 +9,13 @@ internal object Versions {
     const val CORE_KTX = "1.6.0"
 
     const val APPCOMPAT = "1.4.0"
-    const val CONSTRAINT_LAYOUT = "1.1.3"
+     const val CONSTRAINT_LAYOUT = "2.1.4"
     const val ACTIVITY = "1.4.0"
     const val FRAGMENT = "1.4.0"
     const val SECURITY_CRYPTO = "1.0.0"
     const val RECYCLERVIEW = "1.2.1"
     const val DATA_BINDING = "7.2.2"
-    const val CAMERA_X = "1.1.0-beta01"
+    const val CAMERA_X = "1.2.0"
     const val PALETTE = "1.0.0"
     const val STARTUP = "1.1.1"
 
