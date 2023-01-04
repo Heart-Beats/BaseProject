@@ -31,37 +31,30 @@ object AppSizeUtil {
 	}
 
 	/**
-	 * 格式化单位
-	 *
-	 * @param size
-	 * @return
+	 * 格式化后的文件大小
 	 */
-	fun getFormatSize(size: Long): String {
-		val kiloByte = size / 1024
+	fun getFormatSize(sizeByte: Long): String {
+		val kiloByte = sizeByte / 1000F
 		if (kiloByte < 1) {
-			return size.toString() + "Byte"
+			return sizeByte.toString() + "Byte"
 		}
-		val megaByte = kiloByte / 1024
+		val megaByte = kiloByte / 1024F
 		if (megaByte < 1) {
 			val result1 = BigDecimal(kiloByte.toString())
-			return result1.setScale(2, BigDecimal.ROUND_HALF_UP)
-				.toPlainString().toString() + "KB"
+			return result1.setScale(2, BigDecimal.ROUND_HALF_UP).toPlainString().toString() + "KB"
 		}
-		val gigaByte = megaByte / 1024
+		val gigaByte = megaByte / 1024F
 		if (gigaByte < 1) {
 			val result2 = BigDecimal(megaByte.toString())
-			return result2.setScale(2, BigDecimal.ROUND_HALF_UP)
-				.toPlainString().toString() + "MB"
+			return result2.setScale(2, BigDecimal.ROUND_HALF_UP).toPlainString().toString() + "MB"
 		}
-		val teraBytes = gigaByte / 1024
+		val teraBytes = gigaByte / 1024F
 		if (teraBytes < 1) {
 			val result3 = BigDecimal(gigaByte.toString())
-			return result3.setScale(2, BigDecimal.ROUND_HALF_UP)
-				.toPlainString().toString() + "GB"
+			return result3.setScale(2, BigDecimal.ROUND_HALF_UP).toPlainString().toString() + "GB"
 		}
-		val result4 = BigDecimal(teraBytes)
-		return result4.setScale(2, BigDecimal.ROUND_HALF_UP).toPlainString()
-			.toString() + "TB"
+		val result4 = BigDecimal(teraBytes.toString())
+		return result4.setScale(2, BigDecimal.ROUND_HALF_UP).toPlainString().toString() + "TB"
 	}
 
 	/**

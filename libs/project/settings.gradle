@@ -46,7 +46,7 @@ def includeBase() {
 }
 
 def includeSDK() {
-    include ':SDK:Umeng', ':SDK:Pay', ':libs-aar'/*, ':SDK:TencentCloud'*/
+    include ':SDK:Umeng', ':SDK:Pay', ':libs-aar', ':SDK:TencentCloud'
 
     includeShadow()
 }
