@@ -5,6 +5,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
 
 /**
  * @author  张磊  on  2021/11/05 at 15:02
@@ -29,4 +31,14 @@ suspend fun String.getHttpContentLength(): Long {
 
         0
     }
+}
+
+/**
+ * 将 URL 转为合法的 URL 地址
+ */
+fun String.getLegalUrl(): String {
+    return URLEncoder.encode(this.trim(), StandardCharsets.UTF_8.name())  // 非法字符（中文、空格等）转为合法的 URL 编码
+        .replace("+", "%20")    // 还原空格， 用 %20 编码代替
+        .replace("%3A", ":")    // 还原 ':'
+        .replace("%2F", "/")    // 还原 '/'
 }

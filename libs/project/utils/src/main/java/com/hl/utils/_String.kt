@@ -1,6 +1,9 @@
 package com.hl.utils
 
 import android.net.Uri
+import org.json.JSONArray
+import org.json.JSONException
+import org.json.JSONObject
 
 /**
  * 身份证号脱敏
@@ -114,4 +117,22 @@ fun Int.left0(length: Int = 4): String {
 fun String.isMatchPasswordRule(minLength: Int = 6, maxLength: Int = 20): Boolean {
     val regex = """^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).{$minLength,$maxLength}$"""
     return this.matches(regex.toRegex())
+}
+
+/**
+ * 是否为 Json 字符串
+ */
+fun String?.isJson(): Boolean {
+    val content = this ?: ""
+    return try {
+        if (content.contains("[") && content.contains("]")) {
+            JSONArray(content)
+            true
+        } else {
+            JSONObject(content)
+            true
+        }
+    } catch (e: JSONException) {
+        false
+    }
 }
