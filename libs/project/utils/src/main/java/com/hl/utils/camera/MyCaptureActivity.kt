@@ -66,7 +66,7 @@ class MyCaptureActivity : FragmentActivity() {
 			this.hideBar(BarHide.FLAG_HIDE_BAR)
 		}
 
-		setContentView(R.layout.activity_my_capture)
+		setContentView(R.layout.hl_utils_activity_my_capture)
 
 		initView()
 	}

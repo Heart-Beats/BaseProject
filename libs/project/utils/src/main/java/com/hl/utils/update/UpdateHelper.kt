@@ -1,6 +1,7 @@
 package com.hl.utils.update
 
 import android.content.Context
+import com.blankj.utilcode.util.AppUtils
 import constant.UiType.PLENTIFUL
 import listener.Md5CheckResultListener
 import listener.OnBtnClickListener
@@ -35,8 +36,8 @@ object UpdateHelper {
             .apkUrl(apkUrl)
             .updateTitle(title)
             .updateContent(content)
-            .uiConfig(UiConfig().apply(uiConfig))
-            .updateConfig(getDefaultUpdateConfig().apply(updateConfig))
+            .uiConfig(_uiConfig.apply(uiConfig))
+            .updateConfig(getDefaultUpdateConfig(apkUrl).apply(updateConfig))
             .setMd5CheckResultListener(object : Md5CheckResultListener {
                 override fun onResult(result: Boolean) {
                     observer?.onMd5CheckResult(result)
@@ -79,17 +80,18 @@ object UpdateHelper {
     /**
      * 默认更新配置
      */
-    private fun getDefaultUpdateConfig(): UpdateConfig {
+    private fun getDefaultUpdateConfig(apkUrl: String): UpdateConfig {
         val updateConfig = UpdateConfig()
         updateConfig.checkWifi = true
-        updateConfig.needCheckMd5 = true
+        updateConfig.notifyImgRes = AppUtils.getAppIconId()
+        updateConfig.needCheckMd5 = apkUrl.endsWith(".apk")
         return updateConfig
     }
 
     /**
      * 默认UI配置
      */
-    private val uiConfig: UiConfig
+    private val _uiConfig: UiConfig
         get() {
             val uiConfig = UiConfig()
             uiConfig.uiType = PLENTIFUL

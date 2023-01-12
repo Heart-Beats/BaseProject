@@ -19,7 +19,7 @@
         android:id="@+id/text_recycler_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@color/palegreen"
+        android:background="@color/pale_green"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:spanCount="5"
         tools:listitem="@layout/item_text" />
@@ -30,7 +30,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_margin="@dimen/dp_20"
-        android:background="@color/palegreen"
+        android:background="@color/pale_green"
         android:orientation="vertical"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:spanCount="5"

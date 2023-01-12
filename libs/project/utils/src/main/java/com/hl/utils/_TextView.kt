@@ -2,6 +2,7 @@ package com.hl.utils
 
 import android.graphics.Paint
 import android.widget.TextView
+import androidx.annotation.Px
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -49,4 +50,11 @@ fun TextView.addUnderline() {
 	val textPaint = this.paint
 	textPaint.flags = Paint.UNDERLINE_TEXT_FLAG //下划线
 	textPaint.isAntiAlias = true //抗锯齿
+}
+
+/**
+ * TextView 未绘制时获取行数
+ */
+fun TextView.getLines(@Px textViewWidth: Int) {
+	TextViewLinesUtil.getTextViewLines(this, textViewWidth)
 }

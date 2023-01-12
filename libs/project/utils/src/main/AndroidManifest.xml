@@ -41,8 +41,9 @@
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
+                android:resource="@xml/hl_utils_public_file_paths"
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/public_file_paths" />
+                tools:replace="android:resource" />
         </provider>
 
         <provider
@@ -52,7 +53,8 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/public_file_paths" />
+
+                android:resource="@xml/hl_utils_public_file_paths" />
         </provider>
         <!--  x5 中需要使用到的  FileProvider  -->
 

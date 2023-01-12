@@ -12,7 +12,7 @@ import com.hl.uikit.onClick
 import com.hl.uikit.toast
 import com.hl.utils.R
 import com.lxj.xpopup.core.BottomPopupView
-import kotlinx.android.synthetic.main.item_file_download.view.*
+import kotlinx.android.synthetic.main.hl_utils_item_file_download.view.*
 import java.io.File
 
 /**
@@ -23,7 +23,7 @@ class DownloadPop(private val fragmentActivity: FragmentActivity, private val do
     BottomPopupView(fragmentActivity) {
 
     override fun getImplLayoutId(): Int {
-        return R.layout.pop_download
+        return R.layout.hl_utils_pop_download
     }
 
     override fun onCreate() {

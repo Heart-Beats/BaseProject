@@ -98,7 +98,7 @@ class AdAdapter(adDetailList: List<AdsDetail>, @LayoutRes val adLayoutId: Int) :
         AdAdapter.ViewHolder>(adDetailList) {
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val adImage: ImageView? = itemView.findViewWithTag(itemView.context.getString(R.string.ad_banner_tag))
+        val adImage: ImageView? = itemView.findViewWithTag(itemView.context.getString(R.string.hl_utils_ad_banner_tag))
 
     }
 

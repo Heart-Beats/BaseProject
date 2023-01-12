@@ -11,7 +11,7 @@
         android:id="@+id/uikit_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:uikit_rightImage="@drawable/icon_more_dot"
+        app:uikit_rightImage="@drawable/hl_res_icon_more_dot"
         app:uikit_titleEllipsize="marquee"
         app:uikit_titleMargin="15dp" />
 

@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="bottom"
-    android:background="@drawable/shape_white_top_58"
+    android:background="@drawable/hl_res_shape_white_top_round58px"
     android:orientation="vertical"
     android:paddingTop="@dimen/px46">
 
@@ -22,6 +22,6 @@
 
     </FrameLayout>
 
-    <include layout="@layout/item_file_download" />
+    <include layout="@layout/hl_utils_item_file_download" />
 
 </LinearLayout>

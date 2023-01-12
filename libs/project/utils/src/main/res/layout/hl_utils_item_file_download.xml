@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/px58"
-        android:background="@drawable/shape_round_ffffff_8"
+        android:background="@drawable/hl_res_shape_white_round8dp"
         android:paddingVertical="@dimen/px81">
 
         <TextView
@@ -40,7 +40,7 @@
             android:layout_marginEnd="@dimen/px202"
             android:indeterminateOnly="false"
             tools:progress="80"
-            android:progressDrawable="@drawable/download_progress_indeterminate_horizontal"
+            android:progressDrawable="@drawable/hl_utils_download_progress_indeterminate_horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -58,8 +58,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/px81"
             android:layout_marginEnd="@dimen/px58"
-            android:background="@drawable/shape_round4dp_33fa5252"
-            android:src="@drawable/icon_close"
+            android:background="@drawable/hl_res_shape_33fa5252_round4dp"
+            android:src="@drawable/hl_res_icon_close"
             android:text="取消"
             android:textColor="#FFFA5252"
             android:textSize="@dimen/px40"

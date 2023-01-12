@@ -4,11 +4,14 @@ plugins {
     id 'com.android.library'
     id 'kotlin-android'
     id 'kotlin-android-extensions'
+
+    // aspectj 面向切面插件引入
+    id 'io.github.wurensen.android-aspectjx' version '3.3.2'
 }
 
 android {
     compileSdk 31
-
+    resourcePrefix "hl_utils_"
     defaultConfig {
         minSdk 21
         targetSdk 31
@@ -41,6 +44,23 @@ android {
     }
     kotlinOptions {
         jvmTarget = '11'
+    }
+
+    buildFeatures {
+        // 默认不生成 BuildConfig 类
+        // buildConfig = false
+    }
+
+    aspectjx {
+        // 移除kotlin相关，编译错误和提升速度
+        exclude 'kotlin.jvm', 'kotlin.internal'
+        exclude 'kotlinx.coroutines.internal', 'kotlinx.coroutines.android'
+
+        // 是否debug，开启后会输出织入信息等相关日志（3.3.0版本新增）
+        debug = true
+
+        // 关闭AspectJX功能
+        enabled = false
     }
 }
 

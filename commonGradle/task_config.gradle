@@ -1,0 +1,28 @@
+// 打印出所有 .so 库的文件地址
+tasks.whenTaskAdded { task ->
+    // 注意：如果是有多个 flavor，则为 merge“Flavor”DebugNativeLibs 的形式
+    String taskName = task.name
+    if (taskName.matches('^merge.*[(Debug)|(Release)]NativeLibs$')) {
+        task.doFirst {
+            println("------------------- find so files start -------------------")
+
+            it.inputs.files.each { file ->
+                printDir(new File(file.absolutePath))
+            }
+
+            println("------------------- find so files end -------------------")
+        }
+    }
+}
+
+def printDir(File file) {
+    if (file != null) {
+        if (file.isDirectory()) {
+            file.listFiles().each {
+                printDir(it)
+            }
+        } else if (file.absolutePath.endsWith(".so")) {
+            println "find so file: $file.absolutePath"
+        }
+    }
+}

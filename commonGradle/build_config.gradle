@@ -1,9 +1,16 @@
 ext {
     // gradle 共通脚本路径
     commonGradleFile = new File(rootProject.projectDir, "commonGradle")
+}
 
-    initBuildConfigValue = {
-        initBuildConfigValueFun(it)
+apply {
+    from new File(commonGradleFile, "task_config.gradle")
+}
+
+android {
+    defaultConfig {
+        // 初始化相关的配置值
+        initBuildConfigValueFun(getOwner())
     }
 }
 
