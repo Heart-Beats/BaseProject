@@ -29,7 +29,10 @@ object GpsUtil {
 			this.onSureAction = {
 				gotoLocationSourceSettingPage(activityResultHelper, onResult)
 			}
-		}.showPop()
+		}.showPop {
+			this.dismissOnTouchOutside(false)
+			this.dismissOnBackPressed(false)
+		}
 	}
 
 	/**
