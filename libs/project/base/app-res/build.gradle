@@ -6,6 +6,8 @@ plugins {
 android {
     compileSdk 31
 
+    resourcePrefix "hl_res_"
+
     defaultConfig {
         minSdk 21
         targetSdk 31

@@ -11,7 +11,7 @@
         android:layout_height="@dimen/px300"
         android:layout_above="@id/reset_textView"
         android:layout_centerInParent="true"
-        android:src="@drawable/icon_scan_error" />
+        android:src="@drawable/hl_res_icon_scan_error" />
 
     <TextView
         android:id="@+id/reset_textView"

@@ -51,7 +51,7 @@
             android:layout_centerVertical="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/icon_more_dot" />
+            android:src="@drawable/hl_res_icon_more_dot" />
     </RelativeLayout>
 
     <FrameLayout
@@ -101,7 +101,7 @@
                 android:layout_gravity="center"
                 android:indeterminate="false"
                 android:visibility="gone"
-                app:uikit_cpb_background="@color/lightcyan"
+                app:uikit_cpb_background="@color/light_cyan"
                 app:uikit_cpb_max_progress="100"
                 tools:rpb_progress="50"
                 tools:visibility="visible" />

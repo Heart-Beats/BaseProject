@@ -80,6 +80,9 @@ class MyFragmentNavigator(
 			navOptions?.also {
 				this.setRestoreState(it.shouldRestoreState())
 				this.setLaunchSingleTop(it.shouldLaunchSingleTop())
+
+				// popUpTo 属性: 在当前路由堆栈表中，一直将页面出栈，直到指定的页面为止
+				// popUpToInclusive：代表包含关系，是否也弹出指定的页面
 				this.setPopUpTo(it.popUpToId, it.isPopUpToInclusive(), it.shouldPopUpToSaveState())
 			}
 		}.build()

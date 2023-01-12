@@ -9,7 +9,7 @@ import com.blankj.utilcode.util.AppUtils
 import com.hl.uikit.onClick
 import com.hl.utils.share.OpenFileUtil
 import com.hl.utils.R
-import kotlinx.android.synthetic.main.fragment_no_support_file.*
+import kotlinx.android.synthetic.main.hl_utils_fragment_no_support_file.*
 import java.io.File
 
 class NoSupportFileFragment : Fragment() {
@@ -21,7 +21,7 @@ class NoSupportFileFragment : Fragment() {
 	private var noSupportFile: File? = null
 
 	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-		return inflater.inflate(R.layout.fragment_no_support_file, container, false)
+		return inflater.inflate(R.layout.hl_utils_fragment_no_support_file, container, false)
 	}
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

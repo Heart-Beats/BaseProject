@@ -28,7 +28,7 @@ import com.hl.utils.mimetype.MimeType
 import com.hl.utils.previewFie.superFileView.DocView
 import com.hl.utils.share.OpenFileUtil
 import com.hl.utils.videoplayer.initPlayer
-import kotlinx.android.synthetic.main.activity_preview_file.*
+import kotlinx.android.synthetic.main.hl_utils_activity_preview_file.*
 import kotlinx.coroutines.launch
 import java.io.File
 import java.util.*
@@ -66,7 +66,7 @@ class PreviewFileActivity : FragmentActivity() {
             .init()
 
 
-        setContentView(R.layout.activity_preview_file)
+        setContentView(R.layout.hl_utils_activity_preview_file)
 
         fileUrl = intent.getStringExtra(URL) ?: ""
         fileName = intent.getStringExtra(FILE_NAME)
@@ -143,7 +143,7 @@ class PreviewFileActivity : FragmentActivity() {
     private fun showPopup(v: View) {
         val popup = PopupMenu(this, v)
         val inflater: MenuInflater = popup.menuInflater
-        inflater.inflate(R.menu.preview_file_menu, popup.menu)
+        inflater.inflate(R.menu.hl_utils_preview_file_menu, popup.menu)
 
         popup.setOnMenuItemClickListener {
             when (it.itemId) {

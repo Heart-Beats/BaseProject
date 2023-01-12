@@ -21,16 +21,14 @@ import com.hl.baseproject.databinding.FragmentMainBinding
 import com.hl.baseproject.fragments.base.BaseFragment
 import com.hl.uikit.onClick
 import com.hl.uikit.toast
-import com.hl.utils.ProxyHandler
+import com.hl.utils.*
 import com.hl.utils.activityResult.ActivityResultHelper
 import com.hl.utils.activityResult.OnActivityResult
-import com.hl.utils.apply2CancelGray
 import com.hl.utils.camera.CaptureFeature
 import com.hl.utils.camera.MyCaptureActivity
+import com.hl.utils.location.GpsUtil
 import com.hl.utils.previewFie.PreviewFileActivity
 import com.hl.utils.qrcode.QRScanUtil
-import com.hl.utils.reqPermissions
-import com.hl.utils.setImmersiveSystemBar
 import com.lxj.xpopup.XPopup
 import com.lxj.xpopup.interfaces.OnSelectListener
 
@@ -52,6 +50,14 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
 	}
 
 	override fun FragmentMainBinding.onViewCreated(savedInstanceState: Bundle?) {
+		GpsUtil.checkGpsEnable(activityResultHelper) {
+			it.yes {
+				toast("GPS 已打开")
+			}.no {
+				toast("GPS 未打开")
+			}
+		}
+
 		this.uikitUploadPicImageGridLayout.apply2CancelGray()
 
 		uikitToolbar.title = "主页面主页面主页面主页面123"

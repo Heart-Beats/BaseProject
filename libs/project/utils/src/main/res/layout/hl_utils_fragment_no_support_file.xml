@@ -14,7 +14,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_140"
-        android:src="@drawable/icon_unknown_file" />
+        android:src="@drawable/hl_res_icon_unknown_file" />
 
     <TextView
         android:id="@+id/file_name"
