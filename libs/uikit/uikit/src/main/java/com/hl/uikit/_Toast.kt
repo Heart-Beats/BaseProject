@@ -5,6 +5,7 @@ import android.view.Gravity
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.hl.uikit.form.GravityFlag
+import com.hl.uikit.utils.ToastUtils
 
 fun Context.toastInit() {
     ToastUtils.init(applicationContext)
