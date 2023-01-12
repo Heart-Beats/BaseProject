@@ -1,4 +1,4 @@
-package com.hl.uikit
+package com.hl.uikit.utils
 
 import android.content.Context
 import android.view.Gravity
@@ -7,6 +7,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.LayoutRes
+import com.hl.uikit.R
 import com.hl.uikit.form.GravityFlag
 
 object ToastUtils {
@@ -19,7 +20,7 @@ object ToastUtils {
 
     val isInitialized: Boolean
         get() {
-            return ::context.isInitialized
+            return ToastUtils::context.isInitialized
         }
 
     fun init(ctx: Context) {

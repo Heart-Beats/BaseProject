@@ -240,9 +240,15 @@
             <enum name="right" value="1" />
         </attr>
     </declare-styleable>
-    <declare-styleable name="UIKitActionSheetLayout">
-        <!--设置控件的最大高度为屏幕的百分比-->
-        <attr name="uikit_maxScrHeightPer" format="dimension|fraction" />
+
+
+    <!--设置控件的最大高度为屏幕的百分比-->
+    <attr name="uikit_maxScreenHeightPercent" format="dimension|fraction" />
+    <declare-styleable name="UIKitMaxHeightFrameLayout">
+        <attr name="uikit_maxScreenHeightPercent" />
+    </declare-styleable>
+    <declare-styleable name="UIKitMaxHeightNestedScrollView">
+        <attr name="uikit_maxScreenHeightPercent" />
     </declare-styleable>
 
     <declare-styleable name="UIKitCommonButton">
