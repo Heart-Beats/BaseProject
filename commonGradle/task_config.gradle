@@ -22,7 +22,7 @@ def printDir(File file) {
                 printDir(it)
             }
         } else if (file.absolutePath.endsWith(".so")) {
-            println "find so file: $file.absolutePath"
+            println "find so file: $file.absolutePath  \n"
         }
     }
 }
