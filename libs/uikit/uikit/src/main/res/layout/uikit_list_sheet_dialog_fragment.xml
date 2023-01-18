@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:uikit_maxScrHeightPer="50%">
+    app:uikit_maxScreenHeightPercent="50%">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"

@@ -4,4 +4,4 @@
     android:id="@+id/actionGroup"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:uikit_maxScrHeightPer="60%" />
+    app:uikit_maxScreenHeightPercent="60%" />
