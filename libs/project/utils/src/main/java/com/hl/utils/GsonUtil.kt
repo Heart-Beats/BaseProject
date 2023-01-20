@@ -13,9 +13,15 @@ object GsonUtil {
 
 
 	@JvmStatic
-	inline fun <reified T> fromJson(json: String): T {
+	inline fun <reified T> fromJson(json: String?): T {
 		val type = TypeToken.get(T::class.java).type
-		return gson.fromJson(json, type)
+		return gson.fromJson(json ?: "", type)
+	}
+
+
+	@JvmStatic
+	fun <T> fromJson(json: String?, clazz: Class<T>): T {
+		return gson.fromJson(json ?: "", clazz)
 	}
 
 

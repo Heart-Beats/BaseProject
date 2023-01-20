@@ -8,7 +8,6 @@ import android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
 import android.content.res.Configuration
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import com.github.lzyzsd.jsbridge.BridgeHandler
 import com.github.lzyzsd.jsbridge.BridgeWebView
 import com.hl.arch.mvvm.activity.startFragment
 import com.hl.arch.web.helpers.JsBridgeHelper
@@ -30,7 +29,6 @@ import com.hl.utils.location.GpsUtil
 import com.hl.utils.previewFie.PreviewFileActivity
 import com.hl.utils.qrcode.QRScanUtil
 import com.lxj.xpopup.XPopup
-import com.lxj.xpopup.interfaces.OnSelectListener
 
 
 class MainFragment : BaseFragment<FragmentMainBinding>() {
@@ -68,11 +66,9 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
 			XPopup.Builder(requireContext())
 				.isViewMode(true)
 				.atView(it)
-				.asAttachList(menus, null, object : OnSelectListener {
-					override fun onSelect(position: Int, text: String?) {
-						toast("$text")
-					}
-				})
+				.asAttachList(menus, null) { _, text ->
+					toast(text)
+				}
 				.show()
 		}
 
@@ -107,7 +103,24 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
 		}
 
 		testCapture.onClick {
-			MyCaptureActivity.start(requireActivity(), CaptureFeature.BOTH, 1)
+			reqPermissions(
+				Manifest.permission.CAMERA,
+				Manifest.permission.WRITE_EXTERNAL_STORAGE,
+				Manifest.permission.RECORD_AUDIO,
+				deniedAction = {
+					toast("您拒绝了相关权限，无法正常使用此功能")
+				}) {
+
+				val captureIntent = Intent(requireContext(), MyCaptureActivity::class.java).apply {
+					this.putExtra(MyCaptureActivity.CAPTURE_FEATURES, CaptureFeature.BOTH)
+				}
+				activityResultHelper.launchIntent(captureIntent, callback = object : OnActivityResult {
+					override fun onResultOk(data: Intent?) {
+						val captureFilePath = data?.getStringExtra(MyCaptureActivity.CAPTURE_FILE_PATH)
+						toast("拍摄后路径 == $captureFilePath")
+					}
+				})
+			}
 		}
 
 		testFilePreview.onClick {
@@ -118,17 +131,6 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
 			)
 		}
 
-		JsBridgeHelper.setISdkImplProvider(object : ISdkImplProvider() {
-			override fun provideProjectSdkImpl(
-				currentFragment: Fragment,
-				bridgeWebView: BridgeWebView,
-				bridgeHandlerProxy: ProxyHandler<BridgeHandler>
-			): ISdk {
-				return object : ISdk {
-
-				}
-			}
-		})
 		testWebView.onClick {
 			this@MainFragment.navigateToWeb("http://dan520.vip/sdk/", "测试 SDK", false)
 			// this@MainFragment.navigateToWeb("http://www.baidu.com", "测试 SDK", false)

@@ -2,7 +2,12 @@ package com.hl.baseproject
 
 import android.content.Context
 import android.util.Log
+import androidx.fragment.app.Fragment
 import com.elvishew.xlog.XLog
+import com.github.lzyzsd.jsbridge.BridgeWebView
+import com.hl.arch.web.helpers.JsBridgeHelper
+import com.hl.arch.web.sdk.ISdk
+import com.hl.arch.web.sdk.ISdkImplProvider
 import com.hl.shadow.Shadow
 import com.hl.shadow.logger.LogLevel
 import com.hl.utils.XLogInitUtil
@@ -32,8 +37,9 @@ object SDKInitHelper {
 		initUM(applicationContext)
 
 		initShadow()
-	}
 
+		initWebView()
+	}
 
 	/**
 	 * 直接初始化友盟
@@ -109,10 +115,20 @@ object SDKInitHelper {
 		})
 	}
 
-	fun initShadow() {
-		val logLevel = if (BuildConfig.DEBUG) LogLevel.DEBUG else LogLevel.INFO
-		Shadow.initShadowLog(logLevel, { logLevel: LogLevel, message: String, t: Throwable? ->
 
+	private fun initShadow() {
+		val logLevel = if (BuildConfig.DEBUG) LogLevel.DEBUG else LogLevel.INFO
+		Shadow.initShadowLog(logLevel) { logLevel: LogLevel, message: String, t: Throwable? ->
+
+		}
+	}
+
+	private fun initWebView() {
+		JsBridgeHelper.setISdkImplProvider(object : ISdkImplProvider() {
+			override fun provideProjectSdkImpl(webViewFragment: Fragment, bridgeWebView: BridgeWebView): ISdk {
+				return object : ISdk {
+				}
+			}
 		})
 	}
 }

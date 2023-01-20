@@ -16,10 +16,8 @@ import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.blankj.utilcode.util.ActivityUtils
 import com.blankj.utilcode.util.NetworkUtils
-import com.github.lzyzsd.jsbridge.BridgeHandler
 import com.github.lzyzsd.jsbridge.BridgeWebView
 import com.github.lzyzsd.jsbridge.CallBackFunction
-import com.google.gson.Gson
 import com.gyf.immersionbar.ktx.immersionBar
 import com.hjq.http.listener.OnDownloadListener
 import com.hl.arch.mvvm.activity.FragmentContainerActivity
@@ -56,26 +54,22 @@ import java.io.File
  * Email: 913305160@qq.com
  */
 
-class IStandSdkImpl(
-	private val currentFragment: Fragment,
-	private val bridgeWebView: BridgeWebView,
-	private var bridgeHandlerProxy: ProxyHandler<BridgeHandler>
-
-) : IStandSdk {
+class IStandSdkImpl(private val webViewFragment: Fragment, val bridgeWebView: BridgeWebView) :
+	ISdkHandlerProxy(bridgeWebView), IStandSdk {
 
 	/**
 	 * 当前 WebViewFragment 依附的 Activity
 	 */
-	private val attachActivity by lazy { currentFragment.requireActivity() }
+	private val attachActivity by lazy { webViewFragment.requireActivity() }
 
 	init {
-		currentFragment.lifecycle.addObserver(object : DefaultLifecycleObserver {
+		webViewFragment.lifecycle.addObserver(object : DefaultLifecycleObserver {
 
 			override fun onCreate(owner: LifecycleOwner) {
 				val intentFilter = IntentFilter(H5Constants.ACTION_CALL_BACK)
 
 				// 注册 CallBackFunction 需要单独处理的广播
-				currentFragment.requireContext().registerReceiver(CallBackFunctionHandlerReceiver, intentFilter)
+				webViewFragment.requireContext().registerReceiver(CallBackFunctionHandlerReceiver, intentFilter)
 			}
 
 			override fun onResume(owner: LifecycleOwner) {
@@ -92,15 +86,11 @@ class IStandSdkImpl(
 
 			override fun onDestroy(owner: LifecycleOwner) {
 				// 反注册 CallBackFunction 需要单独处理的广播
-				currentFragment.requireContext().unregisterReceiver(CallBackFunctionHandlerReceiver)
+				webViewFragment.requireContext().unregisterReceiver(CallBackFunctionHandlerReceiver)
 				CallBackFunctionDataStore.clearCallBackFunction()
-				currentFragment.lifecycle.removeObserver(this)
+				webViewFragment.lifecycle.removeObserver(this)
 			}
 		})
-	}
-
-	private fun commonRegisterHandler(handlerName: String, bridgeHandler: BridgeHandler) {
-		bridgeWebView.registerHandler(handlerName, bridgeHandlerProxy.bind(bridgeHandler))
 	}
 
 	override fun getDeviceInfo(handlerName: String) {
@@ -124,7 +114,7 @@ class IStandSdkImpl(
 	}
 
 	private fun BridgeWebView.h5NavigateBack(data: String?, function: CallBackFunction) {
-		val h5NavigateBackParam = Gson().fromJson(data, H5NavigateBackParam::class.java)
+		val h5NavigateBackParam = GsonUtil.fromJson(data, H5NavigateBackParam::class.java)
 		repeat(h5NavigateBackParam.step) {
 
 			logJs("h5NavigateBack", "开始")
@@ -212,19 +202,19 @@ class IStandSdkImpl(
 	 * 该方法使用 FragmentContainerActivity 进行实现，否则页面回退时整个 h5 页面会刷新
 	 */
 	private fun gotoWebByContainerActivity(h5NavigateToData: String?) {
-		val h5NavigateToParam = Gson().fromJson(h5NavigateToData, H5NavigateToParam::class.java)
+		val h5NavigateToParam = GsonUtil.fromJson(h5NavigateToData, H5NavigateToParam::class.java)
 
 		val args = WebViewFragmentArgs.Builder(h5NavigateToParam.url).apply {
 			setTitle(h5NavigateToParam.title)
 			setIsNeedTitle(h5NavigateToParam.isNeedTitle())
 		}.build().toBundle()
 
-		currentFragment.startFragment(WebViewFragment::class.java, args)
+		webViewFragment.startFragment(WebViewFragment::class.java, args)
 	}
 
 	override fun setH5Data(handlerName: String) {
 		commonRegisterHandler(handlerName) { data, function ->
-			val h5SaveDataEntity = Gson().fromJson(data, H5SaveDataEntity::class.java)
+			val h5SaveDataEntity = GsonUtil.fromJson(data, H5SaveDataEntity::class.java)
 			h5SaveDataEntity.key?.also {
 				H5DataHelper.putData(it, h5SaveDataEntity.value)
 				function.onSuccess("保存数据成功")
@@ -234,7 +224,7 @@ class IStandSdkImpl(
 
 	override fun getH5Data(handlerName: String) {
 		commonRegisterHandler(handlerName) { data, function ->
-			val h5DataEntity = Gson().fromJson(data, H5GetDataEntity::class.java)
+			val h5DataEntity = GsonUtil.fromJson(data, H5GetDataEntity::class.java)
 			if (h5DataEntity == null) {
 				function.onFail("h5 传输的数据异常")
 				return@commonRegisterHandler
@@ -326,9 +316,9 @@ class IStandSdkImpl(
 
 	override fun setStatusBarLightMode(handlerName: String) {
 		commonRegisterHandler(handlerName) { data, function ->
-			val lightModeParam = Gson().fromJson(data, StatusBarLightModeParam::class.java)
-			currentFragment.lifecycleScope.launchWhenStarted {
-				currentFragment.immersionBar {
+			val lightModeParam = GsonUtil.fromJson(data, StatusBarLightModeParam::class.java)
+			webViewFragment.lifecycleScope.launchWhenStarted {
+				webViewFragment.immersionBar {
 					statusBarDarkFont(lightModeParam.isLightMode())
 					if (lightModeParam.isLightMode()) {
 						statusBarColorInt(Color.WHITE)
@@ -344,9 +334,9 @@ class IStandSdkImpl(
 
 	override fun setStatusBarColor(handlerName: String) {
 		commonRegisterHandler(handlerName) { data, function ->
-			Gson().fromJson(data, StatusBarColorParam::class.java)?.color?.also {
-				currentFragment.lifecycleScope.launchWhenStarted {
-					currentFragment.immersionBar {
+			GsonUtil.fromJson(data, StatusBarColorParam::class.java)?.color?.also {
+				webViewFragment.lifecycleScope.launchWhenStarted {
+					webViewFragment.immersionBar {
 						statusBarColor(it)
 					}
 					function.onSuccess()
@@ -381,7 +371,7 @@ class IStandSdkImpl(
 	}
 
 	override fun getLocation(handlerName: String) {
-		commonRegisterHandler(handlerName) { data, function ->
+		commonRegisterHandler(handlerName) { _, _ ->
 
 		}
 	}
@@ -390,7 +380,7 @@ class IStandSdkImpl(
 		commonRegisterHandler(handlerName) { data, function ->
 			val previewImageParam = GsonUtil.fromJson<PreviewImageParam>(data)
 
-			XPopup.Builder(currentFragment.requireContext())
+			XPopup.Builder(webViewFragment.requireContext())
 				.isViewMode(true)
 				.asImageViewer(
 					null, previewImageParam.index, previewImageParam.urls, { popupView, position ->
@@ -406,10 +396,10 @@ class IStandSdkImpl(
 	override fun savePhotoToAlbum(handlerName: String) {
 		commonRegisterHandler(handlerName) { data, function ->
 			val savePhotoToAlbumParam = GsonUtil.fromJson<SavePhotoToAlbumParam>(data)
-			currentFragment.reqPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE, deniedAction = {
+			webViewFragment.reqPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE, deniedAction = {
 				function.onFail("获取存储权限失败")
 			}) {
-				currentFragment.lifecycleScope.launch {
+				webViewFragment.lifecycleScope.launch {
 					val bitmap = BitmapUtil.getBitmapFromUrl(savePhotoToAlbumParam.fileUrl ?: "")
 					bitmap?.run {
 						val saveName = savePhotoToAlbumParam.fileName ?: "${getFormattedNowDateTime()}.png"
@@ -430,7 +420,7 @@ class IStandSdkImpl(
 			val h5Call = GsonUtil.fromJson<H5CallParam>(data)
 			val intent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + h5Call.phone))
 			intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-			currentFragment.startActivity(intent)
+			webViewFragment.startActivity(intent)
 			function.onSuccess()
 		}
 	}
@@ -444,7 +434,7 @@ class IStandSdkImpl(
 			}
 
 			DownloadFileUtil.startDownLoad(
-				currentFragment,
+				webViewFragment,
 				downLoadFileParam.fileUrl,
 				downLoadFileParam.fileName,
 				listener = object : OnDownloadListener {
@@ -453,7 +443,7 @@ class IStandSdkImpl(
 					override fun onProgress(file: File?, progress: Int) {}
 
 					override fun onComplete(file: File?) {
-						ScanFileActionUtil.scanMedia(currentFragment.requireContext(), file?.absolutePath ?: "")
+						ScanFileActionUtil.scanMedia(webViewFragment.requireContext(), file?.absolutePath ?: "")
 						function.onSuccess(file?.absolutePath)
 					}
 
@@ -475,7 +465,7 @@ class IStandSdkImpl(
 			if (filename == null || fileUrl == null) {
 				function.onFail("预览文件名或文件链接地址不可为空！")
 			} else {
-				PreviewFileActivity.start(currentFragment.requireContext(), filename, fileUrl)
+				PreviewFileActivity.start(webViewFragment.requireContext(), filename, fileUrl)
 
 				function.onSuccess()
 			}
@@ -484,7 +474,7 @@ class IStandSdkImpl(
 
 	override fun scanQRCode(handlerName: String) {
 		commonRegisterHandler(handlerName) { _, function ->
-			val webViewFragment = currentFragment as WebViewFragment
+			val webViewFragment = webViewFragment as WebViewFragment
 
 			webViewFragment.launchActivity(
 				CaptureActivity::class.java,
@@ -503,7 +493,7 @@ class IStandSdkImpl(
 
 	override fun share2Platform(handlerName: String) {
 		commonRegisterHandler(handlerName) { data, function ->
-			val share2PlatformParam = Gson().fromJson(data, Share2PlatformParam::class.java)
+			val share2PlatformParam = GsonUtil.fromJson(data, Share2PlatformParam::class.java)
 			val platformParam = share2PlatformParam.convert2SharePlatformParam()
 
 			val shareListener = object : MyUMShareListener() {

@@ -13,12 +13,14 @@ import java.lang.reflect.ParameterizedType
 /**
  * @author  张磊  on  2022/01/12 at 15:31
  * Email: 913305160@qq.com
+ *
+ * 通过反射创建 ViewBinding
  */
 object ViewBindingUtil {
 
     @JvmStatic
     fun <VB : ViewBinding> inflateWithGeneric(genericOwner: Any, layoutInflater: LayoutInflater): VB =
-        withGenericBindingClass<VB>(genericOwner) { clazz ->
+        withGenericBindingClass(genericOwner) { clazz ->
             clazz.getMethod("inflate", LayoutInflater::class.java).invoke(null, layoutInflater) as VB
         }.also { binding ->
             if (genericOwner is ComponentActivity && binding is ViewDataBinding) {
@@ -32,7 +34,7 @@ object ViewBindingUtil {
 
     @JvmStatic
     fun <VB : ViewBinding> inflateWithGeneric(genericOwner: Any, layoutInflater: LayoutInflater, parent: ViewGroup?, attachToParent: Boolean): VB =
-        withGenericBindingClass<VB>(genericOwner) { clazz ->
+        withGenericBindingClass(genericOwner) { clazz ->
             clazz.getMethod("inflate", LayoutInflater::class.java, ViewGroup::class.java, Boolean::class.java)
                 .invoke(null, layoutInflater, parent, attachToParent) as VB
         }.also { binding ->
@@ -43,7 +45,7 @@ object ViewBindingUtil {
 
     @JvmStatic
     fun <VB : ViewBinding> bindWithGeneric(genericOwner: Any, view: View): VB =
-        withGenericBindingClass<VB>(genericOwner) { clazz ->
+        withGenericBindingClass(genericOwner) { clazz ->
             clazz.getMethod("bind", View::class.java).invoke(null, view) as VB
         }.also { binding ->
             if (genericOwner is Fragment && binding is ViewDataBinding) {
