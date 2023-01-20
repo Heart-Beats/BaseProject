@@ -18,7 +18,7 @@ class ProxyHandler<T : Any>(private val methodHook: MethodHook<T>? = null) : Inv
     private var proxy2TargetMap = hashMapOf<Int, T>()
 
     /**
-     * 绑定委托对象，并返回代理对象
+     * 绑定委托对象(即被代理对象)，并返回代理对象
      */
     fun bind(target: T): T {
         //绑定该类实现的所有接口，取得代理类

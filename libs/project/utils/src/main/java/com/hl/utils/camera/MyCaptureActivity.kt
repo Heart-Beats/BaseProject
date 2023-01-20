@@ -5,6 +5,7 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.util.Log
+import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentActivity
 import com.blankj.utilcode.util.FileUtils
 import com.blankj.utilcode.util.ImageUtils
@@ -32,7 +33,7 @@ class MyCaptureActivity : FragmentActivity() {
 		const val CAPTURE_FILE_PATH = "captureFilePath"
 
 		private const val TAG = "MyCaptureActivity"
-		private const val CAPTURE_FEATURES = "CAPTURE_FEATURES"
+		const val CAPTURE_FEATURES = "CAPTURE_FEATURES"
 
 		@JvmStatic
 		fun start(activity: FragmentActivity, captureFeature: CaptureFeature, reqCode: Int) {

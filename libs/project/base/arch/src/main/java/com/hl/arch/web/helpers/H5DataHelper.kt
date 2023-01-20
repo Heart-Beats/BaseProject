@@ -3,6 +3,7 @@ package com.hl.arch.web.helpers
 import androidx.core.content.edit
 import com.blankj.utilcode.util.ActivityUtils
 import com.blankj.utilcode.util.AppUtils
+import com.hl.utils.BaseUtil
 import com.hl.utils.sharedPreferences
 
 /**
@@ -11,23 +12,23 @@ import com.hl.utils.sharedPreferences
  */
 object H5DataHelper {
 
-	private var h5SpName = "${AppUtils.getAppInfo()?.packageName}.h5.sharedPreferences"
+	private var h5SpName = "${BaseUtil.app.packageName}.h5.sharedPreferences"
 
 	@JvmStatic
 	fun putData(key: String, value: String?) {
-		ActivityUtils.getTopActivity().sharedPreferences(h5SpName).edit {
+		BaseUtil.app.sharedPreferences(h5SpName).edit {
 			this.putString(key, value)
 		}
 	}
 
 	@JvmStatic
 	fun getData(key: String): String {
-		return ActivityUtils.getTopActivity().sharedPreferences(h5SpName).getString(key, "") ?: ""
+		return BaseUtil.app.sharedPreferences(h5SpName).getString(key, "") ?: ""
 	}
 
 	@JvmStatic
 	fun clearData() {
-		ActivityUtils.getTopActivity().sharedPreferences(h5SpName).edit {
+		BaseUtil.app.sharedPreferences(h5SpName).edit {
 			this.clear()
 		}
 	}

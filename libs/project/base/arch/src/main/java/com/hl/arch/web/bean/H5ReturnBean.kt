@@ -1,6 +1,6 @@
 package com.hl.arch.web.bean
 
-import com.google.gson.Gson
+import com.hl.utils.GsonUtil
 
 /**
  * @author  张磊  on  2022/06/13 at 16:32
@@ -13,7 +13,7 @@ data class H5ReturnBean<T>(
 	var data: T
 ) {
 	fun toJsonString(): String {
-		return Gson().toJson(this)
+		return GsonUtil.toJson(this)
 	}
 }
 
