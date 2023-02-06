@@ -5,6 +5,7 @@ import android.content.Context
 import android.os.DeadObjectException
 import android.os.IBinder
 import android.os.RemoteException
+import android.os.TransactionTooLargeException
 import android.util.Log
 import com.google.gson.Gson
 import com.hl.shadow.lib.ShadowConstants
@@ -40,7 +41,7 @@ class MyDynamicUuidPluginManager(context: Context) : MyPluginManager(context) {
         } catch (e: DeadObjectException) {
             Log.e(TAG, "onDynamicUuidPpsConnected: onServiceConnected RemoteException", e)
         } catch (e: RemoteException) {
-            if (e.javaClass.simpleName == "TransactionTooLargeException") {
+            if (e is TransactionTooLargeException) {
                 Log.e(TAG, "onDynamicUuidPpsConnected: onServiceConnected TransactionTooLargeException", e)
             } else {
                 throw RuntimeException(e)

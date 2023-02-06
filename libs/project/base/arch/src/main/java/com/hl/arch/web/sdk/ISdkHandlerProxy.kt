@@ -1,6 +1,5 @@
 package com.hl.arch.web.sdk
 
-import com.elvishew.xlog.XLog
 import com.github.lzyzsd.jsbridge.BridgeHandler
 import com.github.lzyzsd.jsbridge.BridgeWebView
 import com.github.lzyzsd.jsbridge.CallBackFunction
@@ -35,6 +34,8 @@ open class ISdkHandlerProxy(private val bridgeWebView: BridgeWebView) {
 		bridgeHandlerProxy: ProxyHandler<BridgeHandler> = bridgeHandlerProxyLazy,
 		bridgeHandler: BridgeHandler,
 	) {
+		logJs("BridgeWebView 注册 H5 方法", handlerName)
+
 		// 注册的 Handler 实际为代理对象
 		bridgeWebView.registerHandler(handlerName, bridgeHandlerProxy.bind(bridgeHandler))
 	}
@@ -46,7 +47,6 @@ open class ISdkHandlerProxy(private val bridgeWebView: BridgeWebView) {
 	 * 这里默认 BridgeHandler.handler(...) 方法调用时加上参数日志，处理完成时加上返回数据日志
 	 */
 	private fun createBridgeHandlerProxy(bridgeWebView: BridgeWebView): ProxyHandler<BridgeHandler> {
-		XLog.d("createBridgeHandlerProxy---------------->")
 
 		// 循环获取 BridgeWebView 对应的 Class
 		var bridgeWebViewClass: Class<in BridgeWebView> = bridgeWebView.javaClass

@@ -52,16 +52,16 @@ private fun handleMatchDeepLinkForUrl(navController: NavController, newUri: Uri)
     navDestinationList.filter {
         it.hasDeepLink(newUri)
     }.forEach {
-        val deepLinks = ReflectHelper(NavDestination::class.java).getFiledValue<ArrayList<NavDeepLink>>(it, "mDeepLinks")
+        val deepLinks = ReflectHelper(NavDestination::class.java).getFiledValue<MutableList<NavDeepLink>>(it, "deepLinks")
         deepLinks?.onEach { navDeepLink ->
             navDeepLink.uriPattern?.run {
                 val reflectHelper = ReflectHelper(NavDeepLink::class.java)
                 when {
                     this.startsWith("http://") -> Pattern.compile("""^\Qhttp://url=\E(.+?)""")
                     this.startsWith("https://") -> Pattern.compile("""^\Qhttps://url=\E(.+?)""")
-                    else -> reflectHelper.getFiledValue<Pattern>(navDeepLink, "mPattern")
+                    else -> reflectHelper.getFiledValue<Pattern>(navDeepLink, "pattern")
                 }?.also { pattern ->
-                    reflectHelper.setFiledValue(navDeepLink, "mPattern", pattern)
+                    reflectHelper.setFiledValue(navDeepLink, "pattern", pattern)
                 }
             }
         }
