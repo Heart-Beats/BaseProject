@@ -2,21 +2,20 @@ package com.hl.arch.web.client
 
 import android.Manifest
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
-import android.location.LocationManager
 import android.net.Uri
 import android.os.Build
-import android.provider.Settings
 import android.webkit.GeolocationPermissions
 import android.webkit.ValueCallback
 import android.webkit.WebChromeClient
 import android.webkit.WebView
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
+import com.hl.arch.web.WebViewFragment
 import com.hl.arch.web.helpers.logJs
 import com.hl.uikit.image.pictureselector.GlideEngine
 import com.hl.uikit.image.pictureselector.MyCompressEngine
+import com.hl.utils.activityResult.OnActivityResult
 import com.hl.utils.file2Uri
 import com.hl.utils.reqPermissions
 import com.luck.picture.lib.basic.PictureSelector
@@ -32,10 +31,6 @@ import com.luck.picture.lib.interfaces.OnResultCallbackListener
  * 自定义 WebChromeClient 辅助WebView处理图片上传操作【<input type=file> 文件上传标签】
  */
 open class MyWebChromeClient(val fragment: Fragment) : WebChromeClient() {
-
-	companion object {
-		private const val REQUEST_CODE_SELECT_FILE = 1104
-	}
 
 	/**
 	 * web 文件图片选择 将文件流回传给web
@@ -110,19 +105,17 @@ open class MyWebChromeClient(val fragment: Fragment) : WebChromeClient() {
 					intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, isMultipleChoose)
 					//i.putExtra(Intent.EXTRA_MIME_TYPES, acceptTypes)
 					intent.type = "*/*"
-					fragment.startActivityForResult(intent, REQUEST_CODE_SELECT_FILE)
 
-					// todo launchIntent 这种方式需要查看一下是否可行
-					// val webViewFragment = fragment as? WebViewFragment
-					// webViewFragment?.launchIntent(intent, object : OnActivityResult {
-					// 	override fun onResultOk(data: Intent?) {
-					// 		onActivityResult(REQUEST_CODE_SELECT_FILE, Activity.RESULT_OK, data)
-					// 	}
-					//
-					// 	override fun onResultCanceled(data: Intent?) {
-					// 		onActivityResult(REQUEST_CODE_SELECT_FILE, Activity.RESULT_CANCELED, data)
-					// 	}
-					// })
+					val webViewFragment = fragment as? WebViewFragment
+					webViewFragment?.launchIntent(intent, object : OnActivityResult {
+						override fun onResultOk(data: Intent?) {
+							onActivityResult(Activity.RESULT_OK, data)
+						}
+
+						override fun onResultCanceled(data: Intent?) {
+							onActivityResult(Activity.RESULT_CANCELED, data)
+						}
+					})
 				}
 			}
 		}
@@ -157,34 +150,29 @@ open class MyWebChromeClient(val fragment: Fragment) : WebChromeClient() {
 		}
 	}
 
-	fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-		logJs("onActivityResult", "requestCode == $requestCode,  resultCode == $resultCode")
+	private fun onActivityResult(resultCode: Int, data: Intent?) {
+		logJs("onActivityResult", "resultCode == $resultCode")
 
 		if (resultCode == Activity.RESULT_OK) {
-			when (requestCode) {
-				REQUEST_CODE_SELECT_FILE -> {
-					// 这里是针对从系统自带的文件选择器中选择问题
+			// 这里是针对从系统自带的文件选择器中选择文件
 
-					val clipData = data?.clipData
-					val resultUri = if (clipData != null) {
-						//有选择多个文件
+			val clipData = data?.clipData
+			val resultUri = if (clipData != null) {
+				//有选择多个文件
 
-						val uris = mutableListOf<Uri>()
-						repeat(clipData.itemCount) {
-							uris.add(clipData.getItemAt(it).uri)
-						}
-
-						uris.toTypedArray()
-					} else {
-						// 单选文件
-
-						data?.data?.let { arrayOf(it) }
-					}
-
-					mUploadCallbackAboveL?.onReceiveValue(resultUri)
+				val uris = mutableListOf<Uri>()
+				repeat(clipData.itemCount) {
+					uris.add(clipData.getItemAt(it).uri)
 				}
-				else -> {}
+
+				uris.toTypedArray()
+			} else {
+				// 单选文件
+
+				data?.data?.let { arrayOf(it) }
 			}
+
+			mUploadCallbackAboveL?.onReceiveValue(resultUri)
 		} else {
 			if (mUploadCallbackAboveL != null) {
 				mUploadCallbackAboveL!!.onReceiveValue(arrayOf())

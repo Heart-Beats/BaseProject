@@ -69,9 +69,6 @@ open class WebViewFragment : ViewBindingMvvmBaseFragment<FragmentWebViewBinding>
 
 	private lateinit var webView: ProgressWebView
 
-	private lateinit var webChromeClient: MyWebChromeClient
-
-
 	private val activityResultHelper = ActivityResultHelper(this)
 
 	override fun FragmentWebViewBinding.onViewCreated(savedInstanceState: Bundle?) {
@@ -128,8 +125,7 @@ open class WebViewFragment : ViewBindingMvvmBaseFragment<FragmentWebViewBinding>
 			settings.initWebSetting()
 		}
 
-		webChromeClient = getWebChromeClient(args)
-		webView.webChromeClient = webChromeClient
+		webView.webChromeClient = getWebChromeClient(args)
 		webView.webViewClient = getWebViewClient()
 	}
 
@@ -307,7 +303,6 @@ open class WebViewFragment : ViewBindingMvvmBaseFragment<FragmentWebViewBinding>
 		}
 
 
-
 	override fun onResume() {
 		super.onResume()
 		webView.settings.javaScriptEnabled = true
@@ -369,11 +364,6 @@ open class WebViewFragment : ViewBindingMvvmBaseFragment<FragmentWebViewBinding>
 		callback: OnActivityResult,
 	) {
 		activityResultHelper.launchIntent(launchIntent, callback = callback)
-	}
-
-	override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-		super.onActivityResult(requestCode, resultCode, data)
-		webChromeClient.onActivityResult(requestCode, resultCode, data)
 	}
 
 	/**

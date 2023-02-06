@@ -184,7 +184,7 @@ abstract class BaseMultiLoaderPluginManager(context: Context) : PluginManagerTha
 				override fun onServiceDisconnected(componentName: ComponentName) {
 					Log.d(TAG, "onServiceConnection（service 断开连接）: componentName ==$componentName")
 					finalServiceConnection?.onServiceDisconnected(componentName)
-					throw RuntimeException("onServiceConnection")
+					throw RuntimeException("onServiceDisconnection")
 				}
 			}, Service.BIND_AUTO_CREATE)
 
