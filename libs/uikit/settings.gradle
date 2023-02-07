@@ -1,5 +1,8 @@
 pluginManagement {
     repositories {
+        // com.kanyun.kace SNAPSHOT 版本仓库地址
+        maven { url "https://s01.oss.sonatype.org/content/repositories/snapshots" }
+
         mavenCentral()
         maven { url 'https://maven.aliyun.com/repository/public' }
         maven { url 'https://maven.aliyun.com/repository/google' }
@@ -12,6 +15,9 @@ pluginManagement {
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
+        // com.kanyun.kace SNAPSHOT 版本仓库地址
+        maven { url "https://s01.oss.sonatype.org/content/repositories/snapshots" }
+
         mavenLocal()
         mavenCentral()
         maven { url 'https://maven.aliyun.com/repository/public' }

@@ -86,6 +86,9 @@ android {
 }
 
 repositories {
+    // com.kanyun.kace SNAPSHOT 版本仓库地址
+    maven { url "https://s01.oss.sonatype.org/content/repositories/snapshots" }
+
     mavenLocal()
     mavenCentral()
     maven { url 'https://maven.aliyun.com/repository/public' }
