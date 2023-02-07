@@ -142,6 +142,7 @@ abstract class MvpBaseActivity<Presenter : MvpBasePresenter<out MvpBaseView>> : 
 
     protected open fun onIvMenuClick() {}
 
+    @Deprecated("Deprecated in Java")
     override fun setTitleColor(@ColorInt color: Int) {
         titleTV!!.setTextColor(color)
     }

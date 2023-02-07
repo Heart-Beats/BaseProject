@@ -4,7 +4,7 @@ internal object Versions {
     const val JUNIT = "4.+"
     const val JUNIT_EXT = "1.1.3"
     const val ESPRESSO_CORE = "3.4.0"
-    const val KOTLIN = "1.7.0"
+    const val KOTLIN = "1.8.0"
     const val KOTLIN_COROUTINES = "1.4.2"
     const val CORE_KTX = "1.6.0"
 
