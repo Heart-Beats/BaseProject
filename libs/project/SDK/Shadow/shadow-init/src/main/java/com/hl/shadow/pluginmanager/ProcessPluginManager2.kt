@@ -13,7 +13,6 @@ import com.tencent.shadow.core.manager.installplugin.UnpackManager
  *  支持初始化为多进程的 PluginManager,  每个对象对应一个 PluginProcessService
  *
  *  @param  context           上下文对象
- *  @param managerName        manager 名字
  *  @param ppsName            pluginProcessServiceName
  */
 

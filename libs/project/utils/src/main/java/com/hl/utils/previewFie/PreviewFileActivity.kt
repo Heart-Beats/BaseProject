@@ -26,7 +26,7 @@ import com.hl.uikit.visible
 import com.hl.utils.*
 import com.hl.utils.mimetype.MimeType
 import com.hl.utils.previewFie.superFileView.DocView
-import com.hl.utils.share.OpenFileUtil
+import com.hl.utils.share.ShareUtil
 import com.hl.utils.videoplayer.initPlayer
 import kotlinx.android.synthetic.main.hl_utils_activity_preview_file.*
 import kotlinx.coroutines.launch
@@ -154,7 +154,7 @@ class PreviewFileActivity : FragmentActivity() {
 
                     if (cacheFile.exists()) {
                         //系统分享
-                        OpenFileUtil.openFileShare(this, cacheFile.absolutePath)
+                        ShareUtil.shareFile(this, cacheFile.absolutePath)
                     } else {
                         EasyHttp.download(this)
                             .url(fileUrl)
@@ -171,7 +171,7 @@ class PreviewFileActivity : FragmentActivity() {
                                 override fun onComplete(file: File?) {
                                     XLog.d("下载完成 ------------->")
 
-                                    OpenFileUtil.openFileShare(this@PreviewFileActivity, cacheFile.absolutePath)
+                                    ShareUtil.shareFile(this@PreviewFileActivity, cacheFile.absolutePath)
                                 }
 
                                 override fun onError(file: File?, e: Exception?) {

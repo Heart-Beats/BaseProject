@@ -40,12 +40,7 @@ object DownloadFileUtil {
 		listener: OnDownloadListener
 	) {
 		val cacheFile = getCacheFile(isSave2AppDir, fileUrl, fileName)
-
-		if (!isSave2AppDir) {
-			reqPermissions2Download(lifecycleOwner, fileUrl, cacheFile, listener)
-		} else {
-			download(lifecycleOwner, fileUrl, cacheFile, listener)
-		}
+		download(lifecycleOwner, fileUrl, isSave2AppDir, cacheFile, listener)
 	}
 
 	/**
@@ -63,7 +58,26 @@ object DownloadFileUtil {
 		listener: OnDownloadListener
 	) {
 		val cacheFile = File(savePath)
-		reqPermissions2Download(lifecycleOwner, fileUrl, cacheFile, listener)
+		val externalFilesDir = BaseUtil.app.getExternalFilesDir(null)
+
+		// 是否保存在 APP 私有目录下
+		val isSave2AppDir = cacheFile.absolutePath.contains(externalFilesDir?.absolutePath ?: "")
+
+		download(lifecycleOwner, fileUrl, isSave2AppDir, cacheFile, listener)
+	}
+
+	private fun download(
+		lifecycleOwner: LifecycleOwner,
+		fileUrl: String,
+		isSave2AppDir: Boolean,
+		cacheFile: File,
+		listener: OnDownloadListener
+	) {
+		if (!isSave2AppDir) {
+			reqPermissions2Download(lifecycleOwner, fileUrl, cacheFile, listener)
+		} else {
+			download(lifecycleOwner, fileUrl, cacheFile, listener)
+		}
 	}
 
 	/**

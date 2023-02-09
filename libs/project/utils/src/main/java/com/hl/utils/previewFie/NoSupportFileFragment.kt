@@ -7,8 +7,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.blankj.utilcode.util.AppUtils
 import com.hl.uikit.onClick
-import com.hl.utils.share.OpenFileUtil
 import com.hl.utils.R
+import com.hl.utils.share.ShareUtil
 import kotlinx.android.synthetic.main.hl_utils_fragment_no_support_file.*
 import java.io.File
 
@@ -34,7 +34,7 @@ class NoSupportFileFragment : Fragment() {
 		no_support_desc.text = "${AppUtils.getAppName()}平台暂不可以打开此类文件，你可以使用其他应用打开并预览。"
 
 		open_file_with_other.onClick {
-			OpenFileUtil.openFileShare(requireContext(), noSupportFile?.absolutePath ?: return@onClick)
+			ShareUtil.shareFile(requireContext(), noSupportFile?.absolutePath ?: return@onClick)
 		}
 	}
 
