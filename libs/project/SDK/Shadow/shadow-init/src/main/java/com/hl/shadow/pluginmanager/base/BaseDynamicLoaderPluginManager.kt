@@ -377,6 +377,7 @@ abstract class BaseDynamicLoaderPluginManager(context: Context) : PluginManagerT
 		Log.d(TAG, "载入 Plugin ---------------")
 		val logIdentity = "uuid=$uuid"
 
+		// 插件引入版本管理后，同一 UUID 的插件若不杀插件进程，启动新插件目前是不生效的
 		val map = mPluginLoader.loadedPlugin
 		if (!map.containsKey(partKey)) {
 			Log.d(TAG, "startLoadPlugin: 插件包 $logIdentity 中的插件( partKey-${partKey}) 还未进行过加载")

@@ -16,7 +16,7 @@ import com.hl.shadow.pluginmanager.base.BaseDynamicLoaderPluginManager
 
 open class ProcessPluginManager(context: Context, private val ppsName: String) : BaseDynamicLoaderPluginManager(context) {
 
-	override fun getName() = ShadowConstants.PLUGIN_MANAGER_NAME
+	public override fun getName() = ShadowConstants.PLUGIN_MANAGER_NAME
 
 	override fun getPluginProcessServiceName() = ppsName
 }

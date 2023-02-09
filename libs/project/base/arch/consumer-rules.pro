@@ -1,3 +1,6 @@
+# JsBridge 的混淆配置，官方库未自带，去除会导致混淆时传输数据解析失败，具体见类： com.github.lzyzsd.jsbridge.Message
+-keep class org.json.** { *; }
+
 # ViewBindingUtil 中获取 ViewBinding 对象使用了反射，需要不混淆
 -keepclassmembers class * implements androidx.viewbinding.ViewBinding {
   public static * inflate(android.view.LayoutInflater);
