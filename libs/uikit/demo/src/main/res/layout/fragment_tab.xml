@@ -28,7 +28,7 @@
         android:layout_marginTop="30dp"
         android:text="标签页 Tabs"
         android:textColor="@color/uikit_color_3"
-        android:textSize="@dimen/uikit_fontsize_6"
+        android:textSize="@dimen/uikit_font_size_6"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar" />
