@@ -2,7 +2,7 @@ package com.hl.baseproject
 
 import android.content.Intent
 import android.os.Bundle
-import com.hl.arch.mvvm.activity.ViewBindingBaseActivity
+import com.hl.arch.base.ViewBindingBaseActivity
 import com.hl.baseproject.databinding.ActivityTest2Binding
 import com.hl.uikit.onClick
 import com.hl.uikit.toast

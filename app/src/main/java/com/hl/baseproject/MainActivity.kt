@@ -3,7 +3,7 @@ package com.hl.baseproject
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.hl.arch.mvvm.activity.ViewBindingBaseActivity
+import com.hl.arch.base.ViewBindingBaseActivity
 import com.hl.baseproject.databinding.ActivityMainBinding
 import com.hl.baseproject.fragments.MainFragment
 import com.hl.baseproject.fragments.TestFragment

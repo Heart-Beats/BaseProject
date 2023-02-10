@@ -1,18 +1,18 @@
-package com.hl.arch.mvvm.fragment
+package com.hl.arch.base
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import androidx.viewbinding.ViewBinding
-import com.hl.arch.bindingDelegate.FragmentBindingDelegate
+import com.hl.arch.bindingDelegate.ActivityBindingDelegate
 import com.hl.arch.bindingDelegate.ViewBindingDelegate
 
 /**
- * @Author  张磊  on  2021/03/02 at 12:44
+ * @Author  张磊  on  2021/03/02 at 15:36
  * Email: 913305160@qq.com
  */
-abstract class ViewBindingMvvmBaseFragment<Binding : ViewBinding> : MvvmBaseFragment(),
-    ViewBindingDelegate<Binding> by FragmentBindingDelegate() {
+abstract class ViewBindingBaseActivity<Binding : ViewBinding> : BaseActivity(),
+    ViewBindingDelegate<Binding> by ActivityBindingDelegate() {
 
     override val layoutResId: Int = 0
 
@@ -23,11 +23,9 @@ abstract class ViewBindingMvvmBaseFragment<Binding : ViewBinding> : MvvmBaseFrag
         return createViewWithBinding(layoutInflater)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onViewCreated(savedInstanceState: Bundle?) {
         viewBinding.onViewCreated(savedInstanceState)
     }
-
 
     /**
      * 使用 ViewBinding 的页面视图创建完成

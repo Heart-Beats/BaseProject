@@ -7,6 +7,7 @@ import android.view.View
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import com.hl.arch.R
+import com.hl.arch.base.ViewBindingBaseActivity
 import com.hl.arch.databinding.ActivityFragmentContainerBinding
 import com.hl.utils.replaceFragment
 

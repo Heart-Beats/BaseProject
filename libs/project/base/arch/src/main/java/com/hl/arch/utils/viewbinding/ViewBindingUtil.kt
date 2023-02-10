@@ -1,4 +1,4 @@
-package com.hl.arch.utils
+package com.hl.arch.utils.viewbinding
 
 import android.view.LayoutInflater
 import android.view.View
@@ -18,6 +18,9 @@ import java.lang.reflect.ParameterizedType
  */
 object ViewBindingUtil {
 
+    /**
+     * 从指定对象的泛型参数中创建 ViewBinding 对象
+     */
     @JvmStatic
     fun <VB : ViewBinding> inflateWithGeneric(genericOwner: Any, layoutInflater: LayoutInflater): VB =
         withGenericBindingClass(genericOwner) { clazz ->
