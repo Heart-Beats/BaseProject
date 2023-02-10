@@ -42,7 +42,7 @@ android {
     buildTypes {
         debug {
             // 是否需要混淆
-            def needMinify = true
+            def needMinify = false
 
             if (needMinify) {
                 // 是否开启调试， 混淆打开时 debug 调试需关闭，否则混淆无效
