@@ -8,7 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.hl.arch.adapters.BaseAbstractAdapter
-import com.hl.arch.mvvm.activity.ViewBindingBaseActivity
+import com.hl.arch.base.ViewBindingBaseActivity
 import com.hl.baseproject.databinding.ActivityTestBinding
 import com.hl.uikit.recyclerview.decoration.GridSpaceItemDecoration
 import com.hl.uikit.recyclerview.decoration.RecyclerViewDividerDecoration

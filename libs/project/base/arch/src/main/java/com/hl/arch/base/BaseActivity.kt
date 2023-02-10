@@ -4,11 +4,13 @@ import android.graphics.Color
 import android.os.Bundle
 import android.os.PersistableBundle
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.MutableLiveData
@@ -19,9 +21,10 @@ import com.hl.arch.utils.getColorByRes
 import com.hl.arch.utils.initInsetPadding
 import com.hl.arch.utils.setSafeValue
 import com.hl.arch.utils.traverseFindFirstViewByType
+import kotlin.math.roundToInt
 
 
-abstract class BaseActivity : AppCompatActivity() {
+abstract class BaseActivity : AppCompatActivity(), IPageInflate {
 
     private val TAG = "BaseActivity"
 
@@ -29,36 +32,39 @@ abstract class BaseActivity : AppCompatActivity() {
         MutableLiveData<MotionEvent>()
     }
 
-    abstract val layoutResId: Int?
+    /**
+     *  页面对应的视图 layout Id, 需子类实现
+     */
+    @get:LayoutRes
+    abstract val layoutResId: Int
 
     @JvmField
     protected var toolbar: Toolbar? = null
 
     protected lateinit var immersionBar: ImmersionBar
 
+    /**
+     * 页面视图创建完成
+     */
     abstract fun onViewCreated(savedInstanceState: Bundle?)
 
-    /**
-     * 该方法在 ViewBindingBaseActivity 中使用，确保 super.onCreate(savedInstanceState) 之后填充 ViewBinding 的视图
-     */
-    protected open fun getViewBindingLayoutView(): View? = null
+    override fun getPageInflateView(layoutInflater: LayoutInflater): View {
+        return layoutInflater.inflate(layoutResId, null, false)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.d(TAG, "onCreate:  =====> $this")
 
-        layoutResId?.let {
-            val inflateView = View.inflate(this, it, null)
-            toolbar = inflateView?.traverseFindFirstViewByType(Toolbar::class.java)?.apply {
+        getPageInflateView(layoutInflater).run {
+            toolbar = this.traverseFindFirstViewByType(Toolbar::class.java)?.apply {
                 // xml 中通过 style 可统一配置，这里设置会导致 xml 中设置失效
                 // this.setTitleTextColor(getColorByRes(R.color.colorTitleText))
                 // this.setBackgroundColor(getColorByRes(R.color.colorTitlePrimary))
             }
-            setContentView(inflateView)
-        }
-        getViewBindingLayoutView()?.run {
             setContentView(this)
         }
+
         updateSystemBar()
 
         //Activity 创建之后设置toolbar
@@ -92,7 +98,7 @@ abstract class BaseActivity : AppCompatActivity() {
         val green = Color.green(rgb)
         val red = Color.red(rgb)
         var alpha = Color.alpha(rgb)
-        alpha = Math.round(alpha * percent)
+        alpha = (alpha * percent).roundToInt()
         return Color.argb(alpha, red, green, blue)
     }
 
@@ -172,7 +178,7 @@ abstract class BaseActivity : AppCompatActivity() {
      * @param immersionBarBlock 使用 immersionBar 对状态栏的后续设置
      */
     protected fun setStatusBarImmerseFromView(statusBarView: View, immersionBarBlock: ImmersionBar.() -> Unit = {}) {
-        Log.d(TAG, "setStatusBarImmerseFromView =====> 开始设置沉浸式状态栏， statusBarView == ${statusBarView}")
+        Log.d(TAG, "setStatusBarImmerseFromView =====> 开始设置沉浸式状态栏， statusBarView == $statusBarView")
 
         initInsetPadding(top = false)
         if (::immersionBar.isInitialized) {

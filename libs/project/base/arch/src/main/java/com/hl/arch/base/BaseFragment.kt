@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.addCallback
+import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
@@ -24,18 +25,17 @@ import com.hl.arch.utils.*
  * @Author  张磊  on  2020/08/28 at 18:35
  * Email: 913305160@qq.com
  */
-abstract class BaseFragment : Fragment() {
+abstract class BaseFragment : Fragment(), IPageInflate {
 
     companion object {
         private const val TAG = "BaseFragment"
     }
 
-    protected abstract val layoutResId: Int?
-
     /**
-     * 该属性在 ViewBindingBaseFragment 中初始化，因为 ViewBinding 无法获取 layoutResId
+     *  页面对应的视图 layout Id, 需子类实现
      */
-    protected var layoutView: View? = null
+    @get:LayoutRes
+    protected abstract val layoutResId: Int
 
     @JvmField
     protected var toolbar: Toolbar? = null
@@ -137,6 +137,10 @@ abstract class BaseFragment : Fragment() {
         }
     }
 
+    override fun getPageInflateView(layoutInflater: LayoutInflater): View {
+        return layoutInflater.inflate(layoutResId, null, false)
+    }
+
     /**
      * 该方法在导航回退到当前 Fragment 时也会触发，因此可用作页面切换时更新数据保持数据最新
      */
@@ -147,9 +151,7 @@ abstract class BaseFragment : Fragment() {
             updateSystemBar()
         }
 
-        val inflateView = layoutResId?.let {
-            inflater.inflate(it, container, false)
-        } ?: layoutView
+        val inflateView = getPageInflateView(inflater)
 
         toolbar = inflateView?.traverseFindFirstViewByType(Toolbar::class.java)?.apply {
             // xml 中通过 style 可统一配置，这里设置会导致 xml 中设置失效

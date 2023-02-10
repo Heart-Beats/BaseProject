@@ -7,13 +7,8 @@ import android.content.pm.ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
 import android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
 import android.content.res.Configuration
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import com.github.lzyzsd.jsbridge.BridgeWebView
 import com.hl.arch.mvvm.activity.startFragment
-import com.hl.arch.web.helpers.JsBridgeHelper
 import com.hl.arch.web.navigateToWeb
-import com.hl.arch.web.sdk.ISdk
-import com.hl.arch.web.sdk.ISdkImplProvider
 import com.hl.baseproject.TestActivity
 import com.hl.baseproject.TestActivity2
 import com.hl.baseproject.databinding.FragmentMainBinding
