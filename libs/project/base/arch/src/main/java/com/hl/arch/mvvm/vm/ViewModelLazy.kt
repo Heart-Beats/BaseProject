@@ -52,7 +52,7 @@ fun <VM : ViewModel> Fragment.createViewModelLazy(
 		view?.let {
 			val fragment = this
 			if (fragment is MvvmBaseFragment) {
-				fragment.onViewModelCreated(vm)
+				fragment.onViewModelCreated(vm, fragment.viewLifecycleOwner)
 			}
 		}
 	}
