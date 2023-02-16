@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="hl_res_四分之一中文占位符" type="string">&#8197;</item>
+    <item name="hl_res_半个中文占位符" type="string">&#8194;</item>
+    <item name="hl_res_一个中文占位符" type="string">&#8195;</item>
+
+    <item name="hl_res_零宽非连接符" type="string">\u200C</item>
+    <item name="hl_res_零宽连接符" type="string">\u200D</item>
+    <item name="hl_res_位序掩码" type="string">\uFEFF</item>
+</resources>

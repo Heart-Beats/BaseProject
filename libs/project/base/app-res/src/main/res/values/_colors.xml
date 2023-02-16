@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="ResourceName">
+    <color name="_FFF2F6FF">#FFF2F6FF</color>
+    <color name="_FF31415F">#FF31415F</color>
+    <color name="_FF1732A4">#FF1732A4</color>
+    <color name="_FF272E4B">#FF272E4B</color>
+    <color name="_FF787D8F">#FF787D8F</color>
+    <color name="_FF131313">#FF131313</color>
+    <color name="_FF4C64FE">#FF4C64FE</color>
+    <color name="_FFD8D8D8">#FFD8D8D8</color>
+</resources>
