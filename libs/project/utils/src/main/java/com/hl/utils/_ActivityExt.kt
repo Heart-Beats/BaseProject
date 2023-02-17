@@ -6,11 +6,16 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 
+/**
+ * 通过 id 获取对应的 Fragment
+ */
 fun FragmentActivity.getFragmentById(@IdRes id: Int): Fragment? {
     return supportFragmentManager.findFragmentById(id)
 }
 
-
+/**
+ * 获取 navigation 当前使用的 Fragment
+ */
 fun FragmentActivity.getCurrentNavigationFragment(): Fragment? {
     return supportFragmentManager.primaryNavigationFragment?.childFragmentManager?.fragments?.firstOrNull()
 }

@@ -2,15 +2,16 @@ package com.hl.arch.mvvm.vmDelegate
 
 import android.util.Log
 import androidx.lifecycle.LifecycleOwner
+import com.elvishew.xlog.XLog
 import com.hl.arch.loading.loadingPopupWeakReference
-import com.hl.arch.mvvm.PublicResp
+import com.hl.arch.api.PublicResp
 import com.hl.arch.mvvm.api.event.RequestStateEvent
 import com.hl.arch.mvvm.api.event.UiEvent
 import com.hl.arch.mvvm.vm.FlowVM
 import com.hl.arch.mvvm.vm.LiveDataVM
 import com.hl.arch.utils.apiRespRepeatSafeCollect
-import com.hl.arch.utils.onceLastObserve
 import com.hl.arch.utils.repeatSafeCollect
+import com.hl.utils.onceLastObserve
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -21,18 +22,22 @@ interface ViewModelDelegate {
 	/**
 	 * ViewModel 创建完成
 	 */
-	fun <VM> onViewModelCreated(vm: VM, viewLifecycleOwner: LifecycleOwner)
+	fun <VM> onViewModelCreated(vm: VM, lifecycleOwner: LifecycleOwner)
 
 	/**
-	 * 重写处理  api 请求相关事件
+	 * 重写处理  api 请求相关事件, 比如： UiShowLoading， UiShowException， UiDismissLoading
 	 */
-	fun onLiveDataVMCreated(liveDataVM: LiveDataVM) {}
+	fun onLiveDataVMCreated(liveDataVM: LiveDataVM) {
+		XLog.d("onLiveDataVMCreated --------->$liveDataVM")
+	}
 
 
 	/**
-	 * 重写处理  api 请求相关事件
+	 * 重写处理  api 请求相关事件, 比如： UiShowLoading， UiShowException， UiDismissLoading
 	 */
-	fun onFlowVMCreated(flowVM: FlowVM) {}
+	fun onFlowVMCreated(flowVM: FlowVM) {
+		XLog.d("onFlowVMCreated --------->$flowVM")
+	}
 
 	/********************请求时产生的相关 UI 事件处理*****************************************/
 
@@ -50,7 +55,7 @@ interface ViewModelDelegate {
 
 
 class BaseViewModelDelegate : ViewModelDelegate {
-	private val TAG = "ViewModelDelegate"
+	private val TAG = "BaseViewModelDelegate"
 
 	override fun <VM> onViewModelCreated(vm: VM, lifecycleOwner: LifecycleOwner) {
 		if (vm is LiveDataVM) {
@@ -82,7 +87,7 @@ class BaseViewModelDelegate : ViewModelDelegate {
 		onLiveDataVMCreated(this)
 	}
 
-	protected open fun FlowVM.stateEventFlowCollect(lifecycleOwner: LifecycleOwner) {
+	private fun FlowVM.stateEventFlowCollect(lifecycleOwner: LifecycleOwner) {
 		this.requestStateEventFlow.safeCollect(lifecycleOwner) {
 			when (it) {
 				is RequestStateEvent.LoadingEvent -> {

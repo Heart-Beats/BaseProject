@@ -33,6 +33,11 @@ fun <T : View> View.traverseFindFirstViewByType(findViewType: Class<T>): T? {
 	}
 }
 
+/**
+ * 用于从 ViewGroup 及其所有后代子 View 中查找指定 tag 的 View
+ * @param  tag 需要查找的子 View 的 tag
+ * @return 若找到返回第一个找到的 子 View， 否则返回 null
+ */
 fun <T : View> View.traverseFindFirstViewByTag(tag: String): T? {
 	val parentView = this
 	if (this.tag == tag) {

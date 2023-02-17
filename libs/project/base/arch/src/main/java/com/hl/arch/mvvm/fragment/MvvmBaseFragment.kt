@@ -15,8 +15,4 @@ abstract class MvvmBaseFragment : BaseFragment(), ViewModelDelegate by BaseViewM
     private companion object {
         const val TAG = "MvvmBaseFragment"
     }
-
-    abstract override fun onLiveDataVMCreated(liveDataVM: LiveDataVM)
-
-    abstract override fun onFlowVMCreated(flowVM: FlowVM)
 }

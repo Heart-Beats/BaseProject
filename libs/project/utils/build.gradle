@@ -81,6 +81,8 @@ dependencies {
     implementation Deps.AndroidX.fragment_ktx
     implementation Deps.Material.material
 
+    implementation Deps.AndroidX.databinding_runtime
+
     implementation Deps.Lifecycle.lifecycle_extensions
     implementation Deps.Lifecycle.lifecycle_livedata_ktx
     implementation Deps.Lifecycle.lifecycle_viewmodel_ktx

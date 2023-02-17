@@ -18,9 +18,9 @@ import com.gyf.immersionbar.ImmersionBar
 import com.gyf.immersionbar.ktx.immersionBar
 import com.hl.arch.R
 import com.hl.arch.utils.getColorByRes
-import com.hl.arch.utils.initInsetPadding
-import com.hl.arch.utils.setSafeValue
-import com.hl.arch.utils.traverseFindFirstViewByType
+import com.hl.utils.initInsetPadding
+import com.hl.utils.setSafeValue
+import com.hl.utils.traverseFindFirstViewByType
 import kotlin.math.roundToInt
 
 
@@ -28,7 +28,7 @@ abstract class BaseActivity : AppCompatActivity(), IPageInflate {
 
     private val TAG = "BaseActivity"
 
-    val touchEvent by lazy {
+    protected val touchEvent by lazy {
         MutableLiveData<MotionEvent>()
     }
 
@@ -57,6 +57,7 @@ abstract class BaseActivity : AppCompatActivity(), IPageInflate {
         Log.d(TAG, "onCreate:  =====> $this")
 
         getPageInflateView(layoutInflater).run {
+            //需要注意，这里的 toolbar 必须为 androidx.appcompat.widget.Toolbar
             toolbar = this.traverseFindFirstViewByType(Toolbar::class.java)?.apply {
                 // xml 中通过 style 可统一配置，这里设置会导致 xml 中设置失效
                 // this.setTitleTextColor(getColorByRes(R.color.colorTitleText))
@@ -67,7 +68,12 @@ abstract class BaseActivity : AppCompatActivity(), IPageInflate {
 
         updateSystemBar()
 
-        //Activity 创建之后设置toolbar
+        /**
+         * Activity 创建之后设置toolbar
+         *
+         * 注意：关联 ActionBar 时， toolbar 在 xml 中设置属性 app:title 为 null 或 "" 设置不生效，
+         *      页面的标题会默认 app 名称， 可在 setSupportActionBar 之前调用 toolbar.setTitle("") 方法解决
+         */
         setSupportActionBar(toolbar)
 
         onViewCreated(savedInstanceState)

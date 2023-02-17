@@ -7,6 +7,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.NavGraph
 import androidx.navigation.fragment.findNavController
+import com.hl.utils.ReflectHelper
 import java.util.*
 
 /**
@@ -15,8 +16,10 @@ import java.util.*
  */
 
 fun Fragment.getLastPage(): CharSequence {
-    val navBackStackEntryDeque = NavController::class.java
-        .getFiledValue<NavController, Deque<NavBackStackEntry>>(findNavController(), "mBackStack")
+    val navBackStackEntryDeque =
+        ReflectHelper(NavController::class.java).getFiledValue<Deque<NavBackStackEntry>>(
+            findNavController(), "mBackStack"
+        )
 
     val stringBuilder = StringBuilder()
     stringBuilder.append(" -------- 导航栈 ----------- \n")
@@ -36,19 +39,6 @@ fun Fragment.getLastPage(): CharSequence {
     }
 
     return destinationList?.getOrNull(destinationList.size - 2)?.label ?: ""
-}
-
-
-private fun <T, V> Class<T>.getFiledValue(obj: T, filedName: String): V? {
-    return try {
-        val field = this.getDeclaredField(filedName)
-        field.isAccessible = true
-        val get = field.get(obj)
-        field.isAccessible = false
-        get as? V
-    } catch (e: Exception) {
-        null
-    }
 }
 
 fun Fragment.getNavController(): NavController? {

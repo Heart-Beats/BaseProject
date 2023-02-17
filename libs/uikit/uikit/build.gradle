@@ -55,7 +55,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     // embed 可使打包的产物中包含 java  依赖， aar 依赖或者 远程依赖
-    implementation project(path: ':uikit-res')
+    api project(path: ':uikit-res')
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
@@ -70,22 +70,23 @@ dependencies {
     implementation "com.google.android.material:material:1.5.0"
 
     //github 地址 ：https://github.com/zyyoona7/WheelPicker
-    def wheel_picker_version='1.0.9'
-    implementation "com.github.zyyoona7:wheelview:${wheel_picker_version}"
-    implementation "com.github.zyyoona7:pickerview:${wheel_picker_version}"
+    def wheel_picker_version = '1.0.9'
+    api "com.github.zyyoona7:wheelview:${wheel_picker_version}"
+    api "com.github.zyyoona7:pickerview:${wheel_picker_version}"
 
     //github 地址 ：https://github.com/airbnb/lottie-android
-    implementation('com.airbnb.android:lottie:5.0.3')
-    implementation 'io.github.scwang90:refresh-layout-kernel:2.0.5'
+    api('com.airbnb.android:lottie:5.0.3')
+    api 'io.github.scwang90:refresh-layout-kernel:2.0.5'
     implementation 'com.github.bumptech.glide:glide:4.12.0'
 
     def picture_selector_version = 'v3.0.6'
     api "io.github.lucksiege:pictureselector:$picture_selector_version"
     api "io.github.lucksiege:compress:$picture_selector_version"
+
     implementation 'com.guolindev.permissionx:permissionx:1.7.1'
 
     //完整版引入
-    implementation('com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer:v8.1.9-release-jitpack')
+    api('com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer:v8.1.9-release-jitpack')
 
     api('com.github.lzyzsd:jsbridge:1.0.4')
     api('com.github.getActivity:ShapeView:8.5')

@@ -20,6 +20,8 @@ import com.gyf.immersionbar.ImmersionBar
 import com.gyf.immersionbar.ktx.immersionBar
 import com.hl.arch.R
 import com.hl.arch.utils.*
+import com.hl.utils.initInsetPadding
+import com.hl.utils.traverseFindFirstViewByType
 
 /**
  * @Author  张磊  on  2020/08/28 at 18:35
@@ -146,17 +148,19 @@ abstract class BaseFragment : Fragment(), IPageInflate {
      */
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         Log.d(TAG, "onCreateView =====> $this")
-        if (isMainPage()) {
-            // 为主页面时更新状态栏的设置
-            updateSystemBar()
-        }
 
         val inflateView = getPageInflateView(inflater)
 
+        //需要注意，这里的 toolbar 必须为 androidx.appcompat.widget.Toolbar
         toolbar = inflateView?.traverseFindFirstViewByType(Toolbar::class.java)?.apply {
             // xml 中通过 style 可统一配置，这里设置会导致 xml 中设置失效
             // this.setTitleTextColor(getColorByRes(R.color.colorTitleText))
             // this.setBackgroundColor(getColorByRes(R.color.colorTitlePrimary))
+        }
+
+        if (isMainPage()) {
+            // 为主页面时更新状态栏的设置
+            updateSystemBar()
         }
         return inflateView
     }
@@ -228,20 +232,27 @@ abstract class BaseFragment : Fragment(), IPageInflate {
             onBackPressed = backPressed()
         )
 
-        //Activity 创建之后设置toolbar
         val appCompatActivity = requireActivity as? AppCompatActivity
+
+        /**
+         * Activity 创建之后设置 toolbar
+         *
+         * 注意：关联 ActionBar 时， toolbar 在 xml 中设置属性 app:title 为 null 或 "" 设置不生效，
+         *      页面的标题会默认 app 名称， 可在 setSupportActionBar 之前调用 toolbar.setTitle("") 方法解决
+         */
         appCompatActivity?.setSupportActionBar(toolbar)
     }
 
     /**
-     *   在未使用 Navigation 的 Activity 中， 指示当前 Fragment 是否为 Activity 整个页面 , 默认： true
+     *   在未使用 Navigation 的 Activity 中， 指示当前 Fragment 是否为 Activity 整个页面
+     *      当 Fragment 页面中存在 androidx.appcompat.widget.Toolbar 时可认为正常页面，此时返回 true
      *
      *  @return true: 当作页面处理，添加返回事件、标题栏以及系统状态栏的设置
      *          false：当作页面中的子视图， 不添加以上处理
      *
      *         注意：fragment 为 页面子视图时，必须重写返回 false , 否则会导致无法返回页面
      */
-    protected open fun isActivityMainPage() = true
+    protected open fun isActivityMainPage() = toolbar != null
 
 
     @Deprecated("Deprecated in Java")

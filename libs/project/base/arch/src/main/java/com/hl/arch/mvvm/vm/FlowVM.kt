@@ -3,13 +3,14 @@ package com.hl.arch.mvvm.vm
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.hl.arch.mvvm.PublicResp
+import com.hl.arch.api.PublicResp
 import com.hl.arch.mvvm.api.event.RequestStateEvent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 
 abstract class FlowVM : ViewModel() {
-    private val TAG = "FlowBaseVM"
+
+    private val tag = "FlowVM"
 
     /**
      * replay:                  对新订阅者重新发送之前已发出的数据项数目
@@ -30,34 +31,33 @@ abstract class FlowVM : ViewModel() {
     protected fun <BODY> apiFlow(
         needLoading: Boolean,
         reqBlock: suspend () -> PublicResp<BODY>,
-        needDisPatchEvent: Boolean = true,
-        needDispatchFail: Boolean = true,
+        needDispatchFailEvent: Boolean = true,
     ) = flow {
         val resp = reqBlock()
         emit(resp)
     }
         .flowOn(Dispatchers.IO)
         .onEach {
-            Log.d(TAG, "apiFlow: 收到请求的数据")
+            Log.d(tag, "apiFlow: 收到请求的数据")
 
-            it.dispatchApiEvent(needDisPatchEvent, needDispatchFail)
+            it.dispatchApiEvent(needDispatchFailEvent)
         }
         .onStart {
-            Log.d(TAG, "apiFlow: 请求开始")
+            Log.d(tag, "apiFlow: 请求开始")
             if (needLoading) {
                 _requestStateFlow.emit(RequestStateEvent.createLoadingEvent())
             }
         }.catch { exception ->
-            Log.e(TAG, "apiFlow: 请求出错", exception)
+            Log.e(tag, "apiFlow: 请求出错", exception)
             _requestStateFlow.emit(RequestStateEvent.createErrorEvent(exception))
         }
         .onCompletion { exception ->
             // 该方法在流完成或取消时调用，回调参数为取消异常或失败的原因
             if (exception != null) {
                 // 异常未被 catch 代码块捕获，不为空
-                Log.e(TAG, "apiFlow: 请求完成", exception)
+                Log.e(tag, "apiFlow: 请求完成", exception)
             } else {
-                Log.d(TAG, "apiFlow: 请求完成")
+                Log.d(tag, "apiFlow: 请求完成")
                 if (needLoading) {
                     _requestStateFlow.emit(RequestStateEvent.createCompletedEvent())
                 }
@@ -67,18 +67,16 @@ abstract class FlowVM : ViewModel() {
     /**
      * 返回一个初始值为 null 的 StateFlow
      *
-     * @param  needLoading 是否需要 loading 事件
-     * @param  reqBlock     请求的方法
-     * @param  needDispatchEvent 是否分发事件
-     * @param  needDispatchFail 是否分发请求失败事件
+     * @param  needLoading              是否需要 loading 事件
+     * @param  reqBlock                 请求的方法
+     * @param  needDispatchFailEvent    是否分发请求失败事件
      *
      */
     protected fun <BODY> apiStateFlow(
         needLoading: Boolean,
         reqBlock: suspend () -> PublicResp<BODY>,
-        needDispatchEvent: Boolean = true,
-        needDispatchFail: Boolean = true,
-    ) = apiFlow(needLoading, reqBlock, needDispatchEvent, needDispatchFail).toStateFlow()
+        needDispatchFailEvent: Boolean = true,
+    ) = apiFlow(needLoading, reqBlock, needDispatchFailEvent).toStateFlow()
 
 
     private fun <T> Flow<T>.toStateFlow() = this.stateIn(
@@ -97,16 +95,14 @@ abstract class FlowVM : ViewModel() {
     /**
      * 该方法用来分发请求完成后对应的事件
      *
-     * @param  needDispatchEvent 是否分发事件（所有非请求成功的事件）
-     * @param  needDispatchFail 是否分发请求失败事件
-     * @param  onFail           失败时的处理
-     * @param  onSuccess        请求成功时的处理
+     * @param  needDispatchFailEvent    是否分发请求失败事件
+     * @param  onFail                   失败时的处理
+     * @param  onSuccess                请求成功时的处理
      *
      */
     abstract fun <BODY, T : PublicResp<BODY>> T.dispatchApiEvent(
-        needDispatchEvent: Boolean = true, needDispatchFail: Boolean = true,
+        needDispatchFailEvent: Boolean = true,
         onFail: ((failCode: String, failReason: String) -> Unit)? = null,
         onSuccess: (body: BODY?) -> Unit = {}
     )
-
 }

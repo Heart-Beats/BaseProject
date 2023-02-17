@@ -14,7 +14,7 @@
 
         <!-- configChanges 属性可配置 activity 自主处理的配置变更项，可在 onConfigurationChanged 方法中处理 -->
         <activity
-            android:name=".mvvm.activity.FragmentContainerActivity"
+            android:name=".base.FragmentContainerActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
     </application>

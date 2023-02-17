@@ -14,20 +14,21 @@ import kotlin.reflect.KClass
 @MainThread
 inline fun <reified VM : ViewModel> MvvmBaseFragment.activityViewModels(
 	noinline factoryProducer: (() -> ViewModelProvider.Factory)? = null
-) = createViewModelLazy(VM::class, { requireActivity().viewModelStore },
-	factoryProducer ?: { requireActivity().defaultViewModelProviderFactory })
+) = createViewModelLazy(
+	VM::class,
+	{ requireActivity().viewModelStore },
+	factoryProducer ?: { requireActivity().defaultViewModelProviderFactory }
+)
 
 @MainThread
 inline fun <reified VM : ViewModel> MvvmBaseFragment.navGraphViewModels(
 	@IdRes navGraphId: Int,
 	noinline factoryProducer: (() -> ViewModelProvider.Factory)? = null
 ): Lazy<VM> {
-	val backStackEntry by lazy {
-		findNavController().getBackStackEntry(navGraphId)
-	}
-	val storeProducer: () -> ViewModelStore = {
-		backStackEntry.viewModelStore
-	}
+	val backStackEntry by lazy { findNavController().getBackStackEntry(navGraphId) }
+
+	val storeProducer: () -> ViewModelStore = { backStackEntry.viewModelStore }
+
 	return createViewModelLazy(VM::class, storeProducer) {
 		factoryProducer?.invoke() ?: backStackEntry.defaultViewModelProviderFactory
 	}
@@ -45,9 +46,8 @@ fun <VM : ViewModel> Fragment.createViewModelLazy(
 	storeProducer: () -> ViewModelStore,
 	factoryProducer: (() -> ViewModelProvider.Factory)? = null
 ): Lazy<VM> {
-	val factoryPromise = factoryProducer ?: {
-		defaultViewModelProviderFactory
-	}
+	val factoryPromise = factoryProducer ?: { defaultViewModelProviderFactory }
+
 	return ViewModelLazy(viewModelClass, storeProducer, factoryPromise) { vm ->
 		view?.let {
 			val fragment = this

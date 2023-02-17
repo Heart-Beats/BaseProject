@@ -20,8 +20,8 @@ import com.github.lzyzsd.jsbridge.BridgeWebView
 import com.github.lzyzsd.jsbridge.CallBackFunction
 import com.gyf.immersionbar.ktx.immersionBar
 import com.hjq.http.listener.OnDownloadListener
-import com.hl.arch.mvvm.activity.FragmentContainerActivity
-import com.hl.arch.mvvm.activity.startFragment
+import com.hl.arch.base.FragmentContainerActivity
+import com.hl.arch.base.startFragment
 import com.hl.arch.web.H5Constants
 import com.hl.arch.web.WebViewFragment
 import com.hl.arch.web.WebViewFragmentArgs

@@ -21,12 +21,12 @@ abstract class BaseMultiAdapter<T>(private var adapterData: MutableList<T>) : Re
 	/**
 	 * 保存 itemViewType 与 ItemProvider 的映射关系
 	 */
-	private val itemProviders = SparseArray<BaseItemProvider<T>>()
+	private val itemProviders = SparseArray<BaseItemProvider<out T>>()
 
 	/**
 	 * 向 Adapter 注册 BaseItemProvider
 	 */
-	abstract fun registerItemProvider(position: Int, itemData: T): BaseItemProvider<T>
+	abstract fun registerItemProvider(position: Int, itemData: T): BaseItemProvider<out T>
 
 	override fun getItemViewType(position: Int): Int {
 		val itemProvider = registerItemProvider(position, adapterData[position])
@@ -43,7 +43,7 @@ abstract class BaseMultiAdapter<T>(private var adapterData: MutableList<T>) : Re
 		val itemProvider = itemProviders[viewType]
 
 		val itemView = LayoutInflater.from(parent.context).inflate(itemProvider.layoutId, parent, false)
-		return MultiViewHolder(itemProvider, this, itemView)
+		return MultiViewHolder(itemProvider as BaseItemProvider<T>, this, itemView)
 	}
 
 	override fun onBindViewHolder(holder: BaseViewHolder<T>, position: Int) {

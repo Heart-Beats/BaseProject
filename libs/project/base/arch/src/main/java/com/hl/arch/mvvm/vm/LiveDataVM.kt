@@ -7,6 +7,7 @@ import com.hl.arch.mvvm.api.event.UiEvent
 import com.hl.arch.mvvm.api.event.dismissLoading
 import com.hl.arch.mvvm.api.event.showException
 import com.hl.arch.mvvm.api.event.showLoading
+import com.hl.arch.mvvm.liveData.EventLiveData
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job

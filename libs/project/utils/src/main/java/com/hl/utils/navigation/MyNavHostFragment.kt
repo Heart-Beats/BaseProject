@@ -31,6 +31,7 @@ class MyNavHostFragment : NavHostFragment() {
     private var navAnimations: NavAnimations? = null
     private val specialDeepLinks = mutableListOf<String>()
 
+    @Deprecated("Use {@link #onCreateNavController(NavController)}")
     override fun createFragmentNavigator(): Navigator<out FragmentNavigator.Destination> {
         return MyFragmentNavigator(this, childFragmentManager, getContainerId())
     }

@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import androidx.lifecycle.LifecycleOwner
 import androidx.viewbinding.ViewBinding
-import com.hl.arch.utils.viewbinding.ViewBindingUtil
+import com.hl.utils.viewbinding.ViewBindingUtil
 
 /**
  * @author  张磊  on  2023/02/10 at 17:22
