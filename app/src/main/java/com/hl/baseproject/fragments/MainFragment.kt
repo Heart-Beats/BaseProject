@@ -7,12 +7,12 @@ import android.content.pm.ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
 import android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
 import android.content.res.Configuration
 import android.os.Bundle
-import com.hl.arch.mvvm.activity.startFragment
+import androidx.navigation.fragment.findNavController
 import com.hl.arch.web.navigateToWeb
 import com.hl.baseproject.TestActivity
 import com.hl.baseproject.TestActivity2
+import com.hl.baseproject.base.BaseFragment
 import com.hl.baseproject.databinding.FragmentMainBinding
-import com.hl.baseproject.fragments.base.BaseFragment
 import com.hl.uikit.onClick
 import com.hl.uikit.toast
 import com.hl.utils.*
@@ -152,7 +152,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
 		}
 
 		startShadowPlugin.onClick {
-			startFragment(ShadowPluginFragment::class.java)
+			findNavController().navigate(MainFragmentDirections.actionMainFragmentToShadowPluginFragment())
 		}
 	}
 

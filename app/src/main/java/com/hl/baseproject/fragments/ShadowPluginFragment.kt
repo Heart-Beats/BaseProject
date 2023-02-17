@@ -7,7 +7,7 @@ import android.view.View
 import com.blankj.utilcode.util.FileUtils
 import com.elvishew.xlog.XLog
 import com.hl.baseproject.databinding.FragmentShadowPluginBinding
-import com.hl.baseproject.fragments.base.BaseFragment
+import com.hl.baseproject.base.BaseFragment
 import com.hl.baseproject.shadow.pps.TestPluginProcessService
 import com.hl.baseproject.shadow.pps.ZKYPluginProcessService
 import com.hl.shadow.Shadow

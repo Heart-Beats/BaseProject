@@ -1,13 +1,12 @@
 package com.hl.baseproject
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import androidx.viewpager2.adapter.FragmentStateAdapter
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.setupWithNavController
 import com.hl.arch.base.ViewBindingBaseActivity
 import com.hl.baseproject.databinding.ActivityMainBinding
-import com.hl.baseproject.fragments.MainFragment
-import com.hl.baseproject.fragments.TestFragment
-import com.hl.uikit.onClick
+import com.hl.res.R
+import com.hl.utils.navigation.MyNavHostFragment
 
 
 class MainActivity : ViewBindingBaseActivity<ActivityMainBinding>() {
@@ -19,25 +18,16 @@ class MainActivity : ViewBindingBaseActivity<ActivityMainBinding>() {
 
     override fun ActivityMainBinding.onViewCreated(savedInstanceState: Bundle?) {
 
-        this.viewPager.adapter = object : FragmentStateAdapter(this@MainActivity) {
-            override fun getItemCount() = 2
-
-            override fun createFragment(position: Int): Fragment {
-                return when (position) {
-                    0 -> MainFragment()
-                    else -> TestFragment()
-                }
+        val myNavHostFragment = this.navHostFragment.getFragment<MyNavHostFragment>().also {
+            it.setCommonNavAnimations {
+                this.enterAnim = R.anim.hl_res_slide_in_right
+                this.exitAnim = R.anim.hl_res_slide_out_left
+                this.popEnterAnim = R.anim.hl_res_slide_in_left
+                this.popExitAnim = R.anim.hl_res_slide_out_right
             }
         }
 
-        this.main.onClick {
-            viewPager.setCurrentItem(0)
-        }
-
-        this.test.onClick {
-            viewPager.setCurrentItem(1)
-        }
-
+        this.bottomNavigationView.setupWithNavController(myNavHostFragment.findNavController())
     }
 
 }

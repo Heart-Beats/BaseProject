@@ -1,6 +1,6 @@
 package com.hl.uikit.utils
 
-import android.content.Context
+import android.app.Application
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.widget.ImageView
@@ -16,15 +16,15 @@ object ToastUtils {
     private const val TOAST_DURATION_LONG: Long = 3500
 
     private var toast: Toast? = null
-    private lateinit var context: Context
+    private lateinit var app: Application
 
     val isInitialized: Boolean
         get() {
-            return ToastUtils::context.isInitialized
+            return ToastUtils::app.isInitialized
         }
 
-    fun init(ctx: Context) {
-        context = ctx
+    fun init(app: Application) {
+        this.app = app
     }
 
 
@@ -41,7 +41,7 @@ object ToastUtils {
         val gravity = toastBuilder.gravity
         val duration = toastBuilder.duration
 
-        val layoutView = LayoutInflater.from(context).inflate(layout, null)
+        val layoutView = LayoutInflater.from(app).inflate(layout, null)
         val toastText = layoutView.findViewWithTag<TextView>("toast_text")
         val toastImageView = layoutView.findViewWithTag<ImageView>("toast_icon")
 
@@ -51,9 +51,9 @@ object ToastUtils {
         }
 
         // toast 去重点击处理
-        toast?.cancel()
+        cancel()
 
-        toast = Toast(context)
+        toast = Toast(app)
         toast?.setGravity(gravity, 0, 0)
         toast?.duration = duration
         toast?.view = layoutView

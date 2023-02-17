@@ -9,6 +9,7 @@
 
     <com.hl.uikit.UIKitToolbar
         android:id="@+id/uikit_toolbar"
+        app:navigationIcon="@null"
         android:layout_width="match_parent"
         app:uikit_rightImage="@drawable/hl_res_icon_more_dot"
         app:uikit_titleMargin="15dp"

@@ -49,7 +49,6 @@ dependencies {
     api Deps.AndroidX.activity_ktx
     api Deps.AndroidX.fragment_ktx
     api Deps.AndroidX.view_binding
-    implementation Deps.AndroidX.databinding_runtime
     api Deps.Material.material
     api Deps.AndroidX.recyclerview
     api Deps.Lifecycle.lifecycle_viewmodel_ktx

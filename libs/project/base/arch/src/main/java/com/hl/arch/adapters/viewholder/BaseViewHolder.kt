@@ -11,8 +11,7 @@ import com.hl.uikit.onClick
  * Email: 913305160@qq.com
  */
 
-abstract class BaseViewHolder<T>(val adapter: RecyclerView.Adapter<BaseViewHolder<T>>, itemView: View) : RecyclerView
-.ViewHolder(itemView) {
+abstract class BaseViewHolder<T>(val adapter: RecyclerView.Adapter<BaseViewHolder<T>>, itemView: View) : RecyclerView.ViewHolder(itemView) {
 
 	init {
 		// 给 viewHolder 的 item 设置点击以及长按事件

@@ -1,5 +1,6 @@
 package com.hl.utils
 
+import android.os.Looper
 import com.blankj.utilcode.util.ThreadUtils
 
 /**
@@ -7,9 +8,18 @@ import com.blankj.utilcode.util.ThreadUtils
  * Email: 913305160@qq.com
  */
 
+
 /**
- * 在 UI 线程指定延迟时间执行任务
+ * 是否为主线程
  */
-fun Any.runOnUiThread(delayMillis: Long = 0L, runnable: Runnable) {
+fun isMainThread(): Boolean {
+	return Looper.getMainLooper() === Looper.myLooper()
+}
+
+
+/**
+ * 在主线程指定延迟时间执行任务
+ */
+fun runOnUiThread(delayMillis: Long = 0L, runnable: Runnable) {
 	ThreadUtils.runOnUiThreadDelayed(runnable, delayMillis)
 }

@@ -18,8 +18,8 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.hl.arch.R
-import com.hl.arch.ToastUtils
 import com.hl.arch.base.BaseActivity
+import com.hl.uikit.toast
 
 /**
  * 功能：activity基类
@@ -51,7 +51,7 @@ abstract class MvpBaseActivity<Presenter : MvpBasePresenter<out MvpBaseView>> : 
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         if (!getData(intent)) {
-            ToastUtils.showShort(this, "无数据")
+            toast("无数据")
             finish()
             return
         }
@@ -252,7 +252,7 @@ abstract class MvpBaseActivity<Presenter : MvpBasePresenter<out MvpBaseView>> : 
     }
 
     override fun showMsg(msg: String) {
-        ToastUtils.showShort(this, msg)
+        toast(msg)
     }
 
 

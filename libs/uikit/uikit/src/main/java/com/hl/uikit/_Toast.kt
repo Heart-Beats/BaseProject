@@ -1,5 +1,6 @@
 package com.hl.uikit
 
+import android.app.Application
 import android.content.Context
 import android.view.Gravity
 import android.widget.Toast
@@ -8,7 +9,7 @@ import com.hl.uikit.form.GravityFlag
 import com.hl.uikit.utils.ToastUtils
 
 fun Context.toastInit() {
-    ToastUtils.init(applicationContext)
+    ToastUtils.init(applicationContext as Application)
 }
 
 fun Context.toast(text: CharSequence, duration: Int = Toast.LENGTH_SHORT, @GravityFlag gravity: Int = Gravity.CENTER) {
@@ -80,12 +81,13 @@ fun Context.toastSuccess(
     @GravityFlag gravity: Int = Gravity.CENTER
 ) {
     if (!ToastUtils.isInitialized) {
-        ToastUtils.init(applicationContext)
+        toastInit()
     }
     ToastUtils.show {
         this.layout = R.layout.uikit_layout_toast_with_icon
         this.iconRes = R.drawable.uikit_ic_toast_success
         this.text = text
+        this.gravity = gravity
         this.duration = duration
     }
 }

@@ -8,6 +8,7 @@
     tools:context=".fragments.TestFragment">
 
     <com.hl.uikit.UIKitToolbar
+        app:navigationIcon="@null"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:uikit_subtitle="副标题"

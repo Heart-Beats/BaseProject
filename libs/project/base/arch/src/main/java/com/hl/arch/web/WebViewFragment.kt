@@ -20,8 +20,8 @@ import com.elvishew.xlog.XLog
 import com.gyf.immersionbar.ktx.hideStatusBar
 import com.gyf.immersionbar.ktx.immersionBar
 import com.gyf.immersionbar.ktx.showStatusBar
+import com.hl.arch.base.startFragment
 import com.hl.arch.databinding.FragmentWebViewBinding
-import com.hl.arch.mvvm.activity.startFragment
 import com.hl.arch.mvvm.fragment.ViewBindingMvvmBaseFragment
 import com.hl.arch.mvvm.vm.FlowVM
 import com.hl.arch.mvvm.vm.LiveDataVM

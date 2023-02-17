@@ -1,7 +1,7 @@
 package com.hl.arch.mvvm.api.event
 
-import android.os.Looper
-import com.hl.arch.mvvm.vm.EventLiveData
+import com.hl.arch.mvvm.liveData.EventLiveData
+import com.hl.utils.isMainThread
 
 /**
  * @author  张磊  on  2021/11/06 at 18:57
@@ -26,10 +26,6 @@ fun <T> EventLiveData<T>.setSafeValue(value: T?) {
 	} else {
 		this.postValue(value)
 	}
-}
-
-fun isMainThread(): Boolean {
-	return Looper.getMainLooper() === Looper.myLooper()
 }
 
 sealed class UiEvent {

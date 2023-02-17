@@ -9,6 +9,7 @@ import com.hl.arch.mvvm.fragment.ViewBindingMvvmBaseFragment
 import com.hl.arch.mvvm.vm.FlowVM
 import com.hl.arch.mvvm.vm.LiveDataVM
 import com.hl.baseproject.BuildConfig
+import com.hl.baseproject.R
 import com.hl.baseproject.databinding.FragmentTestBinding
 import com.hl.tencentcloud.cos.TencentCosUtil
 import com.hl.tencentcloud.cos.TransferListener
@@ -125,9 +126,9 @@ class TestFragment : ViewBindingMvvmBaseFragment<FragmentTestBinding>() {
 					currentTime.text = TimeUtil.calculateCountTime2String(currentPosition)
 				}
 			})
-			mediaPlayerHelper.preparePlayUrl(url)
+			// mediaPlayerHelper.preparePlayUrl(url)
 
-			// mediaPlayerHelper.playRes(requireContext(), R.raw.summer)
+			mediaPlayerHelper.preparePlayRes(requireContext(), R.raw.summer)
 		}
 	}
 }

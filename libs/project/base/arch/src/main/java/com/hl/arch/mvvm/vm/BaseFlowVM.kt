@@ -1,7 +1,7 @@
 package com.hl.arch.mvvm.vm
 
 import androidx.lifecycle.viewModelScope
-import com.hl.arch.mvvm.PublicResp
+import com.hl.arch.api.PublicResp
 import kotlinx.coroutines.CoroutineScope
 
 /**
@@ -16,20 +16,18 @@ abstract class BaseFlowVM : FlowVM() {
      */
     protected fun <BODY> apiFlow(
         needLoading: Boolean = true,
-        needDisPatchEvent: Boolean = true,
-        needFailToast: Boolean = true,
+        needDispatchFailEvent: Boolean = true,
         reqBlock: suspend CoroutineScope.() -> PublicResp<BODY>
-    ) = apiFlow(needLoading, { reqBlock(viewModelScope) }, needDisPatchEvent, needFailToast)
+    ) = apiFlow(needLoading, { viewModelScope.reqBlock() }, needDispatchFailEvent)
 
     /**
      * 请求获取 StateFlow，该流会直接生产数据且保存最新的数据，同 LiveData 一般
      */
     protected fun <BODY> apiStateFlow(
         needLoading: Boolean = true,
-        needDisPatchEvent: Boolean = true,
-        needFailToast: Boolean = true,
+        needDispatchFailEvent: Boolean = true,
         reqBlock: suspend CoroutineScope.() -> PublicResp<BODY>
     ) =
-        apiStateFlow(needLoading, { reqBlock(viewModelScope) }, needDisPatchEvent, needFailToast)
+        apiStateFlow(needLoading, { viewModelScope.reqBlock() }, needDispatchFailEvent)
 
 }

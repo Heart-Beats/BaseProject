@@ -5,8 +5,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.hl.arch.ToastUtils
 import com.hl.arch.base.BaseFragment
+import com.hl.uikit.toast
 
 /**
  * fragment基类
@@ -58,7 +58,7 @@ abstract class MvpBaseFragment<Presenter : MvpBasePresenter<out MvpBaseView>> : 
     protected open fun requestData() {}
 
     override fun showMsg(msg: String) {
-        ToastUtils.showShort(requireContext(), msg)
+        toast(msg)
     }
 
     override fun getAttachContext(): Context {

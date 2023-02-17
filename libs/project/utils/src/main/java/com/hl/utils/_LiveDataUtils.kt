@@ -1,6 +1,5 @@
 package com.hl.utils
 
-import android.os.Looper
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -29,8 +28,11 @@ fun <T> LiveData<T>.onceLastObserve(owner: LifecycleOwner, onChanged: (T) -> Uni
 	this.observe(owner, onChanged)
 }
 
+/**
+ * 安全设置数据， 主线程 setValue，子线程 postValue
+ */
 fun <T> MutableLiveData<T>.setSafeValue(obj: T?) {
-	if (Looper.myLooper() == Looper.getMainLooper()) {
+	if (isMainThread()) {
 		this.value = obj
 	} else {
 		this.postValue(obj)
