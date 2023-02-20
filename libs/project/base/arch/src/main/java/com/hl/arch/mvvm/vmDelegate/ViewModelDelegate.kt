@@ -3,8 +3,8 @@ package com.hl.arch.mvvm.vmDelegate
 import android.util.Log
 import androidx.lifecycle.LifecycleOwner
 import com.elvishew.xlog.XLog
-import com.hl.arch.loading.loadingPopupWeakReference
 import com.hl.arch.api.PublicResp
+import com.hl.arch.loading.getLoadingPopup
 import com.hl.arch.mvvm.api.event.RequestStateEvent
 import com.hl.arch.mvvm.api.event.UiEvent
 import com.hl.arch.mvvm.vm.FlowVM
@@ -42,14 +42,14 @@ interface ViewModelDelegate {
 	/********************请求时产生的相关 UI 事件处理*****************************************/
 
 	fun onShowLoading(msg: CharSequence) {
-		loadingPopupWeakReference.get()?.show()
+		getLoadingPopup()?.show()
 	}
 
 	fun onShowError(throwable: Throwable) {
 	}
 
 	fun onDismissLoading() {
-		loadingPopupWeakReference.get()?.dismiss()
+		getLoadingPopup()?.dismiss()
 	}
 }
 

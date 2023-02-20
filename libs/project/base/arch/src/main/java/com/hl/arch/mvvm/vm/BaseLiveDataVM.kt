@@ -3,6 +3,7 @@ package com.hl.arch.mvvm.vm
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.hl.arch.api.ApiEvent
 import com.hl.arch.api.IApiEventProvider
 import com.hl.arch.api.PublicResp
 import com.hl.arch.mvvm.api.event.dismissLoading
@@ -10,7 +11,6 @@ import com.hl.arch.mvvm.api.event.setSafeValue
 import com.hl.arch.mvvm.api.event.showException
 import com.hl.arch.mvvm.liveData.EventLiveData
 import com.hl.utils.setSafeValue
-import com.hl.arch.api.ApiEvent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import java.net.ConnectException
