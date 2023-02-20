@@ -1,8 +1,6 @@
 package com.hl.arch.mvvm.fragment
 
 import com.hl.arch.base.BaseFragment
-import com.hl.arch.mvvm.vm.FlowVM
-import com.hl.arch.mvvm.vm.LiveDataVM
 import com.hl.arch.mvvm.vmDelegate.BaseViewModelDelegate
 import com.hl.arch.mvvm.vmDelegate.ViewModelDelegate
 
@@ -12,7 +10,4 @@ import com.hl.arch.mvvm.vmDelegate.ViewModelDelegate
  */
 abstract class MvvmBaseFragment : BaseFragment(), ViewModelDelegate by BaseViewModelDelegate() {
 
-    private companion object {
-        const val TAG = "MvvmBaseFragment"
-    }
 }

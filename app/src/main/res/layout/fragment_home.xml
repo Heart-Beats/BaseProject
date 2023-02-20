@@ -8,19 +8,21 @@
     tools:context=".fragments.home.HomeFragment"
     app:srlEnablePreviewInEditMode="true">
 
-    <!--<com.hl.uikit.refresh.UIKitCommonRefreshHeader-->
-    <!--    android:layout_width="match_parent"-->
-    <!--    android:layout_height="wrap_content"-->
-    <!--    app:uikit_pull_lottie_animation_url="https://assets6.lottiefiles.com/packages/lf20_lmk0pfms.json"-->
-    <!--    app:uikit_refresh_lottie_animation_url="https://assets6.lottiefiles.com/packages/lf20_ngcpf3x7.json" />-->
+    <com.hl.uikit.refresh.UIKitCommonRefreshHeader
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:uikit_pull_lottie_animation_url="https://assets6.lottiefiles.com/packages/lf20_lmk0pfms.json"
+        app:uikit_refresh_lottie_animation_url="https://assets6.lottiefiles.com/packages/lf20_ngcpf3x7.json" />
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fitsSystemWindows="true"
+        android:fitsSystemWindows="false"
         android:orientation="vertical">
+
+        <!-- CoordinatorLayout 设置 fitsSystemWindows 属性后会预留状态栏 padding -->
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appbar"
@@ -45,42 +47,54 @@
                     app:layout_collapseMode="parallax"
                     tools:background="@color/cyan" />
 
-                <androidx.appcompat.widget.Toolbar
+                <LinearLayout
                     android:id="@+id/home_title_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:contentInsetStart="@dimen/dp_0"
-                    android:gravity="center_vertical"
-                    android:paddingHorizontal="@dimen/dp_15"
-                    app:layout_collapseMode="pin"
-                    app:title="@string/hl_res_零宽非连接符">
+                    android:orientation="vertical">
 
-                    <ImageView
-                        android:id="@+id/iv_home_menu"
-                        android:layout_width="wrap_content"
+                    <View
+                        android:id="@+id/status_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp" />
+
+                    <androidx.appcompat.widget.Toolbar
+                        android:id="@+id/home_toolbar"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:srcCompat="@drawable/icon_home_menu" />
+                        android:contentInsetStart="@dimen/dp_0"
+                        android:gravity="center_vertical"
+                        android:paddingHorizontal="@dimen/dp_15"
+                        app:layout_collapseMode="pin"
+                        app:title="@string/hl_res_零宽非连接符">
 
-                    <com.hl.uikit.image.UIKitRoundImageView
-                        android:id="@+id/iv_logo"
-                        android:layout_width="@dimen/dp_24"
-                        android:layout_height="@dimen/dp_24"
-                        android:layout_marginHorizontal="@dimen/dp_8"
-                        android:scaleType="centerCrop"
-                        app:uikit_corner_radius="@dimen/dp_8"
-                        tools:srcCompat="@mipmap/app_logo" />
+                        <ImageView
+                            android:id="@+id/iv_home_menu"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:srcCompat="@drawable/icon_home_menu" />
 
-                    <TextView
-                        android:id="@+id/home_title"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:ellipsize="end"
-                        android:maxLines="1"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/sp_17"
-                        android:textStyle="bold"
-                        tools:text="优码科技有限公司" />
-                </androidx.appcompat.widget.Toolbar>
+                        <com.hl.uikit.image.UIKitRoundImageView
+                            android:id="@+id/iv_logo"
+                            android:layout_width="@dimen/dp_24"
+                            android:layout_height="@dimen/dp_24"
+                            android:layout_marginHorizontal="@dimen/dp_8"
+                            android:scaleType="centerCrop"
+                            app:uikit_corner_radius="@dimen/dp_8"
+                            tools:srcCompat="@mipmap/app_logo" />
+
+                        <TextView
+                            android:id="@+id/home_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/sp_17"
+                            android:textStyle="bold"
+                            tools:text="优码科技有限公司" />
+                    </androidx.appcompat.widget.Toolbar>
+                </LinearLayout>
             </com.hl.uikit.UIKitCollapsingToolbarLayout>
         </com.google.android.material.appbar.AppBarLayout>
 

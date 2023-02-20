@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="main_color">@color/_FF1732A4</color>
+    <color name="main_color">@color/uikit_main_color</color>
     <color name="text_color_black">@color/_FF272E4B</color>
     <color name="text_color_hint">@color/_FF787D8F</color>
     
