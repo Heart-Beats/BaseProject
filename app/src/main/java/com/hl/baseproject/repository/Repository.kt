@@ -1,11 +1,11 @@
-package com.youma.yky.app.main
+package com.hl.baseproject.repository
 
 import com.blankj.utilcode.util.DeviceUtils
 import com.hl.api.RetrofitManager
 import com.hl.api.interceptor.RequestHeaderOrParamsInterceptor
 import com.hl.baseproject.configs.AppConfig
 import com.hl.utils.toJsonString
-import com.youma.yky.merchant.user.UserManager
+import com.hl.baseproject.user.UserManager
 
 /**
  * @author  张磊  on  2021/11/03 at 15:25
@@ -51,6 +51,6 @@ object Repository {
 	}
 
 	fun getH5Url(route: String) {
-		"${baseUrl}${route}"
+		"$baseUrl${route}"
 	}
 }

@@ -11,8 +11,8 @@ import com.hl.baseproject.repository.network.bean.BannerData
 import com.hl.uikit.UIKitCollapsingToolbarLayout
 import com.hl.utils.*
 import com.hl.utils.banner.AdsIndicator
-import com.youma.yky.app.main.main.newhome.banner.CommonBannerAdapter
-import com.youma.yky.app.main.viewmodels.HomeViewModel
+import com.hl.baseproject.fragments.home.banner.CommonBannerAdapter
+import com.hl.baseproject.viewmodels.HomeViewModel
 import com.youth.banner.Banner
 import com.youth.banner.config.IndicatorConfig
 import com.youth.banner.indicator.Indicator

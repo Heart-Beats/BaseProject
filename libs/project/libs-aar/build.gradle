@@ -1,2 +1,0 @@
-configurations.maybeCreate("default")
-artifacts.add("default", file('alipaysdk-15.8.08.220217103129.aar'))

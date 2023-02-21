@@ -1,4 +1,4 @@
-package com.youma.yky.app.main.main.newhome.banner
+package com.hl.baseproject.fragments.home.banner
 
 /**
  * @author  张磊  on  2022/09/01 at 21:24

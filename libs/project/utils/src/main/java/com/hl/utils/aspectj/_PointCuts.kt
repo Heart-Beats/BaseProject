@@ -1,4 +1,4 @@
-package com.youma.yky.merchant.aspectj
+package com.hl.utils.aspectj
 
 /**
  * @author  张磊  on  2023/01/05 at 13:46

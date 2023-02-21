@@ -1,4 +1,4 @@
-package com.youma.yky.merchant.user
+package com.hl.baseproject.user
 
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize

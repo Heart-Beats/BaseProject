@@ -230,3 +230,6 @@ shadow_manager_multi_loader_ext = { module = "com.tencent.shadow.dynamic:manager
 shadow_common = { module = "com.tencent.shadow.core:common", version.ref = "shadow" }
 shadow_loader = { module = "com.tencent.shadow.core:loader", version.ref = "shadow" }
 shadow_loader_impl = { module = "com.tencent.shadow.dynamic:loader-impl", version.ref = "shadow" }
+
+android_gif_drawable = { module = "pl.droidsonroids.gif:android-gif-drawable", version.ref = "androidGifDrawable" }
+aliPaySdk = { module = "com.alipay.sdk:alipaysdk-android", version.ref = "aliPay" }

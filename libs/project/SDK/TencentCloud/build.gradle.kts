@@ -33,6 +33,7 @@ android {
 }
 
 repositories {
+	// cos_android_lite 从阿里仓库同步有问题需要单独配置
 	mavenCentral()
 	google()
 }

@@ -1,10 +1,10 @@
 pluginManagement {
     repositories {
-        mavenCentral()
         maven { url 'https://maven.aliyun.com/repository/public' }
         maven { url 'https://maven.aliyun.com/repository/google' }
         maven { url = 'https://maven.aliyun.com/repository/gradle-plugin' }
         maven { url 'https://jitpack.io' }
+        mavenCentral()
         gradlePluginPortal()
     }
 }
@@ -20,10 +20,10 @@ dependencyResolutionManagement {
 
     repositories {
         mavenLocal()
-        mavenCentral()
         maven { url 'https://maven.aliyun.com/repository/public' } // central 和 jcenter 的聚合仓
         maven { url 'https://maven.aliyun.com/repository/google' }
         maven { url 'https://jitpack.io' }
+        mavenCentral()
     }
 }
 
@@ -46,9 +46,11 @@ def includeBase() {
 }
 
 def includeSDK() {
-    include ':SDK:Umeng', ':SDK:Pay', ':libs-aar', ':SDK:TencentCloud'
+    include ':SDK:Umeng', ':SDK:Pay', ':SDK:TencentCloud', ':SDK:UniMP'
 
     includeShadow()
+
+    includeLocalAARS()
 }
 
 def includeShadow() {
@@ -58,4 +60,18 @@ def includeShadow() {
     //    project(':SDK:shadow-plugin-manager').projectDir = file('./SDK/Shadow/plugin-manager')
     project(':SDK:shadow-lib').projectDir = file('./SDK/Shadow/shadow-lib')
     project(':SDK:shadow-init').projectDir = file('./SDK/Shadow/shadow-init')
+}
+
+def includeLocalAARS() {
+    // 加入 UniApp 需要依赖的本地 AAR
+    includeUniAppAARS()
+}
+
+def includeUniAppAARS() {
+    include ':SDK:uniapp-base-oaid-sdk', ':SDK:uniapp-breakpad-build-release', ':SDK:uniapp-v8-release', ':SDK:uniMPSDK-V2-release'
+
+    project(':SDK:uniapp-base-oaid-sdk').projectDir = file('./SDK/LocalAAR/uniapp-aars/base-oaid-sdk-aar')
+    project(':SDK:uniapp-breakpad-build-release').projectDir = file('./SDK/LocalAAR/uniapp-aars/breakpad-build-release-aar')
+    project(':SDK:uniapp-v8-release').projectDir = file('./SDK/LocalAAR/uniapp-aars/uniapp-v8-release-aar')
+    project(':SDK:uniMPSDK-V2-release').projectDir = file('./SDK/LocalAAR/uniapp-aars/uniMPSDK-V2-release-aar')
 }

@@ -1,4 +1,4 @@
-package com.youma.yky.app.main.main.newhome.banner
+package com.hl.baseproject.fragments.home.banner
 
 import android.view.ViewGroup
 import com.hl.baseproject.R
