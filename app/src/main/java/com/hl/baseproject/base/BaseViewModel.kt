@@ -1,11 +1,10 @@
-package com.youma.yky.app.main.base
+package com.hl.baseproject.base
 
 import com.hl.arch.api.IApiEventProvider
 import com.hl.arch.api.PublicResp
 import com.hl.arch.mvvm.vm.BaseLiveDataVM
-import com.hl.baseproject.base.MyApiEventProvider
 import com.hl.baseproject.repository.network.RequestApiInterface
-import com.youma.yky.app.main.Repository
+import com.hl.baseproject.repository.Repository
 
 /**
  * @author  张磊  on  2022/01/12 at 12:27

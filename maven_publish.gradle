@@ -18,6 +18,8 @@ task buildSdk() {
 
     dependsOn gradle.includedBuild('project').task(':SDK:shadow-lib:assemble')
     dependsOn gradle.includedBuild('project').task(':SDK:shadow-init:assembleRelease')
+
+    dependsOn gradle.includedBuild('project').task(':SDK:UniMP:assembleRelease')
 }
 
 //引入配置设置
@@ -146,6 +148,20 @@ setGeneratePomFileAndDepends('baseArch')
 setGeneratePomFileAndDepends('utils')
 setGeneratePomFileAndDepends('Pay')
 setGeneratePomFileAndDepends('Umeng')
+setGeneratePomFileAndDepends('TencentCloud')
+setGeneratePomFileAndDepends('shadowLib')
+setGeneratePomFileAndDepends('shadowInit')
+
+// 设置 UniApp 相关的 POM 文件
+setUniAppGeneratePomFileAndDepends()
+
+def setUniAppGeneratePomFileAndDepends() {
+    setGeneratePomFileAndDepends('uniapp_base_oaid_sdk')
+    setGeneratePomFileAndDepends('uniapp_breakpad_build_release')
+    setGeneratePomFileAndDepends('uniapp_v8_release')
+    setGeneratePomFileAndDepends('uniMPSDK_V2_release')
+    setGeneratePomFileAndDepends('UniMP')
+}
 
 
 /**
@@ -369,10 +385,10 @@ project.afterEvaluate {
                 pom.withXml {
                     def root = asNode()
 
-                    // 该库所依赖的 libs-aar 模块下的三方 aar 需要使用项目单独下载依赖
-
                     setDependencyNode(root, 'compile', 'androidx.core', 'core-ktx', Versions.CORE_KTX)
                     setDependencyNode(root, 'compile', 'androidx.appcompat', 'appcompat', Versions.APPCOMPAT)
+
+                    setDependencyNode(root, 'compile', 'com.alipay.sdk', 'alipaysdk-android', Versions.ALI_PAY)
 
                     setDependencyNode(root, 'compile', 'com.tencent.mm.opensdk', 'wechat-sdk-android-without-mta', Versions.WEI_XIN_OPEN_SDK)
                     setDependencyNode(root, 'compile', 'com.google.code.gson', 'gson', Versions.GSON)
@@ -481,6 +497,126 @@ project.afterEvaluate {
 
                     setDependencyNode(root, 'compile', 'com.tencent.shadow.dynamic', 'host-multi-loader-ext', Versions.SHADOW)
                     setDependencyNode(root, 'compile', 'com.tencent.shadow.dynamic', 'manager-multi-loader-ext', Versions.SHADOW)
+
+                    setScm(root)
+                }
+            }
+
+            uniapp_base_oaid_sdk(MavenPublication) {
+                def moduleName = 'base-oaid-sdk-aar'
+                def publishModuleName = 'uniapp-base-oaid-sdk'
+                def modulePath = "$libProjectPath/SDK/LocalAAR/uniapp-aars/$moduleName"
+
+                groupId myGroupId
+                artifactId publishModuleName
+
+                version getPublicationVersion()
+                artifact("$modulePath/base-oaid-sdk.aar") //指定 aar 包所在的路径
+
+                // 上传 source，这样使用方可以看到方法注释
+                // artifact sourceAar(moduleName, modulePath)
+
+                pom.withXml {
+                    def root = asNode()
+                    setScm(root)
+                }
+            }
+
+            uniapp_breakpad_build_release(MavenPublication) {
+                def moduleName = 'breakpad-build-release-aar'
+                def publishModuleName = 'uniapp-breakpad-build-release'
+                def modulePath = "$libProjectPath/SDK/LocalAAR/uniapp-aars/$moduleName"
+
+                groupId myGroupId
+                artifactId publishModuleName
+
+                version getPublicationVersion()
+                artifact("$modulePath/breakpad-build-release.aar") //指定 aar 包所在的路径
+
+                // 上传 source，这样使用方可以看到方法注释
+                // artifact sourceAar(moduleName, modulePath)
+
+                pom.withXml {
+                    def root = asNode()
+                    setScm(root)
+                }
+            }
+
+            uniapp_v8_release(MavenPublication) {
+                def moduleName = 'uniapp-v8-release-aar'
+                def publishModuleName = 'uniapp-v8-release'
+                def modulePath = "$libProjectPath/SDK/LocalAAR/uniapp-aars/$moduleName"
+
+                groupId myGroupId
+                artifactId publishModuleName
+
+                version getPublicationVersion()
+                artifact("$modulePath/uniapp-v8-release.aar") //指定 aar 包所在的路径
+
+                // 上传 source，这样使用方可以看到方法注释
+                // artifact sourceAar(moduleName, modulePath)
+
+                pom.withXml {
+                    def root = asNode()
+                    setScm(root)
+                }
+            }
+
+            uniMPSDK_V2_release(MavenPublication) {
+                def moduleName = 'uniMPSDK-V2-release-aar'
+                def publishModuleName = 'uniMPSDK-V2-release'
+                def modulePath = "$libProjectPath/SDK/LocalAAR/uniapp-aars/$moduleName"
+
+                groupId myGroupId
+                artifactId publishModuleName
+
+                version getPublicationVersion()
+                artifact("$modulePath/uniMPSDK-V2-release.aar") //指定 aar 包所在的路径
+
+                // 上传 source，这样使用方可以看到方法注释
+                // artifact sourceAar(moduleName, modulePath)
+
+                pom.withXml {
+                    def root = asNode()
+                    setScm(root)
+                }
+            }
+
+
+            UniMP(MavenPublication) {
+                def moduleName = 'UniMP'
+                def publishModuleName = 'uni-mp'
+
+                def modulePath = "$libProjectPath/SDK/$moduleName"
+
+                groupId myGroupId
+                artifactId publishModuleName
+                version getPublicationVersion()
+
+                // 非 aar 包的相关路径定义
+                artifact("$modulePath/build/outputs/aar/${moduleName}-release.aar")
+                artifact sourceAar(publishModuleName, modulePath)
+
+                pom.withXml {
+                    def root = asNode()
+
+                    setDependencyNode(root, 'compile', myGroupId, 'uniapp-base-oaid-sdk', getPublicationVersion())
+                    setDependencyNode(root, 'compile', myGroupId, 'uniapp-breakpad-build-release', getPublicationVersion())
+                    setDependencyNode(root, 'compile', myGroupId, 'uniapp-v8-release', getPublicationVersion())
+                    setDependencyNode(root, 'compile', myGroupId, 'uniMPSDK-V2-release', getPublicationVersion())
+
+                    setDependencyNode(root, 'compile', 'androidx.recyclerview', 'recyclerview', Versions.RECYCLERVIEW)
+                    setDependencyNode(root, 'compile', 'androidx.legacy', 'legacy-support-v4', '1.0.0')
+                    setDependencyNode(root, 'compile', 'androidx.appcompat', 'appcompat', Versions.APPCOMPAT)
+                    setDependencyNode(root, 'compile', 'com.alibaba', 'fastjson', Versions.FAST_JSON)
+
+                    def fresco_version = '2.5.0'
+                    setDependencyNode(root, 'compile', 'com.facebook.fresco', 'fresco', fresco_version)
+                    setDependencyNode(root, 'compile', 'com.facebook.fresco', 'animated-gif', fresco_version)
+
+                    setDependencyNode(root, 'compile', 'com.github.bumptech.glide', 'glide', Versions.GLIDE)
+                    setDependencyNode(root, 'compile', 'pl.droidsonroids.gif', 'android-gif-drawable', Versions.ANDROID_GIF_DRAWABLE)
+                    setDependencyNode(root, 'compile', 'androidx.webkit', 'webkit', '1.3.0')
 
                     setScm(root)
                 }

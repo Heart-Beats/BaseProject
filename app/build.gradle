@@ -138,4 +138,5 @@ dependencies {
 
     implementation 'com.hl:TencentCloud'
     implementation "com.hl:shadow-init"
+    implementation "com.hl:UniMP"
 }

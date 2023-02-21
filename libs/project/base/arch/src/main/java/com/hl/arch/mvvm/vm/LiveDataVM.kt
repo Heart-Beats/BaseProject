@@ -6,7 +6,6 @@ import androidx.lifecycle.viewModelScope
 import com.hl.arch.mvvm.api.event.UiEvent
 import com.hl.arch.mvvm.api.event.dismissLoading
 import com.hl.arch.mvvm.api.event.showException
-import com.hl.arch.mvvm.api.event.showLoading
 import com.hl.arch.mvvm.liveData.EventLiveData
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
@@ -38,10 +37,6 @@ open class LiveDataVM : ViewModel() {
             }
             uiEvent.showException(throwable)
         }) {
-            if (needLoading) {
-                //请求开始前展示对话框
-                uiEvent.showLoading()
-            }
             block()
         }
     }

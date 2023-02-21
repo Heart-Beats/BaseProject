@@ -1,0 +1,2 @@
+configurations.maybeCreate("default")
+artifacts.add("default", file('uniMPSDK-V2-release.aar'))

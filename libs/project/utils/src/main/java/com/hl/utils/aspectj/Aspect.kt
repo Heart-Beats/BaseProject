@@ -1,4 +1,4 @@
-package com.youma.yky.merchant.aspectj
+package com.hl.utils.aspectj
 
 import org.aspectj.lang.annotation.Aspect
 
@@ -14,7 +14,7 @@ class AspectInject {
 	private val TAG = "Aspect"
 
 
-	// @Pointcut("execution(@com.youma.yky.merchant.aspectjx.ClickEvent * android.view.OnClickListener.onClick(..))")
+	// @Pointcut("execution(@com.hl.utils.aspectj.ClickEvent * android.view.OnClickListener.onClick(..))")
 	// private fun ClickEventMethod() {}
 	//
 	// @Before("ClickEventMethod()")

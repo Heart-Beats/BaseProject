@@ -16,6 +16,12 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        /**
+         * 用consumerProguardFiles方式加入的混淆有如下特性：
+         *   1. 库的 proguard-rule.pro 会打包进aar中
+         *   2. 此配置只对此 aar 进行混淆配置，只对库文件有效，对应用程序无效
+         * */
         consumerProguardFiles "consumer-rules.pro"
     }
 

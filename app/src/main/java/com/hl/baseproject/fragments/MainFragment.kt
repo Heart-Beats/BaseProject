@@ -7,6 +7,7 @@ import android.content.pm.ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
 import android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
 import android.content.res.Configuration
 import android.os.Bundle
+import android.os.Environment
 import androidx.navigation.fragment.findNavController
 import com.hl.arch.web.navigateToWeb
 import com.hl.baseproject.TestActivity
@@ -15,6 +16,7 @@ import com.hl.baseproject.base.BaseFragment
 import com.hl.baseproject.databinding.FragmentMainBinding
 import com.hl.uikit.onClick
 import com.hl.uikit.toast
+import com.hl.unimp.UniMPHelper
 import com.hl.utils.*
 import com.hl.utils.activityResult.ActivityResultHelper
 import com.hl.utils.activityResult.OnActivityResult
@@ -24,6 +26,7 @@ import com.hl.utils.location.GpsUtil
 import com.hl.utils.previewFie.PreviewFileActivity
 import com.hl.utils.qrcode.QRScanUtil
 import com.lxj.xpopup.XPopup
+import java.io.File
 
 
 class MainFragment : BaseFragment<FragmentMainBinding>() {
@@ -153,6 +156,14 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
 
 		startShadowPlugin.onClick {
 			findNavController().navigate(MainFragmentDirections.actionMainFragmentToShadowPluginFragment())
+		}
+
+		startUniMP.onClick {
+			val appid = "__UNI__0773E11"
+
+			UniMPHelper.openUniMPFromWgt(requireContext(), appid, uniMPReleaseConfigurationBlock = {
+				this.wgtPath = File(Environment.getExternalStorageDirectory(), "${appid}.wgt").absolutePath
+			})
 		}
 	}
 

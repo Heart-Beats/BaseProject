@@ -9,6 +9,7 @@ import com.hl.arch.api.PublicResp
 import com.hl.arch.mvvm.api.event.dismissLoading
 import com.hl.arch.mvvm.api.event.setSafeValue
 import com.hl.arch.mvvm.api.event.showException
+import com.hl.arch.mvvm.api.event.showLoading
 import com.hl.arch.mvvm.liveData.EventLiveData
 import com.hl.utils.setSafeValue
 import kotlinx.coroutines.CoroutineScope
@@ -39,10 +40,20 @@ abstract class BaseLiveDataVM : LiveDataVM(), IApiEventProvider {
         onSuccess: (body: BODY?) -> Unit = {}
     ) {
         apiLaunch(needLoading) {
+            if (needLoading) {
+                //请求开始开启 loading
+                uiEvent.showLoading()
+            }
+
+            // 发起请求
             val publicResp = this.reqBlock()
 
-            // 请求结束关闭 loading , 分发数据
-            uiEvent.dismissLoading()
+            if (needLoading) {
+                // 请求结束关闭 loading
+                uiEvent.dismissLoading()
+            }
+
+            // 分发请求数据
             publicResp.dispatchApiEvent(needDispatchFailEvent, onFail, onSuccess)
         }
     }

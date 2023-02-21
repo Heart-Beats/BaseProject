@@ -11,6 +11,7 @@ import com.hl.arch.web.sdk.ISdkImplProvider
 import com.hl.baseproject.configs.AppConfig
 import com.hl.shadow.Shadow
 import com.hl.shadow.logger.LogLevel
+import com.hl.unimp.UniMPHelper
 import com.hl.utils.XLogInitUtil
 import com.scwang.smart.refresh.layout.SmartRefreshLayout
 import com.tencent.smtt.export.external.TbsCoreSettings
@@ -18,6 +19,7 @@ import com.tencent.smtt.sdk.QbSdk
 import com.tencent.smtt.sdk.TbsListener
 import com.tencent.smtt.utils.TbsLogClient
 import com.umeng.commonsdk.UMConfigure
+import io.dcloud.feature.sdk.MenuActionSheetItem
 
 /**
  * @author  张磊  on  2022/06/15 at 11:31
@@ -45,6 +47,8 @@ object SDKInitHelper {
 		initWebView()
 
 		initRefreshLayout()
+
+		initUniMP(context)
 	}
 
 	/**
@@ -171,5 +175,20 @@ object SDKInitHelper {
 		// SmartRefreshLayout.setDefaultRefreshFooterCreator { context, _ ->
 		//     UIKitCommonRefreshFooter(context)
 		// }
+	}
+
+	private fun initUniMP(context: Context) {
+		UniMPHelper.initUniMP(context) {
+			val item = MenuActionSheetItem("关于", "gy")
+			val sheetItems: MutableList<MenuActionSheetItem> = ArrayList()
+			sheetItems.add(item)
+
+			this.setCapsule(true)
+				.setEnableBackground(true)
+				.setMenuDefFontSize("16px")
+				.setMenuDefFontColor("#ff00ff")
+				.setMenuDefFontWeight("normal")
+				.setMenuActionSheetItems(sheetItems)
+		}
 	}
 }

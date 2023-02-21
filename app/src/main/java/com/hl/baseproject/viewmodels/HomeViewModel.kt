@@ -1,9 +1,9 @@
-package com.youma.yky.app.main.viewmodels
+package com.hl.baseproject.viewmodels
 
 import androidx.lifecycle.MutableLiveData
 import com.hl.baseproject.repository.network.bean.BannerData
 import com.hl.utils.setSafeValue
-import com.youma.yky.app.main.base.BaseViewModel
+import com.hl.baseproject.base.BaseViewModel
 
 /**
  * @author  张磊  on  2022/08/31 at 17:43

@@ -21,81 +21,95 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
-            android:layout_width="wrap_content"
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:fillViewport="true">
 
-            <com.hl.uikit.image.UIKitUploadPicImageGridLayout
-                android:id="@+id/uikitUploadPicImageGridLayout"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/test_scan_qrcode"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="测试扫码"
-                android:textSize="35dp" />
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/test_rotate_screen"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:text="旋转屏幕"
-                android:textSize="24sp" />
+                <com.hl.uikit.image.UIKitUploadPicImageGridLayout
+                    android:id="@+id/uikitUploadPicImageGridLayout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/test_capture"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:text="测试拍照"
-                android:textSize="24sp" />
+                <TextView
+                    android:id="@+id/test_scan_qrcode"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="测试扫码"
+                    android:textSize="35dp" />
 
-            <TextView
-                android:id="@+id/test_file_preview"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:text="测试文件预览"
-                android:textSize="24sp" />
+                <TextView
+                    android:id="@+id/test_rotate_screen"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:text="旋转屏幕"
+                    android:textSize="24sp" />
 
-            <TextView
-                android:id="@+id/test_web_view"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:text="测试优码APP-SDK"
-                android:textSize="24sp" />
+                <TextView
+                    android:id="@+id/test_capture"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:text="测试拍照"
+                    android:textSize="24sp" />
 
-            <TextView
-                android:id="@+id/goto_test1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:text="前往测试1页面"
-                android:textSize="24sp" />
+                <TextView
+                    android:id="@+id/test_file_preview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:text="测试文件预览"
+                    android:textSize="24sp" />
 
-            <TextView
-                android:id="@+id/goto_test2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:text="前往测试2页面"
-                android:textSize="24sp" />
+                <TextView
+                    android:id="@+id/test_web_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:text="测试优码APP-SDK"
+                    android:textSize="24sp" />
 
-            <TextView
-                android:id="@+id/start_shadow_plugin"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:text="Shadow 插件测试"
-                android:textSize="24sp" />
-        </LinearLayout>
+                <TextView
+                    android:id="@+id/goto_test1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:text="前往测试1页面"
+                    android:textSize="24sp" />
+
+                <TextView
+                    android:id="@+id/goto_test2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:text="前往测试2页面"
+                    android:textSize="24sp" />
+
+                <TextView
+                    android:id="@+id/start_shadow_plugin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:text="Shadow 插件测试"
+                    android:textSize="24sp" />
+
+                <TextView
+                    android:id="@+id/start_uniMP"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:text="Uni 小程序测试"
+                    android:textSize="24sp" />
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
 
         <com.hl.uikit.sidebar.UIKitSideBarView
             android:id="@+id/side_bar"

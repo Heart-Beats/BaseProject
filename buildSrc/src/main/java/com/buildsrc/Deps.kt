@@ -9,7 +9,7 @@ internal object Versions {
     const val CORE_KTX = "1.6.0"
 
     const val APPCOMPAT = "1.4.0"
-     const val CONSTRAINT_LAYOUT = "2.1.4"
+    const val CONSTRAINT_LAYOUT = "2.1.4"
     const val ACTIVITY = "1.4.0"
     const val FRAGMENT = "1.4.0"
     const val SECURITY_CRYPTO = "1.0.0"
@@ -67,8 +67,10 @@ internal object Versions {
     const val WAVE_SIDE_BAR = "1.3"
     const val SIDE_BAR = "1.0.0"
     const val ANDROID_AUTO_SIZE = "v1.2.1"
-    // const val SHADOW = "local-a12772c9-SNAPSHOT"
     const val SHADOW = "2.3.0"
+
+    const val ANDROID_GIF_DRAWABLE = "1.2.25"
+    const val ALI_PAY = "15.8.11"
 }
 
 class Deps {
@@ -490,5 +492,20 @@ class Deps {
         const val common = "com.tencent.shadow.core:common:${Versions.SHADOW}"
         const val loader = "com.tencent.shadow.core:loader:${Versions.SHADOW}"
         const val loader_impl = "com.tencent.shadow.dynamic:loader-impl:${Versions.SHADOW}"
+    }
+
+    object Gif {
+        /**
+         * 基于  JNI 实现的高性能 GIF 播放库
+         * 地址： https://github.com/koral--/android-gif-drawable
+         */
+        const val android_gif_drawable = "pl.droidsonroids.gif:android-gif-drawable:${Versions.ANDROID_GIF_DRAWABLE}"
+    }
+
+    /**
+     * 阿里巴巴相关的 SDK
+     */
+    object Ali {
+        const val pay = "com.alipay.sdk:alipaysdk-android:${Versions.ALI_PAY}"
     }
 }

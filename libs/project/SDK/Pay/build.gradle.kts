@@ -36,11 +36,10 @@ android {
 dependencies {
     implementation(fileTree("libs", { include("*.jar", "*.aar") }))
 
-    // 依赖的 libs-aar 模块下的三方 aar,  需要使用该库的项目单独下载依赖
-    implementation(project(mapOf("path" to ":libs-aar")))
-
     implementation(Deps.AndroidX.core_ktx)
     implementation(Deps.AndroidX.appcompat)
+
+    implementation(Deps.Ali.pay)
     implementation(Deps.Tencent.wechat_sdk_android_without_mta)
     implementation(Deps.Json.gson)
 }
