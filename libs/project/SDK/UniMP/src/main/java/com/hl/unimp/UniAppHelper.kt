@@ -56,7 +56,7 @@ object UniMPHelper {
 		uniMPSdk.releaseWgtToRunPath(appid, uniMPReleaseConfiguration) { code, pArgs ->
 			Log.d(TAG, "UniMPReleaseCallBack: code = $code, pArgs = $pArgs")
 			if (code == 1) {
-				openUniMP(context, appid, openArgumentsBlock)
+				openUniMPCheckExistsApp(context, appid, openArgumentsBlock)
 			} else {
 				Log.e(TAG, "releaseWgtToRunPath 失败，appid ==$appid")
 			}
@@ -64,23 +64,34 @@ object UniMPHelper {
 	}
 
 	/**
-	 * 启动内置uni 小程序， 前提需要已集成小程序资源： https://nativesupport.dcloud.net.cn/UniMPDocs/UseSdk/android.html#导入小程序应用资源
+	 *  检查 uni 小程序是否存在并启动 ，前提需要已集成小程序资源： https://nativesupport.dcloud.net.cn/UniMPDocs/UseSdk/android.html#导入小程序应用资源
 	 *
 	 *  @param context
 	 *  @param appid                       :  uni 小程序对应的 appid
 	 *  @param openArguments               : 启动 uni小程序的启动参数
+	 *
+	 *  @return 小程序资源存在且启动成功返回 true，否则返回 false
 	 */
-	fun openUniMP(
+	fun openUniMPCheckExistsApp(
 		context: Context,
 		appid: String,
 		openArgumentsBlock: UniMPOpenConfiguration.() -> Unit = { }
-	) {
+	): Boolean {
 		val uniMPOpenConfiguration = UniMPOpenConfiguration().apply { openArgumentsBlock() }
-		if (uniMPSdk.isExistsApp(appid)) {
+		if (isExistsApp(appid)) {
 			uniMPSdk.openUniMP(context, appid, uniMPOpenConfiguration)
+			return true
 		} else {
 			Log.e(TAG, "openUniMP: isExistsApp $appid == false")
+			return false
 		}
+	}
+
+	/**
+	 * 检查 appid 对应的小程序资源是否存在
+	 */
+	fun isExistsApp(appid: String): Boolean {
+		return uniMPSdk.isExistsApp(appid)
 	}
 
 	/**
