@@ -5,12 +5,14 @@ import android.os.Environment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.lifecycleScope
 import com.blankj.utilcode.util.FileUtils
 import com.elvishew.xlog.XLog
 import com.hjq.http.EasyHttp
 import com.hjq.http.listener.OnDownloadListener
 import com.hjq.http.request.DownloadRequest
 import com.hl.uikit.toast
+import kotlinx.coroutines.launch
 import java.io.File
 
 /**
@@ -31,16 +33,18 @@ object DownloadFileUtil {
 	 * @param fileUrl          文件下载地址
 	 * @param isSave2AppDir    是否保存在应用私有目录下
 	 * @param listener        下载监听回调
+	 * @param md5             文件 MD5 值， 若与本地文件一致则实现极速下载（跳过下载）
 	 */
 	fun startDownLoad(
 		lifecycleOwner: LifecycleOwner,
 		fileUrl: String,
 		fileName: String? = null,
 		isSave2AppDir: Boolean = true,
+		md5: String? = null,
 		listener: OnDownloadListener
 	) {
 		val cacheFile = getCacheFile(isSave2AppDir, fileUrl, fileName)
-		download(lifecycleOwner, fileUrl, isSave2AppDir, cacheFile, listener)
+		download(lifecycleOwner, fileUrl, isSave2AppDir, cacheFile, md5, listener)
 	}
 
 	/**
@@ -50,11 +54,13 @@ object DownloadFileUtil {
 	 * @param fileUrl          文件下载地址
 	 * @param savePath         文件保存的全路径
 	 * @param listener        下载监听回调
+	 * @param md5             文件 MD5 值， 若与本地文件一致则实现极速下载（跳过下载）
 	 */
 	fun startDownLoad(
 		lifecycleOwner: LifecycleOwner,
 		fileUrl: String,
 		savePath: String,
+		md5: String? = null,
 		listener: OnDownloadListener
 	) {
 		val cacheFile = File(savePath)
@@ -63,7 +69,7 @@ object DownloadFileUtil {
 		// 是否保存在 APP 私有目录下
 		val isSave2AppDir = cacheFile.absolutePath.contains(externalFilesDir?.absolutePath ?: "")
 
-		download(lifecycleOwner, fileUrl, isSave2AppDir, cacheFile, listener)
+		download(lifecycleOwner, fileUrl, isSave2AppDir, cacheFile, md5, listener)
 	}
 
 	private fun download(
@@ -71,12 +77,13 @@ object DownloadFileUtil {
 		fileUrl: String,
 		isSave2AppDir: Boolean,
 		cacheFile: File,
+		md5: String?,
 		listener: OnDownloadListener
 	) {
 		if (!isSave2AppDir) {
-			reqPermissions2Download(lifecycleOwner, fileUrl, cacheFile, listener)
+			reqPermissions2Download(lifecycleOwner, fileUrl, cacheFile, md5, listener)
 		} else {
-			download(lifecycleOwner, fileUrl, cacheFile, listener)
+			download(lifecycleOwner, fileUrl, cacheFile, md5, listener)
 		}
 	}
 
@@ -87,6 +94,7 @@ object DownloadFileUtil {
 		lifecycleOwner: LifecycleOwner,
 		fileUrl: String,
 		cacheFile: File,
+		md5: String?,
 		listener: OnDownloadListener
 	) {
 		when (lifecycleOwner) {
@@ -94,14 +102,14 @@ object DownloadFileUtil {
 				lifecycleOwner.reqPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE, deniedAction = {
 					lifecycleOwner.toast("您拒绝了权限，无法正常下载文件")
 				}) {
-					download(lifecycleOwner, fileUrl, cacheFile, listener)
+					download(lifecycleOwner, fileUrl, cacheFile, md5, listener)
 				}
 			}
 			is Fragment -> {
 				lifecycleOwner.reqPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE, deniedAction = {
 					lifecycleOwner.toast("您拒绝了权限，无法正常下载文件")
 				}) {
-					download(lifecycleOwner, fileUrl, cacheFile, listener)
+					download(lifecycleOwner, fileUrl, cacheFile, md5, listener)
 				}
 			}
 			else -> {
@@ -117,45 +125,63 @@ object DownloadFileUtil {
 		lifecycleOwner: LifecycleOwner,
 		fileUrl: String,
 		saveFile: File,
+		md5: String?,
 		listener: OnDownloadListener
 	) {
 		// 创建文件
 		if (!FileUtils.createOrExistsFile(saveFile)) {
-			XLog.d("创建下载文件失败")
+			XLog.i("创建下载文件失败")
 		}
 
-		val downloadRequest = EasyHttp.download(lifecycleOwner).url(fileUrl)
-		downloadRequestMap[downloadRequest] = fileUrl
+		lifecycleOwner.lifecycleScope.launch {
+			if (md5 == null) {
+				val downloadFileLength = fileUrl.getHttpContentLength()
+				if (saveFile.exists() && saveFile.length() == downloadFileLength) {
+					XLog.i("下载文件已存在，跳过下载")
 
-		downloadRequest
-			.file(saveFile)
-			.listener(object : OnDownloadListener {
-				override fun onStart(file: File?) {
-					listener.onStart(file)
+					// 文件已下载完成时跳过下载过程
+					listener.onComplete(saveFile)
+					listener.onEnd(saveFile)
+
+					return@launch
 				}
+			}
 
-				override fun onProgress(file: File?, progress: Int) {
-					listener.onProgress(file, progress)
-				}
+			val downloadRequest = EasyHttp.download(lifecycleOwner)
+				.md5(md5)  //可通过服务端设置 MD5 字段或者 Content -MD5 相应头来进行文件校验存在，实现极速下载
+				.url(fileUrl)
+			downloadRequestMap[downloadRequest] = fileUrl
 
-				override fun onComplete(file: File?) {
-					listener.onComplete(file)
-				}
-
-				override fun onError(file: File?, e: Exception?) {
-					listener.onError(file, e)
-				}
-
-				override fun onEnd(file: File?) {
-					listener.onEnd(file)
-
-					// 下载结束移除该请求
-					if (downloadRequestMap.contains(downloadRequest)) {
-						downloadRequestMap.remove(downloadRequest)
+			downloadRequest
+				.file(saveFile)
+				.listener(object : OnDownloadListener {
+					override fun onStart(file: File?) {
+						listener.onStart(file)
 					}
-				}
-			})
-			.start()
+
+					override fun onProgress(file: File?, progress: Int) {
+						listener.onProgress(file, progress)
+					}
+
+					override fun onComplete(file: File?) {
+						listener.onComplete(file)
+					}
+
+					override fun onError(file: File?, e: Exception?) {
+						listener.onError(file, e)
+					}
+
+					override fun onEnd(file: File?) {
+						listener.onEnd(file)
+
+						// 下载结束移除该请求
+						if (downloadRequestMap.contains(downloadRequest)) {
+							downloadRequestMap.remove(downloadRequest)
+						}
+					}
+				})
+				.start()
+		}
 	}
 
 	private fun getCacheFile(isSave2AppDir: Boolean, fileUrl: String, fileName: String?): File {

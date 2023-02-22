@@ -34,6 +34,11 @@ suspend fun String.getHttpContentLength(): Long {
 }
 
 /**
+ * 从 Url 中获取下载的文件名称
+ */
+fun String.getDownloadFileNameFromUrl() = this.substringAfterLast("/")
+
+/**
  * 将 URL 转为合法的 URL 地址
  */
 fun String.getLegalUrl(): String {
