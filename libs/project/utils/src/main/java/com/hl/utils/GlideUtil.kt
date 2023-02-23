@@ -1,6 +1,7 @@
 package com.hl.utils
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.text.TextUtils
 import android.widget.ImageView
@@ -12,6 +13,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
 import com.hl.res.R
+import kotlin.concurrent.thread
 
 object GlideUtil {
 
@@ -137,5 +139,24 @@ object GlideUtil {
             .error(drawable)
             .fallback(drawable)
         Glide.with(context).load(url).apply(requestOptions).into(target)
+    }
+
+    /**
+     * 在后台线程将 指定 url 加载转换为 Bitmap
+     */
+    @JvmOverloads
+    @JvmStatic
+    fun loadUrl2Bitmap(context: Context, url: String, callback: (loadBitmap: Bitmap) -> Unit) {
+        thread {
+            val bitmap = Glide.with(context)
+                .asBitmap()
+                .load(url)
+                .submit()
+                .get()
+
+            runOnUiThread {
+                callback(bitmap)
+            }
+        }
     }
 }

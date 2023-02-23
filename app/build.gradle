@@ -131,7 +131,10 @@ dependencies {
     implementation Deps.Material.material
 
     implementation 'com.hl:base-api'
-    implementation "com.hl:base-arch"
+    implementation('com.hl:base-arch') {
+        // base-arch 依赖传递了 smooth-navigation，重写了 navigation-fragment 中的相关类，会冲突需要排除
+        exclude group: 'androidx.navigation', module: 'navigation-fragment'
+    }
 
     //    def hlVersion = '0.5.9'
     //    implementation "com.hl:tencent-cloud:${hlVersion}"

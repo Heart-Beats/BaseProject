@@ -6,7 +6,7 @@ import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.NavGraph
-import androidx.navigation.fragment.findNavController
+import com.hl.utils.navigation.findNavController
 import com.hl.utils.ReflectHelper
 import java.util.*
 

@@ -7,16 +7,17 @@ import com.hl.arch.utils.getColorByRes
 import com.hl.arch.web.navigateToWeb
 import com.hl.baseproject.base.BaseFragment
 import com.hl.baseproject.databinding.FragmentHomeBinding
+import com.hl.baseproject.fragments.home.banner.CommonBannerAdapter
 import com.hl.baseproject.repository.network.bean.BannerData
+import com.hl.baseproject.viewmodels.HomeViewModel
 import com.hl.uikit.UIKitCollapsingToolbarLayout
 import com.hl.utils.*
 import com.hl.utils.banner.AdsIndicator
-import com.hl.baseproject.fragments.home.banner.CommonBannerAdapter
-import com.hl.baseproject.viewmodels.HomeViewModel
 import com.youth.banner.Banner
 import com.youth.banner.config.IndicatorConfig
 import com.youth.banner.indicator.Indicator
 import com.youth.banner.listener.OnBannerListener
+import com.youth.banner.listener.OnPageChangeListener
 
 /**
  * @author  张磊  on  2023/02/13 at 14:46
@@ -41,14 +42,17 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
 	// 状态栏颜色默认透明
 	override fun getStatusBarColor() = Color.TRANSPARENT
 
+	override fun onBackPressed() {
+		launchHome()
+	}
+
 	override fun onResume() {
 		super.onResume()
-
+		setStatusBarImmerseFromView(viewBinding.statusView)
 		toolbarIsCollapseFlag = toolbarIsCollapseFlag
 	}
 
 	override fun FragmentHomeBinding.onViewCreated(savedInstanceState: Bundle?) {
-		setStatusBarImmerseFromView(statusView)
 		this.initTitleLayout()
 
 		homeViewModel.getTopBannerList()
@@ -85,6 +89,19 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
 		this.homeTitle.text = getAppName()
 	}
 
+	/**
+	 * 根据指定的图片地址修改状态栏以及标题栏的字体样式
+	 */
+	private fun updateStatusBarAndTitleStyleFromImageUrl(url: String) {
+		GlideUtil.loadUrl2Bitmap(requireContext(), url) {
+			changeStatusBarStyleFromBitmap(it) { _, bodyTextColor, _, _ ->
+				viewBinding.ivHomeMenu.setColor(bodyTextColor)
+				// viewBinding.ivLogo.setColor(bodyTextColor)
+				viewBinding.homeTitle.setTextColor(bodyTextColor)
+			}
+		}
+	}
+
 	private fun FragmentHomeBinding.initTopBanner() {
 		val banner = this.topBanner as Banner<BannerData, CommonBannerAdapter>
 		banner.initTopBanner(commonBannerAdapter) { data, _ ->
@@ -93,6 +110,19 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
 				navigateToWeb(jumpUrl, isNeedTitle = true)
 			}
 		}
+
+		banner.addOnPageChangeListener(object : OnPageChangeListener {
+			override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+			}
+
+			override fun onPageSelected(position: Int) {
+				val url = commonBannerAdapter.getDatas()[position].imagePath ?: return
+				updateStatusBarAndTitleStyleFromImageUrl(url)
+			}
+
+			override fun onPageScrollStateChanged(state: Int) {
+			}
+		})
 	}
 
 	private fun Banner<BannerData, CommonBannerAdapter>.initTopBanner(

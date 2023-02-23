@@ -21,6 +21,7 @@ internal object Versions {
 
     const val LIFECYCLE = "2.4.0"
     const val NAV_VERSION = "2.5.3"
+    const val SMOOTH_NAVIGATION = "4.0.0"
 
     const val MATERIAL = "1.4.0"
 
@@ -130,29 +131,40 @@ class Deps {
         /**
          * 协程核心库
          */
-        const val kotlinx_coroutines_core = "org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.KOTLIN_COROUTINES}"
+        const val kotlinx_coroutines_core =
+            "org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.KOTLIN_COROUTINES}"
 
         /**
          * 协程 Android 平台库
          */
-        const val kotlinx_coroutines_android = "org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.KOTLIN_COROUTINES}"
+        const val kotlinx_coroutines_android =
+            "org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.KOTLIN_COROUTINES}"
     }
 
-    object JetpackNavigation {
-        // Java language implementation
-        const val navigation_fragment = "androidx.navigation:navigation-fragment::${Versions.NAV_VERSION}"
-        const val navigation_ui = "androidx.navigation:navigation-ui:${Versions.NAV_VERSION}"
+    object Jetpack {
 
-        // Kotlin
-        const val navigation_fragment_ktx = "androidx.navigation:navigation-fragment-ktx:${Versions.NAV_VERSION}"
-        const val navigation_ui_ktx = "androidx.navigation:navigation-ui-ktx:${Versions.NAV_VERSION}"
+        object Navigation {
+            /**
+             * 提供安全可靠 Navigation 操作，解决 GitHub 上 "Navigation Add Hide 修改版" 普遍存在 "popUpToInclusive 导致 Fragment 不符预期加载" 等问题。
+             * 仓库地址： https://github.com/KunMinX/Smooth-Navigation
+             */
+            const val smooth_navigation = "com.kunminx.arch:smooth-navigation:${Versions.SMOOTH_NAVIGATION}"
 
-        // Feature module Support
-        const val navigation_dynamic_features_fragment =
-            "androidx.navigation:navigation-dynamic-features-fragment:${Versions.NAV_VERSION}"
+            // Java language implementation
+            const val navigation_fragment = "androidx.navigation:navigation-fragment:${Versions.NAV_VERSION}"
+            const val navigation_ui = "androidx.navigation:navigation-ui:${Versions.NAV_VERSION}"
 
-        // Jetpack Compose Integration
-        const val navigation_compose = "androidx.navigation:navigation-compose:${Versions.NAV_VERSION}"
+            // Kotlin
+            const val navigation_fragment_ktx = "androidx.navigation:navigation-fragment-ktx:${Versions.NAV_VERSION}"
+            const val navigation_ui_ktx = "androidx.navigation:navigation-ui-ktx:${Versions.NAV_VERSION}"
+
+            // Feature module Support
+            const val navigation_dynamic_features_fragment =
+                "androidx.navigation:navigation-dynamic-features-fragment:${Versions.NAV_VERSION}"
+
+            // Jetpack Compose Integration
+            const val navigation_compose = "androidx.navigation:navigation-compose:${Versions.NAV_VERSION}"
+        }
     }
 
     object XLog {

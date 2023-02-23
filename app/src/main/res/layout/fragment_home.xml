@@ -14,9 +14,7 @@
         app:uikit_pull_lottie_animation_url="https://assets6.lottiefiles.com/packages/lf20_lmk0pfms.json"
         app:uikit_refresh_lottie_animation_url="https://assets6.lottiefiles.com/packages/lf20_ngcpf3x7.json" />
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="false"
