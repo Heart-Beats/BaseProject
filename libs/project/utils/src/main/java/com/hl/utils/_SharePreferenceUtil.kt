@@ -2,51 +2,56 @@ package com.hl.utils
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.util.Log
-import androidx.fragment.app.Fragment
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKeys
 import com.google.gson.Gson
-import java.lang.reflect.ParameterizedType
-import java.lang.reflect.Type
+
 
 private const val SHARE_PREFS_NAME = "com.hl.sharedPreferences"
 
 private fun getPreferences(
-    context: Context,
     name: String = SHARE_PREFS_NAME,
+    isUseMMKV: Boolean = true,
+    isMultiProcess: Boolean = false,
     isEncrypted: Boolean = false
 ): SharedPreferences {
-    return when (isEncrypted) {
-        true -> {
-            val encryptedName = "${name}-encrypted"
+    val app = BaseUtil.app
 
-            val masterKeyAlias = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC)
-            EncryptedSharedPreferences.create(
-                encryptedName, masterKeyAlias, context,
-                EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-                EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
-            )
+    return if (isUseMMKV) {
+        // 使用 MMKV  时
+        getPreferencesByMMKV(name, isMultiProcess, isEncrypted)
+    } else {
+        // 使用 SP  时， 多进程间通过  SP 来共享数据是不安全的, 因此不支持 isMultiProcess 参数
+        when (isEncrypted) {
+            true -> {
+                val encryptedName = "${name}-encrypted"
+
+                val masterKeyAlias = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC)
+                EncryptedSharedPreferences.create(
+                    encryptedName, masterKeyAlias, app,
+                    EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+                    EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+                )
+            }
+            else -> app.getSharedPreferences(name, Context.MODE_PRIVATE)
         }
-        else -> context.getSharedPreferences(name, Context.MODE_PRIVATE)
     }
 }
 
+/**
+ * @param name            sp 文件名称
+ * @param isUseMMKV       是否使用 MMKV
+ * @param isMultiProcess  是否支持多进程访问，仅使用 MMKV 时才支持
+ * @param isEncrypted     是否对存储数据进行加密
+ */
 @JvmOverloads
-fun Context.sharedPreferences(
-    name: String = "${this.packageName}.sharedPreferences",
+fun Any.sharedPreferences(
+    name: String = "${BaseUtil.app.packageName}.sharedPreferences",
+    isUseMMKV: Boolean = true,
+    isMultiProcess: Boolean = false,
     isEncrypted: Boolean = false
 ): SharedPreferences {
-    return getPreferences(this, name, isEncrypted = isEncrypted)
-}
-
-@JvmOverloads
-fun Fragment.sharedPreferences(
-    name: String = "${this.requireContext().packageName}.sharedPreferences",
-    isEncrypted: Boolean = false
-): SharedPreferences? {
-    val context = context ?: return null
-    return getPreferences(context, name, isEncrypted = isEncrypted)
+    return getPreferences(name, isUseMMKV = isUseMMKV, isMultiProcess = isMultiProcess, isEncrypted = isEncrypted)
 }
 
 
@@ -58,35 +63,9 @@ fun SharedPreferences.Editor.putObject(key: String, obj: Any) {
 inline fun <reified T> SharedPreferences.getObject(key: String): T? {
     val json = getString(key, null) ?: return null
     return try {
-        Gson().fromJson(json, T::class.java)
+        GsonUtil.fromJson<T>(json)
     } catch (e: Exception) {
         null
     }
 }
-
-inline fun <reified T> SharedPreferences.getList(key: String): List<T>? {
-    val json = getString(key, null) ?: return null
-    return try {
-        return gsonParseJson2List(json)
-    } catch (e: Exception) {
-        Log.e("SharedPreferencesUtil", "类型转换错误", e)
-        null
-    }
-}
-
-/**
- * 将字符串数组转换为 List 对象
- */
-inline fun <reified T> gsonParseJson2List(json: String?): List<T>? {
-    return Gson().fromJson<List<T>>(json, ParameterizedTypeImpl(T::class.java))
-}
-
-class ParameterizedTypeImpl(private val clz: Class<*>) : ParameterizedType {
-    override fun getRawType(): Type = List::class.java
-
-    override fun getOwnerType(): Type? = null
-
-    override fun getActualTypeArguments(): Array<Type> = arrayOf(clz)
-}
-
 

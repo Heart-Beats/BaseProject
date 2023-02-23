@@ -108,6 +108,7 @@ dependencies {
 
     api Deps.XLog.xlog
     api Deps.Tencent.tbs_sdk
+    api Deps.Tencent.mmkv
     api Deps.Okhttp.easy_http
     api Deps.Popup.x_popup
     api Deps.Okhttp.okhttp
