@@ -8,6 +8,7 @@ import com.hjq.http.EasyConfig
 import com.hjq.http.config.IRequestHandler
 import com.hjq.http.request.HttpRequest
 import com.hjq.http.ssl.HttpSslFactory
+import com.tencent.mmkv.MMKV
 import okhttp3.OkHttpClient
 import okhttp3.Response
 import java.lang.reflect.Type
@@ -29,6 +30,9 @@ object BaseUtil {
 
 		// 异步初始化相关库
 		thread {
+			// 初始化 MMKV
+			MMKV.initialize(app)
+
 			initEasyHttp("https://www.baidu.com/", debug)
 		}
 	}

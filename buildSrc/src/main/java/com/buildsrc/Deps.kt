@@ -63,6 +63,7 @@ internal object Versions {
     const val WEI_XIN_OPEN_SDK = "+"
     const val TBS_SDK = "44181"
     const val TENCENT_COS = "5.9.+"
+    const val MMKV = "1.2.15"
     const val UPDATE_APP_UTILSX = "2.3.0"
     const val LOTTIE = "5.0.3"
     const val WAVE_SIDE_BAR = "1.3"
@@ -453,6 +454,8 @@ class Deps {
         const val tbs_sdk = "com.tencent.tbs:tbssdk:${Versions.TBS_SDK}"
 
         const val cos_android_lite = "com.qcloud.cos:cos-android-lite:${Versions.TENCENT_COS}"
+
+        const val mmkv = "com.tencent:mmkv:${Versions.MMKV}"
     }
 
     object Update {

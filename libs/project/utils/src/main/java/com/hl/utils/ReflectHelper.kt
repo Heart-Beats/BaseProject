@@ -1,6 +1,7 @@
 package com.hl.utils
 
 import android.util.Log
+import java.lang.reflect.ParameterizedType
 import java.lang.reflect.Type
 
 /**
@@ -66,7 +67,7 @@ class ReflectHelper<T>(private val clazz: Class<T>) {
         // 获取带有泛型的父类类型
         val genericSuperclass = clazz.genericSuperclass
         if (genericSuperclass != null) {
-            if (genericSuperclass is ParameterizedTypeImpl) {
+            if (genericSuperclass is ParameterizedType) {
                 // 获取父类的泛型参数的实际类型
                 return genericSuperclass.actualTypeArguments.map { it.javaClass }
             }

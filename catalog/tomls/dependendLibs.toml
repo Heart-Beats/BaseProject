@@ -210,6 +210,8 @@ tbsSdk = { module = "com.tencent.tbs:tbssdk", version.ref = "tbsSdk" }
 
 tencentCos = { module = "com.qcloud.cos:cos-android-lite", version.ref = "tencentCos" }
 
+mmkv = { module = "com.tencent:mmkv", version.ref = "mmkv" }
+
 # 不包含统计功能
 updateAppUtilsx = { module = "com.teprinciple:updateapputilsx", version.ref = "updateAppUtilsx" }
 
