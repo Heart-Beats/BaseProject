@@ -2,18 +2,9 @@ package com.hl.utils.navigation
 
 import android.view.View
 import androidx.annotation.StringRes
-import androidx.navigation.NavHostController
 import androidx.navigation.Navigator
-import androidx.navigation.fragment.DialogFragmentNavigator
 import androidx.navigation.fragment.FragmentNavigator
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.fragment.R
-import androidx.navigation.plusAssign
-
-/**
- * @Author  张磊  on  2020/12/30 at 16:23
- * Email: 913305160@qq.com
- */
 
 /**
  * @Author  张磊  on  2020/12/02 at 14:02
@@ -43,7 +34,7 @@ class MyNavHostFragment : NavHostFragment() {
         val id = id
         return if (id != 0 && id != View.NO_ID) {
             id
-        } else R.id.nav_host_fragment_container
+        } else com.androidx.navigation.R.id.nav_host_fragment_container
     }
 
     /**

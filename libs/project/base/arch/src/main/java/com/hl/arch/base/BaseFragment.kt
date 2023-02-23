@@ -1,6 +1,7 @@
 package com.hl.arch.base
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
@@ -15,12 +16,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.FragmentNavigator
-import androidx.navigation.fragment.findNavController
 import com.gyf.immersionbar.ImmersionBar
 import com.gyf.immersionbar.ktx.immersionBar
 import com.hl.arch.R
 import com.hl.arch.utils.*
+import com.hl.utils.OnPaletteColorParse
+import com.hl.utils.PaletteUtil
 import com.hl.utils.initInsetPadding
+import com.hl.utils.navigation.findNavController
 import com.hl.utils.traverseFindFirstViewByType
 
 /**
@@ -119,6 +122,22 @@ abstract class BaseFragment : Fragment(), IPageInflate {
         }
     }
 
+    /**
+     * 从 bitmap 中分析修改状态栏对应的颜色以及字体颜色
+     *
+     * @param bitmap              需要分析的 bitmap
+     * @param onPaletteColorParse 分析结果的回调
+     */
+    protected fun changeStatusBarStyleFromBitmap(bitmap: Bitmap, onPaletteColorParse: OnPaletteColorParse? = null) {
+        PaletteUtil.getColorFromBitmap(bitmap) { rgb, bodyTextColor, titleTextColor, isLight ->
+            onPaletteColorParse?.invoke(rgb, bodyTextColor, titleTextColor, isLight)
+            immersionBar.apply {
+                statusBarColorInt(rgb)
+                statusBarDarkFont(isLight)
+            }.init()
+        }
+    }
+
     protected open fun updateSystemBar() {
         Log.d(TAG, "updateSystemBar =====> $this, 更新状态栏为默认配置")
 
@@ -212,13 +231,25 @@ abstract class BaseFragment : Fragment(), IPageInflate {
             // 使用 Navigation 时
             true
         } else {
-            // 未使用 Navigation 且为 activity 主页面
-            val isActivityMainPage = getNavController() == null && isActivityMainPage()
-            if (isActivityMainPage) {
-                Log.d(TAG, "isMainPage =====> ${this.javaClass.simpleName} 为未使用 Navigation 的 Activity 页面")
-            }
+            if (getNavController() == null) {
+                // 未使用 Navigation 且为 activity 主页面
+                val isActivityMainPage = isActivityMainPage()
+                if (isActivityMainPage) {
+                    Log.d(TAG, "isMainPage =====> ${this.javaClass.simpleName} 为未使用 Navigation 的 Activity 页面")
+                }
 
-            isActivityMainPage
+                isActivityMainPage
+            } else {
+                // 使用 Navigation, 但该页面非 Navigation 页面，且此时存在 toolbar， 可认为是主要页面(Navigation 搭配使用 ViewPager 实现的主页)
+                val isMainPage = toolbar != null
+                if (isMainPage) {
+                    Log.d(
+                        TAG,
+                        "isMainPage =====> ${this.javaClass.simpleName} 为使用 Navigation， 但非 Navigation 页面且存在 toolbar 的主页 "
+                    )
+                }
+                isMainPage
+            }
         }
     }
 
@@ -280,6 +311,16 @@ abstract class BaseFragment : Fragment(), IPageInflate {
         Log.d(TAG, "onStart =====> $this")
     }
 
+    /**
+     * 采用 add hide 方式对 fragment 进行显示控制时， 该方法会回调
+     *
+     * @param hidden  true: 隐藏   false:  显示
+     */
+    override fun onHiddenChanged(hidden: Boolean) {
+        super.onHiddenChanged(hidden)
+        Log.d(TAG, "onHiddenChanged : hidden == $hidden  =========> $this")
+    }
+
     override fun onResume() {
         super.onResume()
         Log.d(TAG, "onResume =====> $this")
@@ -337,7 +378,7 @@ abstract class BaseFragment : Fragment(), IPageInflate {
             if (isNavigationPage()) {
                 findNavController().popBackStack()
             } else {
-                // 此时为为使用 Navigation 的 Activity 的主页面
+                // 此时为未使用 Navigation 的 Activity 的主页面
                 if (isMainPage()) {
                     requireActivity().finish()
                 }

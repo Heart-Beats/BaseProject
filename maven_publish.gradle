@@ -300,7 +300,6 @@ project.afterEvaluate {
                     setDependencyNode(root, 'compile', 'androidx.lifecycle', 'lifecycle-livedata-ktx', Versions.LIFECYCLE)
                     setDependencyNode(root, 'compile', 'androidx.lifecycle', 'lifecycle-extensions', '2.2.0')
                     setDependencyNode(root, 'compile', 'androidx.lifecycle', 'lifecycle-runtime-ktx', Versions.LIFECYCLE)
-                    setDependencyNode(root, 'compile', 'androidx.navigation', 'navigation-fragment-ktx', Versions.NAV_VERSION)
                     setDependencyNode(root, 'compile', 'androidx.navigation', 'navigation-ui', Versions.NAV_VERSION)
 
                     setDependencyNode(root, 'compile', 'com.geyifeng.immersionbar', 'immersionbar', Versions.IMMERSION_BAR)
@@ -341,6 +340,8 @@ project.afterEvaluate {
                     setDependencyNode(root, 'compile', 'androidx.lifecycle', 'lifecycle-viewmodel-ktx', Versions.LIFECYCLE)
                     setDependencyNode(root, 'compile', 'androidx.lifecycle', 'lifecycle-livedata-ktx', Versions.LIFECYCLE)
                     setDependencyNode(root, 'compile', 'androidx.lifecycle', 'lifecycle-runtime-ktx', Versions.LIFECYCLE)
+
+                    setDependencyNode(root, 'compile', 'com.kunminx.arch', 'smooth-navigation', Versions.SMOOTH_NAVIGATION)
                     setDependencyNode(root, 'compile', 'androidx.navigation', 'navigation-fragment-ktx', Versions.NAV_VERSION)
 
                     setDependencyNode(root, 'compile', 'com.guolindev.permissionx', 'permissionx', Versions.PERMISSION_X)

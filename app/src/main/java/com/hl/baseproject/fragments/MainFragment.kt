@@ -8,7 +8,6 @@ import android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
 import android.content.res.Configuration
 import android.os.Bundle
 import android.os.Environment
-import androidx.navigation.fragment.findNavController
 import com.hl.arch.web.navigateToWeb
 import com.hl.baseproject.TestActivity
 import com.hl.baseproject.TestActivity2
@@ -23,6 +22,7 @@ import com.hl.utils.activityResult.OnActivityResult
 import com.hl.utils.camera.CaptureFeature
 import com.hl.utils.camera.MyCaptureActivity
 import com.hl.utils.location.GpsUtil
+import com.hl.utils.navigation.findNavController
 import com.hl.utils.previewFie.PreviewFileActivity
 import com.hl.utils.qrcode.QRScanUtil
 import com.lxj.xpopup.XPopup
@@ -43,6 +43,16 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
 		val list = ('A'..'C').map { it.toString() }.toMutableList()
 		list.add("#")
 		list
+	}
+
+	override fun onBackPressed() {
+		launchHome()
+	}
+
+	override fun onResume() {
+		super.onResume()
+		// 页面显示时恢复默认状态栏配置
+		updateSystemBar()
 	}
 
 	override fun FragmentMainBinding.onViewCreated(savedInstanceState: Bundle?) {
@@ -155,7 +165,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
 		}
 
 		startShadowPlugin.onClick {
-			findNavController().navigate(MainFragmentDirections.actionMainFragmentToShadowPluginFragment())
+			findNavController().navigate(AppMainFragmentDirections.actionAppMainFragmentToShadowPluginFragment())
 		}
 
 		startUniMP.onClick {

@@ -19,6 +19,7 @@ import com.hl.utils.BitmapUtil
 import com.hl.utils.TimeUtil
 import com.hl.utils.XLogUtil
 import com.hl.utils.date.toFormatString
+import com.hl.utils.launchHome
 import com.hl.utils.media.MediaPlayerHelper
 import com.hl.utils.media.OnPlayListener
 import com.hl.utils.span.dsl.buildSpannableString
@@ -36,6 +37,16 @@ class TestFragment : ViewBindingMvvmBaseFragment<FragmentTestBinding>() {
 	}
 
 	override fun onFlowVMCreated(flowVM: FlowVM) {
+	}
+
+	override fun onBackPressed() {
+		launchHome()
+	}
+
+	override fun onResume() {
+		super.onResume()
+		// 页面显示时恢复默认状态栏配置
+		updateSystemBar()
 	}
 
 	override fun FragmentTestBinding.onViewCreated(savedInstanceState: Bundle?) {

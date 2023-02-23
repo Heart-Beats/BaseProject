@@ -1,5 +1,6 @@
 package com.hl.arch.base
 
+import android.graphics.Bitmap
 import android.graphics.Color
 import android.os.Bundle
 import android.os.PersistableBundle
@@ -18,10 +19,7 @@ import com.gyf.immersionbar.ImmersionBar
 import com.gyf.immersionbar.ktx.immersionBar
 import com.hl.arch.R
 import com.hl.arch.utils.getColorByRes
-import com.hl.utils.initInsetPadding
-import com.hl.utils.setSafeValue
-import com.hl.utils.traverseFindFirstViewByType
-import kotlin.math.roundToInt
+import com.hl.utils.*
 
 
 abstract class BaseActivity : AppCompatActivity(), IPageInflate {
@@ -92,20 +90,6 @@ abstract class BaseActivity : AppCompatActivity(), IPageInflate {
     override fun onResume() {
         super.onResume()
         Log.d(TAG, "onResume:  =====> $this")
-    }
-
-    /**
-     * @param percent   透明度
-     * @param rgb   RGB值
-     * @return 最终设置过透明度的颜色值
-     */
-    protected open fun getTranslucentColor(percent: Float, rgb: Int): Int {
-        val blue = Color.blue(rgb)
-        val green = Color.green(rgb)
-        val red = Color.red(rgb)
-        var alpha = Color.alpha(rgb)
-        alpha = (alpha * percent).roundToInt()
-        return Color.argb(alpha, red, green, blue)
     }
 
     override fun onPause() {
@@ -193,6 +177,22 @@ abstract class BaseActivity : AppCompatActivity(), IPageInflate {
                 statusBarDarkFont(false)
                 transparentStatusBar()
                 immersionBarBlock()
+            }.init()
+        }
+    }
+
+    /**
+     * 从 bitmap 中分析修改状态栏对应的颜色以及字体颜色
+     *
+     * @param bitmap              需要分析的 bitmap
+     * @param onPaletteColorParse 分析结果的回调
+     */
+    protected fun changeStatusBarStyleFromBitmap(bitmap: Bitmap, onPaletteColorParse: OnPaletteColorParse? = null) {
+        PaletteUtil.getColorFromBitmap(bitmap) { rgb, bodyTextColor, titleTextColor, isLight ->
+            onPaletteColorParse?.invoke(rgb, bodyTextColor, titleTextColor, isLight)
+            immersionBar.apply {
+                statusBarColorInt(rgb)
+                statusBarDarkFont(isLight)
             }.init()
         }
     }
