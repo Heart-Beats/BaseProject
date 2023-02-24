@@ -151,6 +151,7 @@ abstract class BaseAbstractAdapter<T>(private var adapterData: MutableList<T>) :
         val myDiffCallback = MyDiffCallback(adapterData, newData)
         DiffUtil.calculateDiff(myDiffCallback, true).dispatchUpdatesTo(this)
         this.adapterData = newData.toMutableList()
+        // this.notifyDataSetChanged()
     }
 
 

@@ -36,7 +36,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
 		set(value) {
 			field = value
 			// 更改状态栏字体颜色
-			immersionBar.statusBarDarkFont(field).init()
+			immersionBar?.statusBarDarkFont(field)?.init()
 		}
 
 	// 状态栏颜色默认透明
@@ -44,6 +44,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
 
 	override fun onBackPressed() {
 		launchHome()
+	}
+
+	override fun onCreate(savedInstanceState: Bundle?) {
+		super.onCreate(savedInstanceState)
+		homeViewModel.reFreshHomeData()
 	}
 
 	override fun onResume() {
@@ -55,7 +60,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
 	override fun FragmentHomeBinding.onViewCreated(savedInstanceState: Bundle?) {
 		this.initTitleLayout()
 
-		homeViewModel.getTopBannerList()
+		this.refreshLayout.setOnRefreshListener {
+			homeViewModel.reFreshHomeData()
+			it.finishRefresh()
+		}
+
 		homeViewModel.topBannerListLiveData.onceLastObserve(viewLifecycleOwner) {
 			it ?: return@onceLastObserve
 

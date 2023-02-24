@@ -23,7 +23,7 @@ internal object Versions {
     const val NAV_VERSION = "2.5.3"
     const val SMOOTH_NAVIGATION = "4.0.0"
 
-    const val MATERIAL = "1.4.0"
+    const val MATERIAL = "1.8.0"
 
     const val XLOG = "1.10.1"
 

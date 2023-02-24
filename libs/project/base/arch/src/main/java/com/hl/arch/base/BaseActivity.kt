@@ -39,7 +39,7 @@ abstract class BaseActivity : AppCompatActivity(), IPageInflate {
     @JvmField
     protected var toolbar: Toolbar? = null
 
-    protected lateinit var immersionBar: ImmersionBar
+    protected var immersionBar: ImmersionBar? = null
 
     /**
      * 页面视图创建完成
@@ -171,14 +171,12 @@ abstract class BaseActivity : AppCompatActivity(), IPageInflate {
         Log.d(TAG, "setStatusBarImmerseFromView =====> 开始设置沉浸式状态栏， statusBarView == $statusBarView")
 
         initInsetPadding(top = false)
-        if (::immersionBar.isInitialized) {
-            immersionBar.apply {
-                statusBarView(statusBarView)
-                statusBarDarkFont(false)
-                transparentStatusBar()
-                immersionBarBlock()
-            }.init()
-        }
+        immersionBar?.apply {
+            statusBarView(statusBarView)
+            statusBarDarkFont(false)
+            transparentStatusBar()
+            immersionBarBlock()
+        }?.init()
     }
 
     /**
@@ -190,10 +188,10 @@ abstract class BaseActivity : AppCompatActivity(), IPageInflate {
     protected fun changeStatusBarStyleFromBitmap(bitmap: Bitmap, onPaletteColorParse: OnPaletteColorParse? = null) {
         PaletteUtil.getColorFromBitmap(bitmap) { rgb, bodyTextColor, titleTextColor, isLight ->
             onPaletteColorParse?.invoke(rgb, bodyTextColor, titleTextColor, isLight)
-            immersionBar.apply {
+            immersionBar?.apply {
                 statusBarColorInt(rgb)
                 statusBarDarkFont(isLight)
-            }.init()
+            }?.init()
         }
     }
 
