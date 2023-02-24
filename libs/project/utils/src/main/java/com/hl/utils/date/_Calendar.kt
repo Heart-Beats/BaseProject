@@ -1,7 +1,7 @@
 package com.hl.utils
 
+import com.hl.utils.date.DatePattern
 import com.hl.utils.date.LunarUtil
-import com.hl.utils.date.srcPattern
 import com.hl.utils.date.toDate
 import com.hl.utils.date.toFormatString
 import java.util.*
@@ -11,12 +11,12 @@ import java.util.*
  * Email: 913305160@qq.com
  */
 
-fun Calendar.toFormatString(destPattern: String = srcPattern): String {
+fun Calendar.toFormatString(@DatePattern destPattern: String = DatePattern.YMD_HMS): String {
 	return time.toFormatString(destPattern)
 }
 
 fun Calendar.toDate(): Date {
-	return this.toFormatString(srcPattern).toDate(srcPattern)
+	return this.toFormatString(DatePattern.YMD_HMS).toDate(DatePattern.YMD_HMS)
 }
 
 fun Calendar?.copyNewCalendar(): Calendar? {
@@ -26,7 +26,7 @@ fun Calendar?.copyNewCalendar(): Calendar? {
 	}
 }
 
-fun String.toCalendar(srcPattern: String): Calendar? {
+fun String.toCalendar(@DatePattern srcPattern: String): Calendar? {
 	val date = try {
 		toDate(srcPattern)
 	} catch (e: Exception) {

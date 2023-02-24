@@ -36,10 +36,10 @@ class TestActivity2 : ViewBindingBaseActivity<ActivityTest2Binding>() {
 				PaletteUtil.getColorFromBitmap(this) { rgb, _, _, isLight ->
 					toast("是否为深色的图片 == ${!isLight}")
 
-					immersionBar.apply {
+					immersionBar?.apply {
 						statusBarColorInt(rgb)
 						statusBarDarkFont(isLight)
-					}.init()
+					}?.init()
 				}
 			}
 		}

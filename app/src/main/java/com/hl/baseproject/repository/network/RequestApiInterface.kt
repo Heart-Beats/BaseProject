@@ -1,8 +1,10 @@
 package com.hl.baseproject.repository.network
 
 import com.hl.baseproject.repository.network.bean.BannerData
+import com.hl.baseproject.repository.network.bean.HomeArticleList
 import com.hl.baseproject.repository.network.bean.WanAndroidPublicResp
 import retrofit2.http.GET
+import retrofit2.http.Path
 
 /**
  * @author  张磊  on  2023/02/16 at 18:07
@@ -15,4 +17,7 @@ interface RequestApiInterface {
 	 */
 	@GET("banner/json")
 	suspend fun getTopBannerList(): WanAndroidPublicResp<List<BannerData>?>
+
+	@GET("article/list/{pageIndex}/json")
+	suspend fun getHomeArticleList(@Path("pageIndex") pageIndex: Int = 0): WanAndroidPublicResp<HomeArticleList?>
 }

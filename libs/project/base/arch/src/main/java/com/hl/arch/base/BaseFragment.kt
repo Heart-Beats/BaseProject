@@ -45,7 +45,7 @@ abstract class BaseFragment : Fragment(), IPageInflate {
     @JvmField
     protected var toolbar: Toolbar? = null
 
-    protected lateinit var immersionBar: ImmersionBar
+    protected var immersionBar: ImmersionBar? = null
 
     /**
      * Fragment 销毁视图时保存页面数据至  arguments
@@ -112,14 +112,12 @@ abstract class BaseFragment : Fragment(), IPageInflate {
 
         initInsetPadding(top = false)
 
-        if (::immersionBar.isInitialized) {
-            immersionBar.apply {
-                statusBarView(statusBarView)
-                statusBarDarkFont(false)
-                transparentStatusBar()
-                immersionBarBlock()
-            }.init()
-        }
+        immersionBar?.apply {
+            statusBarView(statusBarView)
+            statusBarDarkFont(false)
+            transparentStatusBar()
+            immersionBarBlock()
+        }?.init()
     }
 
     /**
@@ -131,10 +129,10 @@ abstract class BaseFragment : Fragment(), IPageInflate {
     protected fun changeStatusBarStyleFromBitmap(bitmap: Bitmap, onPaletteColorParse: OnPaletteColorParse? = null) {
         PaletteUtil.getColorFromBitmap(bitmap) { rgb, bodyTextColor, titleTextColor, isLight ->
             onPaletteColorParse?.invoke(rgb, bodyTextColor, titleTextColor, isLight)
-            immersionBar.apply {
+            immersionBar?.apply {
                 statusBarColorInt(rgb)
                 statusBarDarkFont(isLight)
-            }.init()
+            }?.init()
         }
     }
 
