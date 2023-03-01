@@ -1,4 +1,4 @@
-package com.hl.utils.navigation
+package com.hl.navigatioin
 
 import android.view.View
 import androidx.annotation.StringRes

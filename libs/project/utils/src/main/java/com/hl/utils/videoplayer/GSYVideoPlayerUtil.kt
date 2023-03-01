@@ -3,8 +3,9 @@ package com.hl.utils.videoplayer
 import android.content.pm.ActivityInfo
 import android.view.View
 import android.widget.ImageView
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.LifecycleOwner
-import androidx.navigation.findNavController
 import com.hl.uikit.onClick
 import com.hl.uikit.video.UIKitMyStandardGSYVideoPlayer
 import com.hl.utils.loadFirstFrameCover
@@ -108,7 +109,11 @@ fun UIKitMyStandardGSYVideoPlayer.initPlayer(
             } else {
                 //释放所有
                 this.setVideoAllCallBack(null)
-                this.findNavController().popBackStack()
+
+                when (lifecycleOwner) {
+                    is FragmentActivity -> lifecycleOwner.finish()
+                    is Fragment -> lifecycleOwner.requireActivity().finish()
+                }
             }
         }
     }

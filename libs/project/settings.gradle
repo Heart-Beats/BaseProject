@@ -29,13 +29,12 @@ dependencyResolutionManagement {
 
 rootProject.name='Project'
 
-include ':utils'
-
 // 不添加 includeBuild， 该项目下无法依赖 uikit 项目下的相关库
 includeBuild('../uikit')
 
 includeBase()
 includeSDK()
+include ':utils', ':navigation'
 
 def includeBase() {
     include ':base-api', ':base-arch', ':base-app-res'

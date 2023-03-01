@@ -11,6 +11,7 @@ task buildSdk() {
     dependsOn gradle.includedBuild('project').task(':base-app-res:assembleRelease')
     dependsOn gradle.includedBuild('project').task(':base-arch:assembleRelease')
     dependsOn gradle.includedBuild('project').task(':utils:assembleRelease')
+    dependsOn gradle.includedBuild('project').task(':navigation:assembleRelease')
 
     dependsOn gradle.includedBuild('project').task(':SDK:Pay:assembleRelease')
     dependsOn gradle.includedBuild('project').task(':SDK:Umeng:assembleRelease')
@@ -146,6 +147,7 @@ setGeneratePomFileAndDepends('baseApi')
 setGeneratePomFileAndDepends('baseAppRes')
 setGeneratePomFileAndDepends('baseArch')
 setGeneratePomFileAndDepends('utils')
+setGeneratePomFileAndDepends('navigation')
 setGeneratePomFileAndDepends('Pay')
 setGeneratePomFileAndDepends('Umeng')
 setGeneratePomFileAndDepends('TencentCloud')
@@ -285,6 +287,7 @@ project.afterEvaluate {
                 pom.withXml {
                     def root = asNode()
                     setDependencyNode(root, 'compile', myGroupId, 'utils', getPublicationVersion())
+                    setDependencyNode(root, 'compile', myGroupId, 'navigation', getPublicationVersion())
                     setDependencyNode(root, 'compile', myGroupId, 'Umeng', getPublicationVersion())
 
                     setDependencyNode(root, 'compile', 'androidx.core', 'core-ktx', Versions.CORE_KTX)
@@ -341,9 +344,6 @@ project.afterEvaluate {
                     setDependencyNode(root, 'compile', 'androidx.lifecycle', 'lifecycle-livedata-ktx', Versions.LIFECYCLE)
                     setDependencyNode(root, 'compile', 'androidx.lifecycle', 'lifecycle-runtime-ktx', Versions.LIFECYCLE)
 
-                    setDependencyNode(root, 'compile', 'com.kunminx.arch', 'smooth-navigation', Versions.SMOOTH_NAVIGATION)
-                    setDependencyNode(root, 'compile', 'androidx.navigation', 'navigation-fragment-ktx', Versions.NAV_VERSION)
-
                     setDependencyNode(root, 'compile', 'com.guolindev.permissionx', 'permissionx', Versions.PERMISSION_X)
                     setDependencyNode(root, 'compile', 'com.google.code.gson', 'gson', Versions.GSON)
                     setDependencyNode(root, 'compile', 'io.github.shashank02051997', 'FancyToast', Versions.FANCY_TOAST)
@@ -369,6 +369,27 @@ project.afterEvaluate {
                     setDependencyNode(root, 'compile', 'me.rosuh', 'AndroidFilePicker', Versions.ANDROID_FILE_PICKER)
                     setDependencyNode(root, 'compile', 'cjt.library.wheel', 'camera', Versions.CAMERA)
                     setDependencyNode(root, 'compile', 'androidx.palette', 'palette-ktx', Versions.PALETTE)
+
+                    setScm(root)
+                }
+            }
+
+            navigation(MavenPublication) {
+                def moduleName = 'navigation'
+                def modulePath = "$libProjectPath/$moduleName"
+
+                groupId myGroupId
+                artifactId moduleName
+                version getPublicationVersion()
+                artifact("$modulePath/build/outputs/aar/${moduleName}-release.aar")
+                artifact sourceAar(moduleName, modulePath)
+
+                pom.withXml {
+                    def root = asNode()
+                    setDependencyNode(root, 'compile', 'com.google.android.material', 'material', Versions.MATERIAL)
+
+                    setDependencyNode(root, 'compile', 'com.kunminx.arch', 'smooth-navigation', Versions.SMOOTH_NAVIGATION)
+                    setDependencyNode(root, 'compile', 'androidx.navigation', 'navigation-fragment-ktx', Versions.NAV_VERSION)
 
                     setScm(root)
                 }

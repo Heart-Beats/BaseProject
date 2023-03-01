@@ -24,6 +24,8 @@ import com.hl.utils.OnPaletteColorParse
 import com.hl.utils.PaletteUtil
 import com.hl.utils.initInsetPadding
 import com.hl.utils.navigation.findNavController
+import com.hl.utils.navigation.getCurrentDestination
+import com.hl.utils.navigation.getNavController
 import com.hl.utils.traverseFindFirstViewByType
 
 /**
@@ -108,7 +110,7 @@ abstract class BaseFragment : Fragment(), IPageInflate {
      * @param immersionBarBlock 使用 immersionBar 对状态栏的后续设置
      */
     protected fun setStatusBarImmerseFromView(statusBarView: View, immersionBarBlock: ImmersionBar.() -> Unit = {}) {
-        Log.d(TAG, "setStatusBarImmerseFromView =====> 开始设置沉浸式状态栏， statusBarView == ${statusBarView}")
+        Log.d(TAG, "setStatusBarImmerseFromView =====> 开始设置沉浸式状态栏， statusBarView == $statusBarView")
 
         initInsetPadding(top = false)
 
@@ -169,7 +171,7 @@ abstract class BaseFragment : Fragment(), IPageInflate {
         val inflateView = getPageInflateView(inflater)
 
         //需要注意，这里的 toolbar 必须为 androidx.appcompat.widget.Toolbar
-        toolbar = inflateView?.traverseFindFirstViewByType(Toolbar::class.java)?.apply {
+        toolbar = inflateView.traverseFindFirstViewByType(Toolbar::class.java)?.apply {
             // xml 中通过 style 可统一配置，这里设置会导致 xml 中设置失效
             // this.setTitleTextColor(getColorByRes(R.color.colorTitleText))
             // this.setBackgroundColor(getColorByRes(R.color.colorTitlePrimary))
@@ -315,8 +317,25 @@ abstract class BaseFragment : Fragment(), IPageInflate {
      * @param hidden  true: 隐藏   false:  显示
      */
     override fun onHiddenChanged(hidden: Boolean) {
-        super.onHiddenChanged(hidden)
-        Log.d(TAG, "onHiddenChanged : hidden == $hidden  =========> $this")
+        if (hidden) {
+            onFragmentHide()
+        } else {
+            onFragmentShow()
+        }
+    }
+
+    /**
+     *  fragment Show 时， 该方法会回调
+     */
+    protected fun onFragmentShow() {
+        Log.d(TAG, "onFragmentShow  =========> $this")
+    }
+
+    /**
+     * fragment Hide 时， 该方法会回调
+     */
+    protected fun onFragmentHide() {
+        Log.d(TAG, "onFragmentHide  =========> $this")
     }
 
     override fun onResume() {
