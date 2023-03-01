@@ -46,6 +46,7 @@ android {
 
 dependencies {
     api project(path: ':utils')
+    api project(path: ':navigation')
     api project(path: ':SDK:Umeng')
 
     api Deps.AndroidX.core_ktx

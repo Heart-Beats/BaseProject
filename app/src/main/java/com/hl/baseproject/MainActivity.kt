@@ -3,7 +3,7 @@ package com.hl.baseproject
 import android.os.Bundle
 import com.hl.arch.base.ViewBindingBaseActivity
 import com.hl.baseproject.databinding.ActivityMainBinding
-import com.hl.utils.navigation.MyNavHostFragment
+import com.hl.navigatioin.MyNavHostFragment
 
 
 class MainActivity : ViewBindingBaseActivity<ActivityMainBinding>() {
@@ -15,7 +15,7 @@ class MainActivity : ViewBindingBaseActivity<ActivityMainBinding>() {
 
     override fun ActivityMainBinding.onViewCreated(savedInstanceState: Bundle?) {
 
-        this.navHostFragment.getFragment<MyNavHostFragment>().also {
+        this.navHostFragment.getFragment<com.hl.navigatioin.MyNavHostFragment>().also {
             it.setCommonNavAnimations {
                 this.enterAnim = com.hl.res.R.anim.hl_res_slide_in_right
                 this.exitAnim = com.hl.res.R.anim.hl_res_slide_out_left

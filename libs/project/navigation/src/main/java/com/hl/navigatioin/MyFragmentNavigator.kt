@@ -1,4 +1,5 @@
-package com.hl.utils.navigation
+package com.hl.navigatioin
+
 
 import android.net.Uri
 import android.os.Bundle

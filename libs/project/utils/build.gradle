@@ -87,9 +87,6 @@ dependencies {
     implementation Deps.Lifecycle.lifecycle_livedata_ktx
     implementation Deps.Lifecycle.lifecycle_viewmodel_ktx
 
-    api Deps.Jetpack.Navigation.smooth_navigation
-    api(Deps.Jetpack.Navigation.navigation_fragment_ktx)
-
     implementation Deps.PermissionX.permission_x
     implementation Deps.Json.gson
     implementation Deps.FancyToast.fancy_toast

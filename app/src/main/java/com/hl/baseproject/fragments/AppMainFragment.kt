@@ -3,11 +3,10 @@ package com.hl.baseproject.fragments
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.blankj.utilcode.util.ActivityUtils
 import com.hl.baseproject.base.BaseFragment
 import com.hl.baseproject.databinding.FragmentAppMainBinding
 import com.hl.baseproject.fragments.home.HomeFragment
-import com.hl.utils.navigation.ui.setupWithViewPager2
+import com.hl.utils.views.setupWithViewPager2
 
 
 class AppMainFragment : BaseFragment<FragmentAppMainBinding>() {

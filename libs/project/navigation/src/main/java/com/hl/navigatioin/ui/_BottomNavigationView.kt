@@ -1,75 +1,23 @@
-package com.hl.utils.navigation.ui
+package com.hl.navigatioin.ui
 
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.view.MotionEvent
+import android.view.View
 import androidx.annotation.IdRes
-import androidx.core.view.children
 import androidx.core.view.forEach
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavOptions
-import androidx.viewpager2.widget.ViewPager2
-import com.google.android.material.bottomnavigation.BottomNavigationItemView
-import com.google.android.material.bottomnavigation.BottomNavigationMenuView
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.hl.uikit.visibleOrGone
 import java.lang.ref.WeakReference
 
 /**
  * @author  张磊  on  2023/02/22 at 18:02
  * Email: 913305160@qq.com
  */
-
-/**
- * 拦截 bottomNavigationMenuView 的默认点击与长按处理（消除长按的 toast 提示，且长按处理与点击处理一致）
- */
-fun BottomNavigationView.initTouchHandle() {
-
-	//拦截 bottomNavigationMenuView 的点击与长按处理（消除长按的 toast 提示，且长按处理与点击处理一致）
-	val bottomNavigationMenuView = this.children.first() as BottomNavigationMenuView
-	bottomNavigationMenuView.children.forEach {
-		if (it is BottomNavigationItemView) {
-			it.setOnTouchListener { v, event ->
-				if (event.action == MotionEvent.ACTION_UP) {
-					if (event.x >= 0 && event.x <= v.width && event.y >= 0 && event.y <= v.height) {
-						//仅当触摸点在 view 之内才执行 view 原有的点击事件
-						v.performClick()
-					}
-				}
-				true
-			}
-		}
-	}
-}
-
-/**
- * 将 BottomNavigationView 与 ViewPager2 关联起来，实现彼此联动
- *
- * @param viewPager2    联动的 viewPager2
- * @param smoothScroll  点击BottomNavigationView 的菜单项时，viewPager2 跳转时是否需要动画
- */
-fun BottomNavigationView.setupWithViewPager2(viewPager2: ViewPager2, smoothScroll: Boolean = true) {
-	this.setOnItemSelectedListener { item ->
-		if (!item.isChecked) {
-			val index = this.menu.children.indexOf(item)
-			viewPager2.setCurrentItem(index, smoothScroll)
-			true
-		} else {
-			true
-		}
-	}
-
-	val bottomNavigationMenuView = this
-	viewPager2.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
-		override fun onPageSelected(position: Int) {
-			bottomNavigationMenuView.selectedItemId = bottomNavigationMenuView.menu.getItem(position).itemId
-		}
-	})
-}
 
 /**
  * 将 BottomNavigationView 与 navController 关联起来，
@@ -124,7 +72,7 @@ private fun BottomNavigationView.setBottomNavigationViewVisibility(
 				&& this.menu.findItem(destinationParent.id) != null -> true
 		else -> false
 	}
-	this.visibleOrGone(isMainDestination)
+	this.visibility = if (isMainDestination) View.VISIBLE else View.GONE
 }
 
 private fun onNavDestinationSelected(item: MenuItem, navController: NavController): Boolean {
@@ -132,10 +80,10 @@ private fun onNavDestinationSelected(item: MenuItem, navController: NavControlle
 		.setLaunchSingleTop(true)
 		.setRestoreState(true)    // 是否保存 fragment 的状态
 		.also {
-			it.setEnterAnim(com.hl.utils.navigation.NavAnimations.NO_ANIM)
-				.setExitAnim(com.hl.utils.navigation.NavAnimations.NO_ANIM)
-				.setPopEnterAnim(com.hl.utils.navigation.NavAnimations.NO_ANIM)
-				.setPopExitAnim(com.hl.utils.navigation.NavAnimations.NO_ANIM)
+			it.setEnterAnim(com.hl.navigatioin.NavAnimations.NO_ANIM)
+				.setExitAnim(com.hl.navigatioin.NavAnimations.NO_ANIM)
+				.setPopEnterAnim(com.hl.navigatioin.NavAnimations.NO_ANIM)
+				.setPopExitAnim(com.hl.navigatioin.NavAnimations.NO_ANIM)
 		}
 		.apply {
 			if (item.order and Menu.CATEGORY_SECONDARY == 0) {
