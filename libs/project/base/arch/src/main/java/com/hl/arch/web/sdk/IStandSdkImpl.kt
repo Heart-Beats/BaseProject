@@ -13,7 +13,6 @@ import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
-import com.hl.utils.navigation.findNavController
 import com.blankj.utilcode.util.ActivityUtils
 import com.blankj.utilcode.util.NetworkUtils
 import com.github.lzyzsd.jsbridge.BridgeWebView
@@ -38,6 +37,7 @@ import com.hl.umeng.sdk.UMShareUtil
 import com.hl.utils.*
 import com.hl.utils.activityResult.OnActivityResult
 import com.hl.utils.date.getFormattedNowDateTime
+import com.hl.utils.navigation.findNavController
 import com.hl.utils.previewFie.PreviewFileActivity
 import com.king.zxing.CameraScan
 import com.king.zxing.CaptureActivity
@@ -55,7 +55,7 @@ import java.io.File
  */
 
 class IStandSdkImpl(private val webViewFragment: Fragment, val bridgeWebView: BridgeWebView) :
-	ISdkHandlerProxy(bridgeWebView), IStandSdk {
+	IStandSdk, ISdkRegister by ISdkHandlerProxy(bridgeWebView) {
 
 	/**
 	 * 当前 WebViewFragment 依附的 Activity

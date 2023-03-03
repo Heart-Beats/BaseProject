@@ -16,10 +16,14 @@ import java.lang.reflect.Method
  *
  * 注册并代理 ISdk 相关实现类中声明的 JsBridge 方法
  */
-open class ISdkHandlerProxy(private val bridgeWebView: BridgeWebView) {
+open class ISdkHandlerProxy(private val bridgeWebView: BridgeWebView) : ISdkRegister {
 
 	private val bridgeHandlerProxyLazy by lazy {
 		createBridgeHandlerProxy(bridgeWebView)
+	}
+
+	override fun commonRegisterHandler(handlerName: String, bridgeHandler: BridgeHandler) {
+		commonRegisterHandler(handlerName, bridgeHandlerProxyLazy, bridgeHandler)
 	}
 
 	/**
@@ -29,7 +33,7 @@ open class ISdkHandlerProxy(private val bridgeWebView: BridgeWebView) {
 	 * @param bridgeHandlerProxy  BridgeHandler 的代理对象
 	 * @param bridgeHandler       BridgeHandler，即 H5 调用方法时的默认处理
 	 */
-	fun commonRegisterHandler(
+	private fun commonRegisterHandler(
 		handlerName: String,
 		bridgeHandlerProxy: ProxyHandler<BridgeHandler> = bridgeHandlerProxyLazy,
 		bridgeHandler: BridgeHandler,
