@@ -55,7 +55,8 @@ internal object Versions {
     const val PICTURE_SELECTOR = "v3.0.6"
     const val ANDROID_FILE_PICKER = "0.75"
     const val SHAPE_VIEW = "8.5"
-    const val CALENDAR_VIEW = "3.7.1"
+    const val CALENDAR_VIEW = "3.7.1.37"
+    const val NCALENDAR = "5.0.2"
     const val FLOW_LAYOUT = "1.1.2"
     const val CAMERA = "1.1.9"
     const val VERIFICATION_CODE_INPUT_VIEW = "1.0.2"
@@ -65,7 +66,7 @@ internal object Versions {
     const val TENCENT_COS = "5.9.+"
     const val MMKV = "1.2.15"
     const val UPDATE_APP_UTILSX = "2.3.0"
-    const val LOTTIE = "5.0.3"
+    const val LOTTIE = "6.0.0"
     const val WAVE_SIDE_BAR = "1.3"
     const val SIDE_BAR = "1.0.0"
     const val ANDROID_AUTO_SIZE = "v1.2.1"
@@ -73,6 +74,8 @@ internal object Versions {
 
     const val ANDROID_GIF_DRAWABLE = "1.2.25"
     const val ALI_PAY = "15.8.11"
+
+    const val SENSEY = "1.9.0"
 }
 
 class Deps {
@@ -170,43 +173,6 @@ class Deps {
 
     object XLog {
         const val xlog = "com.elvishew:xlog:${Versions.XLOG}"
-    }
-
-    object Netease {
-        /**
-         * 音视频通话
-         */
-        const val nertc_sdk = "com.netease.yunxin:nertc:${Versions.NERTC}"
-
-        /**
-         * 基础功能 (必需)
-         */
-        const val base_sdk = "com.netease.nimlib:basesdk:${Versions.NIM}"
-
-        const val av_sign_alling_sdk = "com.netease.nimlib:avsignalling:${Versions.NIM}"
-
-        /**
-         * 通过云信来集成小米等厂商推送需要
-         */
-        const val im_push_sdk = "com.netease.nimlib:push:${Versions.NIM}"
-
-        /**
-         * 全文检索插件
-         */
-        const val lucene_sdk = "com.netease.nimlib:lucene:${Versions.NIM}"
-
-        /**
-         *  聊天室需要
-         */
-        const val chatroom_sdk = "com.netease.nimlib:chatroom:${Versions.NIM}"
-        const val rts_sdk = "com.netease.nimlib:rts:${Versions.NIM}"
-
-        /**
-         * 超大群需要
-         */
-        const val super_team_Sdk = "com.netease.nimlib:superteam:${Versions.NIM}"
-        const val ysf_sdk = "com.netease.nimlib:ysf:${Versions.NIM}"
-        const val ysf_kit_sdk = "com.netease.nimlib:ysfkit:${Versions.NIM}"
     }
 
     object Retrofit {
@@ -421,33 +387,56 @@ class Deps {
      */
     object UiThirty {
 
-        // 快速实现相关 view  Shape 框架, github 地址：https://github.com/getActivity/ShapeView
+        /**
+         * 快速实现相关 view  Shape 框架, github 地址：https://github.com/getActivity/ShapeView
+         */
         const val shape_view = "com.github.getActivity:ShapeView:${Versions.SHAPE_VIEW}"
 
-        // 可高度定制化的日历组件， github 地址：https://github.com/huanghaibin-dev/CalendarView
-        const val calendar_view = "com.haibin:calendarview:${Versions.CALENDAR_VIEW}"
+        /**
+         * Android上一个优雅、万能自定义 UI、支持周视图、自定义周起始、性能高效的日历控件，支持热插拔实现的 UI定制！
+         * 支持标记、自定义颜色、农历、自定义月视图各种显示模式等。Canvas 绘制，速度快、占用内存低
+         *
+         * github 地址：https://github.com/angcyo/CalendarView
+         */
+        const val calendar_view = "com.github.angcyo:CalendarView:${Versions.CALENDAR_VIEW}"
+
+        /**
+         *  一款安卓日历，仿 miui，钉钉，华为的日历，万年历、365、周日历，月日历，月视图、周视图滑动切换，农历，节气，
+         *      Andriod Calendar , MIUI Calendar,小米日历
+         *
+         *  github 地址: https://github.com/yannecer/NCalendar
+         */
+        const val NCalendar = "com.necer.ncalendar:ncalendar:${Versions.NCALENDAR}"
 
         const val flow_layout = "com.hyman:flowlayout-lib:${Versions.FLOW_LAYOUT}"
     }
 
     object Camera {
-        //模仿微信拍照的Android开源控件
+        /**
+         * 模仿微信拍照的Android开源控件
+         */
         const val camera = "cjt.library.wheel:camera:${Versions.CAMERA}"
     }
 
     object VerificationCodeInputView {
-        //支持粘贴的验证码输入框
+        /**
+         * 支持粘贴的验证码输入框
+         */
         const val verification_code_input_view =
             "com.github.Wynsbin:VerificationCodeInputView:${Versions.VERIFICATION_CODE_INPUT_VIEW}"
     }
 
     object GSYVideoPlayer {
-        //完整版引入（视频播放）
+        /**
+         * 完整版引入（视频播放）
+         */
         const val gsy_video_player = "com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer:${Versions.GSY_VIDEO_PLAYER}"
     }
 
     object Tencent {
-        //不包含统计功能
+        /**
+         * 不包含统计功能
+         */
         const val wechat_sdk_android_without_mta =
             "com.tencent.mm.opensdk:wechat-sdk-android-without-mta:${Versions.WEI_XIN_OPEN_SDK}"
 
@@ -459,7 +448,9 @@ class Deps {
     }
 
     object Update {
-        //不包含统计功能
+        /**
+         * 一行代码快速实现app版本更新, 开源地址： https://github.com/teprinciple/UpdateAppUtils
+         */
         const val update_app_utilsx = "com.teprinciple:updateapputilsx:${Versions.UPDATE_APP_UTILSX}"
     }
 
@@ -522,5 +513,14 @@ class Deps {
      */
     object Ali {
         const val pay = "com.alipay.sdk:alipaysdk-android:${Versions.ALI_PAY}"
+    }
+
+    object Sensey {
+        /**
+         * 基于  Android 原生封装的传感器以及手势检测库
+         *
+         * 开源地址：https://github.com/nisrulz/sensey
+         */
+        const val sensey = "com.github.nisrulz:sensey:${Versions.SENSEY}"
     }
 }
