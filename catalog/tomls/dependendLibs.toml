@@ -188,8 +188,12 @@ pickSelector_file_picker = { module = "me.rosuh:AndroidFilePicker", version.ref 
 # 快速实现相关 view  Shape 框架, github 地址：https://github.com/getActivity/ShapeView
 shapeView = { module = "com.github.getActivity:ShapeView", version.ref = "shapeView" }
 
-# 可高度定制化的日历组件， github 地址：https://github.com/huanghaibin-dev/CalendarView
-calendarView = { module = "com.haibin:calendarview", version.ref = "calendarView" }
+# 可高度定制化的日历组件， github 地址：https://github.com/angcyo/CalendarView
+calendarView = { module = "com.github.angcyo:CalendarView", version.ref = "calendarView" }
+
+# 一款安卓日历，仿 miui，钉钉，华为的日历，万年历、365、周日历，月日历，月视图、周视图滑动切换，农历，节气， Andriod Calendar , MIUI Calendar,小米日历
+#  github 地址: https://github.com/yannecer/NCalendar
+nCalendar = { module = "com.necer.ncalendar:ncalendar", version.ref = "nCalendar" }
 
 flowLayout = { module = "com.hyman:flowlayout-lib", version.ref = "flowLayout" }
 
@@ -235,3 +239,4 @@ shadow_loader_impl = { module = "com.tencent.shadow.dynamic:loader-impl", versio
 
 android_gif_drawable = { module = "pl.droidsonroids.gif:android-gif-drawable", version.ref = "androidGifDrawable" }
 aliPaySdk = { module = "com.alipay.sdk:alipaysdk-android", version.ref = "aliPay" }
+sensey = { module = "com.github.nisrulz:sensey", version.ref = "sensey" }
