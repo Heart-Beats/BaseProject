@@ -43,7 +43,7 @@ class MultiBaseUrlInterceptor(val onDomainGetBaseUrl: (domainName: String) -> St
 			builder.removeHeader(DOMAIN_NAME)
 
 			if (!domainCacheMap.contains(this)) {
-				domainCacheMap[this] = onDomainGetBaseUrl(this)
+				domainCacheMap[this] = onDomainGetBaseUrl(this).trim()
 			}
 
 			val newHttpUrl = domainCacheMap[this]?.toHttpUrlOrNull()?.run {

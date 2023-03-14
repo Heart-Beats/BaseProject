@@ -97,10 +97,10 @@ object RetrofitManager {
                     }
 
                     /**
-                     * 网络拦截器, 位于CallServerInterceptor之前，属于倒数第二个拦截器,处在发送数据的前一刻，以及收到数据的第一刻。
+                     * 网络拦截器, 位于 CallServerInterceptor 之前，属于倒数第二个拦截器,处在发送数据的前一刻，以及收到数据的第一刻。
                      * 这么敏感的位置，决定了通过这个拦截器可以看到更多的信息
-                     *      请求之前: OkHttp处理之后的请求报文数据，比如增加了各种header之后的数据。
-                     *      请求之后: OkHttp处理之前的响应报文数据，比如解压缩之前的数据。
+                     *      请求之前: OkHttp 处理之后的请求报文数据，比如增加了各种 header 之后的数据。
+                     *      请求之后: OkHttp 处理之前的响应报文数据，比如解压缩之前的数据。
                      */
                     addNetworkInterceptor(loggingInterceptor)
                 }
