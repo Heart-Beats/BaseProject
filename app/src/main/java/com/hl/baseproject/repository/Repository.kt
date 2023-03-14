@@ -2,10 +2,9 @@ package com.hl.baseproject.repository
 
 import com.blankj.utilcode.util.DeviceUtils
 import com.hl.api.RetrofitManager
-import com.hl.api.interceptor.RequestHeaderOrParamsInterceptor
 import com.hl.baseproject.configs.AppConfig
-import com.hl.utils.toJsonString
 import com.hl.baseproject.user.UserManager
+import com.hl.utils.toJsonString
 
 /**
  * @author  张磊  on  2021/11/03 at 15:25
@@ -29,14 +28,10 @@ object Repository {
 				this.addHeaderParam("Content-type", "application/json;charset=UTF-8")
 					.addHeaderParam("User-Agent", "Android")
 					.addHeaderParam("deviceInfo", deviceInfo)
-					.addDynamicHeaderOrParams(object : RequestHeaderOrParamsInterceptor.IDynamicHeaderOrParams {
-
-						override fun onDynamic(headerInterceptorBuilder: RequestHeaderOrParamsInterceptor.Builder) {
-							headerInterceptorBuilder
-								.addHeaderParam("Authorization", UserManager.getUser().token ?: "")
-								.addHeaderParam("traceId", createRandomString())
-						}
-					})
+					.addDynamicHeaderOrParams {
+						it.addHeaderParam("Authorization", UserManager.getUser().token ?: "")
+						it.addHeaderParam("traceId", createRandomString())
+					}
 			})
 	}
 

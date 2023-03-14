@@ -28,7 +28,7 @@ class RequestHeaderOrParamsInterceptor private constructor() : Interceptor {
 
     @Throws(IOException::class)
     override fun intercept(chain: Interceptor.Chain): Response {
-        dynamicHeaderOrParams?.onDynamic(builder)
+        dynamicHeaderOrParams?.invoke(builder)
 
         val request = chain.request()
         val requestBuilder = request.newBuilder()
@@ -137,26 +137,41 @@ class RequestHeaderOrParamsInterceptor private constructor() : Interceptor {
     class Builder {
         private var interceptor: RequestHeaderOrParamsInterceptor = RequestHeaderOrParamsInterceptor()
 
+        /**
+         * 添加公共请求参数， POST 添加到请求体中，  GET 拼接到 url 中
+         */
         fun addParam(key: String, value: String): Builder {
             interceptor.paramsMap[key] = value
             return this
         }
 
+        /**
+         * 添加公共请求参数， POST 添加到请求体中，  GET 拼接到 url 中
+         */
         fun addParamsMap(paramsMap: Map<String, String>): Builder {
             interceptor.paramsMap.putAll(paramsMap)
             return this
         }
 
+        /**
+         * 添加公共请求头， 以 key-value 形式
+         */
         fun addHeaderParam(key: String, value: String): Builder {
             interceptor.headerParamsMap[key] = value
             return this
         }
 
+        /**
+         * 添加公共请求头，  以 map 形式
+         */
         fun addHeaderParamsMap(headerParamsMap: Map<String, String>): Builder {
             interceptor.headerParamsMap.putAll(headerParamsMap)
             return this
         }
 
+        /**
+         * 添加公共请求头，  直接以字符串形式
+         */
         fun addHeaderLine(headerLine: String): Builder {
             val index = headerLine.indexOf(":")
             require(index != -1) { "Unexpected header: $headerLine" }
@@ -164,6 +179,9 @@ class RequestHeaderOrParamsInterceptor private constructor() : Interceptor {
             return this
         }
 
+        /**
+         * 添加公共请求头，  以字符串列表形式
+         */
         fun addHeaderLinesList(headerLinesList: List<String>): Builder {
             for (headerLine in headerLinesList) {
                 val index = headerLine.indexOf(":")
@@ -173,18 +191,31 @@ class RequestHeaderOrParamsInterceptor private constructor() : Interceptor {
             return this
         }
 
+        /**
+         * 添加公共查询参数，以 key-value 形式，无论 POST、GET 都拼接到 url 中
+         */
         fun addQueryParam(key: String, value: String): Builder {
             interceptor.queryParamsMap[key] = value
             return this
         }
 
+        /**
+         * 添加公共查询参数，以 map 形式，无论 POST、GET 都拼接到 url 中
+         */
         fun addQueryParamsMap(queryParamsMap: Map<String, String>): Builder {
             interceptor.queryParamsMap.putAll(queryParamsMap)
             return this
         }
 
-        fun addDynamicHeaderOrParams(impl: IDynamicHeaderOrParams): Builder {
-            interceptor.dynamicHeaderOrParams = impl
+        /**
+         * 添加动态请求参数，可以回调调用其他设置请求头或参数的方法
+         *
+         * 但与直接调用其他方法的不同点之处在于：
+         *      其他方法调用设置后的请求头或参数在每次拦截处理请求时，值和第一次设置有关，不会进行动态改变
+         *      在本回调中调用其他设置请求头或参数方法后，每次拦截处理请求时都会调用触发，因此可以得到动态的请求头或者参数，并且会将之前设置的进行覆盖
+         */
+        fun addDynamicHeaderOrParams(dynamicHeaderOrParams: IDynamicHeaderOrParams): Builder {
+            interceptor.dynamicHeaderOrParams = dynamicHeaderOrParams
             return this
         }
 
@@ -194,13 +225,11 @@ class RequestHeaderOrParamsInterceptor private constructor() : Interceptor {
         }
 
     }
-
-    interface IDynamicHeaderOrParams {
-        /**
-         * 动态添加公共请求头或请求参数
-         *
-         * @param headerInterceptorBuilder 添加动态参数的 builder
-         */
-        fun onDynamic(headerInterceptorBuilder: Builder)
-    }
 }
+
+/**
+ * 动态添加公共请求头或请求参数
+ *
+ * @param headerInterceptorBuilder 添加动态参数的 builder
+ */
+typealias IDynamicHeaderOrParams = (headerInterceptorBuilder: RequestHeaderOrParamsInterceptor.Builder) -> Unit
