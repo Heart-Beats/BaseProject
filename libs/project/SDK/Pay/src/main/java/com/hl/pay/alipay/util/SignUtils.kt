@@ -5,7 +5,7 @@ import java.security.KeyFactory
 import java.security.Signature
 import java.security.spec.PKCS8EncodedKeySpec
 
-object SignUtils {
+internal object SignUtils {
     private const val ALGORITHM = "RSA"
     private const val SIGN_ALGORITHMS = "SHA1WithRSA"
     private const val SIGN_SHA256RSA_ALGORITHMS = "SHA256WithRSA"

@@ -7,7 +7,7 @@ import com.hl.pay.alipay.util.OrderInfoUtil2_0
  * @author 张磊  on  2022/02/23 at 16:47
  * Email: 913305160@qq.com
  */
-object AlipayConfig {
+internal object AlipayConfig {
     /**
      * 支付宝支付业务：入参app_id，上文创建应用时候，已经得到
      * 由于App支付功能需要签约，因此需要上传公司信息和证件等资料进行签约

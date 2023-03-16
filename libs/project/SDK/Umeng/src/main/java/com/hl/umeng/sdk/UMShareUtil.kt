@@ -9,6 +9,8 @@ import com.umeng.socialize.media.UMImage
 import com.umeng.socialize.media.UMWeb
 
 /**
+ * 友盟三方社交平台分享工具类
+ *
  * @author  张磊  on  2022/01/23 at 7:44
  * Email: 913305160@qq.com
  */

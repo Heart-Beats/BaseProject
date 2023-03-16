@@ -25,10 +25,10 @@ internal object OrderInfoUtil2_0 {
          * orderInfo的获取必须来自服务端；
          */
         val rsa2: Boolean = AlipayConfig.RSA2_PRIVATE.length > 0
-        val params: Map<String, String> = OrderInfoUtil2_0.buildOrderParamMap(AlipayConfig.APPID, rsa2, payRMB)
-        val orderParam: String = OrderInfoUtil2_0.buildOrderParam(params) //拼接订单信息
+        val params: Map<String, String> = buildOrderParamMap(AlipayConfig.APPID, rsa2, payRMB)
+        val orderParam: String = buildOrderParam(params) //拼接订单信息
         val privateKey: String = if (rsa2) AlipayConfig.RSA2_PRIVATE else AlipayConfig.RSA_PRIVATE
-        val sign: String = OrderInfoUtil2_0.getSign(params, privateKey, rsa2) //然后并对订单信息使用私钥进行RSA加密
+        val sign: String = getSign(params, privateKey, rsa2) //然后并对订单信息使用私钥进行RSA加密
         return "$orderParam&$sign"
     }
 
