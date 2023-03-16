@@ -9,7 +9,7 @@ import com.alipay.sdk.app.PayTask
  * @author  张磊  on  2022/02/23 at 17:13
  * Email: 913305160@qq.com
  */
-class AliPayThread(
+internal class AliPayThread(
     private val orderInfo: String, val activity: Activity,
     private val aliPayResult: (Map<String, String>) -> Unit
 ) : Thread() {

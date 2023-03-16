@@ -5,10 +5,16 @@ import com.umeng.socialize.UMAuthListener
 import com.umeng.socialize.UMShareAPI
 import com.umeng.socialize.bean.SHARE_MEDIA
 
-object UMLoginUtils {
+/**
+ * 友盟三方社交平台授权登录工具类
+ *
+ * @author  张磊  on  2022/01/23 at 7:44
+ * Email: 913305160@qq.com
+ */
+object UMAuthUtil {
 
     /**
-     * 友盟第三方登录并获取用户信息
+     * 友盟第三方认证授权并获取用户信息
      * SHARE_MEDIA.QQ [qq]
      * SHARE_MEDIA.SINA [新浪微博]
      * SHARE_MEDIA.WEIXIN [微信]
@@ -23,7 +29,7 @@ object UMLoginUtils {
      * SHARE_MEDIA.DROPBOX [DropBox]
      */
     @JvmStatic
-    fun toShareAppLoginGetInfo(
+    fun toShareAppAuthGetInfo(
         activity: Activity,
         action: SHARE_MEDIA,
         listener: MyUMAuthListener

@@ -2,12 +2,12 @@ package com.hl.pay
 
 import android.app.Activity
 import com.google.gson.Gson
-import com.tencent.mm.opensdk.modelpay.PayReq
-import com.tencent.mm.opensdk.openapi.WXAPIFactory
 import com.hl.pay.alipay.AliPayThread
 import com.hl.pay.weixin.PayResultCallBack
 import com.hl.pay.weixin.PayState
 import com.hl.pay.weixin.WxPayResponse
+import com.tencent.mm.opensdk.modelpay.PayReq
+import com.tencent.mm.opensdk.openapi.WXAPIFactory
 
 
 /**
@@ -21,6 +21,11 @@ object PaymentHelper {
 
     /**
      * 微信支付
+     *
+     * @param activity            当前的 activity
+     * @param configAppId         当前应用在微信开发者平台申请的 appId
+     * @param wxPayResponse       微信支付生成的相关订单信息
+     * @param payResultCallBack   支付结果的回调
      */
     fun startWeChatPay(
         activity: Activity,
@@ -60,6 +65,11 @@ object PaymentHelper {
 
     /**
      * 支付宝支付
+     *
+     * @param activity              当前的 activity
+     * @param configAppId           当前应用在支付宝开发者平台申请的 appId
+     * @param aliPayOrderInfo       支付宝支付生成的相关订单信息
+     * @param payResultCallBack     支付结果的回调
      */
     fun startAliPay(activity: Activity, configAppId: String, aliPayOrderInfo: String, payResultCallBack: PayResultCallBack) {
 
