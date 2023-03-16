@@ -346,7 +346,6 @@ project.afterEvaluate {
 
                     setDependencyNode(root, 'compile', 'com.guolindev.permissionx', 'permissionx', Versions.PERMISSION_X)
                     setDependencyNode(root, 'compile', 'com.google.code.gson', 'gson', Versions.GSON)
-                    setDependencyNode(root, 'compile', 'io.github.shashank02051997', 'FancyToast', Versions.FANCY_TOAST)
                     setDependencyNode(root, 'compile', 'androidx.security', 'security-crypto', Versions.SECURITY_CRYPTO)
                     setDependencyNode(root, 'compile', 'com.github.bumptech.glide', 'glide', Versions.GLIDE)
                     setDependencyNode(root, 'compile', 'com.github.jenly1314', 'zxing-lite', Versions.ZXING_LITE)
