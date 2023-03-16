@@ -68,10 +68,6 @@ dependencies {
     api 'com.hl:uikit'
     api project(path: ':base-app-res')
 
-    testImplementation Deps.Test.junit
-    androidTestImplementation Deps.Test.junit_ext
-    androidTestImplementation Deps.Test.espresso_core
-
     implementation Deps.AndroidX.startup
     implementation Deps.AndroidX.core_ktx
     implementation Deps.AndroidX.appcompat
@@ -89,7 +85,6 @@ dependencies {
 
     implementation Deps.PermissionX.permission_x
     implementation Deps.Json.gson
-    implementation Deps.FancyToast.fancy_toast
     implementation Deps.AndroidX.security_crypto
     implementation Deps.Glide.glide
     api Deps.ZXing.zxing_lite

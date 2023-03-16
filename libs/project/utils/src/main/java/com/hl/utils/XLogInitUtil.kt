@@ -9,6 +9,7 @@ import com.elvishew.xlog.internal.DefaultsFactory
 import com.elvishew.xlog.printer.file.FilePrinter
 import com.elvishew.xlog.printer.file.backup.NeverBackupStrategy
 import com.elvishew.xlog.printer.file.clean.NeverCleanStrategy
+import com.hl.utils.date.DatePattern
 import com.hl.utils.date.toFormatString
 import java.io.File
 import java.io.FileFilter
@@ -75,7 +76,7 @@ object XLogInitUtil {
 	}
 
 	private fun getFilePrinter(logFileMinUploadMB: Long): Triple<String, File, FilePrinter> {
-		val nowDate = Date().toFormatString("yyyy-MM-dd")
+		val nowDate = Date().toFormatString(DatePattern.YMD)
 		val defaultLogFileName = "${nowDate}_log.txt"
 
 		val sharedPreferences = BaseUtil.app.sharedPreferences()
