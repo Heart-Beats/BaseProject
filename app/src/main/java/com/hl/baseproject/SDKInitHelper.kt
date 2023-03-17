@@ -5,12 +5,14 @@ import android.util.Log
 import androidx.fragment.app.Fragment
 import com.elvishew.xlog.XLog
 import com.github.lzyzsd.jsbridge.BridgeWebView
+import com.github.nisrulz.sensey.Sensey
 import com.hl.arch.web.helpers.JsBridgeHelper
 import com.hl.arch.web.sdk.ISdk
 import com.hl.arch.web.sdk.ISdkImplProvider
 import com.hl.baseproject.configs.AppConfig
 import com.hl.shadow.Shadow
 import com.hl.shadow.logger.LogLevel
+import com.hl.umeng.sdk.UMInitUtil
 import com.hl.unimp.UniMPHelper
 import com.hl.utils.XLogInitUtil
 import com.scwang.smart.refresh.layout.SmartRefreshLayout
@@ -18,7 +20,7 @@ import com.tencent.smtt.export.external.TbsCoreSettings
 import com.tencent.smtt.sdk.QbSdk
 import com.tencent.smtt.sdk.TbsListener
 import com.tencent.smtt.utils.TbsLogClient
-import com.umeng.commonsdk.UMConfigure
+import com.umeng.message.api.UPushRegisterCallback
 import io.dcloud.feature.sdk.MenuActionSheetItem
 
 /**
@@ -49,15 +51,24 @@ object SDKInitHelper {
 		initRefreshLayout()
 
 		initUniMP(context)
+
+		Sensey.getInstance().init(context)
 	}
 
 	/**
 	 * 直接初始化友盟
 	 */
 	private fun initUM(applicationContext: Context) {
-		val umengAppKey: String = BuildConfig.umengAppKey
-		val umengSecretKey: String = BuildConfig.umengSecretKey
-		UMConfigure.init(applicationContext, umengAppKey, "Umeng", UMConfigure.DEVICE_TYPE_PHONE, umengSecretKey)
+		UMInitUtil.initUM(applicationContext, object : UPushRegisterCallback {
+			override fun onSuccess(deviceToken: String) {
+				//注册成功会返回deviceToken deviceToken是推送消息的唯一标志
+				XLog.d("获取友盟 deviceToken 成功：$deviceToken")
+			}
+
+			override fun onFailure(errCode: String, errDesc: String) {
+				XLog.d("注册失败 code:$errCode, desc:$errDesc")
+			}
+		})
 	}
 
 

@@ -8,6 +8,9 @@ import android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
 import android.content.res.Configuration
 import android.os.Bundle
 import android.os.Environment
+import com.elvishew.xlog.XLog
+import com.github.nisrulz.sensey.Sensey
+import com.github.nisrulz.sensey.ShakeDetector.ShakeListener
 import com.hl.arch.web.navigateToWeb
 import com.hl.baseproject.TestActivity
 import com.hl.baseproject.TestActivity2
@@ -31,10 +34,6 @@ import java.io.File
 
 class MainFragment : BaseFragment<FragmentMainBinding>() {
 
-	override fun isActivityMainPage(): Boolean {
-		return false
-	}
-
 	private val qrScanUtil = QRScanUtil(this)
 
 	private val activityResultHelper = ActivityResultHelper(this)
@@ -45,6 +44,16 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
 		list
 	}
 
+	private val shakeListener: ShakeListener = object : ShakeListener {
+		override fun onShakeDetected() {
+			XLog.d("正在摇晃手机中")
+		}
+
+		override fun onShakeStopped() {
+			toast("停止摇动手机")
+		}
+	}
+
 	override fun onBackPressed() {
 		launchHome()
 	}
@@ -53,6 +62,8 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
 		super.onResume()
 		// 页面显示时恢复默认状态栏配置
 		updateSystemBar()
+
+		Sensey.getInstance().startShakeDetection(shakeListener)
 	}
 
 	override fun FragmentMainBinding.onViewCreated(savedInstanceState: Bundle?) {
@@ -177,12 +188,17 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
 		}
 	}
 
+	override fun onPause() {
+		super.onPause()
+		Sensey.getInstance().stopShakeDetection(shakeListener)
+	}
+
 
 	override fun onConfigurationChanged(newConfig: Configuration) {
 		super.onConfigurationChanged(newConfig)
 		if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
 			setImmersiveSystemBar(true)
-		} else {
+	 	} else {
 			setImmersiveSystemBar(false)
 		}
 	}
