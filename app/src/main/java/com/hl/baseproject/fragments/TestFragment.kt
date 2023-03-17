@@ -18,6 +18,7 @@ import com.hl.uikit.toast
 import com.hl.utils.BitmapUtil
 import com.hl.utils.TimeUtil
 import com.hl.utils.XLogUtil
+import com.hl.utils.date.DatePattern
 import com.hl.utils.date.toFormatString
 import com.hl.utils.launchHome
 import com.hl.utils.media.MediaPlayerHelper
@@ -86,7 +87,7 @@ class TestFragment : ViewBindingMvvmBaseFragment<FragmentTestBinding>() {
 				"REPLACED", "REPLACED"
 			)
 
-			val date = Date().toFormatString("yyyy-MM-dd")
+			val date = Date().toFormatString(DatePattern.YMD)
 			val logFile = XLogUtil.logFile
 
 			val cosPath = "YMLog/Test/BaseProject/${date}/Android/${BuildConfig.VERSION_NAME}/测试_${logFile?.name}"

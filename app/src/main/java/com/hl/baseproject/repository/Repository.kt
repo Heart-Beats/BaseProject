@@ -2,6 +2,7 @@ package com.hl.baseproject.repository
 
 import com.blankj.utilcode.util.DeviceUtils
 import com.hl.api.RetrofitManager
+import com.hl.api.interceptor.MultiBaseUrlInterceptor
 import com.hl.baseproject.configs.AppConfig
 import com.hl.baseproject.user.UserManager
 import com.hl.utils.toJsonString

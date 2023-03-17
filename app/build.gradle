@@ -11,6 +11,18 @@ plugins {
 apply from: "../commonGradle/build_config.gradle"
 
 android {
+    compileSdk AndroidVersions.COMPILE_SDK
+
+    defaultConfig {
+        applicationId 'com.hl.baseproject.demo'
+        minSdk AndroidVersions.MIN_SDK
+        targetSdk AndroidVersions.TARGET_SDK
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
     signingConfigs {
         debug {
             storeFile file('./license/BaseProject.jks')
@@ -24,21 +36,6 @@ android {
             keyPassword 'android123456'
             keyAlias 'BaseProject'
         }
-    }
-    compileSdk AndroidVersions.COMPILE_SDK
-
-    defaultConfig {
-        applicationId 'com.hl.baseproject.demo'
-        minSdk AndroidVersions.MIN_SDK
-        targetSdk AndroidVersions.TARGET_SDK
-        versionCode 1
-        versionName "1.0"
-
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-    }
-
-    viewBinding {
-        enabled = true
     }
 
     buildTypes {
@@ -78,12 +75,18 @@ android {
             signingConfig signingConfigs.realse
         }
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_11
         targetCompatibility JavaVersion.VERSION_11
     }
     kotlinOptions {
         jvmTarget = '11'
+    }
+
+
+    viewBinding {
+        enabled = true
     }
 }
 
@@ -142,4 +145,6 @@ dependencies {
     implementation 'com.hl:TencentCloud'
     implementation "com.hl:shadow-init"
     implementation "com.hl:UniMP"
+
+    implementation  Deps.Sensey.sensey
 }
