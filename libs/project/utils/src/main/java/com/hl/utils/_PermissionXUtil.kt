@@ -26,7 +26,7 @@ fun FragmentActivity.reqPermissions(
     PermissionX.init(this)
         .permissions(*permissions)
         .apply {
-            if (needExplainRequestReason) this.explainReasonBeforeRequest
+            this.explainReasonBeforeRequest = needExplainRequestReason
         }
         .onExplainRequestReason { scope, deniedList ->
             // 用户请求权限之前触发，用于解释获取权限原因，必须调用 explainReasonBeforeRequest() 才会触发
@@ -55,7 +55,7 @@ fun Fragment.reqPermissions(
     PermissionX.init(this)
         .permissions(*permissions)
         .apply {
-            if (needExplainRequestReason) this.explainReasonBeforeRequest
+            this.explainReasonBeforeRequest = needExplainRequestReason
         }
         .onExplainRequestReason { scope, deniedList ->
             // 用户请求权限之前触发，用于解释获取权限原因，必须调用 explainReasonBeforeRequest() 才会触发

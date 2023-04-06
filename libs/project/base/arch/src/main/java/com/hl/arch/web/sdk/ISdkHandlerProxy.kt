@@ -4,11 +4,10 @@ import com.github.lzyzsd.jsbridge.BridgeHandler
 import com.github.lzyzsd.jsbridge.BridgeWebView
 import com.github.lzyzsd.jsbridge.CallBackFunction
 import com.hl.arch.web.helpers.logJs
-import com.hl.utils.BuildVersionUtil
-import com.hl.utils.MethodHook
-import com.hl.utils.ProxyHandler
-import com.hl.utils.ReflectHelper
+import com.hl.utils.*
 import java.lang.reflect.Method
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.TimeUnit
 
 /**
  * @author  张磊  on  2023/01/20 at 20:31
@@ -84,6 +83,34 @@ open class ISdkHandlerProxy(private val bridgeWebView: BridgeWebView) : ISdkRegi
 			) {
 				if (isExecOnCallBackMethod(method)) {
 					logJs("${jsFunName}.${method.name}() 执行", "返回数据 == ${args.firstOrNull()}")
+				}
+			}
+
+			override fun onHookedMethod(
+				target: CallBackFunction,
+				proxy: CallBackFunction,
+				method: Method,
+				args: Array<Any>
+			): Any? {
+				// 主线程时直接执行方法返回数据
+				if (isMainThread()) {
+					return super.onHookedMethod(target, proxy, method, args)
+				}
+
+				// 子线程时切换到主线程执行，并同步等待主线程执行完毕
+				val countDownLatch = CountDownLatch(1)
+
+				var functionInvokeResult: Any? = null
+				runOnUiThread {
+					functionInvokeResult = super.onHookedMethod(target, proxy, method, args)
+					countDownLatch.countDown()
+				}
+
+				val await = countDownLatch.await(5L, TimeUnit.SECONDS)
+				if (await) {
+					return functionInvokeResult
+				} else {
+					throw IllegalStateException("${method.name} 方法执行超过 5s")
 				}
 			}
 		})

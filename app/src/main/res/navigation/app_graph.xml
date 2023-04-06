@@ -21,4 +21,27 @@
         android:label="fragment_shadow_plugin"
         tools:layout="@layout/fragment_shadow_plugin" />
 
+    <fragment
+        android:id="@+id/webViewFragment"
+        android:name="com.hl.arch.web.WebViewFragment"
+        android:label="WebViewFragment"
+        tools:layout="@layout/fragment_web_view">
+        <argument
+            android:name="title"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="url"
+            app:argType="string" />
+        <argument
+            android:name="isNeedTitle"
+            android:defaultValue="false"
+            app:argType="boolean" />
+    </fragment>
+
+    <action
+        android:id="@+id/action_global_webViewFragment"
+        app:destination="@id/webViewFragment" />
+
 </navigation>
