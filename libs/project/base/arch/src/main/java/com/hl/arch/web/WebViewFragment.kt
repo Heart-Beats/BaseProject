@@ -92,8 +92,7 @@ open class WebViewFragment : ViewBindingMvvmBaseFragment<FragmentWebViewBinding>
 			if (uri.scheme == "native") {
 				onNativeRequestLoading(webView, uri)
 			} else {
-				JsBridgeHelper.registerHandlers(this@WebViewFragment, webView)
-				webView.loadUrl(args.url)
+				loadUrl(args.url)
 			}
 		}
 	}
@@ -343,6 +342,7 @@ open class WebViewFragment : ViewBindingMvvmBaseFragment<FragmentWebViewBinding>
 	 * 载入显示 url 对应的网页
 	 */
 	fun loadUrl(url: String) {
+		JsBridgeHelper.registerHandlers(this@WebViewFragment, webView)
 		webView.loadUrl(url)
 	}
 

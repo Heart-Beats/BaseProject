@@ -36,7 +36,7 @@ object JsBridgeHelper {
 
 			listOf(standSdkImpl, projectSdkImpl).forEach { iSdkImpl ->
 				iSdkImpl.javaClass.interfaces.forEach { `interface` ->
-					// 判断  it 是否继承 ISdk 或者相同
+					// 判断  iSdkImpl 是否继承 ISdk 或者相同
 					if (ISdk::class.java.isAssignableFrom(`interface`)) {
 						`interface`.methods.asSequence()
 							.filter {

@@ -153,31 +153,29 @@ open class MyWebChromeClient(val fragment: Fragment) : WebChromeClient() {
 	private fun onActivityResult(resultCode: Int, data: Intent?) {
 		logJs("onActivityResult", "resultCode == $resultCode")
 
+		val uris = mutableListOf<Uri>()
 		if (resultCode == Activity.RESULT_OK) {
 			// 这里是针对从系统自带的文件选择器中选择文件
 
 			val clipData = data?.clipData
-			val resultUri = if (clipData != null) {
+			if (clipData != null) {
 				//有选择多个文件
 
-				val uris = mutableListOf<Uri>()
 				repeat(clipData.itemCount) {
 					uris.add(clipData.getItemAt(it).uri)
 				}
-
-				uris.toTypedArray()
 			} else {
 				// 单选文件
 
-				data?.data?.let { arrayOf(it) }
+				data?.data?.let {
+					uris.add(it)
+				}
 			}
+		}
 
-			mUploadCallbackAboveL?.onReceiveValue(resultUri)
-		} else {
-			if (mUploadCallbackAboveL != null) {
-				mUploadCallbackAboveL!!.onReceiveValue(arrayOf())
-				mUploadCallbackAboveL = null
-			}
+		if (mUploadCallbackAboveL != null) {
+			mUploadCallbackAboveL!!.onReceiveValue(uris.toTypedArray())
+			mUploadCallbackAboveL = null
 		}
 	}
 }

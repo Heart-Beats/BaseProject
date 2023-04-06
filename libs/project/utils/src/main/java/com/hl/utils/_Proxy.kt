@@ -39,7 +39,12 @@ class ProxyHandler<T : Any>(private val methodHook: MethodHook<T>? = null) : Inv
         //在调用具体函数方法前，执行功能处理
         methodHook?.beforeHookedMethod(target, proxy as T, method, args)
 
-        val result = method.invoke(target, *args)
+
+        val result = if (methodHook != null) {
+            methodHook.onHookedMethod(target, proxy as T, method, args)
+        } else {
+            method.invoke(target, *args)
+        }
 
         //在调用具体函数方法后，执行功能处理
         methodHook?.afterHookedMethod(target, proxy as T, method, args)
@@ -54,7 +59,7 @@ open class MethodHook<T : Any> {
      * 被代理对象的方法执行之前 的 Hook
      *
      * @param target  被代理对象
-     * @param proxy  被代理对象， 注意： 动态代理的对象判断与其他对象是否相等仅可使用 === （地址相等）
+     * @param proxy   代理对象， 注意： 动态代理的对象判断与其他对象是否相等仅可使用 === （地址相等）
      * @param method  执行的方法
      * @param args    方法的参数
      */
@@ -62,10 +67,24 @@ open class MethodHook<T : Any> {
     }
 
     /**
+     * 被代理对象的方法执行时的 Hook
+     *
+     * @param target  被代理对象
+     * @param proxy   代理对象， 注意： 动态代理的对象判断与其他对象是否相等仅可使用 === （地址相等）
+     * @param method  执行的方法
+     * @param args    方法的参数
+     *
+     * @return        方法执行后返回的结果
+     */
+    open fun onHookedMethod(target: T, proxy: T, method: Method, args: Array<Any>): Any? {
+        return method.invoke(target, *args)
+    }
+
+    /**
      * 被代理对象的方法执行之后 的 Hook
      *
      * @param target  被代理对象
-     * @param proxy  被代理对象， 注意： 动态代理的对象判断与其他对象是否相等仅可使用 === （地址相等）
+     * @param proxy   代理对象， 注意： 动态代理的对象判断与其他对象是否相等仅可使用 === （地址相等）
      * @param method  执行的方法
      * @param args    方法的参数
      */
