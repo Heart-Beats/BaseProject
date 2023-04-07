@@ -133,7 +133,7 @@ open class MyWebChromeClient(val fragment: Fragment) : WebChromeClient() {
 					.forResult(object : OnResultCallbackListener<LocalMedia> {
 						override fun onResult(result: ArrayList<LocalMedia>?) {
 							val availableUris =
-								result?.map { file2Uri(fragment.requireContext(), it.compressPath ?: it.realPath) }
+								result?.map { file2Uri(it.compressPath ?: it.realPath) }
 
 							logJs("请求${operaType}", "${operaType}成功：结果 == $availableUris")
 							availableUris?.run {

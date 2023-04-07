@@ -59,9 +59,6 @@ kace {
             "uikit_options_picker_dialog_fragment.xml",
             "uikit_range_time_picker_dialog_fragment.xml",
             "uikit_timeinterval_dialog_fragment.xml",
-            "uikit_search_bar_layout.xml",
-            "uikit_search_view.xml",
-            "uikit_toolbar_search_layout.xml",
     ]
 }
 

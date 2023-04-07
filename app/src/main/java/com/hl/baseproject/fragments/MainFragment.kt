@@ -63,7 +63,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
 		// 页面显示时恢复默认状态栏配置
 		updateSystemBar()
 
-		Sensey.getInstance().startShakeDetection(shakeListener)
+		Sensey.getInstance().startShakeDetection(10.0F, 1000L, shakeListener)
 	}
 
 	override fun FragmentMainBinding.onViewCreated(savedInstanceState: Bundle?) {
