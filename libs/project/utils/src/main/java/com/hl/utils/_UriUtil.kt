@@ -1,9 +1,9 @@
 package com.hl.utils
 
-import android.content.Context
 import android.net.Uri
 import android.os.Build
 import androidx.core.content.FileProvider
+import com.blankj.utilcode.util.UriUtils
 import java.io.File
 
 /**
@@ -11,20 +11,34 @@ import java.io.File
  * Email: 913305160@qq.com
  */
 
-fun file2Uri(context: Context, filePath: String): Uri {
+fun file2Uri(filePath: String): Uri {
     val file = File(filePath)
     if (!file.exists()) {
-        if (file.parentFile?.exists() == false) {
-            file.parentFile?.mkdirs()
-        }
-        if (file.parentFile?.exists() == true) {
+        val parentFile = file.parentFile
+        assert(parentFile != null)
+        if (!parentFile.exists()) {
+            parentFile.mkdirs()
+        } else {
             file.createNewFile()
         }
     }
     return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
         // 需要配置文件 fileprovider，注意配置的 authority
-        FileProvider.getUriForFile(context, context.packageName + ".fileprovider", file)
+        val app = BaseUtil.app
+        FileProvider.getUriForFile(app, app.packageName + ".fileprovider", file)
     } else {
         Uri.fromFile(file)
     }
+}
+
+fun uri2File(fileUri: Uri): File? {
+    return UriUtils.uri2File(fileUri)
+}
+
+fun res2Uri(resPath: String): Uri? {
+    return UriUtils.res2Uri(resPath)
+}
+
+fun uri2Bytes(fileUri: Uri): ByteArray? {
+    return UriUtils.uri2Bytes(fileUri)
 }
