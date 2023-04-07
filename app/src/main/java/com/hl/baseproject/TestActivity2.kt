@@ -11,6 +11,7 @@ import com.hl.utils.toBitmap
 
 class TestActivity2 : ViewBindingBaseActivity<ActivityTest2Binding>() {
 
+	@Deprecated("Deprecated in Java")
 	override fun onBackPressed() {
 		setResult(RESULT_OK, Intent().apply {
 			this.putExtra("data", "我是测试2页面数据")

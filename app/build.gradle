@@ -5,7 +5,7 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-parcelize'
-    id 'androidx.navigation.safeargs'
+    id 'androidx.navigation.safeargs' version '2.5.3'
 }
 
 apply from: "../commonGradle/build_config.gradle"

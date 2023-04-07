@@ -58,6 +58,7 @@ class TestActivity : ViewBindingBaseActivity<ActivityTestBinding>() {
 		})
 	}
 
+	@Deprecated("Deprecated in Java")
 	override fun onBackPressed() {
 		setResult(RESULT_OK, Intent().apply {
 			this.putExtra("data", "我是测试1页面数据")
