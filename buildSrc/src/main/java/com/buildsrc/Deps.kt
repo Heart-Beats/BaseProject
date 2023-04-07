@@ -4,12 +4,12 @@ internal object Versions {
     const val JUNIT = "4.+"
     const val JUNIT_EXT = "1.1.3"
     const val ESPRESSO_CORE = "3.4.0"
-    const val KOTLIN = "1.7.0"
+    const val KOTLIN = "1.8.0"
     const val KOTLIN_COROUTINES = "1.4.2"
     const val CORE_KTX = "1.6.0"
 
-    const val APPCOMPAT = "1.4.0"
-    const val CONSTRAINT_LAYOUT = "2.1.4"
+    const val APPCOMPAT = "1.6.0"
+     const val CONSTRAINT_LAYOUT = "2.1.4"
     const val ACTIVITY = "1.4.0"
     const val FRAGMENT = "1.4.0"
     const val SECURITY_CRYPTO = "1.0.0"
@@ -19,7 +19,7 @@ internal object Versions {
     const val PALETTE = "1.0.0"
     const val STARTUP = "1.1.1"
 
-    const val LIFECYCLE = "2.4.0"
+    const val LIFECYCLE = "2.5.1"
     const val NAV_VERSION = "2.5.3"
     const val SMOOTH_NAVIGATION = "4.0.0"
 

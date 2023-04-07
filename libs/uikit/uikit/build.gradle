@@ -1,6 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
+apply plugin: 'com.kanyun.kace'
 
 //apply plugin: 'com.kezong.fat-aar'
 
@@ -50,6 +50,21 @@ android {
 //    transitive = true //如果你想将所有远程依赖在pom中声明的依赖项同时打入在最终产物里的话, transitive 需要为 true
 //}
 
+kace {
+    // 当 whiteList 不为空时，只有 whiteList 中的 layout 才会被解析
+    whiteList = []
+
+    // 当 blackList 不为空时，blackList 中的 layout 不会被解析
+    blackList = [
+            "uikit_options_picker_dialog_fragment.xml",
+            "uikit_range_time_picker_dialog_fragment.xml",
+            "uikit_timeinterval_dialog_fragment.xml",
+            "uikit_search_bar_layout.xml",
+            "uikit_search_view.xml",
+            "uikit_toolbar_search_layout.xml",
+    ]
+}
+
 dependencies {
     testImplementation 'junit:junit:4.13.2'
     implementation fileTree(dir: 'libs', include: ['*.jar'])
@@ -59,7 +74,7 @@ dependencies {
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
-    implementation "androidx.appcompat:appcompat:1.4.1"
+    implementation "androidx.appcompat:appcompat:1.6.0"
     implementation "androidx.core:core-ktx:1.7.0"
     implementation "androidx.recyclerview:recyclerview:1.2.1"
     implementation "androidx.fragment:fragment-ktx:1.4.1"

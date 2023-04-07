@@ -9,7 +9,7 @@ import com.alibaba.android.vlayout.LayoutHelper
 import com.alibaba.android.vlayout.layout.GridLayoutHelper
 import com.alibaba.android.vlayout.layout.LinearLayoutHelper
 import com.hl.uikit.demo.R
-import com.hl.uikit.dpInt
+import com.hl.uikit.demo.util.dpInt
 import com.hl.uikit.onClick
 
 

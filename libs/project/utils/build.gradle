@@ -3,7 +3,7 @@ import com.buildsrc.Deps
 plugins {
     id 'com.android.library'
     id 'kotlin-android'
-    id 'kotlin-android-extensions'
+    id 'com.kanyun.kace'
 
     // aspectj 面向切面插件引入
     id 'io.github.wurensen.android-aspectjx' version '3.3.2'

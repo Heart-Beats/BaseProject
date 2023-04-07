@@ -30,8 +30,10 @@ internal class DynamicUuidPpsBinder(private val dynamicUuidPps: DynamicUuidPlugi
                     dynamicUuidPps.setUuid(_arg0)
                     reply?.writeInt(TRANSACTION_CODE_NO_EXCEPTION)
                 } catch (e: FailedException) {
-                    reply?.writeInt(TRANSACTION_CODE_FAILED_EXCEPTION)
-                    e.writeToParcel(reply, 0)
+                    reply?.run {
+                        writeInt(TRANSACTION_CODE_FAILED_EXCEPTION)
+                        e.writeToParcel(this, 0)
+                    }
                 }
                 return true
             }
