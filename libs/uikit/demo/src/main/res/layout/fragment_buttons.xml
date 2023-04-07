@@ -186,7 +186,7 @@
                 android:foreground="?attr/selectableItemBackground"
                 android:text="文字按钮"
                 android:textColor="@color/uikit_color_1"
-                android:textSize="@dimen/uikit_fontsize_8" />
+                android:textSize="@dimen/uikit_font_size_8" />
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

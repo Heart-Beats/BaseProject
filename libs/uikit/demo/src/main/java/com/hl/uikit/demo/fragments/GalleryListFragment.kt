@@ -12,7 +12,7 @@ import kotlinx.android.synthetic.main.fragment_gallery_list.*
 import com.hl.uikit.demo.R
 import com.hl.uikit.demo.gallery.GalleryImageInfo
 import com.hl.uikit.demo.gallery.toGalleryImage
-import com.hl.uikit.dpInt
+import com.hl.uikit.demo.util.dpInt
 import com.hl.uikit.onClick
 
 class GalleryListFragment : BaseFragment() {

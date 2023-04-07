@@ -44,7 +44,7 @@
         android:layout_marginEnd="30dp"
         android:gravity="center"
         android:textColor="@color/uikit_color_3"
-        android:textSize="@dimen/uikit_fontsize_6"
+        android:textSize="@dimen/uikit_font_size_6"
         app:layout_constraintBottom_toTopOf="@+id/operate_desc"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"

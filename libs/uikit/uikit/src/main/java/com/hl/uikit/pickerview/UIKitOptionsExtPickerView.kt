@@ -23,9 +23,11 @@ class UIKitOptionsExtPickerView<T> : OptionsPickerView<T> {
         opt5Pos: Int, opt5Data: T?,
         opt6Pos: Int, opt6Data: T?
     ) -> Unit)? = null
+
     private lateinit var mOptionsWv4: WheelView<T>
     private lateinit var mOptionsWv5: WheelView<T>
     private lateinit var mOptionsWv6: WheelView<T>
+
     var opt4SelectedPosition: Int = 0
         set(value) {
             field = value
@@ -46,17 +48,9 @@ class UIKitOptionsExtPickerView<T> : OptionsPickerView<T> {
         get() = mOptionsWv6.selectedItemPosition
 
     constructor(context: Context) : this(context, null)
-    constructor(context: Context, attrs: AttributeSet?) : this(
-        context,
-        attrs,
-        R.attr.uikit_optionsPickerViewStyle
-    )
+    constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, R.attr.uikit_optionsPickerViewStyle)
 
-    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(
-        context,
-        attrs,
-        defStyleAttr
-    ) {
+    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
         init()
         val ta = context.obtainStyledAttributes(
             attrs,

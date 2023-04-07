@@ -69,7 +69,7 @@
                 android:layout_marginTop="30dp"
                 android:text="40pt"
                 android:textColor="#ff000000"
-                android:textSize="@dimen/uikit_fontsize_1"
+                android:textSize="@dimen/uikit_font_size_1"
                 app:layout_constraintLeft_toLeftOf="@id/guideStart"
                 app:layout_constraintTop_toBottomOf="@id/textView2" />
 
@@ -91,7 +91,7 @@
                 android:layout_marginTop="20dp"
                 android:text="34pt"
                 android:textColor="#bf000000"
-                android:textSize="@dimen/uikit_fontsize_2"
+                android:textSize="@dimen/uikit_font_size_2"
                 app:layout_constraintLeft_toLeftOf="@id/guideStart"
                 app:layout_constraintTop_toBottomOf="@id/textView3" />
 
@@ -113,7 +113,7 @@
                 android:layout_marginTop="20dp"
                 android:text="30pt"
                 android:textColor="#ff000000"
-                android:textSize="@dimen/uikit_fontsize_3"
+                android:textSize="@dimen/uikit_font_size_3"
                 app:layout_constraintLeft_toLeftOf="@id/guideStart"
                 app:layout_constraintTop_toBottomOf="@id/textView5" />
             <TextView
@@ -133,7 +133,7 @@
                 android:layout_marginTop="20dp"
                 android:text="28pt"
                 android:textColor="#ff000000"
-                android:textSize="@dimen/uikit_fontsize_4"
+                android:textSize="@dimen/uikit_font_size_4"
                 app:layout_constraintLeft_toLeftOf="@id/guideStart"
                 app:layout_constraintTop_toBottomOf="@id/textView7" />
             <TextView
@@ -153,7 +153,7 @@
                 android:layout_marginTop="20dp"
                 android:text="20pt"
                 android:textColor="#bf000000"
-                android:textSize="@dimen/uikit_fontsize_5"
+                android:textSize="@dimen/uikit_font_size_5"
                 app:layout_constraintLeft_toLeftOf="@id/guideStart"
                 app:layout_constraintTop_toBottomOf="@id/textView9" />
             <TextView
@@ -173,7 +173,7 @@
                 android:layout_marginTop="20dp"
                 android:text="18pt"
                 android:textColor="#bf000000"
-                android:textSize="@dimen/uikit_fontsize_6"
+                android:textSize="@dimen/uikit_font_size_6"
                 app:layout_constraintLeft_toLeftOf="@id/guideStart"
                 app:layout_constraintTop_toBottomOf="@id/textView11" />
             <TextView
@@ -193,7 +193,7 @@
                 android:layout_marginTop="20dp"
                 android:text="16pt"
                 android:textColor="#333333"
-                android:textSize="@dimen/uikit_fontsize_7"
+                android:textSize="@dimen/uikit_font_size_7"
                 app:layout_constraintLeft_toLeftOf="@id/guideStart"
                 app:layout_constraintTop_toBottomOf="@id/textView13" />
             <TextView
@@ -213,7 +213,7 @@
                 android:layout_marginTop="20dp"
                 android:text="14pt"
                 android:textColor="#333333"
-                android:textSize="@dimen/uikit_fontsize_8"
+                android:textSize="@dimen/uikit_font_size_8"
                 app:layout_constraintLeft_toLeftOf="@id/guideStart"
                 app:layout_constraintTop_toBottomOf="@id/textView15" />
             <TextView
@@ -234,7 +234,7 @@
                 android:layout_marginTop="20dp"
                 android:text="13pt"
                 android:textColor="#333333"
-                android:textSize="@dimen/uikit_fontsize_9"
+                android:textSize="@dimen/uikit_font_size_9"
                 app:layout_constraintLeft_toLeftOf="@id/guideStart"
                 app:layout_constraintTop_toBottomOf="@id/textView17" />
 
@@ -256,7 +256,7 @@
                 android:layout_marginTop="20dp"
                 android:text="12pt"
                 android:textColor="#333333"
-                android:textSize="@dimen/uikit_fontsize_10"
+                android:textSize="@dimen/uikit_font_size_10"
                 app:layout_constraintLeft_toLeftOf="@id/guideStart"
                 app:layout_constraintTop_toBottomOf="@id/textView19" />
             <TextView

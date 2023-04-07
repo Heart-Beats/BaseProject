@@ -3,10 +3,11 @@ package com.hl.uikit.pickerview
 import android.os.Bundle
 import android.util.SparseArray
 import android.view.View
-import com.zyyoona7.wheel.WheelView
-import kotlinx.android.synthetic.main.uikit_range_time_picker_dialog_fragment.*
+import android.widget.CheckedTextView
+import android.widget.TextView
 import com.hl.uikit.R
 import com.hl.uikit.onClick
+import com.zyyoona7.wheel.WheelView
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -23,12 +24,18 @@ class RangeTimePickerDialogFragment : TimePickerDialogFragment() {
 
     override val customViewId: Int
         get() = R.layout.uikit_range_time_picker_dialog_fragment
+
     private var mMonthMode: Boolean? = null
     private var isFromPickerEvent: Boolean = true
+
     var enableSwitchMode: Boolean = true
     var timeDisplayFormat: SimpleDateFormat? = null
 
     private val rangeTimes = SparseArray<Calendar>()
+
+    private var btnSwitchMode: TextView? = null
+    private var ctvStart: CheckedTextView? = null
+    private var ctvEnd: CheckedTextView? = null
 
     /**
      * 仅在 enableSwitchMode == true 时，monthMode 有效
@@ -46,6 +53,7 @@ class RangeTimePickerDialogFragment : TimePickerDialogFragment() {
             }
             rangeStartTime = time
         }
+
     private val getMonthRangeStartTime: (monthMode: Boolean, defTime: Calendar?) -> Calendar? =
         { monthMode, defTime ->
             if (monthMode) {
@@ -71,6 +79,7 @@ class RangeTimePickerDialogFragment : TimePickerDialogFragment() {
             }
             rangeEndTime = time
         }
+
     private val getMonthRangeEndTime: (monthMode: Boolean, defTime: Calendar?) -> Calendar? =
         { monthMode, defTime ->
             if (monthMode) {
@@ -103,6 +112,7 @@ class RangeTimePickerDialogFragment : TimePickerDialogFragment() {
                 else -> "timeDisplayFormat"
             }
         }
+
     var rangeEndTime: Calendar? = null
         set(value) {
             field = value.cloneTime()
@@ -126,13 +136,16 @@ class RangeTimePickerDialogFragment : TimePickerDialogFragment() {
                 else -> "timeDisplayFormat"
             }
         }
+
     var rangeTimePositiveClickListener: (dialog: RangeTimePickerDialogFragment, startTime: Calendar?, endTime: Calendar?) -> Unit =
         { _, _, _ -> }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initView(view)
+
         updateMonthMode()
-        enableSwitchMode = showYear && (showMonth || showDay) && enableSwitchMode//仅仅在显示 年月、年月日 时支持
+        enableSwitchMode = showYear && (showMonth || showDay) && enableSwitchMode //仅仅在显示 年月、年月日 时支持
         setMonthRangeEndTime(
             isMonthMode(), getMonthRangeEndTime(isMonthMode(), rangeEndTime)
         )
@@ -153,6 +166,12 @@ class RangeTimePickerDialogFragment : TimePickerDialogFragment() {
         } else {
             View.GONE
         }
+    }
+
+    private fun initView(rootView: View) {
+        btnSwitchMode = rootView.findViewById(R.id.btnSwitchMode)
+        ctvStart = rootView.findViewById(R.id.ctvStart)
+        ctvEnd = rootView.findViewById(R.id.ctvEnd)
     }
 
     private fun updateMonthMode() {
@@ -225,7 +244,7 @@ class RangeTimePickerDialogFragment : TimePickerDialogFragment() {
 
     private fun initSwitchModeListener() {
         btnSwitchMode?.onClick {
-            ctvStart.performClick()
+            ctvStart?.performClick()
             showDay = !showDay
             updateMonthMode()
             updateModeDisplay()

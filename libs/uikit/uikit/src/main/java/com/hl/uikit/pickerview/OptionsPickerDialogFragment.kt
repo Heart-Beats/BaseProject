@@ -9,6 +9,7 @@ open class OptionsPickerDialogFragment<T> : Alert2SheetDialogFragment() {
     private var isLinkageMode: Boolean? = null
     protected var mPickerView: UIKitOptionsExtPickerView<T>? = null
     private val mDefPositions = arrayListOf(0, 0, 0, 0, 0, 0)
+
     var opt1Pos: Int = 0
         private set(value) {
             mPickerView?.opt1SelectedPosition = value
@@ -18,6 +19,7 @@ open class OptionsPickerDialogFragment<T> : Alert2SheetDialogFragment() {
             }
         }
         get() = mPickerView?.opt1SelectedPosition ?: 0
+
     var opt2Pos: Int = 0
         private set(value) {
             mPickerView?.opt2SelectedPosition = value
@@ -27,6 +29,7 @@ open class OptionsPickerDialogFragment<T> : Alert2SheetDialogFragment() {
             }
         }
         get() = mPickerView?.opt2SelectedPosition ?: 0
+
     var opt3Pos: Int = 0
         private set(value) {
             mPickerView?.opt3SelectedPosition = value
@@ -36,6 +39,7 @@ open class OptionsPickerDialogFragment<T> : Alert2SheetDialogFragment() {
             }
         }
         get() = mPickerView?.opt3SelectedPosition ?: 0
+
     var opt4Pos: Int = 0
         private set(value) {
             mPickerView?.opt4SelectedPosition = value
@@ -45,6 +49,7 @@ open class OptionsPickerDialogFragment<T> : Alert2SheetDialogFragment() {
             }
         }
         get() = mPickerView?.opt4SelectedPosition ?: 0
+
     var opt5Pos: Int = 0
         private set(value) {
             mPickerView?.opt5SelectedPosition = value
@@ -54,6 +59,7 @@ open class OptionsPickerDialogFragment<T> : Alert2SheetDialogFragment() {
             }
         }
         get() = mPickerView?.opt5SelectedPosition ?: 0
+
     var opt6Pos: Int = 0
         private set(value) {
             mPickerView?.opt6SelectedPosition = value
@@ -63,6 +69,7 @@ open class OptionsPickerDialogFragment<T> : Alert2SheetDialogFragment() {
             }
         }
         get() = mPickerView?.opt5SelectedPosition ?: 0
+
     private var mData1: List<T>? = null
     private var mData2: List<T>? = null
     private var mData3: List<T>? = null
