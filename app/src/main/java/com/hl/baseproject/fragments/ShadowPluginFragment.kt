@@ -35,7 +35,7 @@ class ShadowPluginFragment : BaseFragment<FragmentShadowPluginBinding>() {
 
 		AppSizeUtil.getSize(requireContext()) { cacheSize, dataSize, codeSize ->
 			val appSize = cacheSize + dataSize + codeSize
-			viewBinding?.displayCacheSize?.text = AppSizeUtil.getFormatSize(appSize)
+			viewBinding.displayCacheSize?.text = AppSizeUtil.getFormatSize(appSize)
 		}
 
 		val shadowPluginManagerParentDir = File(requireContext().filesDir, "ShadowPluginManager")

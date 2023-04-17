@@ -60,13 +60,13 @@ class UIKitCommonButton : AppCompatButton {
 			SOLID_COLOR_GRAY_RADIUS0 -> {
 				minHeight = 50.dpInt
 				setBackgroundResource(R.drawable.uikit_main_button_gray_radius0_selector)
-				setTextColor(ContextCompat.getColor(context, R.color.uikit_color_4))
+				setTextColor(ContextCompat.getColor(context, com.hl.uikitres.R.color.uikit_color_4))
 			}
 
 			STROKE_RADIUS4 -> {
 				minHeight = 50.dpInt
 				setBackgroundResource(R.drawable.uikit_stroke_button_radius4_selector)
-				setTextColor(ContextCompat.getColor(context, R.color.uikit_color_1))
+				setTextColor(ContextCompat.getColor(context, com.hl.uikitres.R.color.uikit_color_1))
 			}
 
 			CAPSULE, CAPSULE_STROKE -> {
@@ -78,7 +78,7 @@ class UIKitCommonButton : AppCompatButton {
 					setBackgroundResource(R.drawable.uikit_capsule_button_selector)
 				} else {
 					setBackgroundResource(R.drawable.uikit_stroke_capsule_button_selector)
-					setTextColor(ContextCompat.getColor(context, R.color.uikit_color_1))
+					setTextColor(ContextCompat.getColor(context, com.hl.uikitres.R.color.uikit_color_1))
 				}
 			}
 			CUSTOM -> {

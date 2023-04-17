@@ -5,6 +5,8 @@ apply plugin: 'com.kanyun.kace'
 //apply plugin: 'com.kezong.fat-aar'
 
 android {
+    namespace 'com.hl.uikit'
+
     compileSdkVersion 31
     resourcePrefix "uikit_"
     defaultConfig {

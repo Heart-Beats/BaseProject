@@ -1,6 +1,6 @@
 package com.hl.utils.aspectj
 
-import org.aspectj.lang.annotation.Aspect
+// import org.aspectj.lang.annotation.Aspect
 
 /**
  * @author  张磊  on  2023/01/05 at 13:39
@@ -8,7 +8,7 @@ import org.aspectj.lang.annotation.Aspect
  *
  * AOP 注入类
  */
-@Aspect
+// @Aspect
 class AspectInject {
 
 	private val TAG = "Aspect"

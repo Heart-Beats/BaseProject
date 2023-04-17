@@ -1,7 +1,7 @@
 package com.hl.baseproject.user
 
 import android.os.Parcelable
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 
 /**
  * @author  张磊  on  2022/01/05 at 11:55
