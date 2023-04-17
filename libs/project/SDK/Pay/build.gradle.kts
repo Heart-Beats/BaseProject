@@ -8,11 +8,12 @@ plugins {
 }
 
 android {
-    compileSdk = AndroidVersions.COMPILE_SDK
+    namespace = "com.hl.pay"
 
+    compileSdk = AndroidVersions.COMPILE_SDK
     defaultConfig {
-        minSdk = 21
-        targetSdk = 31
+        minSdk = AndroidVersions.MIN_SDK
+        targetSdk = AndroidVersions.TARGET_SDK
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")

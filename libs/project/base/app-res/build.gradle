@@ -1,16 +1,18 @@
+import com.buildsrc.AndroidVersions
+
 plugins {
     id 'com.android.library'
     id 'kotlin-android'
 }
 
 android {
-    compileSdk 31
+    namespace 'com.hl.res'
+    resourcePrefix 'hl_res_'
 
-    resourcePrefix "hl_res_"
-
+    compileSdkVersion AndroidVersions.COMPILE_SDK
     defaultConfig {
-        minSdk 21
-        targetSdk 31
+        minSdkVersion AndroidVersions.MIN_SDK
+        targetSdkVersion AndroidVersions.TARGET_SDK
         versionCode 1
         versionName "1.0"
 

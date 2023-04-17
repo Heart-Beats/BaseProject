@@ -1,3 +1,4 @@
+import com.buildsrc.AndroidVersions
 import com.buildsrc.Deps
 
 plugins {
@@ -6,15 +7,17 @@ plugins {
     id 'com.kanyun.kace'
 
     // aspectj 面向切面插件引入
-    id 'io.github.wurensen.android-aspectjx' version '3.3.2'
+    //    id 'io.github.wurensen.android-aspectjx' version '3.3.2'
 }
 
 android {
-    compileSdk 31
+    namespace = "com.hl.utils"
     resourcePrefix "hl_utils_"
+
+    compileSdkVersion AndroidVersions.COMPILE_SDK
     defaultConfig {
-        minSdk 21
-        targetSdk 31
+        minSdkVersion AndroidVersions.MIN_SDK
+        targetSdkVersion AndroidVersions.TARGET_SDK
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -47,21 +50,23 @@ android {
     }
 
     buildFeatures {
+        aidl true
+
         // 默认不生成 BuildConfig 类
-        // buildConfig = false
+        buildConfig = true
     }
 
-    aspectjx {
-        // 移除kotlin相关，编译错误和提升速度
-        exclude 'kotlin.jvm', 'kotlin.internal'
-        exclude 'kotlinx.coroutines.internal', 'kotlinx.coroutines.android'
-
-        // 是否debug，开启后会输出织入信息等相关日志（3.3.0版本新增）
-        debug = true
-
-        // 关闭AspectJX功能
-        enabled = false
-    }
+    //    aspectjx {
+    //        // 移除kotlin相关，编译错误和提升速度
+    //        exclude 'kotlin.jvm', 'kotlin.internal'
+    //        exclude 'kotlinx.coroutines.internal', 'kotlinx.coroutines.android'
+    //
+    //        // 是否debug，开启后会输出织入信息等相关日志（3.3.0版本新增）
+    //        debug = true
+    //
+    //        // 关闭AspectJX功能
+    //        enabled = false
+    //    }
 }
 
 dependencies {

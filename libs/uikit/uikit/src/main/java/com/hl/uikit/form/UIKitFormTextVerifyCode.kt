@@ -47,13 +47,13 @@ class UIKitFormTextVerifyCode : UIKitFormItemView {
 
     private val mProcessListener: (mCount: Int) -> Unit = { mCount ->
         tvSmsCode?.text = "已发送(${mCount})"
-        tvSmsCode?.setTextColor(ContextCompat.getColor(context, R.color.uikit_color_4))
+        tvSmsCode?.setTextColor(ContextCompat.getColor(context, com.hl.uikitres.R.color.uikit_color_4))
         tvSmsCode?.isEnabled = false
     }
 
     private val mFinishedListener: () -> Unit = {
         tvSmsCode?.text = "重新获取"
-        tvSmsCode?.setTextColor(ContextCompat.getColor(context, R.color.uikit_color_3))
+        tvSmsCode?.setTextColor(ContextCompat.getColor(context, com.hl.uikitres.R.color.uikit_color_3))
         tvSmsCode?.isEnabled = true
     }
 

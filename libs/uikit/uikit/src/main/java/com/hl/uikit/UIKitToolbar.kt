@@ -236,14 +236,14 @@ class UIKitToolbar : Toolbar {
         setRightAction(MenuAction(menuIcon = mRightActionIconRes, menuText = mRightText))
 
         //  从主题中获取 TextAppearance 相关属性设置
-        val ta = TintTypedArray.obtainStyledAttributes(context, attrs, R.styleable.Toolbar, defStyleAttr, 0)
-        mTitleTextAppearance = ta.getResourceId(R.styleable.Toolbar_titleTextAppearance, 0)
-        mSubTitleTextAppearance = ta.getResourceId(R.styleable.Toolbar_subtitleTextAppearance, 0)
-        if (ta.hasValue(R.styleable.Toolbar_titleTextColor)) {
-            setTitleTextColor(ta.getColorStateList(R.styleable.Toolbar_titleTextColor))
+        val ta = TintTypedArray.obtainStyledAttributes(context, attrs, androidx.appcompat.R.styleable.Toolbar, defStyleAttr, 0)
+        mTitleTextAppearance = ta.getResourceId(androidx.appcompat.R.styleable.Toolbar_titleTextAppearance, 0)
+        mSubTitleTextAppearance = ta.getResourceId(androidx.appcompat.R.styleable.Toolbar_subtitleTextAppearance, 0)
+        if (ta.hasValue(androidx.appcompat.R.styleable.Toolbar_titleTextColor)) {
+            setTitleTextColor(ta.getColorStateList(androidx.appcompat.R.styleable.Toolbar_titleTextColor))
         }
-        if (ta.hasValue(R.styleable.Toolbar_subtitleTextColor)) {
-            setSubtitleTextColor(ta.getColorStateList(R.styleable.Toolbar_subtitleTextColor))
+        if (ta.hasValue(androidx.appcompat.R.styleable.Toolbar_subtitleTextColor)) {
+            setSubtitleTextColor(ta.getColorStateList(androidx.appcompat.R.styleable.Toolbar_subtitleTextColor))
         }
         ta.recycle()
     }

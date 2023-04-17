@@ -8,8 +8,8 @@ plugins {
 
 android {
 	namespace = "com.hl.unimp"
-	compileSdk = AndroidVersions.COMPILE_SDK
 
+	compileSdk = AndroidVersions.COMPILE_SDK
 	defaultConfig {
 		minSdk = AndroidVersions.MIN_SDK
 		targetSdk = AndroidVersions.TARGET_SDK

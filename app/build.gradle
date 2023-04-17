@@ -11,6 +11,8 @@ plugins {
 apply from: "../commonGradle/build_config.gradle"
 
 android {
+    namespace 'com.hl.baseproject'
+
     compileSdk AndroidVersions.COMPILE_SDK
 
     defaultConfig {

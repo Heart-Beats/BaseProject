@@ -11,7 +11,6 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.BitmapImageViewTarget
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
-import com.hl.uikit.R
 import com.luck.picture.lib.engine.ImageEngine
 import com.luck.picture.lib.interfaces.OnCallbackListener
 
@@ -90,7 +89,7 @@ class GlideEngine private constructor() : ImageEngine {
             .override(180, 180)
             .centerCrop()
             .sizeMultiplier(0.5f)
-            .placeholder(R.drawable.ps_image_placeholder)
+            .placeholder(com.luck.picture.lib.R.drawable.ps_image_placeholder)
             .into(object : BitmapImageViewTarget(imageView) {
                 override fun setResource(resource: Bitmap?) {
                     val circularBitmapDrawable = RoundedBitmapDrawableFactory.create(context.resources, resource)
@@ -115,7 +114,7 @@ class GlideEngine private constructor() : ImageEngine {
             .load(url)
             .override(200, 200)
             .centerCrop()
-            .placeholder(R.drawable.ps_image_placeholder)
+            .placeholder(com.luck.picture.lib.R.drawable.ps_image_placeholder)
             .into(imageView)
     }
 

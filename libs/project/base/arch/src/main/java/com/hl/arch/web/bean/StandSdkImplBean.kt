@@ -3,7 +3,7 @@ package com.hl.arch.web.bean
 import android.os.Parcelable
 import com.hl.umeng.sdk.SharePlatformParam
 import com.umeng.socialize.bean.SHARE_MEDIA
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 
 
 data class H5DeviceInfo(

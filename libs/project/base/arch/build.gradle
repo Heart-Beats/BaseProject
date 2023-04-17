@@ -1,3 +1,4 @@
+import com.buildsrc.AndroidVersions
 import com.buildsrc.Deps
 
 plugins {
@@ -7,11 +8,12 @@ plugins {
 }
 
 android {
-    compileSdk 31
+    namespace 'com.hl.arch'
 
+    compileSdkVersion AndroidVersions.COMPILE_SDK
     defaultConfig {
-        minSdk 21
-        targetSdk 31
+        minSdkVersion AndroidVersions.MIN_SDK
+        targetSdkVersion AndroidVersions.TARGET_SDK
         versionCode 1
         versionName "1.0"
 
@@ -39,8 +41,11 @@ android {
         jvmTarget = '11'
     }
 
-    viewBinding {
-        enabled = true
+    buildFeatures {
+        viewBinding true
+
+        // 默认不生成 BuildConfig 类
+        buildConfig true
     }
 }
 

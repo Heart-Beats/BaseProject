@@ -13,7 +13,6 @@ internal class HttpLogger : HttpLoggingInterceptor.Logger {
 
 	override fun log(message: String) {
 		// 请求或者响应开始
-		var message = message
 		if (message.startsWith("--> POST")) {
 			mMessage.setLength(0)
 		}
