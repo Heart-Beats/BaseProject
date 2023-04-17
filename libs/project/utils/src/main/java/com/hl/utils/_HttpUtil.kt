@@ -36,7 +36,12 @@ suspend fun String.getHttpContentLength(): Long {
 /**
  * 从 Url 中获取下载的文件名称
  */
-fun String.getDownloadFileNameFromUrl() = this.substringAfterLast("/")
+fun String.getDownloadFileNameFromUrl(): String {
+    val fileUrlPath = this.substringAfterLast("/")
+
+    // 分割后的 fileUrl 可能包含参数，如：xxx.mp4?width=1280
+    return fileUrlPath.substringBefore("?", fileUrlPath)
+}
 
 /**
  * 将 URL 转为合法的 URL 地址

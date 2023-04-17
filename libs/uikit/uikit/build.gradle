@@ -82,6 +82,10 @@ dependencies {
     implementation "com.google.android.material:material:1.5.0"
 
     //github 地址 ：https://github.com/zyyoona7/WheelPicker
+//    def wheel_picker_version = '2.0.7'
+//    api "com.github.zyyoona7.WheelPicker:wheelview:${wheel_picker_version}"
+//    api "com.github.zyyoona7.WheelPicker:pickerview:${wheel_picker_version}"
+
     def wheel_picker_version = '1.0.9'
     api "com.github.zyyoona7:wheelview:${wheel_picker_version}"
     api "com.github.zyyoona7:pickerview:${wheel_picker_version}"

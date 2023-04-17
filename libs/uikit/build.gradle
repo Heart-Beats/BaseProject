@@ -14,7 +14,7 @@ plugins {
     id 'com.android.library' version '7.4.1' apply false
     id 'org.jetbrains.kotlin.android' version '1.8.0' apply false
 
-    // 帮助从 com.kanyun.kace 无缝迁移的插件框架
+    // 帮助从 kotlin-android-extensions 无缝迁移的插件框架
     id 'com.kanyun.kace' version "1.8.0-1.0.4" apply false
 }
 

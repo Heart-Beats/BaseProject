@@ -87,14 +87,7 @@ open class WebViewFragment : ViewBindingMvvmBaseFragment<FragmentWebViewBinding>
 
 		initWebView(args)
 
-		args.url.run {
-			val uri = this.toUri()
-			if (uri.scheme == "native") {
-				onNativeRequestLoading(webView, uri)
-			} else {
-				loadUrl(args.url)
-			}
-		}
+		loadUrl(args.url)
 	}
 
 	private fun FragmentWebViewBinding.initToolBar(title: String) {
@@ -342,8 +335,13 @@ open class WebViewFragment : ViewBindingMvvmBaseFragment<FragmentWebViewBinding>
 	 * 载入显示 url 对应的网页
 	 */
 	fun loadUrl(url: String) {
-		JsBridgeHelper.registerHandlers(this@WebViewFragment, webView)
-		webView.loadUrl(url)
+		val uri = url.toUri()
+		if (uri.scheme == "native") {
+			onNativeRequestLoading(webView, uri)
+		} else {
+			JsBridgeHelper.registerHandlers(this@WebViewFragment, webView)
+			webView.loadUrl(url)
+		}
 	}
 
 	/**
