@@ -114,7 +114,7 @@ class IStandSdkImpl(private val webViewFragment: Fragment, val bridgeWebView: Br
 	}
 
 	private fun BridgeWebView.h5NavigateBack(data: String?, function: CallBackFunction) {
-		val h5NavigateBackParam = GsonUtil.fromJson(data, H5NavigateBackParam::class.java)
+		val h5NavigateBackParam = GsonUtil.fromJson<H5NavigateBackParam>(data) ?: return
 		repeat(h5NavigateBackParam.step) {
 
 			logJs("h5NavigateBack", "开始")
@@ -202,7 +202,7 @@ class IStandSdkImpl(private val webViewFragment: Fragment, val bridgeWebView: Br
 	 * 该方法使用 FragmentContainerActivity 进行实现，否则页面回退时整个 h5 页面会刷新
 	 */
 	private fun gotoWebByContainerActivity(h5NavigateToData: String?) {
-		val h5NavigateToParam = GsonUtil.fromJson(h5NavigateToData, H5NavigateToParam::class.java)
+		val h5NavigateToParam = GsonUtil.fromJson<H5NavigateToParam>(h5NavigateToData) ?: return
 
 		val args = WebViewFragmentArgs.Builder(h5NavigateToParam.url).apply {
 			setTitle(h5NavigateToParam.title)
@@ -214,8 +214,8 @@ class IStandSdkImpl(private val webViewFragment: Fragment, val bridgeWebView: Br
 
 	override fun setH5Data(handlerName: String) {
 		commonRegisterHandler(handlerName) { data, function ->
-			val h5SaveDataEntity = GsonUtil.fromJson(data, H5SaveDataEntity::class.java)
-			h5SaveDataEntity.key?.also {
+			val h5SaveDataEntity = GsonUtil.fromJson<H5SaveDataEntity>(data)
+			h5SaveDataEntity?.key?.also {
 				H5DataHelper.putData(it, h5SaveDataEntity.value)
 				function.onSuccess("保存数据成功")
 			} ?: function.onFail("key 不可为空")
@@ -224,7 +224,7 @@ class IStandSdkImpl(private val webViewFragment: Fragment, val bridgeWebView: Br
 
 	override fun getH5Data(handlerName: String) {
 		commonRegisterHandler(handlerName) { data, function ->
-			val h5DataEntity = GsonUtil.fromJson(data, H5GetDataEntity::class.java)
+			val h5DataEntity = GsonUtil.fromJson<H5GetDataEntity>(data)
 			if (h5DataEntity == null) {
 				function.onFail("h5 传输的数据异常")
 				return@commonRegisterHandler
@@ -316,7 +316,7 @@ class IStandSdkImpl(private val webViewFragment: Fragment, val bridgeWebView: Br
 
 	override fun setStatusBarLightMode(handlerName: String) {
 		commonRegisterHandler(handlerName) { data, function ->
-			val lightModeParam = GsonUtil.fromJson(data, StatusBarLightModeParam::class.java)
+			val lightModeParam = GsonUtil.fromJson<StatusBarLightModeParam>(data) ?: return@commonRegisterHandler
 			webViewFragment.lifecycleScope.launchWhenStarted {
 				webViewFragment.immersionBar {
 					statusBarDarkFont(lightModeParam.isLightMode())
@@ -334,7 +334,7 @@ class IStandSdkImpl(private val webViewFragment: Fragment, val bridgeWebView: Br
 
 	override fun setStatusBarColor(handlerName: String) {
 		commonRegisterHandler(handlerName) { data, function ->
-			GsonUtil.fromJson(data, StatusBarColorParam::class.java)?.color?.also {
+			GsonUtil.fromJson<StatusBarColorParam>(data)?.color?.also {
 				webViewFragment.lifecycleScope.launchWhenStarted {
 					webViewFragment.immersionBar {
 						statusBarColor(it)
@@ -360,7 +360,7 @@ class IStandSdkImpl(private val webViewFragment: Fragment, val bridgeWebView: Br
 
 	override fun setWebView(handlerName: String) {
 		commonRegisterHandler(handlerName) { data, function ->
-			val h5SetWebViewParam = GsonUtil.fromJson<H5SetWebViewParam>(data)
+			val h5SetWebViewParam = GsonUtil.fromJson<H5SetWebViewParam>(data) ?: return@commonRegisterHandler
 			try {
 				bridgeWebView.setBackgroundColor(Color.parseColor(h5SetWebViewParam.backgroundColor))
 				function.onCallBack(H5Return.success())
@@ -378,7 +378,7 @@ class IStandSdkImpl(private val webViewFragment: Fragment, val bridgeWebView: Br
 
 	override fun previewImage(handlerName: String) {
 		commonRegisterHandler(handlerName) { data, function ->
-			val previewImageParam = GsonUtil.fromJson<PreviewImageParam>(data)
+			val previewImageParam = GsonUtil.fromJson<PreviewImageParam>(data) ?: return@commonRegisterHandler
 
 			XPopup.Builder(webViewFragment.requireContext())
 				.isViewMode(true)
@@ -395,7 +395,7 @@ class IStandSdkImpl(private val webViewFragment: Fragment, val bridgeWebView: Br
 
 	override fun savePhotoToAlbum(handlerName: String) {
 		commonRegisterHandler(handlerName) { data, function ->
-			val savePhotoToAlbumParam = GsonUtil.fromJson<SavePhotoToAlbumParam>(data)
+			val savePhotoToAlbumParam = GsonUtil.fromJson<SavePhotoToAlbumParam>(data) ?: return@commonRegisterHandler
 			webViewFragment.reqPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE, deniedAction = {
 				function.onFail("获取存储权限失败")
 			}) {
@@ -417,7 +417,7 @@ class IStandSdkImpl(private val webViewFragment: Fragment, val bridgeWebView: Br
 
 	override fun callPhone(handlerName: String) {
 		commonRegisterHandler(handlerName) { data, function ->
-			val h5Call = GsonUtil.fromJson<H5CallParam>(data)
+			val h5Call = GsonUtil.fromJson<H5CallParam>(data) ?: return@commonRegisterHandler
 			val intent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + h5Call.phone))
 			intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
 			webViewFragment.startActivity(intent)
@@ -427,7 +427,7 @@ class IStandSdkImpl(private val webViewFragment: Fragment, val bridgeWebView: Br
 
 	override fun downloadFile(handlerName: String) {
 		commonRegisterHandler(handlerName) { data, function ->
-			val downLoadFileParam = GsonUtil.fromJson<DownLoadFileParam>(data)
+			val downLoadFileParam = GsonUtil.fromJson<DownLoadFileParam>(data) ?: return@commonRegisterHandler
 			if (!downLoadFileParam.fileUrl.startsWith("http")) {
 				function.onFail("文件下载地址有误！")
 				return@commonRegisterHandler
@@ -459,7 +459,7 @@ class IStandSdkImpl(private val webViewFragment: Fragment, val bridgeWebView: Br
 
 	override fun previewFile(handlerName: String) {
 		commonRegisterHandler(handlerName) { data, function ->
-			val previewFileParam = GsonUtil.fromJson<PreviewFileParam>(data)
+			val previewFileParam = GsonUtil.fromJson<PreviewFileParam>(data) ?: return@commonRegisterHandler
 			val filename = previewFileParam.fileName
 			val fileUrl = previewFileParam.fileUrl
 			if (filename == null || fileUrl == null) {
@@ -493,7 +493,7 @@ class IStandSdkImpl(private val webViewFragment: Fragment, val bridgeWebView: Br
 
 	override fun share2Platform(handlerName: String) {
 		commonRegisterHandler(handlerName) { data, function ->
-			val share2PlatformParam = GsonUtil.fromJson(data, Share2PlatformParam::class.java)
+			val share2PlatformParam = GsonUtil.fromJson<Share2PlatformParam>(data) ?: return@commonRegisterHandler
 			val platformParam = share2PlatformParam.convert2SharePlatformParam()
 
 			val shareListener = object : MyUMShareListener() {
