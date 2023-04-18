@@ -7,13 +7,32 @@ androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version
 androidx-test-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "testEspressoCore" }
 
 # compose
-androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "compose" }
-androidx-compose-ui = { group = "androidx.compose.ui", name = "ui", version.ref = "compose" }
-androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview", version.ref = "compose" }
-androidx-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling", version.ref = "compose" }
-androidx-compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4", version.ref = "compose" }
-androidx-compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest", version.ref = "compose" }
-androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "material3" }
+#使用 Materials (BoM) 提供，以确保所有库组的版本保持同步：https://developer.android.com/jetpack/compose/bom/bom?hl=zh-cn, </br> 使用方式: implementation platform(androidx-compose-bom)
+androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "androidxComposeBom" }
+# compose 以下任选一个就可以, 首选 material3
+androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3" }
+androidx-compose-material = { group = "androidx.compose.material", name = "material" }
+androidx-compose-foundation = { group = "androidx.compose.foundation", name = "foundation" }
+androidx-compose-ui = { group = "androidx.compose.ui", name = "ui" }
+# as 预览支持
+androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
+androidx-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
+# UI Test 支持
+androidx-compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
+androidx-compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
+# material 图标支持
+androidx-compose-material-icons-core = { group = "androidx.compose.material", name = "material-icons-core" }
+androidx-compose-material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended" }
+# window size 工具包
+androidx-compose-material3-window-size-class = { group = "androidx.compose.material3", name = "material3-window-size-class" }
+# 集成 LiveData
+androidx-compose-runtime-livedata = { group = "androidx.compose.runtime", name = "runtime-livedata" }
+# 集成 RxJava2
+androidx-compose-runtime-rxjava2 = { group = "androidx.compose.runtime", name = "runtime-rxjava2" }
+# 集成  compose 对于 activity 的扩展， 否则无法在 activity 中使用  setContent { } 方法
+androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "1.6.1" }
+# 集成  compose 对于 ViewModel 的扩展
+androidx-lifecycle-viewmodel-compose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "2.5.1" }
 
 androidx_core_ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx_appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }

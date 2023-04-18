@@ -9,7 +9,7 @@ internal object Versions {
     const val CORE_KTX = "1.6.0"
 
     const val APPCOMPAT = "1.6.0"
-     const val CONSTRAINT_LAYOUT = "2.1.4"
+    const val CONSTRAINT_LAYOUT = "2.1.4"
     const val ACTIVITY = "1.4.0"
     const val FRAGMENT = "1.4.0"
     const val SECURITY_CRYPTO = "1.0.0"
@@ -18,6 +18,8 @@ internal object Versions {
     const val CAMERA_X = "1.2.0"
     const val PALETTE = "1.0.0"
     const val STARTUP = "1.1.1"
+
+    const val COMPOSE_BOM = "2023.01.00"
 
     const val LIFECYCLE = "2.5.1"
     const val NAV_VERSION = "2.5.3"
@@ -115,6 +117,77 @@ class Deps {
         const val palette_Ktx = "androidx.palette:palette-ktx:${Versions.PALETTE}"
 
         const val startup = "androidx.startup:startup-runtime:${Versions.STARTUP}"
+
+        object Compose {
+            /**
+             * 使用 Materials (BoM) 提供，以确保所有库组的版本保持同步：https://developer.android.com/jetpack/compose/bom/bom?hl=zh-cn
+             * 使用方式: implementation platform(bom)
+             */
+            const val bom = "androidx.compose:compose-bom:${Versions.COMPOSE_BOM}"
+
+            //  compose 以下任选一个就可以, 首选 material3
+            const val material3 = "androidx.compose.material3:material3"
+            const val material = "androidx.compose.material:material"
+            const val foundation = "androidx.compose.foundation:foundation"  // 跳过 Material Design 直接在基础组件之上构建
+            const val ui = "androidx.compose.ui:ui"  // 仅导入 compose 的主要 API，如：测量、布局
+
+            /**
+             * AS 预览支持
+             */
+            const val ui_tooling_preview = "androidx.compose.ui:ui-tooling-preview"
+
+            /**
+             * 建议使用 debugImplementation 导入
+             */
+            const val ui_tooling = "androidx.compose.ui:ui-tooling"
+
+            /**
+             * UI 测试
+             */
+            const val ui_test_junit4 = "androidx.compose.ui:ui-test-junit4"
+
+            /**
+             * 建议使用 debugImplementation 导入
+             */
+            const val ui_test_manifest = "androidx.compose.ui:ui-test-manifest"
+
+
+            // 可选功能集成
+            /**
+             * material 图标
+             */
+            const val material_icons_core = "androidx.compose.material:material-icons-core"
+
+            /**
+             * material 图标扩展包
+             */
+            const val material_icons_extended = "androidx.compose.material:material-icons-extended"
+
+            /**
+             * window size 工具包
+             */
+            const val material3_window_size_class = "androidx.compose.material3:material3-window-size-class"
+
+            /**
+             * 集成 LiveData
+             */
+            const val runtime_livedata = "androidx.compose.runtime:runtime-livedata"
+
+            /**
+             * 集成 RxJava2
+             */
+            const val runtime_rxjava2 = "androidx.compose.runtime:runtime-rxjava2"
+
+            /**
+             * 集成  compose 对于 activity 的扩展， 否则无法在 activity 中使用  setContent { } 方法
+             */
+            const val activity = "androidx.activity:activity-compose:1.6.1"
+
+            /**
+             * 集成  compose 对于 ViewModel 的扩展
+             */
+            const val viewmodel = "androidx.lifecycle:lifecycle-viewmodel-compose:2.5.1"
+        }
     }
 
     object Lifecycle {
