@@ -58,7 +58,7 @@ dependencies {
 	implementation("com.facebook.fresco:fresco:${fresco_version}")
 	implementation("com.facebook.fresco:animated-gif:${fresco_version}")
 
-	implementation(Deps.Glide.glide)
+	implementation(Deps.ImageLoader.Glide.glide)
 	api(Deps.Gif.android_gif_drawable)
 	implementation("androidx.webkit:webkit:1.3.0")
 }

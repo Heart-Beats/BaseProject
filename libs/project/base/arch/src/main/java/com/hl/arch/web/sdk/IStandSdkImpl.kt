@@ -24,7 +24,25 @@ import com.hl.arch.base.startFragment
 import com.hl.arch.web.H5Constants
 import com.hl.arch.web.WebViewFragment
 import com.hl.arch.web.WebViewFragmentArgs
-import com.hl.arch.web.bean.*
+import com.hl.arch.web.bean.AndroidDeviceInfo
+import com.hl.arch.web.bean.DownLoadFileParam
+import com.hl.arch.web.bean.GetNetworkConnectTypeReturn
+import com.hl.arch.web.bean.H5CallParam
+import com.hl.arch.web.bean.H5DeviceInfo
+import com.hl.arch.web.bean.H5GetDataEntity
+import com.hl.arch.web.bean.H5GetDataReturn
+import com.hl.arch.web.bean.H5NavigateBackParam
+import com.hl.arch.web.bean.H5NavigateToParam
+import com.hl.arch.web.bean.H5Return
+import com.hl.arch.web.bean.H5SaveDataEntity
+import com.hl.arch.web.bean.H5SetWebViewParam
+import com.hl.arch.web.bean.PreviewFileParam
+import com.hl.arch.web.bean.PreviewImageParam
+import com.hl.arch.web.bean.SavePhotoToAlbumParam
+import com.hl.arch.web.bean.ScanQRCodeReturn
+import com.hl.arch.web.bean.Share2PlatformParam
+import com.hl.arch.web.bean.StatusBarColorParam
+import com.hl.arch.web.bean.StatusBarLightModeParam
 import com.hl.arch.web.helpers.H5DataHelper
 import com.hl.arch.web.helpers.logJs
 import com.hl.arch.web.helpers.onFail
@@ -34,15 +52,22 @@ import com.hl.arch.web.receiver.CallBackFunctionHandlerReceiver
 import com.hl.uikit.getStatusBarHeight
 import com.hl.umeng.sdk.MyUMShareListener
 import com.hl.umeng.sdk.UMShareUtil
-import com.hl.utils.*
+import com.hl.utils.BitmapUtil
+import com.hl.utils.ClipboardHelper
+import com.hl.utils.DownloadFileUtil
+import com.hl.utils.GsonUtil
+import com.hl.utils.ScanFileActionUtil
+import com.hl.utils.SmsHelper
 import com.hl.utils.activityResult.OnActivityResult
 import com.hl.utils.date.getFormattedNowDateTime
+import com.hl.utils.getCurrentNavigationFragment
 import com.hl.utils.navigation.findNavController
 import com.hl.utils.previewFie.PreviewFileActivity
+import com.hl.utils.reqPermissions
+import com.hl.utils.showImages
+import com.hl.utils.traverseFindFirstViewByType
 import com.king.zxing.CameraScan
 import com.king.zxing.CaptureActivity
-import com.lxj.xpopup.XPopup
-import com.lxj.xpopup.util.SmartGlideImageLoader
 import com.umeng.socialize.bean.SHARE_MEDIA
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.delay
@@ -380,15 +405,8 @@ class IStandSdkImpl(private val webViewFragment: Fragment, val bridgeWebView: Br
 		commonRegisterHandler(handlerName) { data, function ->
 			val previewImageParam = GsonUtil.fromJson<PreviewImageParam>(data) ?: return@commonRegisterHandler
 
-			XPopup.Builder(webViewFragment.requireContext())
-				.isViewMode(true)
-				.asImageViewer(
-					null, previewImageParam.index, previewImageParam.urls, { popupView, position ->
-						// popupView.updateSrcView()
-					}, SmartGlideImageLoader()
-				)
-				.show()
-
+			webViewFragment.requireContext()
+				.showImages(null, previewImageParam.index, previewImageParam.urls ?: listOf())
 			function.onSuccess()
 		}
 	}

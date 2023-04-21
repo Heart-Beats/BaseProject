@@ -34,7 +34,15 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity> <!-- 微信的 SDK 限制了回调类包名必须是${applicationId}.wxapi, 因此这里使用 activity-alias 标签 -->
+        </activity>
+
+        <activity
+            android:name=".compose.ComposeActivity"
+            android:configChanges="keyboard|orientation|screenSize"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+
+        <!-- 微信的 SDK 限制了回调类包名必须是${applicationId}.wxapi, 因此这里使用 activity-alias 标签 -->
         <!-- 微信分享 -->
         <activity-alias
             android:name=".wxapi.WXEntryActivity"
@@ -51,6 +59,7 @@
         <service
             android:name=".shadow.pps.ZKYPluginProcessService"
             android:process=":pluginZKY" />
+
         <!--
 dynamic activity 注册
             注意 configChanges 需要全注册

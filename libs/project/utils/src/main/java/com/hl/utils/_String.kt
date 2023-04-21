@@ -4,6 +4,7 @@ import android.net.Uri
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
+import kotlin.random.Random
 
 /**
  * 身份证号脱敏
@@ -135,4 +136,16 @@ fun String?.isJson(): Boolean {
     } catch (e: JSONException) {
         false
     }
+}
+
+
+/**
+ * 获取指定长度的随机字符串
+ */
+fun getRandomString(sizeOfRandomString: Int): String {
+    val ALLOWED_CHARACTERS = "0123456789qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM"
+    val sb = StringBuilder(sizeOfRandomString)
+    for (i in 0 until sizeOfRandomString)
+        sb.append(ALLOWED_CHARACTERS[Random.nextInt(ALLOWED_CHARACTERS.length)])
+    return sb.toString()
 }

@@ -10,3 +10,7 @@
     *;
 }
 #  x5  混淆结束
+
+
+-dontwarn com.lxj.xpopup.widget.**
+-keep class com.lxj.xpopup.widget.**{*;}
