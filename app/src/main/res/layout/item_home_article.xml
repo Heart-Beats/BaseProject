@@ -27,6 +27,7 @@
         android:textSize="@dimen/sp_14"
         android:textStyle="bold"
         app:layout_constrainedWidth="true"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintBottom_toTopOf="@id/item_article_author_or_sharer"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/item_article_image"

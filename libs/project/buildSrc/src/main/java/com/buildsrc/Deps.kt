@@ -7,6 +7,7 @@ internal object Versions {
     const val KOTLIN = "1.8.0"
     const val KOTLIN_COROUTINES = "1.4.2"
     const val CORE_KTX = "1.6.0"
+    const val COLLECTION_KTX = "1.2.0"
 
     const val APPCOMPAT = "1.6.0"
     const val CONSTRAINT_LAYOUT = "2.1.4"
@@ -40,6 +41,7 @@ internal object Versions {
     const val RX_ANDROID = "3.0.0"
     const val FANCY_TOAST = "2.0.1"
     const val GLIDE = "4.12.0"
+    const val COIL = "2.3.0"
     const val PERMISSION_X = "1.7.1"
     const val GSON = "2.8.9"
     const val FAST_JSON = "1.1.72.android"
@@ -91,32 +93,30 @@ class Deps {
         const val espresso_core = "androidx.test.espresso:espresso-core:${Versions.ESPRESSO_CORE}"
     }
 
-    object AndroidX {
-        const val core_ktx = "androidx.core:core-ktx:${Versions.CORE_KTX}"
-        const val appcompat = "androidx.appcompat:appcompat:${Versions.APPCOMPAT}"
-        const val constraint_layout = "androidx.constraintlayout:constraintlayout:${Versions.CONSTRAINT_LAYOUT}"
-        const val activity = "androidx.activity:activity:${Versions.ACTIVITY}"
-        const val fragment = "androidx.fragment:fragment:${Versions.FRAGMENT}"
-        const val activity_ktx = "androidx.activity:activity-ktx:${Versions.ACTIVITY}"
-        const val fragment_ktx = "androidx.fragment:fragment-ktx:${Versions.FRAGMENT}"
-        const val security_crypto = "androidx.security:security-crypto:${Versions.SECURITY_CRYPTO}"
-        const val recyclerview = "androidx.recyclerview:recyclerview:${Versions.RECYCLERVIEW}"
-        const val view_binding = "androidx.databinding:viewbinding:${Versions.DATA_BINDING}"
-        const val databinding_runtime = "androidx.databinding:databinding-runtime:${Versions.DATA_BINDING}"
+    object Jetpack {
 
-        /**
-         *  camera_core 可选， camera-camera2已包含该依赖
-         */
-        const val camera_core = "androidx.camera:camera-core:${Versions.CAMERA_X}"
-        const val camera_camera2 = "androidx.camera:camera-camera2:${Versions.CAMERA_X}"
-        const val camera_lifecycle = "androidx.camera:camera-lifecycle:${Versions.CAMERA_X}"
-        const val camera_view = "androidx.camera:camera-view:${Versions.CAMERA_X}"
-        const val camera_extensions = "androidx.camera:camera-extensions:${Versions.CAMERA_X}"
+        object Navigation {
+            /**
+             * 提供安全可靠 Navigation 操作，解决 GitHub 上 "Navigation Add Hide 修改版" 普遍存在 "popUpToInclusive 导致 Fragment 不符预期加载" 等问题。
+             * 仓库地址： https://github.com/KunMinX/Smooth-Navigation
+             */
+            const val smooth_navigation = "com.kunminx.arch:smooth-navigation:${Versions.SMOOTH_NAVIGATION}"
 
-        const val palette = "androidx.palette:palette:${Versions.PALETTE}"
-        const val palette_Ktx = "androidx.palette:palette-ktx:${Versions.PALETTE}"
+            // Java language implementation
+            const val navigation_fragment = "androidx.navigation:navigation-fragment:${Versions.NAV_VERSION}"
+            const val navigation_ui = "androidx.navigation:navigation-ui:${Versions.NAV_VERSION}"
 
-        const val startup = "androidx.startup:startup-runtime:${Versions.STARTUP}"
+            // Kotlin
+            const val navigation_fragment_ktx = "androidx.navigation:navigation-fragment-ktx:${Versions.NAV_VERSION}"
+            const val navigation_ui_ktx = "androidx.navigation:navigation-ui-ktx:${Versions.NAV_VERSION}"
+
+            // Feature module Support
+            const val navigation_dynamic_features_fragment =
+                "androidx.navigation:navigation-dynamic-features-fragment:${Versions.NAV_VERSION}"
+
+            // Jetpack Compose Integration
+            const val navigation_compose = "androidx.navigation:navigation-compose:${Versions.NAV_VERSION}"
+        }
 
         object Compose {
             /**
@@ -190,6 +190,35 @@ class Deps {
         }
     }
 
+    object AndroidX {
+        const val core_ktx = "androidx.core:core-ktx:${Versions.CORE_KTX}"
+        const val collection_ktx = "androidx.collection:collection-ktx:${Versions.COLLECTION_KTX}"
+        const val appcompat = "androidx.appcompat:appcompat:${Versions.APPCOMPAT}"
+        const val constraint_layout = "androidx.constraintlayout:constraintlayout:${Versions.CONSTRAINT_LAYOUT}"
+        const val activity = "androidx.activity:activity:${Versions.ACTIVITY}"
+        const val fragment = "androidx.fragment:fragment:${Versions.FRAGMENT}"
+        const val activity_ktx = "androidx.activity:activity-ktx:${Versions.ACTIVITY}"
+        const val fragment_ktx = "androidx.fragment:fragment-ktx:${Versions.FRAGMENT}"
+        const val security_crypto = "androidx.security:security-crypto:${Versions.SECURITY_CRYPTO}"
+        const val recyclerview = "androidx.recyclerview:recyclerview:${Versions.RECYCLERVIEW}"
+        const val view_binding = "androidx.databinding:viewbinding:${Versions.DATA_BINDING}"
+        const val databinding_runtime = "androidx.databinding:databinding-runtime:${Versions.DATA_BINDING}"
+
+        /**
+         *  camera_core 可选， camera-camera2已包含该依赖
+         */
+        const val camera_core = "androidx.camera:camera-core:${Versions.CAMERA_X}"
+        const val camera_camera2 = "androidx.camera:camera-camera2:${Versions.CAMERA_X}"
+        const val camera_lifecycle = "androidx.camera:camera-lifecycle:${Versions.CAMERA_X}"
+        const val camera_view = "androidx.camera:camera-view:${Versions.CAMERA_X}"
+        const val camera_extensions = "androidx.camera:camera-extensions:${Versions.CAMERA_X}"
+
+        const val palette = "androidx.palette:palette:${Versions.PALETTE}"
+        const val palette_Ktx = "androidx.palette:palette-ktx:${Versions.PALETTE}"
+
+        const val startup = "androidx.startup:startup-runtime:${Versions.STARTUP}"
+    }
+
     object Lifecycle {
         const val lifecycle_extensions = "androidx.lifecycle:lifecycle-extensions:2.2.0"
         const val lifecycle_livedata_ktx = "androidx.lifecycle:lifecycle-livedata-ktx:${Versions.LIFECYCLE}"
@@ -216,32 +245,6 @@ class Deps {
          */
         const val kotlinx_coroutines_android =
             "org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.KOTLIN_COROUTINES}"
-    }
-
-    object Jetpack {
-
-        object Navigation {
-            /**
-             * 提供安全可靠 Navigation 操作，解决 GitHub 上 "Navigation Add Hide 修改版" 普遍存在 "popUpToInclusive 导致 Fragment 不符预期加载" 等问题。
-             * 仓库地址： https://github.com/KunMinX/Smooth-Navigation
-             */
-            const val smooth_navigation = "com.kunminx.arch:smooth-navigation:${Versions.SMOOTH_NAVIGATION}"
-
-            // Java language implementation
-            const val navigation_fragment = "androidx.navigation:navigation-fragment:${Versions.NAV_VERSION}"
-            const val navigation_ui = "androidx.navigation:navigation-ui:${Versions.NAV_VERSION}"
-
-            // Kotlin
-            const val navigation_fragment_ktx = "androidx.navigation:navigation-fragment-ktx:${Versions.NAV_VERSION}"
-            const val navigation_ui_ktx = "androidx.navigation:navigation-ui-ktx:${Versions.NAV_VERSION}"
-
-            // Feature module Support
-            const val navigation_dynamic_features_fragment =
-                "androidx.navigation:navigation-dynamic-features-fragment:${Versions.NAV_VERSION}"
-
-            // Jetpack Compose Integration
-            const val navigation_compose = "androidx.navigation:navigation-compose:${Versions.NAV_VERSION}"
-        }
     }
 
     object XLog {
@@ -293,9 +296,20 @@ class Deps {
         const val fancy_toast = "io.github.shashank02051997:FancyToast:${Versions.FANCY_TOAST}"
     }
 
-    object Glide {
-        const val glide = "com.github.bumptech.glide:glide:${Versions.GLIDE}"
-        const val glide_compiler = "com.github.bumptech.glide:compiler:${Versions.GLIDE}"
+    object ImageLoader {
+        object Glide {
+            const val glide = "com.github.bumptech.glide:glide:${Versions.GLIDE}"
+            const val glide_compiler = "com.github.bumptech.glide:compiler:${Versions.GLIDE}"
+        }
+
+        /**
+         * Coil 是一个 Android 图片加载库，通过 Kotlin 协程的方式加载图
+         * 开源地址： https://github.com/coil-kt/coil
+         */
+        object Coil {
+            const val coil = "io.coil-kt:coil:${Versions.COIL}"
+            const val coil_compose = "io.coil-kt:coil-compose:${Versions.COIL}"
+        }
     }
 
     /**

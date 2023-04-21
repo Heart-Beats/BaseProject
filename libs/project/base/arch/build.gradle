@@ -55,6 +55,7 @@ dependencies {
     api project(path: ':SDK:Umeng')
 
     api Deps.AndroidX.core_ktx
+    api Deps.AndroidX.collection_ktx
     api Deps.AndroidX.appcompat
     api Deps.AndroidX.activity
     api Deps.AndroidX.fragment
@@ -70,7 +71,7 @@ dependencies {
 
     api Deps.Status_Bar.immersionbar
     api Deps.Status_Bar.immersionbar_ktx
-    api Deps.Glide.glide
+    api Deps.ImageLoader.Glide.glide
     api Deps.Json.gson
     api Deps.Jetpack.Navigation.navigation_ui
     api Deps.Popup.x_popup

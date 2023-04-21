@@ -291,6 +291,7 @@ project.afterEvaluate {
                     setDependencyNode(root, 'compile', myGroupId, 'Umeng', getPublicationVersion())
 
                     setDependencyNode(root, 'compile', 'androidx.core', 'core-ktx', Versions.CORE_KTX)
+                    setDependencyNode(root, 'compile', 'androidx.collection', 'collection-ktx', Versions.COLLECTION_KTX)
                     setDependencyNode(root, 'compile', 'androidx.appcompat', 'appcompat', Versions.APPCOMPAT)
                     setDependencyNode(root, 'compile', 'androidx.activity', 'activity', Versions.ACTIVITY)
                     setDependencyNode(root, 'compile', 'androidx.fragment', 'fragment', Versions.FRAGMENT)

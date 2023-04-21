@@ -86,16 +86,18 @@ android {
         jvmTarget = '11'
     }
 
+    buildFeatures {
+        viewBinding true
+        compose true
+    }
 
-    viewBinding {
-        enabled = true
+    composeOptions {
+        // 定义 Kotlin 编译器扩展版本与 Kotlin 版本相关联，需与项目的 Kotlin 版本匹配，详见：https://developer.android.com/jetpack/androidx/releases/compose-kotlin?hl=zh-cn
+        kotlinCompilerExtensionVersion = '1.4.1'
     }
 }
 
 repositories {
-    // com.kanyun.kace SNAPSHOT 版本仓库地址
-    maven { url "https://s01.oss.sonatype.org/content/repositories/snapshots" }
-
     mavenLocal()
     maven { url 'https://maven.aliyun.com/repository/public' }
     maven { url 'https://maven.aliyun.com/repository/google' }
@@ -137,6 +139,15 @@ dependencies {
     implementation Deps.AndroidX.appcompat
     implementation Deps.AndroidX.constraint_layout
     implementation Deps.Material.material
+
+    implementation platform(Deps.Jetpack.Compose.bom)
+    implementation Deps.Jetpack.Compose.material3
+    implementation Deps.Jetpack.Compose.ui_tooling_preview
+    debugImplementation Deps.Jetpack.Compose.ui_tooling
+    implementation Deps.Jetpack.Compose.activity
+    implementation Deps.Jetpack.Compose.material_icons_extended
+
+    implementation Deps.ImageLoader.Coil.coil_compose
 
     implementation 'com.hl:base-api'
     implementation('com.hl:base-arch') {
