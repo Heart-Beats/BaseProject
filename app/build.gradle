@@ -1,11 +1,8 @@
-import com.buildsrc.AndroidVersions
-import com.buildsrc.Deps
-
 plugins {
-    id 'com.android.application'
-    id 'org.jetbrains.kotlin.android'
-    id 'kotlin-parcelize'
-    id 'androidx.navigation.safeargs' version '2.5.3'
+    alias libs.plugins.android.application
+    alias libs.plugins.kotlin.android
+    alias libs.plugins.androidx.navigation.safeargs
+    id 'kotlin-parcelize' // 目前在 groovy 中无法直接通过 toml 文件进行使用,  issue:https://github.com/gradle/gradle/issues/17968
 }
 
 apply from: "../commonGradle/build_config.gradle"
@@ -13,12 +10,12 @@ apply from: "../commonGradle/build_config.gradle"
 android {
     namespace 'com.hl.baseproject'
 
-    compileSdk AndroidVersions.COMPILE_SDK
+    compileSdk libs.versions.compileSdk.get().toInteger()
 
     defaultConfig {
         applicationId 'com.hl.baseproject.demo'
-        minSdk AndroidVersions.MIN_SDK
-        targetSdk AndroidVersions.TARGET_SDK
+        minSdk libs.versions.minSdk.get().toInteger()
+        targetSdk libs.versions.targetSdk.get().toInteger()
         versionCode 1
         versionName "1.0"
 
@@ -131,23 +128,18 @@ repositories {
 }
 
 dependencies {
-    testImplementation Deps.Test.junit
-    androidTestImplementation Deps.Test.junit_ext
-    androidTestImplementation Deps.Test.espresso_core
+    testImplementation libs.junit
+    androidTestImplementation libs.androidx.test.ext.junit
+    androidTestImplementation libs.androidx.test.espresso.core
 
-    implementation Deps.AndroidX.core_ktx
-    implementation Deps.AndroidX.appcompat
-    implementation Deps.AndroidX.constraint_layout
-    implementation Deps.Material.material
+    implementation libs.bundles.projectBase
+    implementation libs.material
 
-    implementation platform(Deps.Jetpack.Compose.bom)
-    implementation Deps.Jetpack.Compose.material3
-    implementation Deps.Jetpack.Compose.ui_tooling_preview
-    debugImplementation Deps.Jetpack.Compose.ui_tooling
-    implementation Deps.Jetpack.Compose.activity
-    implementation Deps.Jetpack.Compose.material_icons_extended
+    implementation platform(libs.jetpack.compose.bom)
+    implementation libs.bundles.compose
+    implementation libs.jetpack.compose.material.icons.extended
 
-    implementation Deps.ImageLoader.Coil.coil_compose
+    implementation libs.coil.compose
 
     implementation 'com.hl:base-api'
     implementation('com.hl:base-arch') {
@@ -162,5 +154,5 @@ dependencies {
     implementation "com.hl:shadow-init"
     implementation "com.hl:UniMP"
 
-    implementation  Deps.Sensey.sensey
+    implementation libs.sensey
 }

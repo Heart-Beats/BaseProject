@@ -1,6 +1,0 @@
-#声明相关插件库
-[plugins]
-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
-android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
-android-library = { id = "com.android.library", version.ref = "androidGradlePlugin" }
-android-test = { id = "com.android.test", version.ref = "androidGradlePlugin" }

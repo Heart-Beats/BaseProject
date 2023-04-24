@@ -1,5 +1,3 @@
-import com.buildsrc.Versions
-
 /**
  *  编译本地相关项目
  */
@@ -194,27 +192,27 @@ project.afterEvaluate {
                     setDependencyNode(root, 'compile', myGroupId, 'uikit-res', getPublicationVersion())
 
                     // 添加相关依赖库，缺失会导致运行时无法找到对应类
-                    setDependencyNode(root, 'compile', 'org.jetbrains.kotlin', 'kotlin-stdlib', Versions.KOTLIN)
-                    setDependencyNode(root, 'compile', 'androidx.appcompat', 'appcompat', Versions.APPCOMPAT)
-                    setDependencyNode(root, 'compile', 'androidx.core', 'core-ktx', Versions.CORE_KTX)
-                    setDependencyNode(root, 'compile', 'androidx.recyclerview', 'recyclerview', Versions.RECYCLERVIEW)
-                    setDependencyNode(root, 'compile', 'androidx.fragment', 'fragment-ktx', Versions.FRAGMENT)
-                    setDependencyNode(root, 'compile', 'androidx.constraintlayout', 'constraintlayout', Versions.CONSTRAINT_LAYOUT)
-                    setDependencyNode(root, 'compile', 'org.jetbrains.kotlinx', 'kotlinx-coroutines-core', Versions.KOTLIN_COROUTINES)
-                    setDependencyNode(root, 'compile', 'org.jetbrains.kotlinx', 'kotlinx-coroutines-android', Versions.KOTLIN_COROUTINES)
-                    setDependencyNode(root, 'compile', 'com.google.android.material', 'material', Versions.MATERIAL)
+                    setDependencyNode(root, 'compile', 'org.jetbrains.kotlin', 'kotlin-stdlib', libs.versions.kotlin.get())
+                    setDependencyNode(root, 'compile', 'androidx.appcompat', 'appcompat', libs.versions.appcompat.get())
+                    setDependencyNode(root, 'compile', 'androidx.core', 'core-ktx', libs.versions.coreKtx.get())
+                    setDependencyNode(root, 'compile', 'androidx.recyclerview', 'recyclerview', libs.versions.recyclerview.get())
+                    setDependencyNode(root, 'compile', 'androidx.fragment', 'fragment-ktx', libs.versions.fragment.get())
+                    setDependencyNode(root, 'compile', 'androidx.constraintlayout', 'constraintlayout', libs.versions.constraintLayout.get())
+                    setDependencyNode(root, 'compile', 'org.jetbrains.kotlinx', 'kotlinx-coroutines-core', libs.versions.kotlinCoroutines.get())
+                    setDependencyNode(root, 'compile', 'org.jetbrains.kotlinx', 'kotlinx-coroutines-android', libs.versions.kotlinCoroutines.get())
+                    setDependencyNode(root, 'compile', 'com.google.android.material', 'material', libs.versions.material.get())
 
                     setDependencyNode(root, 'compile', 'com.github.zyyoona7', 'wheelview', '1.0.7')
                     setDependencyNode(root, 'compile', 'com.github.zyyoona7', 'pickerview', '1.0.9')
-                    setDependencyNode(root, 'compile', 'com.airbnb.android', 'lottie', Versions.LOTTIE)
-                    setDependencyNode(root, 'compile', 'io.github.scwang90', 'refresh-layout-kernel', Versions.SMART_REFRESH_LAYOUT)
-                    setDependencyNode(root, 'compile', 'io.github.lucksiege', 'pictureselector', Versions.PICTURE_SELECTOR)
-                    setDependencyNode(root, 'compile', 'io.github.lucksiege', 'compress', Versions.PICTURE_SELECTOR)
-                    setDependencyNode(root, 'compile', 'com.github.bumptech.glide', 'glide', Versions.GLIDE)
-                    setDependencyNode(root, 'compile', 'com.guolindev.permissionx', 'permissionx', Versions.PERMISSION_X)
-                    setDependencyNode(root, 'compile', 'com.github.CarGuo.GSYVideoPlayer', 'GSYVideoPlayer', Versions.GSY_VIDEO_PLAYER)
-                    setDependencyNode(root, 'compile', 'com.github.lzyzsd', 'jsbridge', Versions.JS_BRIDGE)
-                    setDependencyNode(root, 'compile', 'com.github.getActivity', 'ShapeView', Versions.SHAPE_VIEW)
+                    setDependencyNode(root, 'compile', 'com.airbnb.android', 'lottie', libs.versions.lottie.get())
+                    setDependencyNode(root, 'compile', 'io.github.scwang90', 'refresh-layout-kernel', libs.versions.smartRefreshLayout.get())
+                    setDependencyNode(root, 'compile', 'io.github.lucksiege', 'pictureselector', libs.versions.pictureSelector.get())
+                    setDependencyNode(root, 'compile', 'io.github.lucksiege', 'compress', libs.versions.pictureSelector.get())
+                    setDependencyNode(root, 'compile', 'com.github.bumptech.glide', 'glide', libs.versions.glide.get())
+                    setDependencyNode(root, 'compile', 'com.guolindev.permissionx', 'permissionx', libs.versions.permissionX.get())
+                    setDependencyNode(root, 'compile', 'com.github.CarGuo.GSYVideoPlayer', 'GSYVideoPlayer', libs.versions.gsyVideoPlayer.get())
+                    setDependencyNode(root, 'compile', 'com.github.lzyzsd', 'jsbridge', libs.versions.jsBridge.get())
+                    setDependencyNode(root, 'compile', 'com.github.getActivity', 'ShapeView', libs.versions.shapeView.get())
                     setScm(root)
                 }
             }
@@ -248,11 +246,11 @@ project.afterEvaluate {
                 pom.withXml {
                     def root = asNode()
 
-                    setDependencyNode(root, 'compile', 'org.jetbrains.kotlin', 'kotlin-stdlib', Versions.KOTLIN)
-                    setDependencyNode(root, 'compile', 'com.squareup.retrofit2', 'retrofit', Versions.RETROFIT)
-                    setDependencyNode(root, 'compile', 'com.squareup.retrofit2', 'converter-gson', Versions.RETROFIT)
-                    setDependencyNode(root, 'compile', 'com.squareup.retrofit2', 'adapter-rxjava3', Versions.RETROFIT)
-                    setDependencyNode(root, 'compile', 'com.squareup.okhttp3', 'logging-interceptor', Versions.OKHTTP)
+                    setDependencyNode(root, 'compile', 'org.jetbrains.kotlin', 'kotlin-stdlib', libs.versions.kotlin.get())
+                    setDependencyNode(root, 'compile', 'com.squareup.retrofit2', 'retrofit', libs.versions.retrofit.get())
+                    setDependencyNode(root, 'compile', 'com.squareup.retrofit2', 'converter-gson', libs.versions.retrofit.get())
+                    setDependencyNode(root, 'compile', 'com.squareup.retrofit2', 'adapter-rxjava3', libs.versions.retrofit.get())
+                    setDependencyNode(root, 'compile', 'com.squareup.okhttp3', 'logging-interceptor', libs.versions.okhttp.get())
                     setScm(root)
                 }
             }
@@ -290,29 +288,29 @@ project.afterEvaluate {
                     setDependencyNode(root, 'compile', myGroupId, 'navigation', getPublicationVersion())
                     setDependencyNode(root, 'compile', myGroupId, 'Umeng', getPublicationVersion())
 
-                    setDependencyNode(root, 'compile', 'androidx.core', 'core-ktx', Versions.CORE_KTX)
-                    setDependencyNode(root, 'compile', 'androidx.collection', 'collection-ktx', Versions.COLLECTION_KTX)
-                    setDependencyNode(root, 'compile', 'androidx.appcompat', 'appcompat', Versions.APPCOMPAT)
-                    setDependencyNode(root, 'compile', 'androidx.activity', 'activity', Versions.ACTIVITY)
-                    setDependencyNode(root, 'compile', 'androidx.fragment', 'fragment', Versions.FRAGMENT)
-                    setDependencyNode(root, 'compile', 'androidx.activity', 'activity-ktx', Versions.ACTIVITY)
-                    setDependencyNode(root, 'compile', 'androidx.fragment', 'fragment-ktx', Versions.FRAGMENT)
-                    setDependencyNode(root, 'compile', 'androidx.databinding', 'viewbinding', Versions.DATA_BINDING)
-                    setDependencyNode(root, 'compile', 'com.google.android.material', 'material', Versions.MATERIAL)
-                    setDependencyNode(root, 'compile', 'androidx.recyclerview', 'recyclerview', Versions.RECYCLERVIEW)
-                    setDependencyNode(root, 'compile', 'androidx.lifecycle', 'lifecycle-viewmodel-ktx', Versions.LIFECYCLE)
-                    setDependencyNode(root, 'compile', 'androidx.lifecycle', 'lifecycle-livedata-ktx', Versions.LIFECYCLE)
+                    setDependencyNode(root, 'compile', 'androidx.core', 'core-ktx', libs.versions.coreKtx.get())
+                    setDependencyNode(root, 'compile', 'androidx.collection', 'collection-ktx', libs.versions.collectionKtx.get())
+                    setDependencyNode(root, 'compile', 'androidx.appcompat', 'appcompat', libs.versions.appcompat.get())
+                    setDependencyNode(root, 'compile', 'androidx.activity', 'activity', libs.versions.activity.get())
+                    setDependencyNode(root, 'compile', 'androidx.fragment', 'fragment', libs.versions.fragment.get())
+                    setDependencyNode(root, 'compile', 'androidx.activity', 'activity-ktx', libs.versions.activity.get())
+                    setDependencyNode(root, 'compile', 'androidx.fragment', 'fragment-ktx', libs.versions.fragment.get())
+                    setDependencyNode(root, 'compile', 'androidx.databinding', 'viewbinding', libs.versions.dataBinding.get())
+                    setDependencyNode(root, 'compile', 'com.google.android.material', 'material', libs.versions.material.get())
+                    setDependencyNode(root, 'compile', 'androidx.recyclerview', 'recyclerview', libs.versions.recyclerview.get())
+                    setDependencyNode(root, 'compile', 'androidx.lifecycle', 'lifecycle-viewmodel-ktx', libs.versions.lifecycle.get())
+                    setDependencyNode(root, 'compile', 'androidx.lifecycle', 'lifecycle-livedata-ktx', libs.versions.lifecycle.get())
                     setDependencyNode(root, 'compile', 'androidx.lifecycle', 'lifecycle-extensions', '2.2.0')
-                    setDependencyNode(root, 'compile', 'androidx.lifecycle', 'lifecycle-runtime-ktx', Versions.LIFECYCLE)
-                    setDependencyNode(root, 'compile', 'androidx.navigation', 'navigation-ui', Versions.NAV_VERSION)
+                    setDependencyNode(root, 'compile', 'androidx.lifecycle', 'lifecycle-runtime-ktx', libs.versions.lifecycle.get())
+                    setDependencyNode(root, 'compile', 'androidx.navigation', 'navigation-ui', libs.versions.navigation.get())
 
-                    setDependencyNode(root, 'compile', 'com.geyifeng.immersionbar', 'immersionbar', Versions.IMMERSION_BAR)
-                    setDependencyNode(root, 'compile', 'com.geyifeng.immersionbar', 'immersionbar-ktx', Versions.IMMERSION_BAR)
-                    setDependencyNode(root, 'compile', 'com.github.bumptech.glide', 'glide', Versions.GLIDE)
-                    setDependencyNode(root, 'compile', 'com.google.code.gson', 'gson', Versions.GSON)
-                    setDependencyNode(root, 'compile', 'com.github.li-xiaojun', 'XPopup', Versions.X_POPUP)
-                    setDependencyNode(root, 'compile', 'com.blankj', 'utilcodex', Versions.UTIL_CODE_X)
-                    setDependencyNode(root, 'compile', 'com.github.lzyzsd', 'jsbridge', Versions.JS_BRIDGE)
+                    setDependencyNode(root, 'compile', 'com.geyifeng.immersionbar', 'immersionbar', libs.versions.immersionBar.get())
+                    setDependencyNode(root, 'compile', 'com.geyifeng.immersionbar', 'immersionbar-ktx', libs.versions.immersionBar.get())
+                    setDependencyNode(root, 'compile', 'com.github.bumptech.glide', 'glide', libs.versions.glide.get())
+                    setDependencyNode(root, 'compile', 'com.google.code.gson', 'gson', libs.versions.gson.get())
+                    setDependencyNode(root, 'compile', 'com.github.li-xiaojun', 'XPopup', libs.versions.xpopup.get())
+                    setDependencyNode(root, 'compile', 'com.blankj', 'utilcodex', libs.versions.utilCodeX.get())
+                    setDependencyNode(root, 'compile', 'com.github.lzyzsd', 'jsbridge', libs.versions.jsBridge.get())
                     setScm(root)
                 }
             }
@@ -332,43 +330,43 @@ project.afterEvaluate {
                     setDependencyNode(root, 'compile', myGroupId, 'uikit', getPublicationVersion())
                     setDependencyNode(root, 'compile', myGroupId, 'base-app-res', getPublicationVersion())
 
-                    setDependencyNode(root, 'compile', 'androidx.startup', 'startup-runtime', Versions.STARTUP)
-                    setDependencyNode(root, 'compile', 'androidx.core', 'core-ktx', Versions.CORE_KTX)
-                    setDependencyNode(root, 'compile', 'androidx.appcompat', 'appcompat', Versions.APPCOMPAT)
-                    setDependencyNode(root, 'compile', 'androidx.activity', 'activity', Versions.ACTIVITY)
-                    setDependencyNode(root, 'compile', 'androidx.fragment', 'fragment', Versions.FRAGMENT)
-                    setDependencyNode(root, 'compile', 'androidx.activity', 'activity-ktx', Versions.ACTIVITY)
-                    setDependencyNode(root, 'compile', 'androidx.fragment', 'fragment-ktx', Versions.FRAGMENT)
-                    setDependencyNode(root, 'compile', 'com.google.android.material', 'material', Versions.MATERIAL)
-                    setDependencyNode(root, 'compile', 'androidx.databinding', 'databinding-runtime', Versions.DATA_BINDING)
-                    setDependencyNode(root, 'compile', 'androidx.lifecycle', 'lifecycle-viewmodel-ktx', Versions.LIFECYCLE)
-                    setDependencyNode(root, 'compile', 'androidx.lifecycle', 'lifecycle-livedata-ktx', Versions.LIFECYCLE)
-                    setDependencyNode(root, 'compile', 'androidx.lifecycle', 'lifecycle-runtime-ktx', Versions.LIFECYCLE)
+                    setDependencyNode(root, 'compile', 'androidx.startup', 'startup-runtime', libs.versions.startup.get())
+                    setDependencyNode(root, 'compile', 'androidx.core', 'core-ktx', libs.versions.coreKtx.get())
+                    setDependencyNode(root, 'compile', 'androidx.appcompat', 'appcompat', libs.versions.appcompat.get())
+                    setDependencyNode(root, 'compile', 'androidx.activity', 'activity', libs.versions.activity.get())
+                    setDependencyNode(root, 'compile', 'androidx.fragment', 'fragment', libs.versions.fragment.get())
+                    setDependencyNode(root, 'compile', 'androidx.activity', 'activity-ktx', libs.versions.activity.get())
+                    setDependencyNode(root, 'compile', 'androidx.fragment', 'fragment-ktx', libs.versions.fragment.get())
+                    setDependencyNode(root, 'compile', 'com.google.android.material', 'material', libs.versions.material.get())
+                    setDependencyNode(root, 'compile', 'androidx.databinding', 'databinding-runtime', libs.versions.dataBinding.get())
+                    setDependencyNode(root, 'compile', 'androidx.lifecycle', 'lifecycle-viewmodel-ktx', libs.versions.lifecycle.get())
+                    setDependencyNode(root, 'compile', 'androidx.lifecycle', 'lifecycle-livedata-ktx', libs.versions.lifecycle.get())
+                    setDependencyNode(root, 'compile', 'androidx.lifecycle', 'lifecycle-runtime-ktx', libs.versions.lifecycle.get())
 
-                    setDependencyNode(root, 'compile', 'com.guolindev.permissionx', 'permissionx', Versions.PERMISSION_X)
-                    setDependencyNode(root, 'compile', 'com.google.code.gson', 'gson', Versions.GSON)
-                    setDependencyNode(root, 'compile', 'androidx.security', 'security-crypto', Versions.SECURITY_CRYPTO)
-                    setDependencyNode(root, 'compile', 'com.github.bumptech.glide', 'glide', Versions.GLIDE)
-                    setDependencyNode(root, 'compile', 'com.github.jenly1314', 'zxing-lite', Versions.ZXING_LITE)
-                    setDependencyNode(root, 'compile', 'io.github.youth5201314', 'banner', Versions.BANNER)
-                    setDependencyNode(root, 'compile', 'io.github.lucksiege', 'pictureselector', Versions.PICTURE_SELECTOR)
-                    setDependencyNode(root, 'compile', 'io.github.lucksiege', 'compress', Versions.PICTURE_SELECTOR)
-                    setDependencyNode(root, 'compile', 'com.teprinciple', 'updateapputilsx', Versions.UPDATE_APP_UTILSX)
-                    setDependencyNode(root, 'compile', 'com.blankj', 'utilcodex', Versions.UTIL_CODE_X)
-                    setDependencyNode(root, 'compile', 'com.github.CarGuo.GSYVideoPlayer', 'GSYVideoPlayer', Versions.GSY_VIDEO_PLAYER)
+                    setDependencyNode(root, 'compile', 'com.guolindev.permissionx', 'permissionx', libs.versions.permissionX.get())
+                    setDependencyNode(root, 'compile', 'com.google.code.gson', 'gson', libs.versions.gson.get())
+                    setDependencyNode(root, 'compile', 'androidx.security', 'security-crypto', libs.versions.securityCrypto.get())
+                    setDependencyNode(root, 'compile', 'com.github.bumptech.glide', 'glide', libs.versions.glide.get())
+                    setDependencyNode(root, 'compile', 'com.github.jenly1314', 'zxing-lite', libs.versions.zxingLite.get())
+                    setDependencyNode(root, 'compile', 'io.github.youth5201314', 'banner', libs.versions.banner.get())
+                    setDependencyNode(root, 'compile', 'io.github.lucksiege', 'pictureselector', libs.versions.pictureSelector.get())
+                    setDependencyNode(root, 'compile', 'io.github.lucksiege', 'compress', libs.versions.pictureSelector.get())
+                    setDependencyNode(root, 'compile', 'com.teprinciple', 'updateapputilsx', libs.versions.updateAppUtilsx.get())
+                    setDependencyNode(root, 'compile', 'com.blankj', 'utilcodex', libs.versions.utilCodeX.get())
+                    setDependencyNode(root, 'compile', 'com.github.CarGuo.GSYVideoPlayer', 'GSYVideoPlayer', libs.versions.gsyVideoPlayer.get())
 
-                    setDependencyNode(root, 'compile', 'com.elvishew', 'xlog', Versions.XLOG)
-                    setDependencyNode(root, 'compile', 'com.tencent.tbs', 'tbssdk', Versions.TBS_SDK)
-                    setDependencyNode(root, 'compile', 'com.tencent', 'mmkv', Versions.MMKV)
-                    setDependencyNode(root, 'compile', 'com.github.getActivity', 'EasyHttp', Versions.EASY_HTTP)
-                    setDependencyNode(root, 'compile', 'com.github.li-xiaojun', 'XPopup', Versions.X_POPUP)
-                    setDependencyNode(root, 'compile', 'com.squareup.okhttp3', 'okhttp', Versions.OKHTTP)
-                    setDependencyNode(root, 'compile', 'com.geyifeng.immersionbar', 'immersionbar', Versions.IMMERSION_BAR)
-                    setDependencyNode(root, 'compile', 'com.geyifeng.immersionbar', 'immersionbar-ktx', Versions.IMMERSION_BAR)
+                    setDependencyNode(root, 'compile', 'com.elvishew', 'xlog', libs.versions.xlog.get())
+                    setDependencyNode(root, 'compile', 'com.tencent.tbs', 'tbssdk', libs.versions.tbsSdk.get())
+                    setDependencyNode(root, 'compile', 'com.tencent', 'mmkv', libs.versions.mmkv.get())
+                    setDependencyNode(root, 'compile', 'com.github.getActivity', 'EasyHttp', libs.versions.easyHttp.get())
+                    setDependencyNode(root, 'compile', 'com.github.li-xiaojun', 'XPopup', libs.versions.xpopup.get())
+                    setDependencyNode(root, 'compile', 'com.squareup.okhttp3', 'okhttp', libs.versions.okhttp.get())
+                    setDependencyNode(root, 'compile', 'com.geyifeng.immersionbar', 'immersionbar', libs.versions.immersionBar.get())
+                    setDependencyNode(root, 'compile', 'com.geyifeng.immersionbar', 'immersionbar-ktx', libs.versions.immersionBar.get())
 
-                    setDependencyNode(root, 'compile', 'me.rosuh', 'AndroidFilePicker', Versions.ANDROID_FILE_PICKER)
-                    setDependencyNode(root, 'compile', 'cjt.library.wheel', 'camera', Versions.CAMERA)
-                    setDependencyNode(root, 'compile', 'androidx.palette', 'palette-ktx', Versions.PALETTE)
+                    setDependencyNode(root, 'compile', 'me.rosuh', 'AndroidFilePicker', libs.versions.androidFilePicker.get())
+                    setDependencyNode(root, 'compile', 'cjt.library.wheel', 'camera', libs.versions.cameraView.get())
+                    setDependencyNode(root, 'compile', 'androidx.palette', 'palette-ktx', libs.versions.palette.get())
 
                     setScm(root)
                 }
@@ -386,10 +384,10 @@ project.afterEvaluate {
 
                 pom.withXml {
                     def root = asNode()
-                    setDependencyNode(root, 'compile', 'com.google.android.material', 'material', Versions.MATERIAL)
+                    setDependencyNode(root, 'compile', 'com.google.android.material', 'material', libs.versions.material.get())
 
-                    setDependencyNode(root, 'compile', 'com.kunminx.arch', 'smooth-navigation', Versions.SMOOTH_NAVIGATION)
-                    setDependencyNode(root, 'compile', 'androidx.navigation', 'navigation-fragment-ktx', Versions.NAV_VERSION)
+                    setDependencyNode(root, 'compile', 'com.kunminx.arch', 'smooth-navigation', libs.versions.smoothNavigation.get())
+                    setDependencyNode(root, 'compile', 'androidx.navigation', 'navigation-fragment-ktx', libs.versions.navigation.get())
 
                     setScm(root)
                 }
@@ -408,13 +406,13 @@ project.afterEvaluate {
                 pom.withXml {
                     def root = asNode()
 
-                    setDependencyNode(root, 'compile', 'androidx.core', 'core-ktx', Versions.CORE_KTX)
-                    setDependencyNode(root, 'compile', 'androidx.appcompat', 'appcompat', Versions.APPCOMPAT)
+                    setDependencyNode(root, 'compile', 'androidx.core', 'core-ktx', libs.versions.coreKtx.get())
+                    setDependencyNode(root, 'compile', 'androidx.appcompat', 'appcompat', libs.versions.appcompat.get())
 
-                    setDependencyNode(root, 'compile', 'com.alipay.sdk', 'alipaysdk-android', Versions.ALI_PAY)
+                    setDependencyNode(root, 'compile', 'com.alipay.sdk', 'alipaysdk-android', libs.versions.aliPay.get())
 
-                    setDependencyNode(root, 'compile', 'com.tencent.mm.opensdk', 'wechat-sdk-android-without-mta', Versions.WEI_XIN_OPEN_SDK)
-                    setDependencyNode(root, 'compile', 'com.google.code.gson', 'gson', Versions.GSON)
+                    setDependencyNode(root, 'compile', 'com.tencent.mm.opensdk', 'wechat-sdk-android-without-mta', libs.versions.weiXinOpenSdk.get())
+                    setDependencyNode(root, 'compile', 'com.google.code.gson', 'gson', libs.versions.gson.get())
 
                     setScm(root)
                 }
@@ -433,8 +431,8 @@ project.afterEvaluate {
                 pom.withXml {
                     def root = asNode()
 
-                    setDependencyNode(root, 'compile', 'androidx.core', 'core-ktx', Versions.CORE_KTX)
-                    setDependencyNode(root, 'compile', 'androidx.appcompat', 'appcompat', Versions.APPCOMPAT)
+                    setDependencyNode(root, 'compile', 'androidx.core', 'core-ktx', libs.versions.coreKtx.get())
+                    setDependencyNode(root, 'compile', 'androidx.appcompat', 'appcompat', libs.versions.appcompat.get())
 
                     setDependencyNode(root, 'compile', 'com.umeng.umsdk', 'common', '9.4.4')
                     setDependencyNode(root, 'compile', 'com.umeng.umsdk', 'asms', '1.5.0')
@@ -443,7 +441,7 @@ project.afterEvaluate {
                     setDependencyNode(root, 'compile', 'com.umeng.umsdk', 'share-core', '7.1.7')
                     setDependencyNode(root, 'compile', 'com.umeng.umsdk', 'share-board', '7.1.7')
                     setDependencyNode(root, 'compile', 'com.umeng.umsdk', 'share-wx', '7.1.7')
-                    setDependencyNode(root, 'compile', 'com.tencent.mm.opensdk', 'wechat-sdk-android-without-mta', Versions.WEI_XIN_OPEN_SDK)
+                    setDependencyNode(root, 'compile', 'com.tencent.mm.opensdk', 'wechat-sdk-android-without-mta', libs.versions.weiXinOpenSdk.get())
 
                     setScm(root)
                 }
@@ -464,10 +462,10 @@ project.afterEvaluate {
                 pom.withXml {
                     def root = asNode()
 
-                    setDependencyNode(root, 'compile', 'androidx.core', 'core-ktx', Versions.CORE_KTX)
-                    setDependencyNode(root, 'compile', 'androidx.appcompat', 'appcompat', Versions.APPCOMPAT)
+                    setDependencyNode(root, 'compile', 'androidx.core', 'core-ktx', libs.versions.coreKtx.get())
+                    setDependencyNode(root, 'compile', 'androidx.appcompat', 'appcompat', libs.versions.appcompat.get())
 
-                    setDependencyNode(root, 'compile', 'com.qcloud.cos', 'cos-android-lite', Versions.TENCENT_COS)
+                    setDependencyNode(root, 'compile', 'com.qcloud.cos', 'cos-android-lite', libs.versions.tencentCos.get())
 
                     setScm(root)
                 }
@@ -490,7 +488,7 @@ project.afterEvaluate {
                 pom.withXml {
                     def root = asNode()
 
-                    setDependencyNode(root, 'compile', 'org.jetbrains.kotlin', 'kotlin-stdlib', Versions.KOTLIN)
+                    setDependencyNode(root, 'compile', 'org.jetbrains.kotlin', 'kotlin-stdlib', libs.versions.kotlin.get())
 
                     setScm(root)
                 }
@@ -511,15 +509,15 @@ project.afterEvaluate {
                 pom.withXml {
                     def root = asNode()
 
-                    setDependencyNode(root, 'compile', 'org.jetbrains.kotlin', 'kotlin-stdlib', Versions.KOTLIN)
+                    setDependencyNode(root, 'compile', 'org.jetbrains.kotlin', 'kotlin-stdlib', libs.versions.kotlin.get())
                     setDependencyNode(root, 'compile', myGroupId, 'shadow-lib', getPublicationVersion())
 
-                    setDependencyNode(root, 'compile', 'com.tencent.shadow.dynamic', 'host', Versions.SHADOW)
-                    setDependencyNode(root, 'compile', 'com.tencent.shadow.core', 'activity-container', Versions.SHADOW)
-                    setDependencyNode(root, 'compile', 'com.tencent.shadow.dynamic', 'manager', Versions.SHADOW)
+                    setDependencyNode(root, 'compile', 'com.tencent.shadow.dynamic', 'host', libs.versions.shadow.get())
+                    setDependencyNode(root, 'compile', 'com.tencent.shadow.core', 'activity-container', libs.versions.shadow.get())
+                    setDependencyNode(root, 'compile', 'com.tencent.shadow.dynamic', 'manager', libs.versions.shadow.get())
 
-                    setDependencyNode(root, 'compile', 'com.tencent.shadow.dynamic', 'host-multi-loader-ext', Versions.SHADOW)
-                    setDependencyNode(root, 'compile', 'com.tencent.shadow.dynamic', 'manager-multi-loader-ext', Versions.SHADOW)
+                    setDependencyNode(root, 'compile', 'com.tencent.shadow.dynamic', 'host-multi-loader-ext', libs.versions.shadow.get())
+                    setDependencyNode(root, 'compile', 'com.tencent.shadow.dynamic', 'manager-multi-loader-ext', libs.versions.shadow.get())
 
                     setScm(root)
                 }
@@ -628,17 +626,17 @@ project.afterEvaluate {
                     setDependencyNode(root, 'compile', myGroupId, 'uniapp-v8-release', getPublicationVersion())
                     setDependencyNode(root, 'compile', myGroupId, 'uniMPSDK-V2-release', getPublicationVersion())
 
-                    setDependencyNode(root, 'compile', 'androidx.recyclerview', 'recyclerview', Versions.RECYCLERVIEW)
+                    setDependencyNode(root, 'compile', 'androidx.recyclerview', 'recyclerview', libs.versions.recyclerview.get())
                     setDependencyNode(root, 'compile', 'androidx.legacy', 'legacy-support-v4', '1.0.0')
-                    setDependencyNode(root, 'compile', 'androidx.appcompat', 'appcompat', Versions.APPCOMPAT)
-                    setDependencyNode(root, 'compile', 'com.alibaba', 'fastjson', Versions.FAST_JSON)
+                    setDependencyNode(root, 'compile', 'androidx.appcompat', 'appcompat', libs.versions.appcompat.get())
+                    setDependencyNode(root, 'compile', 'com.alibaba', 'fastjson', libs.versions.fastJson.get())
 
                     def fresco_version = '2.5.0'
                     setDependencyNode(root, 'compile', 'com.facebook.fresco', 'fresco', fresco_version)
                     setDependencyNode(root, 'compile', 'com.facebook.fresco', 'animated-gif', fresco_version)
 
-                    setDependencyNode(root, 'compile', 'com.github.bumptech.glide', 'glide', Versions.GLIDE)
-                    setDependencyNode(root, 'compile', 'pl.droidsonroids.gif', 'android-gif-drawable', Versions.ANDROID_GIF_DRAWABLE)
+                    setDependencyNode(root, 'compile', 'com.github.bumptech.glide', 'glide', libs.versions.glide.get())
+                    setDependencyNode(root, 'compile', 'pl.droidsonroids.gif', 'android-gif-drawable', libs.versions.androidGifDrawable.get())
                     setDependencyNode(root, 'compile', 'androidx.webkit', 'webkit', '1.3.0')
 
                     setScm(root)
