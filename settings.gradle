@@ -31,9 +31,7 @@ dependencyResolutionManagement {
     versionCatalogs {
         // 默认创建的 libs 进行配置
         libs {
-            //            from("com.hl.catalog:catalog:1.0.0")
-
-            //            alias('retrofit').to('com.squareup.retrofit2:retrofit:2.9.0')
+            from("com.hl:catalog:1.0.0")
         }
     }
 }
@@ -41,8 +39,6 @@ dependencyResolutionManagement {
 rootProject.name = "BaseProject"
 
 include ':app'
-include ':catalog'
-
 
 def includeBuildProjects = ['libs/project', 'libs/uikit']
 
