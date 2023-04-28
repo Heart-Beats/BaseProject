@@ -1,4 +1,3 @@
-import java.nio.file.Files
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 
@@ -22,6 +21,14 @@ dependencyResolutionManagement {
 
     repositories {
         mavenLocal()
+        maven {
+            name = "GitHubPackages"
+            url 'https://maven.pkg.github.com/Heart-Beats/BaseProject'
+            credentials {
+                username = 'Heart-Beats'
+                password = GITHUB_PACKAGES_READ_TOKEN
+            }
+        }
         maven { url 'https://maven.aliyun.com/repository/public' } // central 和 jcenter 的聚合仓
         maven { url 'https://maven.aliyun.com/repository/google' }
         maven { url 'https://jitpack.io' }
@@ -31,7 +38,7 @@ dependencyResolutionManagement {
     versionCatalogs {
         // 默认创建的 libs 进行配置
         libs {
-            from("com.hl:catalog:1.0.0")
+            from("com.hl:catalog:1.0.0-SNAPSHOT")
         }
     }
 }
@@ -84,40 +91,3 @@ gradle.addProjectEvaluationListener(new ProjectEvaluationListener() {
         println "currentFlavor -------------> ${getCurrentFlavor(project)}"
     }
 })
-
-
-//gradle.settingsEvaluated {
-//    apply from: 'file_util.gradle'
-//    includeBuildProjects.forEach {
-//        copyLocalPropertiesForIncludeBuild(it)
-//    }
-//}
-
-
-/**
- * Android Studio当前不会为IncludeBuild创建包含sdk.dir的local.properties
- * 使得没有ANDROID_HOME或等效环境变量时仅依赖根目录的local.properties无法编译IncludeBuild。
- * 为了使此含有IncludeBuild的项目和其他不含有IncludeBuild的普通Android工程一样可以在
- * 只有根目录的local.properties情况下正常编译，用此任务复制local.properties。
- */
-def copyLocalPropertiesForIncludeBuild(includedBuild) {
-    // 同步 buildSrc 配置
-    def buildSrc = file('buildSrc')
-    if (buildSrc.exists()) {
-        def includedBuildBuildSrc = file("${includedBuild}/buildSrc")
-        //        if (includedBuildBuildSrc.exists() && includedBuildBuildSrc.isDirectory()) {
-        //            includedBuildBuildSrc.deleteDir()
-        //        }
-
-        println "开始拷贝根项目的 buildSrc 目录至 ----> $includedBuild 下"
-        copyFile(buildSrc, includedBuildBuildSrc)
-    }
-
-    def rootFile = file('local.properties')
-    if (rootFile.exists()) {
-        def includeBuildLocalProperties = file("${includedBuild}/local.properties")
-        if (!includeBuildLocalProperties.exists()) {
-            Files.copy(rootFile.toPath(), includeBuildLocalProperties.toPath())
-        }
-    }
-}

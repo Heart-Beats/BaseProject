@@ -21,10 +21,25 @@ dependencyResolutionManagement {
 
     repositories {
         mavenLocal()
+        maven {
+            name = "GitHubPackages"
+            url 'https://maven.pkg.github.com/Heart-Beats/BaseProject'
+            credentials {
+                username = 'Heart-Beats'
+                password = GITHUB_PACKAGES_READ_TOKEN
+            }
+        }
         maven { url 'https://maven.aliyun.com/repository/public' } // central 和 jcenter 的聚合仓
         maven { url 'https://maven.aliyun.com/repository/google' }
         maven { url 'https://jitpack.io' }
         mavenCentral()
+    }
+
+    versionCatalogs {
+        // 默认创建的 libs 进行配置
+        libs {
+            from("com.hl:catalog:1.0.0-SNAPSHOT")
+        }
     }
 }
 

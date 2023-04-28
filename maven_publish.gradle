@@ -657,38 +657,6 @@ project.afterEvaluate {
                 }
             }
 
-            // 配置 GitLab 仓库
-            maven {
-                name = "GitLab"
-
-                url GITLAB_REPOSITORY
-
-                credentials(HttpHeaderCredentials) {
-                    name = 'GitLab 个人访问 token'
-                    value = GITLAB_PERSONAL_ACCESS_TOKEN
-                }
-
-                authentication {
-                    header(HttpHeaderAuthentication)
-                }
-
-                allowInsecureProtocol = true
-            }
-
-            // 配置 YouMa 仓库
-            maven {
-                name = "YouMa"
-
-                url 'http://maven.pm.youmatech.com/repository/maven-releases/'
-
-                credentials {
-                    username = YOUMA_MAVEN_USER
-                    password = YOUMA_MAVEN_PWD
-                }
-
-                allowInsecureProtocol = true
-            }
-
             // 配置 MavenLocal 仓库
             mavenLocal()
         }
@@ -703,28 +671,6 @@ task publishingToGitHubPackages() {
     doLast {
         printPublicationVersion()
         println "打包完成------> GitHubPackages:$GITHUB_REPOSITORY"
-    }
-}
-
-task publishingToGitLab() {
-    description "打包至 GitLab"
-    group 'my-publishing'
-    dependsOn ':publishAllPublicationsToGitLabRepository'
-
-    doLast {
-        printPublicationVersion()
-        println "打包完成------> GitLab:$GITLAB_REPOSITORY"
-    }
-}
-
-task publishingToYouMaMaven() {
-    description "打包至 youma Maven"
-    group 'my-publishing'
-    dependsOn ':publishAllPublicationsToYouMaRepository'
-
-    doLast {
-        printPublicationVersion()
-        println "打包完成------> youma Maven"
     }
 }
 

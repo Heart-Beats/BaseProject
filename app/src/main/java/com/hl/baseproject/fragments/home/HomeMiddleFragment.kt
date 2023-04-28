@@ -146,7 +146,7 @@ class HomeMiddleFragment : BaseFragment<FragmentHomeMiddleBinding>() {
 				}
 
 				viewHolder.getView<ImageView>(R.id.item_article_image)?.onClick {
-					it.context.showImages(it as ImageView, position, data)
+					it.context.showImages(it as ImageView, position % data.size, data)
 				}
 			}
 

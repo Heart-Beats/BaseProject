@@ -101,20 +101,6 @@ repositories {
     maven { url 'https://jitpack.io' }
     mavenCentral()
 
-    // 配置 YouMa 仓库
-    maven {
-        name = "YouMa"
-
-        url 'http://maven.pm.youmatech.com/repository/maven-releases/'
-
-        credentials {
-            username = YOUMA_MAVEN_USER
-            password = YOUMA_MAVEN_PWD
-        }
-
-        allowInsecureProtocol = true
-    }
-
     maven {
         name = "GitHubPackages"
         url "https://maven.pkg.github.com/tencent/shadow"

@@ -1,21 +1,16 @@
-def isPublishRelease = true
-def ARTIFACT_VERSION = '0.7.7'
+def isPublishRelease = false
+def ARTIFACT_VERSION = '0.0.1'
 
 ext {
+    myGroupId = 'com.hl'
+    libProjectPath = 'libs/project'
+    libUikitPath = 'libs/uikit'
+
     // 打包至 GitHub 配置
     GITHUB_USER = System.getenv("GITHUB_USER") ?: 'Heart-Beats'
     GITHUB_PROJECT_NAME = System.getenv("GITHUB_PROJECT") ?: 'BaseProject'
     GITHUB_REPOSITORY = "https://maven.pkg.github.com/" + "${GITHUB_USER}/${GITHUB_PROJECT_NAME}".toLowerCase()
-    GITHUB_PERSONAL_ACCESS_TOKEN = System.getenv("GITHUB_PERSONAL_ACCESS_TOKEN")
-            ?: project.properties['GITHUB_PERSONAL_ACCESS_TOKEN']
-
-    // 打包至 GitLab 配置
-    def gitLabUrl = "http://git.pm.youmatech.com"
-    def gitLabProjectId = '516'
-    //为项目主页中的项目名称下的项目 id
-    GITLAB_REPOSITORY = "${gitLabUrl}/api/v4/projects/${gitLabProjectId}/packages/maven"
-    GITLAB_PERSONAL_ACCESS_TOKEN = System.getenv("GITLAB_PERSONAL_ACCESS_TOKEN") ?:
-            project.properties['GITLAB_PERSONAL_ACCESS_TOKEN']
+    GITHUB_PERSONAL_ACCESS_TOKEN = System.getenv("GITHUB_PACKAGES_WRITE_TOKEN") ?: project.properties['GITHUB_PACKAGES_WRITE_TOKEN']
 
     getPublicationVersion = {
         def VERSION_SUFFIX = ''
@@ -23,7 +18,4 @@ ext {
 
         return ARTIFACT_VERSION + VERSION_SUFFIX
     }
-    myGroupId = 'com.hl'
-    libProjectPath = 'libs/project'
-    libUikitPath = 'libs/uikit'
 }
