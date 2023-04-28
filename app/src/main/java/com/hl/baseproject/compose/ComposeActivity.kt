@@ -2,8 +2,6 @@ package com.hl.baseproject.compose
 
 import android.content.res.Configuration
 import android.os.Bundle
-import androidx.activity.compose.setContent
-import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
@@ -44,23 +42,19 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.hl.arch.base.ComposeBaseActivity
 import com.hl.utils.getRandomString
-import com.hl.utils.initInsetPadding
 import com.hl.utils.showImage
 
 /**
  * @author  张磊  on  2023/04/18 at 11:55
  * Email: 913305160@qq.com
  */
-class ComposeActivity : AppCompatActivity() {
+class ComposeActivity : ComposeBaseActivity() {
 
-	override fun onCreate(savedInstanceState: Bundle?) {
-		super.onCreate(savedInstanceState)
-		this.initInsetPadding(top = true)
-
-		setContent {
-			InitPage()
-		}
+	@Composable
+	override fun Content(savedInstanceState: Bundle?) {
+		InitPage()
 	}
 
 	@Preview(
