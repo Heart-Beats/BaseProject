@@ -2,6 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+
     <uses-permission android:name="android.permission.CAMERA" />
 
     <application
@@ -35,12 +39,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity
-            android:name=".compose.ComposeActivity"
-            android:configChanges="keyboard|orientation|screenSize"
-            android:exported="false"
-            android:screenOrientation="portrait" />
 
         <!-- 微信的 SDK 限制了回调类包名必须是${applicationId}.wxapi, 因此这里使用 activity-alias 标签 -->
         <!-- 微信分享 -->
