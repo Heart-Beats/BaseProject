@@ -12,7 +12,6 @@ import com.elvishew.xlog.XLog
 import com.github.nisrulz.sensey.Sensey
 import com.github.nisrulz.sensey.ShakeDetector.ShakeListener
 import com.hl.arch.web.navigateToWeb
-import com.hl.baseproject.compose.ComposeActivity
 import com.hl.baseproject.TestActivity
 import com.hl.baseproject.TestActivity2
 import com.hl.baseproject.base.BaseFragment
@@ -189,7 +188,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
 		}
 
 		startCompose.onClick {
-			startAct<ComposeActivity>()
+			findNavController().navigate(AppMainFragmentDirections.actionAppMainFragmentToComposeFragment())
 		}
 	}
 

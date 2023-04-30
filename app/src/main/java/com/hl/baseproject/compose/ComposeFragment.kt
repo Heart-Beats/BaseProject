@@ -39,10 +39,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.hl.arch.base.ComposeBaseActivity
+import com.hl.arch.base.ComposeBaseFragment
 import com.hl.utils.getRandomString
 import com.hl.utils.showImage
 
@@ -50,7 +51,7 @@ import com.hl.utils.showImage
  * @author  张磊  on  2023/04/18 at 11:55
  * Email: 913305160@qq.com
  */
-class ComposeActivity : ComposeBaseActivity() {
+class ComposeFragment : ComposeBaseFragment() {
 
 	@Composable
 	override fun Content(savedInstanceState: Bundle?) {
@@ -99,6 +100,8 @@ class ComposeActivity : ComposeBaseActivity() {
 
 	@Composable
 	private fun MessageCard(message: Message) {
+		val context = LocalContext.current
+
 		Card(
 			colors = CardDefaults.cardColors(
 				containerColor = MaterialTheme.colorScheme.onPrimary
@@ -116,7 +119,7 @@ class ComposeActivity : ComposeBaseActivity() {
 						.clip(CircleShape)
 						.border(1.5.dp, MaterialTheme.colorScheme.secondary, CircleShape)
 						.clickable {
-							this@ComposeActivity.showImage(null, message.avatar)
+							context.showImage(null, message.avatar)
 						}
 				)
 
