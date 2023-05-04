@@ -51,7 +51,7 @@ android {
 
     composeOptions {
         // 定义 Kotlin 编译器扩展版本与 Kotlin 版本相关联，需与项目的 Kotlin 版本匹配，详见：https://developer.android.com/jetpack/androidx/releases/compose-kotlin?hl=zh-cn
-        kotlinCompilerExtensionVersion = '1.4.1'
+        kotlinCompilerExtensionVersion = '1.4.5'
     }
 }
 
