@@ -1,4 +1,4 @@
-package com.hl.baseproject.compose
+package com.hl.baseproject.compose.pages
 
 import android.content.res.Configuration
 import android.os.Bundle
@@ -32,18 +32,21 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
+import androidx.fragment.app.activityViewModels
 import com.hl.arch.base.ComposeBaseFragment
+import com.hl.baseproject.compose.AppComposeTheme
+import com.hl.baseproject.compose.widgets.SmartImage
+import com.hl.baseproject.viewmodels.DataViewModel
 import com.hl.utils.getRandomString
 import com.hl.utils.showImage
 
@@ -51,39 +54,46 @@ import com.hl.utils.showImage
  * @author  张磊  on  2023/04/18 at 11:55
  * Email: 913305160@qq.com
  */
-class ComposeFragment : ComposeBaseFragment() {
+class ComposeListFragment : ComposeBaseFragment() {
+
+	private val dataViewModel by activityViewModels<DataViewModel>()
 
 	@Composable
 	override fun Content(savedInstanceState: Bundle?) {
-		InitPage()
+		val images by dataViewModel.imagesLiveData.observeAsState(listOf())
+		val messageList = List(50) {
+			if (it == 0) {
+				Message(avatar = images[0], author = "安卓", msgBody = "Jetpack Compose")
+			} else {
+				Message(
+					avatar = images.random(),
+					author = "安卓$it",
+					msgBody = "Jetpack Compose ${getRandomString(it * 5)}"
+				)
+			}
+		}
+
+
+		InitPage(messageList)
 	}
 
 	@Preview(
 		showBackground = true,
-		name = "Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES or Configuration.UI_MODE_TYPE_NORMAL
+		name = "Dark Mode",
+		uiMode = Configuration.UI_MODE_NIGHT_YES or Configuration.UI_MODE_TYPE_NORMAL
 	)
 	@Preview(showBackground = true)
 	@Composable
-	private fun InitPage() {
-		val messageList = List(50) {
-			if (it == 0) {
-				Message(author = "安卓", msgBody = "Jetpack Compose")
-			} else {
-
-				Message(author = "安卓$it", msgBody = "Jetpack Compose ${getRandomString(it * 5)}")
-			}
-		}
-
-		AppComposeTheme {
+	private fun InitPage(messageList: List<Message>) {
+		AppComposeTheme(systemBarInset = false) {
 			Surface(modifier = Modifier.fillMaxSize()) {
 				MessageList(messageList)
 			}
 		}
-
 	}
 
 	private data class Message(
-		val avatar: String = "https://i.pinimg.com/originals/97/83/36/9783367be1fd1c73f74832d7a524b5b9.jpg",
+		val avatar: String,
 		val author: String,
 		val msgBody: String
 	)
@@ -110,14 +120,13 @@ class ComposeFragment : ComposeBaseFragment() {
 			modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp)
 		) {
 			Row(modifier = Modifier.padding(10.dp)) {
-				AsyncImage(
-					model = message.avatar,
-					contentDescription = "测试头像",
-					contentScale = ContentScale.Crop,
+				SmartImage(
+					imageModel = message.avatar,
+					imageDescription = "测试头像",
 					modifier = Modifier
 						.size(50.dp)
 						.clip(CircleShape)
-						.border(1.5.dp, MaterialTheme.colorScheme.secondary, CircleShape)
+						.border(1.dp, MaterialTheme.colorScheme.secondary, CircleShape)
 						.clickable {
 							context.showImage(null, message.avatar)
 						}

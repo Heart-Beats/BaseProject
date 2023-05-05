@@ -14,8 +14,8 @@
             android:id="@+id/action_appMainFragment_to_shadowPluginFragment"
             app:destination="@id/shadowPluginFragment" />
         <action
-            android:id="@+id/action_appMainFragment_to_composeFragment"
-            app:destination="@id/composeFragment" />
+            android:id="@+id/action_appMainFragment_to_compose_graph"
+            app:destination="@id/compose_graph" />
     </fragment>
 
     <fragment
@@ -47,9 +47,6 @@
         android:id="@+id/action_global_webViewFragment"
         app:destination="@id/webViewFragment" />
 
-    <fragment
-        android:id="@+id/composeFragment"
-        android:name="com.hl.baseproject.compose.ComposeFragment"
-        android:label="ComposeFragment" />
+    <include app:graph="@navigation/compose_graph" />
 
 </navigation>

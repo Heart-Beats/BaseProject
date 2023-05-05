@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/compose_graph"
+    app:startDestination="@id/composeDemoFragment">
+    <fragment
+        android:id="@+id/composeDemoFragment"
+        android:name="com.hl.baseproject.compose.pages.ComposeDemoFragment"
+        android:label="ComposeDemoFragment">
+        <action
+            android:id="@+id/action_composeDemoFragment_to_composeListFragment"
+            app:destination="@id/composeListFragment" />
+        <action
+            android:id="@+id/action_composeDemoFragment_to_composeLayoutsFragment"
+            app:destination="@id/composeLayoutsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/composeListFragment"
+        android:name="com.hl.baseproject.compose.pages.ComposeListFragment"
+        android:label="ComposeListFragment" />
+    <fragment
+        android:id="@+id/composeLayoutsFragment"
+        android:name="com.hl.baseproject.compose.pages.ComposeLayoutsFragment"
+        android:label="ComposeLayoutsFragment" />
+</navigation>

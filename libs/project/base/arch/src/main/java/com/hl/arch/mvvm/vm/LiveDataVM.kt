@@ -18,7 +18,7 @@ import kotlinx.coroutines.launch
  */
 open class LiveDataVM : ViewModel() {
 
-    val uiEvent by lazy {
+    internal val uiEvent by lazy {
         EventLiveData<UiEvent>()
     }
 

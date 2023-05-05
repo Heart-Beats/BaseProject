@@ -188,7 +188,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
 		}
 
 		startCompose.onClick {
-			findNavController().navigate(AppMainFragmentDirections.actionAppMainFragmentToComposeFragment())
+			findNavController().navigate(AppMainFragmentDirections.actionAppMainFragmentToComposeGraph())
 		}
 	}
 

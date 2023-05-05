@@ -88,7 +88,7 @@
                                 android:layout_marginHorizontal="@dimen/dp_8"
                                 android:scaleType="centerCrop"
                                 app:uikit_corner_radius="@dimen/dp_8"
-                                tools:srcCompat="@mipmap/app_logo" />
+                                tools:srcCompat="@mipmap/app_logo_origin" />
 
                             <TextView
                                 android:id="@+id/home_title"

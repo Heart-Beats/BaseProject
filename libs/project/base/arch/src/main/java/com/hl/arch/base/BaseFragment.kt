@@ -235,7 +235,12 @@ abstract class BaseFragment : Fragment(), IPageInflate {
                 // 未使用 Navigation 且为 activity 主页面
                 val isActivityMainPage = isActivityMainPage()
                 if (isActivityMainPage) {
-                    Log.d(TAG, "isMainPage =====> ${this.javaClass.simpleName} 为未使用 Navigation 的 Activity 页面")
+                    Log.d(TAG, "isMainPage =====> ${this.javaClass.simpleName} 为未使用 Navigation 的 Activity 主页面")
+                } else {
+                    Log.d(
+                        TAG,
+                        "isMainPage =====> ${this.javaClass.simpleName} 为未使用 Navigation 且非 Activity 主页面"
+                    )
                 }
 
                 isActivityMainPage
@@ -246,6 +251,11 @@ abstract class BaseFragment : Fragment(), IPageInflate {
                     Log.d(
                         TAG,
                         "isMainPage =====> ${this.javaClass.simpleName} 为使用 Navigation， 但非 Navigation 页面且存在 toolbar 的主页 "
+                    )
+                } else {
+                    Log.d(
+                        TAG,
+                        "isMainPage =====> ${this.javaClass.simpleName} 为使用 Navigation， 但非 Navigation 页面且不存在 toolbar"
                     )
                 }
                 isMainPage
