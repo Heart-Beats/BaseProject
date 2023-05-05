@@ -121,9 +121,11 @@ dependencies {
     implementation libs.bundles.projectBase
     implementation libs.material
 
-    implementation platform(libs.jetpack.compose.bom)
-    implementation libs.bundles.compose
     implementation libs.jetpack.compose.material.icons.extended
+    implementation libs.jetpack.compose.runtime.livedata
+
+    // 在 Compose 中重复使用 View 系统的 Material Design Components (MDC) 主题时适配使用
+    implementation "com.google.accompanist:accompanist-themeadapter-material:0.28.0"
 
     implementation libs.coil.compose
 

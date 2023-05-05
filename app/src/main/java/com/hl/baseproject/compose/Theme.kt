@@ -37,13 +37,15 @@ private val DarkColorScheme = darkColorScheme(
 /**
  * 基于 Compose 的 app 主题设置
  *
- * @param  darkTheme      是否为深色模式
- * @param  dynamicColor   是否需要动态颜色
+ * @param  darkTheme        是否为深色模式
+ * @param  dynamicColor     是否需要动态颜色
+ * @param  systemBarInset   是否需要系统栏
  */
 @Composable
 fun AppComposeTheme(
 	darkTheme: Boolean = isSystemInDarkTheme(),
 	dynamicColor: Boolean = true,
+	systemBarInset: Boolean = true,
 	content: @Composable () -> Unit
 ) {
 
@@ -59,10 +61,11 @@ fun AppComposeTheme(
 	}
 
 	val view = LocalView.current
-	if (!view.isInEditMode) {
+	if (!view.isInEditMode && systemBarInset) {
 		SideEffect {
 			val window = (view.context as Activity).window
 			window.statusBarColor = colorScheme.primary.toArgb()
+			// 设置状态栏的边距以及颜色
 			WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = darkTheme
 		}
 	}
@@ -79,4 +82,7 @@ fun AppComposeTheme(
 	)
 
 	MaterialTheme(colorScheme = colorScheme, typography = typography, content = content)
+
+	// 在 Compose 中重复使用 View 系统的 Material Design Components (MDC) 主题时适配使用
+	// MdcTheme(content = content)
 }

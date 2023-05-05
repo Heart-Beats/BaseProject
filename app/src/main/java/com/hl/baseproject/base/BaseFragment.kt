@@ -23,7 +23,7 @@ abstract class BaseFragment<Binding : ViewBinding> : ViewBindingMvvmBaseFragment
 	}
 
 	private fun dispatchApiEventFailed(event: ApiEvent.Failed) {
-		// todo 处理接口请求失败相关时间
+		// todo 处理接口请求失败相关事件
 		if (event is ApiEvent.Failed.UnknownError) {
 
 			return

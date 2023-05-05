@@ -84,6 +84,6 @@ dependencies {
     api Deps.UtilCodeX.utilcodex
     api Deps.JsBridge.jsbridge
 
-    implementation platform(libs.jetpack.compose.bom)
-    implementation libs.bundles.compose
+    api platform(libs.jetpack.compose.bom)
+    api libs.bundles.compose
 }
