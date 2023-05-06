@@ -14,13 +14,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.hl.baseproject.compose.AppComposeTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchBar(
 	hint: String = "",
-	modifier: Modifier = Modifier,
-	onValueChange: (String) -> Unit = {}
+	onValueChange: (String) -> Unit = {},
+	modifier: Modifier = Modifier
 ) {
 	TextField(
 		value = "",
@@ -32,7 +33,7 @@ fun SearchBar(
 			containerColor = MaterialTheme.colorScheme.surface
 		),
 		placeholder = {
-			Text(hint)
+			Text(hint, color = MaterialTheme.colorScheme.secondary)
 		},
 		modifier = modifier
 			.fillMaxWidth()
@@ -43,5 +44,7 @@ fun SearchBar(
 @Preview(name = "SearchBar")
 @Composable
 private fun PreviewSearchBar() {
-	SearchBar(hint = "搜索")
+	AppComposeTheme {
+		SearchBar(hint = "搜索")
+	}
 }

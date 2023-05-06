@@ -16,6 +16,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.hl.baseproject.R
+import com.hl.baseproject.compose.AppComposeTheme
 
 @Composable
 fun RoundImageText(
@@ -84,11 +85,15 @@ private fun RoundImageText(
 @Preview(name = "RoundImageText")
 @Composable
 private fun PreviewRoundImage() {
-	RoundImageText(R.mipmap.app_logo_origin, imageDescription = "测试图片", roundDp = 15.dp)
+	AppComposeTheme {
+		RoundImageText(R.mipmap.app_logo_origin, imageDescription = "测试图片", roundDp = 15.dp)
+	}
 }
 
 @Preview(name = "CircleImageText")
 @Composable
 private fun PreviewCircleImageText() {
-	CircleImageText(R.mipmap.app_logo_origin, imageDescription = "测试图片")
+	AppComposeTheme {
+		CircleImageText(R.mipmap.app_logo_origin, imageDescription = "测试图片")
+	}
 }

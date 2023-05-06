@@ -73,9 +73,18 @@ class ComposeListFragment : ComposeBaseFragment() {
 			}
 		}
 
-
 		InitPage(messageList)
 	}
+
+	@Composable
+	private fun InitPage(messageList: List<Message>) {
+		AppComposeTheme(systemBarInset = false) {
+			Surface(modifier = Modifier.fillMaxSize()) {
+				MessageList(messageList)
+			}
+		}
+	}
+
 
 	@Preview(
 		showBackground = true,
@@ -84,12 +93,24 @@ class ComposeListFragment : ComposeBaseFragment() {
 	)
 	@Preview(showBackground = true)
 	@Composable
-	private fun InitPage(messageList: List<Message>) {
-		AppComposeTheme(systemBarInset = false) {
-			Surface(modifier = Modifier.fillMaxSize()) {
-				MessageList(messageList)
+	fun PreviewInitPage() {
+		val messageList = List(50) {
+			if (it == 0) {
+				Message(
+					avatar = "https://i.pinimg.com/originals/08/16/e7/0816e71b97808b85d18e8ef7b77ac1a5.jpg",
+					author = "安卓",
+					msgBody = "Jetpack Compose"
+				)
+			} else {
+				Message(
+					avatar = "https://i.pinimg.com/originals/08/16/e7/0816e71b97808b85d18e8ef7b77ac1a5.jpg",
+					author = "安卓$it",
+					msgBody = "Jetpack Compose ${getRandomString(it * 5)}"
+				)
 			}
 		}
+
+		InitPage(messageList)
 	}
 
 	private data class Message(
