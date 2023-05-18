@@ -28,6 +28,8 @@ class ComposeDemoFragment : ComposeBaseFragment() {
 	@Composable
 	private fun InitPage() {
 		AppComposeTheme(systemBarInset = false) {
+
+			//当设置任何元素的颜色时，最好使用 Surface 来实现此目的，它会设置适当的内容颜色 CompositionLocal 值。请慎用直接 Modifier.background 调用，这种调用不会设置适当的内容颜色。
 			Surface(modifier = Modifier.fillMaxSize()) {
 
 				Column(horizontalAlignment = Alignment.CenterHorizontally) {

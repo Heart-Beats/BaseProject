@@ -61,7 +61,7 @@ private fun RoundImageText(
 	) {
 
 		// 设置图片的裁剪样式
-		val shape = if (isCircle) CircleShape else RoundedCornerShape(CornerSize(roundDp))
+		val shape = if (isCircle) CircleShape else RoundedCornerShape(roundDp)
 
 		SmartImage(
 			imageModel = imageModel,
