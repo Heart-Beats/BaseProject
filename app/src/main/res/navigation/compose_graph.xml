@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_composeDemoFragment_to_composeLayoutsFragment"
             app:destination="@id/composeLayoutsFragment" />
+        <action
+            android:id="@+id/action_composeDemoFragment_to_composeStateFragment"
+            app:destination="@id/composeStateFragment" />
     </fragment>
     <fragment
         android:id="@+id/composeListFragment"
@@ -22,4 +25,8 @@
         android:id="@+id/composeLayoutsFragment"
         android:name="com.hl.baseproject.compose.pages.ComposeLayoutsFragment"
         android:label="ComposeLayoutsFragment" />
+    <fragment
+        android:id="@+id/composeStateFragment"
+        android:name="com.hl.baseproject.compose.pages.ComposeStateFragment"
+        android:label="ComposeStateFragment" />
 </navigation>

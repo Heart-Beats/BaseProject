@@ -1,5 +1,6 @@
 package com.hl.baseproject.viewmodels
 
+import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.liveData
 import com.hl.baseproject.base.BaseViewModel
 
@@ -81,4 +82,7 @@ class DataViewModel : BaseViewModel() {
 		liveData { emit(imageData) }
 	}
 
+	private val _imagesStateList = mutableStateListOf<String>().apply { addAll(imageData) }
+
+	val imagesStateList: List<String> = _imagesStateList
 }
