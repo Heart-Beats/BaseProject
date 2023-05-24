@@ -45,10 +45,18 @@ class ComposeDemoFragment : ComposeBaseFragment() {
 					}
 
 					TextButton(onClick = {
-						val navDirections = ComposeDemoFragmentDirections.actionComposeDemoFragmentToComposeLayoutsFragment()
+						val navDirections =
+							ComposeDemoFragmentDirections.actionComposeDemoFragmentToComposeLayoutsFragment()
 						findNavController().navigate(navDirections)
 					}) {
 						Text(text = "Compose 中的基本布局")
+					}
+
+					TextButton(onClick = {
+						val navDirections = ComposeDemoFragmentDirections.actionComposeDemoFragmentToComposeStateFragment()
+						findNavController().navigate(navDirections)
+					}) {
+						Text(text = "Compose 中的状态")
 					}
 				}
 			}

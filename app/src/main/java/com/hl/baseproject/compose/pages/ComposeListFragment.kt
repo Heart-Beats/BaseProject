@@ -9,6 +9,7 @@ import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -42,12 +43,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -56,7 +57,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.hl.arch.base.ComposeBaseFragment
 import com.hl.baseproject.compose.AppComposeTheme
 import com.hl.baseproject.compose.utils.swipeToDismiss
@@ -77,24 +78,28 @@ class ComposeListFragment : ComposeBaseFragment() {
 	 *     1. 使用 Arrangement 来指定排列方式时，有几种默认方式，可见：https://developer.android.com/codelabs/jetpack-compose-layouts/img/c1e6c40e30136af2.gif
 	 *           若想自定义设置距离，可使用： Arrangement.spacedBy()
 	 *
-	 *     2. 当有不同布局的子项时，最好给其指定 contentType， compose 会在相同类型的项之前重复使用组合，因为它们具有相似结构，所以渲染效率会更高
+	 *     2. 项键 : 默认情况下，每个列表项的状态均与该项在列表或网格中的位置相对应。但是如果数据变化导致列表项位置改变则会使其丢失任何记忆状态，为避免此种情况发生，
+	 *              可以为每个列表项提供一个稳定的唯一键，即 key 参数，它可使项状态在发生数据集更改后保持一致。通过提供键，可以帮助 Compose 正确处理重新排序。
+	 *              但有一条限制： 键的类型必须受 Bundle 支持，这是 Android 的机制，旨在当重新创建 activity 时保持相应状态。
 	 *
-	 *     2. 在延迟布局中，可通过 item 方法添加 Header 与 Footer,  避免在一个 item 中放入多个元素，除了分隔符，
+	 *     3. 当有不同布局的子项时，最好给其指定 contentType， compose 会在相同 contentType 的项之间重复使用组合，因为它们具有相似结构，所以渲染效率会更高
+	 *
+	 *     4. 在延迟布局中，可通过 item 方法添加 Header 与 Footer,  避免在一个 item 中放入多个元素，除了分隔符，
 	 *          分隔符需要添加在组合项 Item 中，这样才不会更改 Item 对应的索引
 	 *
-	 *     3. 可通过 rememberLazy[List|Grid]State() 设置给相应延迟布局的 state  属性，获取相关的状态，包括不限于以下：
+	 *     5. 可通过 rememberLazy[List|Grid]State() 设置给相应延迟布局的 state  属性，获取相关的状态，包括不限于以下：
 	 *          state.firstVisibleItemIndex、 state.layoutInfo.visibleItemsInfo（可见项信息）、state.layoutInfo.totalItemsCount（列表总数）
 	 *
-	 *     4. 使用 state 相关属性时，需要搭配 derivedStateOf 进行使用，确保只有当计算中使用的状态属性发生变化时才会进行重组
+	 *     6. 使用 state 相关属性时，需要搭配 derivedStateOf 进行使用，确保只有当计算中使用的状态属性发生变化时才会进行重组
 	 *
-	 *     5. LazyGrid 相关延迟网格布局，若不确定总共有多少行或列，可通过 GridCells.Adaptive() 指定行或列大小， 进行自适应分配；
+	 *     7. LazyGrid 相关延迟网格布局，若不确定总共有多少行或列，可通过 GridCells.Adaptive() 指定行或列大小， 进行自适应分配；
 	 *            还可通过实现 GridCells 接口来动态计算每行的高度或每列的宽度
 	 *
-	 *     6. 滚动列表嵌套时，嵌套的滚动列表必须指定宽度或者高度
+	 *     8. 滚动列表嵌套时，嵌套的滚动列表必须指定宽度或者高度
 	 *
-	 *     7. （自测实现无效果，不知原因）可通过 modifier.animateItemPlacement() 来为延迟布局设置子项的动画，使用时也必须为每个子项设置 key，key 要为 bundle 可传递的类型
+	 *     9. （自测实现无效果，不知原因）可通过 modifier.animateItemPlacement() 来为延迟布局设置子项的动画，使用时也必须为每个子项设置 key，key 要为 bundle 可传递的类型
 	 *
-	 *     8.  debug 包下，延迟布局运行较慢性能比较差，只有在 Release 版本下并且开启 R8 优化（混淆）， 才能真正衡量其性能
+	 *     10.  debug 包下，延迟布局运行较慢性能比较差，只有在 Release 版本下并且开启 R8 优化（混淆）， 才能真正衡量其性能
 	 *
 	 *
 	 * 二：动画相关学习总结：
@@ -109,12 +114,14 @@ class ComposeListFragment : ComposeBaseFragment() {
 	 *
 	 */
 
-
-	private val dataViewModel by activityViewModels<DataViewModel>()
-
 	@Composable
 	override fun Content(savedInstanceState: Bundle?) {
-		val images by dataViewModel.imagesLiveData.observeAsState(listOf())
+		InitPage()
+	}
+
+	@Composable
+	private fun InitPage(dataViewModel: DataViewModel = viewModel()) {
+		val images = dataViewModel.imagesStateList
 		val messageList = MutableList(50) {
 			if (it == 0) {
 				Message(avatar = images[0], author = "安卓", msgBody = "Jetpack Compose")
@@ -125,13 +132,8 @@ class ComposeListFragment : ComposeBaseFragment() {
 					msgBody = "Jetpack Compose ${getRandomString(it * 5)}"
 				)
 			}
-		}
+		}.toMutableStateList()
 
-		InitPage(messageList)
-	}
-
-	@Composable
-	private fun InitPage(messageList: MutableList<Message>) {
 		AppComposeTheme(systemBarInset = false) {
 			Surface(modifier = Modifier.fillMaxSize()) {
 				MessageList(messageList)
@@ -148,23 +150,7 @@ class ComposeListFragment : ComposeBaseFragment() {
 	@Preview(showBackground = true)
 	@Composable
 	fun PreviewInitPage() {
-		val messageList = MutableList(50) {
-			if (it == 0) {
-				Message(
-					avatar = "https://i.pinimg.com/originals/08/16/e7/0816e71b97808b85d18e8ef7b77ac1a5.jpg",
-					author = "安卓",
-					msgBody = "Jetpack Compose"
-				)
-			} else {
-				Message(
-					avatar = "https://i.pinimg.com/originals/08/16/e7/0816e71b97808b85d18e8ef7b77ac1a5.jpg",
-					author = "安卓$it",
-					msgBody = "Jetpack Compose ${getRandomString(it * 5)}"
-				)
-			}
-		}
-
-		InitPage(messageList)
+		InitPage()
 	}
 
 	private data class Message(
@@ -176,30 +162,18 @@ class ComposeListFragment : ComposeBaseFragment() {
 	@OptIn(ExperimentalFoundationApi::class)
 	@Composable
 	private fun MessageList(messageList: MutableList<Message>) {
-		val messageList by remember { derivedStateOf { messageList } }
 
 		Box {
-
 			val state = rememberLazyListState()
 
 			//注意： 延迟布局与可滚动的布局嵌套时，必须指定其大小
 			LazyColumn(contentPadding = PaddingValues(bottom = 8.dp), state = state) {
-				this.stickyHeader(contentType = "text") {
-					Text("我是列表吸顶头部", textAlign = TextAlign.Center, modifier = Modifier
-						.fillMaxWidth()
-						.clickable {
-							messageList.clear()
-							messageList.addAll(messageList.shuffled())
-
-						})
-				}
-
 				this.item(contentType = "text") {
 					Text("我是列表头部", modifier = Modifier.padding(horizontal = 8.dp))
 				}
 
 				this.items(messageList, contentType = { "MessageCard" }, key = {
-					messageList.indexOf(it)
+					it.hashCode()
 				}) { message ->
 					MessageCard(
 						message,
@@ -208,6 +182,26 @@ class ComposeListFragment : ComposeBaseFragment() {
 							.swipeToDismiss {
 								messageList.remove(message)
 							},
+					)
+				}
+
+				this.stickyHeader(contentType = "text") {
+					Text("我是列表吸顶头部", textAlign = TextAlign.Center, modifier = Modifier
+						.fillMaxWidth()
+						.background(color = MaterialTheme.colorScheme.secondary)
+						.clickable {
+							val shuffledList = messageList.shuffled()
+							messageList.clear()
+							messageList.addAll(shuffledList)
+						})
+				}
+
+				this.items(messageList, contentType = { "MessageCard" }, key = {
+					it.hashCode() * 11
+				}) { message ->
+					MessageCard(
+						message,
+						modifier = Modifier.animateItemPlacement(tween(250))
 					)
 				}
 
@@ -229,7 +223,7 @@ class ComposeListFragment : ComposeBaseFragment() {
 				val coroutineScope = rememberCoroutineScope()
 
 				FloatingActionButton(
-					{
+					onClick = {
 						coroutineScope.launch {
 							state.animateScrollToItem(index = 0)
 						}
