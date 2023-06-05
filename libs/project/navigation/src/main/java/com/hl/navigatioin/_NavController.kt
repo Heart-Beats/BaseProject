@@ -2,7 +2,12 @@ package com.hl.utils.navigation
 
 import android.net.Uri
 import android.util.Log
-import androidx.navigation.*
+import androidx.navigation.NavController
+import androidx.navigation.NavDeepLink
+import androidx.navigation.NavDestination
+import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavOptions
+import androidx.navigation.navOptions
 import com.hl.navigatioin.utils.ReflectHelper
 import java.util.regex.Pattern
 
@@ -12,6 +17,26 @@ import java.util.regex.Pattern
  */
 
 const val TAG = "NavController"
+
+/**
+ * 确保返回堆栈顶部最多只有给定目的地的一个副本, 即多次导航同一目的地，栈顶只会存在一个目的地
+ */
+fun NavController.navigateSingleTopTo(route: String) {
+    this.navigate(route) {
+        // 弹出到导航图的起始目的地, 即最终只剩下起始目的地和本次目的地
+        this.popUpTo(
+            this@navigateSingleTopTo.graph.findStartDestination().id
+        ) {
+            // 是否保存弹出目的地的状态
+            saveState = true
+        }
+
+        // 确保返回堆栈顶部最多只有给定目的地的一个副本
+        this.launchSingleTop = true
+        // 是否恢复之前保存的状态
+        this.restoreState = true
+    }
+}
 
 fun NavController.navigateFromUrl(
     url: String,

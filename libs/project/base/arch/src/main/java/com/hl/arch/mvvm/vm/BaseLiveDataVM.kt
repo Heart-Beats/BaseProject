@@ -3,14 +3,11 @@ package com.hl.arch.mvvm.vm
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.hl.arch.api.ApiEvent
 import com.hl.arch.api.IApiEventProvider
 import com.hl.arch.api.PublicResp
 import com.hl.arch.mvvm.api.event.dismissLoading
-import com.hl.arch.mvvm.api.event.setSafeValue
 import com.hl.arch.mvvm.api.event.showException
 import com.hl.arch.mvvm.api.event.showLoading
-import com.hl.arch.mvvm.liveData.EventLiveData
 import com.hl.utils.setSafeValue
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
@@ -26,11 +23,6 @@ import java.util.concurrent.TimeoutException
 abstract class BaseLiveDataVM : LiveDataVM(), IApiEventProvider {
 
     private val tag = "BaseLiveDataVM"
-
-    /**
-     * 接口请求事件
-     */
-    val apiEventFailedLiveData by lazy { EventLiveData<ApiEvent.Failed>() }
 
     protected fun <BODY> apiLaunch(
         needLoading: Boolean = true,
@@ -77,36 +69,6 @@ abstract class BaseLiveDataVM : LiveDataVM(), IApiEventProvider {
             uiEvent.showException(Throwable(message))
             true
         }, block = block)
-    }
-
-    /**
-     * 该方法用来分发请求完成后对应的事件
-     *
-     * @param  needDispatchFailEvent    是否分发请求失败事件
-     * @param  onFail                   失败时的处理
-     * @param  onSuccess                请求成功时的处理
-     *
-     */
-    protected open fun <BODY, T : PublicResp<BODY>> T.dispatchApiEvent(
-        needDispatchFailEvent: Boolean = true,
-        onFail: ((failCode: String, failReason: String) -> Unit)? = null,
-        onSuccess: (body: BODY?) -> Unit = {}
-    ) {
-        val apiEvent = createApiEvent(this.code().toInt(), this.message())
-        Log.i(tag, "根据请求创建的 apiEvent -----------> $apiEvent")
-
-        when (apiEvent) {
-            is ApiEvent.Success -> onSuccess(this.respBody)
-            is ApiEvent.Failed -> {
-
-                if (needDispatchFailEvent) {
-                    apiEventFailedLiveData.setSafeValue(apiEvent)
-                } else {
-                    // 不分发请求错误事件时，使用 onFail 回传错误信息
-                    onFail?.invoke(code(), message())
-                }
-            }
-        }
     }
 
     /**

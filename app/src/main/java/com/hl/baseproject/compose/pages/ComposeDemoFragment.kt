@@ -58,6 +58,20 @@ class ComposeDemoFragment : ComposeBaseFragment() {
 					}) {
 						Text(text = "Compose 中的状态")
 					}
+
+					TextButton(onClick = {
+						val navDirections = ComposeDemoFragmentDirections.actionComposeDemoFragmentToComposeSideEffectsFragment()
+						findNavController().navigate(navDirections)
+					}) {
+						Text(text = "Compose 中的高级状态和附带效应")
+					}
+
+					TextButton(onClick = {
+						val navDirections = ComposeDemoFragmentDirections.actionComposeDemoFragmentToComposeNavigationFragment()
+						findNavController().navigate(navDirections)
+					}) {
+						Text(text = "Compose Navigation")
+					}
 				}
 			}
 		}

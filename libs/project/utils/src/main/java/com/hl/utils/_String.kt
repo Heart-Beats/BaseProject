@@ -120,24 +120,6 @@ fun String.isMatchPasswordRule(minLength: Int = 6, maxLength: Int = 20): Boolean
     return this.matches(regex.toRegex())
 }
 
-/**
- * 是否为 Json 字符串
- */
-fun String?.isJson(): Boolean {
-    val content = this ?: ""
-    return try {
-        if (content.contains("[") && content.contains("]")) {
-            JSONArray(content)
-            true
-        } else {
-            JSONObject(content)
-            true
-        }
-    } catch (e: JSONException) {
-        false
-    }
-}
-
 
 /**
  * 获取指定长度的随机字符串

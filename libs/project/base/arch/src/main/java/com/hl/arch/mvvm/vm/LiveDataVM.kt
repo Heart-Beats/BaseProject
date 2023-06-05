@@ -1,7 +1,6 @@
 package com.hl.arch.mvvm.vm
 
 import android.util.Log
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hl.arch.mvvm.api.event.UiEvent
 import com.hl.arch.mvvm.api.event.dismissLoading
@@ -16,7 +15,7 @@ import kotlinx.coroutines.launch
  * @author  张磊  on  2021/11/06 at 18:30
  * Email: 913305160@qq.com
  */
-open class LiveDataVM : ViewModel() {
+abstract class LiveDataVM : DispatcherVM() {
 
     internal val uiEvent by lazy {
         EventLiveData<UiEvent>()
