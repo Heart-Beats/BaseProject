@@ -76,11 +76,34 @@ import com.hl.baseproject.compose.AppComposeTheme
  *                          2. 状态应至少提升到它可以发生变化（写入）的最高级别。
  *                          3. 如果两种状态发生变化以响应相同的事件，它们应提升到同一级别。
  *
+ * compose 中的状态容器：通过创建负责可组合项的内部状态的状态容器类，可以将所有状态变化处理集中在一个位置。
+ *      ·  记住状态容器：对于可以存储在 Bundle 内的对象，直接使用 rememberSaveable 即可实现存储的值在 activity 和进程重新创建后留存。
+ *                      但对于状态容器并非如此。需要告知 rememberSaveable 如何使用 Saver 保存和恢复状态容器的实例，这就需要自定义保存器。
+ *      ·  自定义保存器： Saver 描述了如何将对象转换为 Saveable（可保存）的内容。Saver 的实现需要重写两个函数：
+ *                          · save - 将原始值转换为可保存的值
+ *                          · restore - 将恢复的值转换为原始类的实例
+ *                      可使用一些现有的 Compose API，如 listSaver 或 mapSaver（用于存储要保存在 List 或 Map 中的值）来实现，以减少编码量。
+ *
+ *
  * compose 中的可观察可变列表：
  *      ·  可变列表：       MutableList<T>  或  ArrayList<T>， 但是它们不会向 Compose 通知列表中的项已发生更改并安排界面重组
  *      ·  可观察可变列表： SnapshotStateList<T>， 可由扩展函数 Collection<T>.toMutableStateList() 直接创建,  还可以使用顶级函数
  *                            mutableStateListOf(vararg elements: T)  进行动态创建
  *
+ * compose 中的状态类型转换：  Compose 支持其他可观察类型转换为 State<T>，以便 Jetpack Compose 可以在状态发生变化后自动重组。
+ *      其他可观察类型  ----> State<T>
+ *          · Flow:      collectAsStateWithLifecycle(), Android 中以生命周期感知型方式从 Flow 收集值。需添加库：androidx.lifecycle:lifecycle-runtime-compose:$lifecycle_version
+ *          · Flow:      collectAsState(), 与 collectAsStateWithLifecycle() 类似，但其不会感知生命周期，因此适用与平台通用代码
+ *          · LiveData： observeAsState()， 观察此 LiveData，并通过 State 表示其值。需添加库： androidx.compose.runtime:runtime-livedata:1.3.2
+ *          · RxJava2:   subscribeAsState(), 可将 RxJava2 的响应式流转换成 Compose State, 需添加库：androidx.compose.runtime:runtime-rxjava2:1.3.2
+ *          · RxJava3:   subscribeAsState(), 可将 RxJava3 的响应式流转换成 Compose State, 需添加库：androidx.compose.runtime:runtime-rxjava3:1.3.2
+ *
+ *      State<T>  -----> Flow
+ *          · snapshotFlow()：将状态转换为 Flow，当在 snapshotFlow 内读取的状态发生变化时，Flow 会向收集器发出新值
+ *
+ *      State<T>  -----> State<T2>
+ *          · derivedStateOf()：当某个 State 需要衍生自另一个 State 时，请使用 derivedStateOf。每当内部状态发生变化时，会执行 derivedStateOf  计算块，
+ *                              但是只有当计算结果与上一次不同时，可组合函数才会重组。
  */
 class ComposeStateFragment : ComposeBaseFragment() {
 

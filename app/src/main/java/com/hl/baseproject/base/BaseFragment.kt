@@ -3,7 +3,9 @@ package com.hl.baseproject.base
 import androidx.viewbinding.ViewBinding
 import com.hl.arch.api.ApiEvent
 import com.hl.arch.mvvm.fragment.ViewBindingMvvmBaseFragment
+import com.hl.arch.mvvm.vm.FlowVM
 import com.hl.arch.mvvm.vm.LiveDataVM
+import com.hl.arch.utils.repeatSafeCollect
 import com.hl.utils.onceLastObserve
 
 /**
@@ -18,6 +20,15 @@ abstract class BaseFragment<Binding : ViewBinding> : ViewBindingMvvmBaseFragment
 
 		val baseViewModel = liveDataVM as? BaseViewModel
 		baseViewModel?.apiEventFailedLiveData?.onceLastObserve(viewLifecycleOwner) {
+			dispatchApiEventFailed(it)
+		}
+	}
+
+	override fun onFlowVMCreated(flowVM: FlowVM) {
+		super.onFlowVMCreated(flowVM)
+
+		val baseViewModel = flowVM as? FlowBaseViewModel
+		baseViewModel?.apiEventFailedFlow?.repeatSafeCollect(viewLifecycleOwner) {
 			dispatchApiEventFailed(it)
 		}
 	}

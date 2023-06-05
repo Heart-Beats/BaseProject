@@ -67,13 +67,13 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
 	}
 
 	override fun FragmentMainBinding.onViewCreated(savedInstanceState: Bundle?) {
-		GpsUtil.checkGpsEnable(activityResultHelper) {
-			it.yes {
-				toast("GPS 已打开")
-			}.no {
-				toast("GPS 未打开")
-			}
-		}
+		// GpsUtil.checkGpsEnable(activityResultHelper) {
+		// 	it.yes {
+		// 		toast("GPS 已打开")
+		// 	}.no {
+		// 		toast("GPS 未打开")
+		// 	}
+		// }
 
 		this.uikitUploadPicImageGridLayout.apply2CancelGray()
 

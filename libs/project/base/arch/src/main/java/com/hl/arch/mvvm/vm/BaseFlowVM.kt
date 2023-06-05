@@ -17,8 +17,10 @@ abstract class BaseFlowVM : FlowVM() {
     protected fun <BODY> apiFlow(
         needLoading: Boolean = true,
         needDispatchFailEvent: Boolean = true,
-        reqBlock: suspend CoroutineScope.() -> PublicResp<BODY>
-    ) = apiFlow(needLoading, { viewModelScope.reqBlock() }, needDispatchFailEvent)
+        reqBlock: suspend CoroutineScope.() -> PublicResp<BODY>,
+        onFail: ((failCode: String, failReason: String) -> Unit)? = null,
+        onSuccess: (body: BODY?) -> Unit = {}
+    ) = apiFlow(needLoading, { viewModelScope.reqBlock() }, needDispatchFailEvent, onFail, onSuccess)
 
     /**
      * 请求获取 StateFlow，该流会直接生产数据且保存最新的数据，同 LiveData 一般
@@ -26,8 +28,9 @@ abstract class BaseFlowVM : FlowVM() {
     protected fun <BODY> apiStateFlow(
         needLoading: Boolean = true,
         needDispatchFailEvent: Boolean = true,
-        reqBlock: suspend CoroutineScope.() -> PublicResp<BODY>
-    ) =
-        apiStateFlow(needLoading, { viewModelScope.reqBlock() }, needDispatchFailEvent)
+        reqBlock: suspend CoroutineScope.() -> PublicResp<BODY>,
+        onFail: ((failCode: String, failReason: String) -> Unit)? = null,
+        onSuccess: (body: BODY?) -> Unit = {}
+    ) = apiStateFlow(needLoading, { viewModelScope.reqBlock() }, needDispatchFailEvent, onFail, onSuccess)
 
 }

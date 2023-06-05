@@ -16,6 +16,12 @@
         <action
             android:id="@+id/action_composeDemoFragment_to_composeStateFragment"
             app:destination="@id/composeStateFragment" />
+        <action
+            android:id="@+id/action_composeDemoFragment_to_composeSideEffectsFragment"
+            app:destination="@id/composeSideEffectsFragment" />
+        <action
+            android:id="@+id/action_composeDemoFragment_to_composeNavigationFragment"
+            app:destination="@id/composeNavigationFragment" />
     </fragment>
     <fragment
         android:id="@+id/composeListFragment"
@@ -29,4 +35,12 @@
         android:id="@+id/composeStateFragment"
         android:name="com.hl.baseproject.compose.pages.ComposeStateFragment"
         android:label="ComposeStateFragment" />
+    <fragment
+        android:id="@+id/composeSideEffectsFragment"
+        android:name="com.hl.baseproject.compose.pages.ComposeSideEffectsFragment"
+        android:label="ComposeSideEffectsFragment" />
+    <fragment
+        android:id="@+id/composeNavigationFragment"
+        android:name="com.hl.baseproject.compose.pages.ComposeNavigationFragment"
+        android:label="ComposeNavigationFragment" />
 </navigation>

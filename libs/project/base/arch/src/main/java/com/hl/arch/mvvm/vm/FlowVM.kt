@@ -1,14 +1,25 @@
 package com.hl.arch.mvvm.vm
 
 import android.util.Log
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hl.arch.api.PublicResp
 import com.hl.arch.mvvm.api.event.RequestStateEvent
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.stateIn
 
-abstract class FlowVM : ViewModel() {
+abstract class FlowVM : DispatcherVM() {
 
     private val tag = "FlowVM"
 
@@ -25,13 +36,15 @@ abstract class FlowVM : ViewModel() {
     private val _requestStateFlow by lazy { MutableSharedFlow<RequestStateEvent>() }
 
     // 请求状态为只读共享流
-    val requestStateEventFlow by lazy { _requestStateFlow.asSharedFlow() }
+    internal val requestStateEventFlow by lazy { _requestStateFlow.asSharedFlow() }
 
 
     protected fun <BODY> apiFlow(
         needLoading: Boolean,
         reqBlock: suspend () -> PublicResp<BODY>,
         needDispatchFailEvent: Boolean = true,
+        onFail: ((failCode: String, failReason: String) -> Unit)? = null,
+        onSuccess: (body: BODY?) -> Unit = {}
     ) = flow {
         val resp = reqBlock()
         emit(resp)
@@ -40,7 +53,7 @@ abstract class FlowVM : ViewModel() {
         .onEach {
             Log.d(tag, "apiFlow: 收到请求的数据")
 
-            it.dispatchApiEvent(needDispatchFailEvent)
+            it.dispatchApiEvent(needDispatchFailEvent, onFail, onSuccess)
         }
         .onStart {
             Log.d(tag, "apiFlow: 请求开始")
@@ -76,7 +89,9 @@ abstract class FlowVM : ViewModel() {
         needLoading: Boolean,
         reqBlock: suspend () -> PublicResp<BODY>,
         needDispatchFailEvent: Boolean = true,
-    ) = apiFlow(needLoading, reqBlock, needDispatchFailEvent).toStateFlow()
+        onFail: ((failCode: String, failReason: String) -> Unit)? = null,
+        onSuccess: (body: BODY?) -> Unit = {}
+    ) = apiFlow(needLoading, reqBlock, needDispatchFailEvent, onFail, onSuccess).toStateFlow()
 
 
     private fun <T> Flow<T>.toStateFlow() = this.stateIn(
@@ -89,20 +104,5 @@ abstract class FlowVM : ViewModel() {
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5000),
         initialValue = this.value
-    )
-
-
-    /**
-     * 该方法用来分发请求完成后对应的事件
-     *
-     * @param  needDispatchFailEvent    是否分发请求失败事件
-     * @param  onFail                   失败时的处理
-     * @param  onSuccess                请求成功时的处理
-     *
-     */
-    abstract fun <BODY, T : PublicResp<BODY>> T.dispatchApiEvent(
-        needDispatchFailEvent: Boolean = true,
-        onFail: ((failCode: String, failReason: String) -> Unit)? = null,
-        onSuccess: (body: BODY?) -> Unit = {}
     )
 }
