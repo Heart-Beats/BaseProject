@@ -12,13 +12,6 @@ import androidx.navigation.fragment.NavHostFragment
  */
 class MyNavHostFragment : NavHostFragment() {
 
-    companion object {
-        const val ENTER_ANIM = "enterAnim"
-        const val EXIT_ANIM = "exitAnim"
-        const val POP_ENTER_ANIM = "popEnterAnim"
-        const val POP_EXIT_ANIM = "popExitAnim"
-    }
-
     private var navAnimations: NavAnimations? = null
     private val specialDeepLinks = mutableListOf<String>()
 

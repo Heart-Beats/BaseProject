@@ -48,7 +48,7 @@ dependencyResolutionManagement {
 
 rootProject.name = "BaseProject"
 
-include ':app'
+include ':app', ':benchmark'
 
 def includeBuildProjects = ['libs/project', 'libs/uikit']
 

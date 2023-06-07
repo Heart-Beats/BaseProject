@@ -36,7 +36,6 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
@@ -61,7 +60,9 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
@@ -221,6 +222,12 @@ class ComposeLayoutsFragment : ComposeBaseFragment() {
 
 		val indicatorLeft by updateTransition.animateDp(transitionSpec = {
 			if (selectedTabIndex isTransitioningTo selectedTabIndex + 1) {
+				/**
+				 * dampingRatio：弹簧阻尼比，数值越小震荡的次数越多
+				 * stiffness：   弹簧刚度，刚度越大弹簧回到原点的速度越快，即动画运行得越快
+				 * visibilityThreshold：可视阈值，即当弹簧弹到某一个值的时候就不弹了然后直接运动到目标值
+				 */
+
 				// 从左往右移动时，左边缘移动较慢
 				spring(stiffness = Spring.StiffnessVeryLow)
 			} else {
@@ -253,21 +260,30 @@ class ComposeLayoutsFragment : ComposeBaseFragment() {
 			randomColor()
 		}
 
+		val endColor = MaterialTheme.colorScheme.primary.copy(0.5F)
+
 		Box(
 			modifier = Modifier
 				.wrapContentSize(align = Alignment.BottomStart)
 				.offset(x = indicatorLeft)
 				.width(indicatorRight - indicatorLeft)
 				// .border(2.dp, borderColor, RoundedCornerShape(4.dp))
-				.background(
-					Brush.horizontalGradient(
-						colors = listOf(
-							MaterialTheme.colorScheme.primary.copy(0.5F),
-							borderColor.copy(0.5F)
-						)
-					),
-					RoundedCornerShape(4.dp)
-				)
+				// .background(
+				// 	Brush.horizontalGradient(
+				// 		colors = listOf(
+				// 			MaterialTheme.colorScheme.primary.copy(0.5F),
+				// 			borderColor.copy(0.5F)
+				// 		)
+				// 	),
+				// 	RoundedCornerShape(4.dp)
+				// )
+				.drawBehind {
+					this.drawRoundRect(
+						brush = Brush.horizontalGradient(
+							colors = listOf(endColor, borderColor.copy(0.5F))
+						), cornerRadius = CornerRadius(x = 4.dp.toPx())
+					)
+				}
 				.padding(4.dp)
 				.fillMaxSize()
 		)
@@ -357,6 +373,7 @@ class ComposeLayoutsFragment : ComposeBaseFragment() {
 	fun RotateColorCircle() {
 		val infiniteTransition = rememberInfiniteTransition()
 
+		// 由于使用动画导致 degrees 改变，因此在动画期间此组合会一直重组
 		val degrees by infiniteTransition.animateFloat(
 			initialValue = 0F,
 			targetValue = 360F,

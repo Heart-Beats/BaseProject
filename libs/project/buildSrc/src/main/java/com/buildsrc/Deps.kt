@@ -376,14 +376,14 @@ class Deps {
 
     object Umeng {
         // 基础库依赖， 必须
-        const val common = "com.umeng.umsdk:common:9.4.4"
-        const val asms = "com.umeng.umsdk:asms:1.5.0"
+        const val common = "com.umeng.umsdk:common:9.6.1"
+        const val asms = "com.umeng.umsdk:asms:1.8.0"
 
         // 性能监控，错误分析升级为独立SDK，看crash数据请一定集成，可选
-        const val apm = "com.umeng.umsdk:apm:1.5.2"
+        const val apm = "com.umeng.umsdk:apm:1.7.0"
 
         //友盟Push依赖
-        const val push = "com.umeng.umsdk:push:6.4.8"
+        const val push = "com.umeng.umsdk:push:6.5.9"
 
         ////使用U-App中ABTest能力，可选
         const val abtest = "com.umeng.umsdk:abtest:1.0.0"
@@ -392,25 +392,25 @@ class Deps {
         //集成U-Link，可选，如要统计分享回流次数和分享新增用户指标则必选
         const val link = "com.umeng.umsdk:link:1.2.0"
 
-        const val share_core = "com.umeng.umsdk:share-core:7.1.7" //分享核心库，必选
-        const val share_board = "com.umeng.umsdk:share-board:7.1.7" //分享面板功能，可选
+        private const val umengShareVersion="7.3.2"
 
-        const val share_wx = "com.umeng.umsdk:share-wx:7.1.7" //微信完整版
+        const val share_core = "com.umeng.umsdk:share-core:$umengShareVersion" //分享核心库，必选
+
+        const val share_wx = "com.umeng.umsdk:share-wx:$umengShareVersion" //微信完整版
         const val wechat_sdk_android_without_mta =
             "com.tencent.mm.opensdk:wechat-sdk-android-without-mta:${Versions.WEI_XIN_OPEN_SDK}" //微信官方依赖库，必选
 
-        const val share_qq = "com.umeng.umsdk:share-qq:7.1.7" //QQ完整版
+        const val share_qq = "com.umeng.umsdk:share-qq:$umengShareVersion" //QQ完整版
 
         const val okhttp = "com.squareup.okhttp3:okhttp:3.14.9" //QQ官方sdk 3.53及之后版本需要集成okhttp3.x，必选
 
-        const val share_sina = "com.umeng.umsdk:share-sina:7.1.7" //新浪微博完整版
-        const val sinaweibosdk = "io.github.sinaweibosdk:core:11.11.1@aar" //新浪微博官方SDK依赖库，必选
+        const val share_sina = "com.umeng.umsdk:share-sina:$umengShareVersion" //新浪微博完整版
+        const val sinaweibosdk = "io.github.sinaweibosdk:core:12.5.0@aar" //新浪微博官方SDK依赖库，必选
 
-        const val share_dingding = "com.umeng.umsdk:share-dingding:7.1.7" //钉钉完整版
+        const val share_dingding = "com.umeng.umsdk:share-dingding:$umengShareVersion" //钉钉完整版
         const val dd_share_sdk = "com.alibaba.android:ddsharesdk:1.2.0@jar" //钉钉官方依赖库，必选
 
-        const val share_alipay = "com.umeng.umsdk:share-alipay:7.1.7" //支付宝完整版
-
+        const val share_alipay = "com.umeng.umsdk:share-alipay:$umengShareVersion" //支付宝完整版
     }
 
     object Banner {

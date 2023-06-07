@@ -44,11 +44,9 @@ class MyFragmentNavigator(
 		navOptions: NavOptions?,
 		navigatorExtras: Navigator.Extras?
 	): NavDestination? {
-		if (!destination.isNeedSpecialHandle()) {
+		return if (!destination.isNeedSpecialHandle()) {
 			val transformNavOptions = transformNavOptions(navOptions)
-
-			Log.d(TAG, "navigate: 处理后的动画 == ${transformNavOptions.toAnimString()}")
-			return super.navigate(destination, args, transformNavOptions, navigatorExtras)
+			super.navigate(destination, args, transformNavOptions, navigatorExtras)
 		} else {
 			val fragmentTag = destination.label?.toString()
 			val findFragment = manager.findFragmentByTag(fragmentTag)
@@ -59,7 +57,7 @@ class MyFragmentNavigator(
 				}
 				this.add(containerId, Class.forName(destination.className) as Class<out Fragment>, args, fragmentTag)
 			}.commit()
-			return null
+			null
 		}
 	}
 
@@ -67,10 +65,12 @@ class MyFragmentNavigator(
 	 *  将布局文件中的 NavOptions 转换为添加统一动画的 NavOptions
 	 */
 	private fun transformNavOptions(navOptions: NavOptions?): NavOptions {
-		val enterAnim = handleDefaultAnim(navOptions, MyNavHostFragment.ENTER_ANIM)
-		val exitAnim = handleDefaultAnim(navOptions, MyNavHostFragment.EXIT_ANIM)
-		val popEnterAnim = handleDefaultAnim(navOptions, MyNavHostFragment.POP_ENTER_ANIM)
-		val popExitAnim = handleDefaultAnim(navOptions, MyNavHostFragment.POP_EXIT_ANIM)
+		Log.d(TAG, "transformNavOptions --- 处理前 navOptions 中设置的动画 == ${navOptions?.toAnimString()}")
+
+		val enterAnim = handleDefaultAnim(navOptions, NavAnimateScene.ENTER_ANIM)
+		val exitAnim = handleDefaultAnim(navOptions, NavAnimateScene.EXIT_ANIM)
+		val popEnterAnim = handleDefaultAnim(navOptions, NavAnimateScene.POP_ENTER_ANIM)
+		val popExitAnim = handleDefaultAnim(navOptions, NavAnimateScene.POP_EXIT_ANIM)
 
 		val newNavOptions = NavOptions.Builder().apply {
 			this.setEnterAnim(enterAnim)
@@ -87,6 +87,8 @@ class MyFragmentNavigator(
 				this.setPopUpTo(it.popUpToId, it.isPopUpToInclusive(), it.shouldPopUpToSaveState())
 			}
 		}.build()
+
+		Log.d(TAG, "transformNavOptions ---  处理后的动画 == ${newNavOptions.toAnimString()}")
 		return newNavOptions
 	}
 
@@ -96,33 +98,23 @@ class MyFragmentNavigator(
 
 	/**
 	 * @param  navOptions 经过 NavController 处理后的导航选项，只要 action 存在，它就不会为 null，即使调用 navigate() 传入 null
-	 * @param  propertyName 处理的动画属性名
+	 * @param  navAnimateName 处理的动画属性名
 	 * @return 动画对应的资源 id , -1 即无动画
 	 */
-	private fun handleDefaultAnim(navOptions: NavOptions?, propertyName: String): Int {
-		try {
-			//使用反射取得所需的属性对应的 get 方法
-			val methodName = "get${propertyName[0].uppercaseChar()}" + propertyName.substring(1)
-			val getPropertyFunction = NavOptions::class.java.getMethod(methodName)
-			Log.d(
-				TAG, "handleDefaultAnim--$propertyName: navOptions中设置的动画 ==" +
-						" ${navOptions?.toAnimString()}"
-			)
+	private fun handleDefaultAnim(navOptions: NavOptions?, @NavAnimateScene navAnimateName: String): Int {
+		val commonNavAnimations = myNavHostFragment.getCommonNavAnimations()
+		val (originAnim, commonAnim) = when (navAnimateName) {
+			NavAnimateScene.ENTER_ANIM -> Pair(navOptions?.enterAnim, commonNavAnimations?.enterAnim)
+			NavAnimateScene.EXIT_ANIM -> Pair(navOptions?.exitAnim, commonNavAnimations?.exitAnim)
+			NavAnimateScene.POP_ENTER_ANIM -> Pair(navOptions?.popEnterAnim, commonNavAnimations?.popEnterAnim)
+			NavAnimateScene.POP_EXIT_ANIM -> Pair(navOptions?.popExitAnim, commonNavAnimations?.popExitAnim)
+			else -> Pair(NavAnimations.NO_ANIM, NavAnimations.NO_ANIM)
+		}
 
-			return if (navOptions == null || getPropertyFunction.invoke(navOptions) == NavAnimations.NO_ANIM) {
-				-1
-			} else if (getPropertyFunction.invoke(navOptions) == -1) {
-				// 当 navOptions 为空或者 navOptions 未设置动画（解析 action 时动画资源默认值都为 -1 ） ----> 使用共通动画
-				myNavHostFragment.getCommonNavAnimations()?.run {
-					val getAnimFunction = this::class.java.getMethod(methodName)
-					getAnimFunction.invoke(this) as? Int ?: -1
-				} ?: -1
-			} else {
-				getPropertyFunction.invoke(navOptions) as? Int ?: -1
-			}
-		} catch (e: Exception) {
-			Log.e(TAG, "handleDefaultAnim: ", e)
-			return -1
+		return when (originAnim) {
+			null, NavAnimations.NO_ANIM -> -1  // 原始动画不存在或设置没有动画使用 Navigation 动画的默认值
+			-1 -> commonAnim ?: originAnim     // 原始动画为默认值时采用设置的共通动画，共通动画不存在时采用 Navigation 动画的默认值
+			else -> originAnim                 // 采用 XML 中单独设置的动画
 		}
 	}
 

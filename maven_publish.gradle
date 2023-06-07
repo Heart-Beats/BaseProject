@@ -349,10 +349,9 @@ project.afterEvaluate {
                     setDependencyNode(root, 'compile', 'com.github.bumptech.glide', 'glide', libs.versions.glide.get())
                     setDependencyNode(root, 'compile', 'com.github.jenly1314', 'zxing-lite', libs.versions.zxingLite.get())
                     setDependencyNode(root, 'compile', 'io.github.youth5201314', 'banner', libs.versions.banner.get())
-                    setDependencyNode(root, 'compile', 'io.github.lucksiege', 'pictureselector', libs.versions.pictureSelector.get())
-                    setDependencyNode(root, 'compile', 'io.github.lucksiege', 'compress', libs.versions.pictureSelector.get())
                     setDependencyNode(root, 'compile', 'com.teprinciple', 'updateapputilsx', libs.versions.updateAppUtilsx.get())
                     setDependencyNode(root, 'compile', 'com.blankj', 'utilcodex', libs.versions.utilCodeX.get())
+
                     setDependencyNode(root, 'compile', 'com.github.CarGuo.GSYVideoPlayer', 'GSYVideoPlayer', libs.versions.gsyVideoPlayer.get())
 
                     setDependencyNode(root, 'compile', 'com.elvishew', 'xlog', libs.versions.xlog.get())
@@ -364,7 +363,6 @@ project.afterEvaluate {
                     setDependencyNode(root, 'compile', 'com.geyifeng.immersionbar', 'immersionbar', libs.versions.immersionBar.get())
                     setDependencyNode(root, 'compile', 'com.geyifeng.immersionbar', 'immersionbar-ktx', libs.versions.immersionBar.get())
 
-                    setDependencyNode(root, 'compile', 'me.rosuh', 'AndroidFilePicker', libs.versions.androidFilePicker.get())
                     setDependencyNode(root, 'compile', 'cjt.library.wheel', 'camera', libs.versions.cameraView.get())
                     setDependencyNode(root, 'compile', 'androidx.palette', 'palette-ktx', libs.versions.palette.get())
 

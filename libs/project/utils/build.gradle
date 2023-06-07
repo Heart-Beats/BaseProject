@@ -95,12 +95,9 @@ dependencies {
     api Deps.ZXing.zxing_lite
 
     api Deps.Banner.banner
-
-    //    implementation Deps.PickSelector.picture_selector
-//    implementation Deps.PickSelector.picture_selector_compress
     api Deps.Update.update_app_utilsx
-
     api Deps.UtilCodeX.utilcodex
+
     api Deps.GSYVideoPlayer.gsy_video_player
 
     api Deps.XLog.xlog
@@ -111,8 +108,6 @@ dependencies {
     api Deps.Okhttp.okhttp
     api Deps.Status_Bar.immersionbar
     api Deps.Status_Bar.immersionbar_ktx
-
-    api Deps.PickSelector.file_picker
     api Deps.Camera.camera
 
     api Deps.AndroidX.palette_Ktx
