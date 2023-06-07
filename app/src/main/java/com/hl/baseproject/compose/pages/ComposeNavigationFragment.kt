@@ -108,7 +108,6 @@ class ComposeNavigationFragment : ComposeBaseFragment() {
 		bottomNavigationBarState: BottomNavigationBarState
 	) {
 		val currentDestination = bottomNavigationBarState.currentDestination
-
 		NavigationBar {
 			bottomAllDestinations.forEach {
 				this.NavigationBarItem(selected = currentDestination == it, label = {
@@ -128,6 +127,8 @@ class ComposeNavigationFragment : ComposeBaseFragment() {
 
 
 	private class BottomNavigationBarState(initDestination: Destination) {
+		// 借助伴生对象可实现静态扩展方法
+		companion object
 
 		var currentDestination by mutableStateOf(initDestination)
 			private set
@@ -138,19 +139,17 @@ class ComposeNavigationFragment : ComposeBaseFragment() {
 		fun updateCurrentDestination(destination: Destination) {
 			currentDestination = destination
 		}
-
-		companion object {
-			// 自定义 Saver 来保存和恢复状态容器
-			val Saver: Saver<BottomNavigationBarState, *> = mapSaver(
-				// save 默认只可保存存储在 Bundle 内的对象， 普通类最简单的方法是实现序列化
-				save = {
-					mapOf("currentDestination" to it.currentDestination)
-				},
-				restore = {
-					val currentDestination = it["currentDestination"] as? Destination
-
-					currentDestination?.run { BottomNavigationBarState(this) }
-				})
-		}
 	}
+
+	private val BottomNavigationBarState.Companion.Saver: Saver<BottomNavigationBarState, *>
+		get() = mapSaver(
+			// save 默认只可保存存储在 Bundle 内的对象， 普通类最简单的方法是实现序列化
+			save = {
+				mapOf("currentDestination" to it.currentDestination)
+			},
+			restore = {
+				val currentDestination = it["currentDestination"] as? Destination
+
+				currentDestination?.run { BottomNavigationBarState(this) }
+			})
 }

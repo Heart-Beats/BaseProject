@@ -52,8 +52,6 @@ dependencies {
     releaseApi Deps.Umeng.apm
     api Deps.Umeng.push
     api Deps.Umeng.share_core
-    api Deps.Umeng.share_board
     api Deps.Umeng.share_wx
     api Deps.Umeng.wechat_sdk_android_without_mta
-
 }

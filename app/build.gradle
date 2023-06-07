@@ -38,11 +38,20 @@ android {
     }
 
     buildTypes {
+        // 创建 release 变体的 benchmark 副本来进行测试生成基准文件
+        benchmark {
+            signingConfig signingConfigs.debug
+            matchingFallbacks = ['release']
+            debuggable false
+        }
         debug {
-            // 是否需要混淆
+            // 是否需要混淆，默认使用 R8 优化
             def needMinify = false
 
             if (needMinify) {
+                // 生成 baseline 文件时使用，避免切换 variant
+                matchingFallbacks = ['release']
+
                 // 是否开启调试， 混淆打开时 debug 调试需关闭，否则混淆无效
                 debuggable !needMinify
 
@@ -55,7 +64,7 @@ android {
             signingConfig signingConfigs.debug
         }
         release {
-            // 1、是否进行混淆
+            // 1、是否进行混淆，默认使用 R8 优化
             minifyEnabled true
 
             // 2、开启zipAlign可以让安装包中的资源按4字节对齐，这样可以减少应用在运行时的内存消耗
@@ -143,4 +152,7 @@ dependencies {
     implementation "com.hl:UniMP"
 
     implementation libs.sensey
+
+    //添加 ProfileInstaller 库以启用本地和 Play 商店中的基准配置文件编译
+    implementation 'androidx.profileinstaller:profileinstaller:1.2.0-alpha01'
 }
