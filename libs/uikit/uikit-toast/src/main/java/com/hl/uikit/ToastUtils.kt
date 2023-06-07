@@ -1,4 +1,4 @@
-package com.hl.uikit.utils
+package com.hl.uikit
 
 import android.app.Application
 import android.view.Gravity
@@ -7,8 +7,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.LayoutRes
-import com.hl.uikit.R
-import com.hl.uikit.form.GravityFlag
 
 object ToastUtils {
 

@@ -19,6 +19,6 @@
         android:layout_marginBottom="10dp"
         android:gravity="center"
         android:textColor="@android:color/white"
-        android:textSize="@dimen/uikit_font_size_8"
+        android:textSize="14sp"
         tools:text="关联成功" />
 </LinearLayout>
