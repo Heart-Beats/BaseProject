@@ -53,7 +53,7 @@ includeBuild('../uikit')
 
 includeBase()
 includeSDK()
-include ':utils', ':navigation'
+include ':utils'
 
 def includeBase() {
     include ':base-api', ':base-arch', ':base-app-res'
@@ -64,7 +64,7 @@ def includeBase() {
 }
 
 def includeSDK() {
-    include ':SDK:Umeng', ':SDK:Pay', ':SDK:TencentCloud', ':SDK:UniMP'
+    include ':SDK:Umeng', ':SDK:Pay', ':SDK:TencentCloud', ':SDK:UniMP', 'SDK:Navigation'
 
     includeShadow()
 
