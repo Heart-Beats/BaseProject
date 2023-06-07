@@ -70,6 +70,7 @@ dependencies {
 
     // embed 可使打包的产物中包含 java  依赖， aar 依赖或者 远程依赖
     api project(path: ':uikit-res')
+    api project(path: ':uikit-toast')
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 

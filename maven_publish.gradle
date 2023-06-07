@@ -4,6 +4,7 @@
 task buildSdk() {
     dependsOn gradle.includedBuild('uikit').task(':uikit:assembleRelease')
     dependsOn gradle.includedBuild('uikit').task(':uikit-res:assembleRelease')
+    dependsOn gradle.includedBuild('uikit').task(':uikit-toast:assembleRelease')
 
     dependsOn gradle.includedBuild('project').task(':base-api:assembleRelease')
     dependsOn gradle.includedBuild('project').task(':base-app-res:assembleRelease')
@@ -141,6 +142,7 @@ def printPublicationVersion() {
 
 setGeneratePomFileAndDepends('uikit')
 setGeneratePomFileAndDepends('uikitRes')
+setGeneratePomFileAndDepends('uikitToast')
 setGeneratePomFileAndDepends('baseApi')
 setGeneratePomFileAndDepends('baseAppRes')
 setGeneratePomFileAndDepends('baseArch')
@@ -190,6 +192,7 @@ project.afterEvaluate {
                     def root = asNode()
 
                     setDependencyNode(root, 'compile', myGroupId, 'uikit-res', getPublicationVersion())
+                    setDependencyNode(root, 'compile', myGroupId, 'uikit-toast', getPublicationVersion())
 
                     // 添加相关依赖库，缺失会导致运行时无法找到对应类
                     setDependencyNode(root, 'compile', 'org.jetbrains.kotlin', 'kotlin-stdlib', libs.versions.kotlin.get())
@@ -219,6 +222,22 @@ project.afterEvaluate {
 
             uikitRes(MavenPublication) {
                 def moduleName = 'uikit-res'
+                def modulePath = "$libUikitPath/$moduleName"
+
+                groupId myGroupId
+                artifactId moduleName
+                version getPublicationVersion()
+                artifact("$modulePath/build/outputs/aar/${moduleName}-release.aar")
+                artifact sourceAar(moduleName, modulePath)
+
+                pom.withXml {
+                    def root = asNode()
+                    setScm(root)
+                }
+            }
+
+            uikitToast(MavenPublication) {
+                def moduleName = 'uikit-toast'
                 def modulePath = "$libUikitPath/$moduleName"
 
                 groupId myGroupId
@@ -311,6 +330,8 @@ project.afterEvaluate {
                     setDependencyNode(root, 'compile', 'com.github.li-xiaojun', 'XPopup', libs.versions.xpopup.get())
                     setDependencyNode(root, 'compile', 'com.blankj', 'utilcodex', libs.versions.utilCodeX.get())
                     setDependencyNode(root, 'compile', 'com.github.lzyzsd', 'jsbridge', libs.versions.jsBridge.get())
+
+                    // todo compose 未添加
                     setScm(root)
                 }
             }
@@ -328,6 +349,7 @@ project.afterEvaluate {
                 pom.withXml {
                     def root = asNode()
                     setDependencyNode(root, 'compile', myGroupId, 'uikit', getPublicationVersion())
+                    setDependencyNode(root, 'compile', myGroupId, 'uikit-toast', getPublicationVersion())
                     setDependencyNode(root, 'compile', myGroupId, 'base-app-res', getPublicationVersion())
 
                     setDependencyNode(root, 'compile', 'androidx.startup', 'startup-runtime', libs.versions.startup.get())
