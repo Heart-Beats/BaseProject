@@ -29,7 +29,7 @@ abstract class BaseMultiAdapter<T>(private var adapterData: MutableList<T>) : Re
 	abstract fun registerItemProvider(position: Int, itemData: T): BaseItemProvider<out T>
 
 	override fun getItemViewType(position: Int): Int {
-		val itemProvider = registerItemProvider(position, adapterData[position])
+		val itemProvider = registerItemProvider(position, getItemData(position))
 		val itemViewType = itemProvider.itemViewType
 
 		if (!itemProviders.containsKey(itemViewType)) {
@@ -42,12 +42,13 @@ abstract class BaseMultiAdapter<T>(private var adapterData: MutableList<T>) : Re
 	override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<T> {
 		val itemProvider = itemProviders[viewType]
 
-		val itemView = LayoutInflater.from(parent.context).inflate(itemProvider.layoutId, parent, false)
+		val itemView =
+			itemProvider.layoutView ?: LayoutInflater.from(parent.context).inflate(itemProvider.layoutId, parent, false)
 		return MultiViewHolder(itemProvider as BaseItemProvider<T>, this, itemView)
 	}
 
 	override fun onBindViewHolder(holder: BaseViewHolder<T>, position: Int) {
-		holder.onBindView(adapterData[position])
+		holder.onBindView(getItemData(position))
 	}
 
 	override fun onBindViewHolder(holder: BaseViewHolder<T>, position: Int, payloads: MutableList<Any>) {
@@ -56,7 +57,7 @@ abstract class BaseMultiAdapter<T>(private var adapterData: MutableList<T>) : Re
 			onBindViewHolder(holder, position)
 			return
 		}
-		holder.onBindView(adapterData[position], payloads)
+		holder.onBindView(getItemData(position), payloads)
 	}
 
 	override fun getItemCount() = adapterData.size
@@ -90,6 +91,13 @@ abstract class BaseMultiAdapter<T>(private var adapterData: MutableList<T>) : Re
 		val myDiffCallback = MyDiffCallback(adapterData, newData)
 		DiffUtil.calculateDiff(myDiffCallback, true).dispatchUpdatesTo(this)
 		this.adapterData = newData.toMutableList()
+	}
+
+	/**
+	 * 获取对应位置的数据
+	 */
+	protected open fun getItemData(position: Int): T {
+		return adapterData[position]
 	}
 
 

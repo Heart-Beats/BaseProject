@@ -16,6 +16,11 @@ import com.hl.arch.adapters.viewholder.BaseViewHolder
 abstract class BaseItemProvider<T> {
 
 	/**
+	 * 当前 ViewHolder 对应的 view， 与 layoutId 互斥，优先以 layoutView
+	 */
+	open val layoutView: View? = null
+
+	/**
 	 * 当前 ViewHolder 对应的布局文件
 	 */
 	abstract val layoutId: Int
