@@ -84,7 +84,7 @@ class MediaPlayerHelper(private val seekBar: SeekBar? = null, private val playLi
 		try {
 			// mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC) // 设置媒体流类型
 			val audioAttributes = AudioAttributes.Builder()
-				.setContentType(AudioManager.STREAM_MUSIC)   // 设置媒体流类型
+				.setContentType(AudioAttributes.CONTENT_TYPE_MOVIE)   // 设置媒体流类型
 				.build()
 			mediaPlayer.setAudioAttributes(audioAttributes)
 			mediaPlayer.setOnBufferingUpdateListener(this)

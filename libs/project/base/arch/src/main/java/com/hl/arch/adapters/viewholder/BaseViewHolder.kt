@@ -17,14 +17,14 @@ abstract class BaseViewHolder<T>(val adapter: RecyclerView.Adapter<BaseViewHolde
 		// 给 viewHolder 的 item 设置点击以及长按事件
 		itemView.apply {
 			this.onClick {
-				val (isLayoutEnd, position, itemData) = getDataForViewHolder(this@BaseViewHolder)
+				val (isLayoutEnd, position, itemData) = getPositionAndData()
 				if (!isLayoutEnd) return@onClick
 
 				onItemClick(this, position, itemData)
 			}
 
 			this.setOnLongClickListener {
-				val (isLayoutEnd, position, itemData) = getDataForViewHolder(this@BaseViewHolder)
+				val (isLayoutEnd, position, itemData) = getPositionAndData()
 				if (isLayoutEnd) return@setOnLongClickListener false
 
 				onItemLongClick(this, position, itemData)
@@ -78,7 +78,7 @@ abstract class BaseViewHolder<T>(val adapter: RecyclerView.Adapter<BaseViewHolde
 		onClick: (childView: View, position: Int, itemData: T) -> Unit
 	) {
 		this.getView<View>(clickChildId)?.onClick {
-			val (isLayoutEnd, position, itemData) = getDataForViewHolder(this)
+			val (isLayoutEnd, position, itemData) = getPositionAndData()
 			if (!isLayoutEnd) return@onClick
 
 			onClick(it, position, itemData)
@@ -93,7 +93,7 @@ abstract class BaseViewHolder<T>(val adapter: RecyclerView.Adapter<BaseViewHolde
 		onLongClick: (childView: View, position: Int, itemData: T) -> Unit
 	) {
 		this.getView<View>(clickChildId)?.setOnLongClickListener {
-			val (isLayoutEnd, position, itemData) = getDataForViewHolder(this)
+			val (isLayoutEnd, position, itemData) = getPositionAndData()
 			if (!isLayoutEnd) return@setOnLongClickListener false
 
 			onLongClick(it, position, itemData)
@@ -101,8 +101,8 @@ abstract class BaseViewHolder<T>(val adapter: RecyclerView.Adapter<BaseViewHolde
 		}
 	}
 
-	private fun getDataForViewHolder(viewHolder: BaseViewHolder<T>): Triple<Boolean, Int, T> {
-		val position = viewHolder.bindingAdapterPosition
+	private fun getPositionAndData(): Triple<Boolean, Int, T> {
+		val position = this.bindingAdapterPosition
 		val isLayoutEnd = position != RecyclerView.NO_POSITION // 布局是否已完成
 
 		val iDataOperate = adapter as IDataOperate<T>

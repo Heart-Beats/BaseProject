@@ -8,7 +8,7 @@ import com.hl.arch.adapters.itemprovider.BaseItemProvider
  * @author  张磊  on  2022/09/22 at 16:03
  * Email: 913305160@qq.com
  */
-open class MultiViewHolder<T>(
+internal open class MultiViewHolder<T>(
 	private val baseItemProvider: BaseItemProvider<T>,
 	adapter: BaseMultiAdapter<T>, itemView: View
 ) : BaseViewHolder<T>(adapter, itemView) {
