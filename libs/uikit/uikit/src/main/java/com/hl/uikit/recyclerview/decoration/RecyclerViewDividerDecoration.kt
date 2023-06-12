@@ -41,8 +41,9 @@ class RecyclerViewDividerDecoration : ItemDecoration() {
         }
         val childCount = parent.childCount
         for (i in 0 until childCount) {
-            if (i >= childCount - 1) {
-                break
+            if (i == 0) {
+                // 跳过绘制第一条的装饰间隔效果
+                continue
             }
             val child = parent.getChildAt(i)
             parent.getDecoratedBoundsWithMargins(child, mBounds)
@@ -51,13 +52,13 @@ class RecyclerViewDividerDecoration : ItemDecoration() {
             var top: Int
             if (layoutManager.orientation == RecyclerView.VERTICAL) {
                 // 纵向
-                bottom = mBounds.bottom + child.translationY.roundToInt()
-                top = bottom - getDividerHeight()
+                top = mBounds.top + child.translationY.roundToInt()
+                bottom = top + getDividerHeight()
             } else {
                 // 横向
-                left = mBounds.right - getDividerHeight()
+                left = mBounds.left + child.translationX.roundToInt()
                 top = mBounds.top
-                right = mBounds.right
+                right = left + getDividerHeight()
                 bottom = mBounds.bottom
             }
 
@@ -73,28 +74,24 @@ class RecyclerViewDividerDecoration : ItemDecoration() {
         val layoutManager = parent.layoutManager
         if (layoutManager is LinearLayoutManager) {
 
-            if (!isLastItem(parent, view, state)) {
-                // 最后一条不设置偏移
+            if (!isFirstItem(parent, view, state)) {
+                // 第一条不设置上偏移，可解决动态添加 item 间隔无效的问题
 
                 when (layoutManager.orientation) {
-                    RecyclerView.VERTICAL -> outRect.set(0, 0, 0, getDividerHeight())
-                    RecyclerView.HORIZONTAL -> outRect.set(0, 0, getDividerHeight(), 0)
+                    RecyclerView.VERTICAL -> outRect.set(0, getDividerHeight(), 0, 0)
+                    RecyclerView.HORIZONTAL -> outRect.set(getDividerHeight(), 0, 0, 0)
                 }
             }
         }
     }
 
     /**
-     * 判断是否为最后一条
+     * 判断是否为第一条
      */
-    private fun isLastItem(parent: RecyclerView, view: View, state: RecyclerView.State): Boolean {
-        //整个RecyclerView最后一个item的position
-        val lastPosition = state.itemCount - 1
-
+    private fun isFirstItem(parent: RecyclerView, view: View, state: RecyclerView.State): Boolean {
         //获取当前要进行布局的item的position
         val current = parent.getChildLayoutPosition(view)
-
-        return lastPosition == current
+        return current == 0
     }
 
     private fun getDividerHeight(): Int {
