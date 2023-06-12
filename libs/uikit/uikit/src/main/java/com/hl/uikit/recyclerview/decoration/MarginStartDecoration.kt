@@ -41,8 +41,8 @@ class MarginStartDecoration(
 	}
 
 	private fun drawVerticalDivider(c: Canvas, parent: RecyclerView, layoutManager: RecyclerView.LayoutManager) {
-		//最后一条不画分割线
-		for (i in 0 until parent.childCount - 1) {
+		//第一条不画分割线， 支持动态添加 item
+		for (i in 1 until parent.childCount) {
 			val childView = parent.getChildAt(i)
 
 			val leftDecorationWidth = layoutManager.getLeftDecorationWidth(childView).toFloat()
@@ -50,7 +50,13 @@ class MarginStartDecoration(
 			// val rightDecorationWidth = layoutManager.getRightDecorationWidth(childView).toFloat()
 			// val bottomDecorationHeight = layoutManager.getBottomDecorationHeight(childView).toFloat()
 
-			c.drawRect(leftDecorationWidth + marginPx, childView.bottom - dividerHeightPx.toFloat(), childView.right.toFloat(), childView.bottom.toFloat(), paint)
+			c.drawRect(
+				leftDecorationWidth + marginPx,
+				childView.top.toFloat(),
+				childView.right.toFloat(),
+				childView.top.toFloat() + dividerHeightPx.toFloat(),
+				paint
+			)
 		}
 	}
 
