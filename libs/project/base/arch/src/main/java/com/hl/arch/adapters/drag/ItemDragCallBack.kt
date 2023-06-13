@@ -9,25 +9,22 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import java.util.*
+import java.util.Collections
 
 /**
  * @author  张磊  on  2022/11/17 at 14:10
  * Email: 913305160@qq.com
  *
+ * @param adapterData  RecyclerView 的 adapter 对应的数据
  * @param isCanSwipe  是否可以滑动
  */
 
-class ItemDragCallBack(private val isCanSwipe: Boolean = true) : ItemTouchHelper.Callback() {
+class ItemDragCallBack<T>(private val adapterData: MutableList<T>, private val isCanSwipe: Boolean = true) :
+	ItemTouchHelper.Callback() {
 
 	private companion object {
 		private const val TAG = "ItemDragCallBack"
 	}
-
-	/**
-	 * RecyclerView 的 adapter 对应的数据
-	 */
-	var adapterData: MutableList<out Any> = mutableListOf()
 
 	/**
 	 * 长按时的背景选中色

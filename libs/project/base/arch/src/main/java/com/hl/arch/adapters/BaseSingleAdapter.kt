@@ -3,13 +3,12 @@ package com.hl.arch.adapters
 import android.view.View
 import com.hl.arch.adapters.itemprovider.BaseItemProvider
 import com.hl.arch.adapters.viewholder.BaseViewHolder
-import java.lang.reflect.ParameterizedType
 
 /**
  * @author  张磊  on  2023/06/08 at 11:23
  * Email: 913305160@qq.com
  */
-abstract class BaseAbstractAdapter2<T>(private var adapterData: MutableList<T>) : BaseMultiAdapter<T>(adapterData) {
+abstract class BaseSingleAdapter<T>(private val adapterData: MutableList<T>) : BaseMultiAdapter<T>(adapterData) {
 
 	/**
 	 * 头部布局
@@ -22,29 +21,41 @@ abstract class BaseAbstractAdapter2<T>(private var adapterData: MutableList<T>) 
 	open var footerView: View? = null
 
 	/**
-	 * 空态 view
-	 */
-	open var emptyView: View? = null
-
-	/**
 	 * 正常数据布局
 	 */
 	abstract val itemLayout: Int
 
 	/**
-	 * 创建 viewHolder 时的回调
+	 *创建 viewHolder 时的回调
 	 */
-	protected open fun onItemInit(viewHolder: BaseViewHolder<T>) {}
-
+	open fun onItemInit(viewHolder: BaseViewHolder<T>) {
+	}
 
 	/**
 	 * 绑定 viewHolder 时的回调
 	 */
-	protected open fun onItemBind(viewHolder: BaseViewHolder<T>, itemData: T) {}
+	abstract fun onItemBind(viewHolder: BaseViewHolder<T>, itemData: T)
+
+	/**
+	 * 刷新 ViewHolder 的视图上的局部数据，
+	 */
+	open fun onItemBind(helper: BaseViewHolder<T>, itemData: T, payloads: List<Any>) {}
+
+	/**
+	 * item 的点击事件
+	 */
+	open fun onItemClick(itemView: View, position: Int, itemData: T) {
+	}
+
+	/**
+	 * item 的长按事件
+	 */
+	open fun onItemLongClick(itemView: View, position: Int, itemData: T) {
+	}
+
 
 	override fun registerItemProvider(position: Int, itemData: T): BaseItemProvider<out T> {
 		return when {
-			isDisplayEmpty() -> EmptyItemProvider()
 			isDisplayHeader(position) -> HeaderItemProvider()
 			isDisplayFooter(position) -> FooterItemProvider()
 			isDisplayData(position) -> DataItemProvider()
@@ -63,66 +74,66 @@ abstract class BaseAbstractAdapter2<T>(private var adapterData: MutableList<T>) 
 			itemCount++
 		}
 
-		if (isDisplayEmpty()) {
-			itemCount = 1
-		}
-
 		return itemCount
 	}
+
 
 	override fun getItemData(position: Int): T {
 		return getRealData(position)
 	}
 
-	// /**
-	//  * 向列表尾部插入数据
-	//  */
-	// override fun insertData(vararg addData: T) {
-	// 	val lastDataSize = adapterData.size
-	// 	this.adapterData.addAll(addData)
-	//
-	// 	if (isHaveFooter()) {
-	// 		this.adapterData.add(Unit)
-	// 	}
-	//
-	// 	notifyItemRangeInserted(lastDataSize, addData.size)
-	// }
-	//
-	// /**
-	//  *  删除数据
-	//  */
-	// override fun removeData(vararg removeData: T) {
-	// 	removeData.forEach {
-	// 		val removeIndex = this.adapterData.indexOf(it)
-	// 		this.adapterData.remove(it)
-	//
-	// 		// 通知指定位置数据移除
-	// 		notifyItemRemoved(removeIndex)
-	// 	}
-	// }
+	override fun insertData(vararg addData: T) {
+		if (addData.isEmpty()) return
 
-	// /**
-	//  * 更新当前的数据
-	//  */
-	// override fun updateData(newData: List<T>) {
-	// 	val myDiffCallback = MyDiffCallback(adapterData, newData)
-	// 	DiffUtil.calculateDiff(myDiffCallback, true).dispatchUpdatesTo(this)
-	// 	this.adapterData = newData.toMutableList()
-	// }
-
-
-	// /**
-	//  * 获取当前的数据
-	//  */
-	// override fun getData(): MutableList<T> {
-	// 	return this.adapterData
-	// }
+		if (isDisplayEmpty()) {
+			super.insertData(*addData)
+		} else {
+			val lastDataSize = adapterData.size
+			this.adapterData.addAll(addData)
+			// 有头部插入索引位置为 数据大小加上头部
+			val insertIndex = if (isHaveHeader()) lastDataSize + 1 else lastDataSize
+			notifyItemRangeInserted(insertIndex, addData.size)
+		}
+	}
 
 
 	/**
-	 * 是否没有数据
+	 *  删除数据
 	 */
-	private fun isNoData() = adapterData.size == 0
+	override fun removeData(vararg removeData: T) {
+		removeData.forEach {
+			var removeIndex = this.adapterData.indexOf(it)
+			val remove = this.adapterData.remove(it)
+
+			if (remove) {
+				// 有头部移除索引位置为 数据移除位置加上头部偏移
+				removeIndex = if (isHaveHeader()) removeIndex + 1 else removeIndex
+
+				if (isDisplayEmpty()) {
+					// 空态时改变显示视图
+					notifyDataSetChanged()
+				} else {
+					// 非空态时通知指定位置数据移除
+					notifyItemRemoved(removeIndex)
+				}
+			}
+		}
+	}
+
+	/**
+	 * 更新当前的数据
+	 */
+	override fun updateData(newData: List<T>) {
+		if (isHaveHeader() || isHaveFooter()) {
+			// 更新数据集
+			this.adapterData.clear()
+			this.adapterData.addAll(newData)
+
+			notifyDataSetChanged()
+		} else {
+			super.updateData(newData)
+		}
+	}
 
 	/**
 	 * 是否有头部
@@ -145,19 +156,12 @@ abstract class BaseAbstractAdapter2<T>(private var adapterData: MutableList<T>) 
 	private fun isDisplayFooter(position: Int) = isHaveFooter() && position == itemCount - 1
 
 	/**
-	 * 是否显示空态
-	 */
-	private fun isDisplayEmpty() = isNoData() && emptyView != null
-
-	/**
 	 * 是否显示正常数据
 	 */
-	private fun isDisplayData(position: Int) =
-		!isDisplayEmpty() && !isDisplayHeader(position) && !isDisplayFooter(position)
-
+	private fun isDisplayData(position: Int) = !isDisplayHeader(position) && !isDisplayFooter(position)
 
 	/**
-	 * 获取对应位置的真实数据
+	 * 获取对应位置的真实数据，头尾以及空态时返回默认的虚拟数据
 	 */
 	private fun getRealData(position: Int): T {
 		return when {
@@ -167,37 +171,12 @@ abstract class BaseAbstractAdapter2<T>(private var adapterData: MutableList<T>) 
 		}
 	}
 
-	private fun createDefaultItemData(): T {
-		val genericSuperclass = this.javaClass.genericSuperclass
-		return try {
-			if (genericSuperclass is ParameterizedType) {
-				val type = genericSuperclass.actualTypeArguments[0]
-				(type as Class<T>).newInstance()
-			} else {
-				error("获取传入数据类型失败！")
-			}
-		} catch (e: Exception) {
-			error("请给数据类型添加默认构造器！")
-		}
-	}
-
 	private fun getRealPosition(position: Int): Int {
 		return when {
 			//  当有头部时，显示正常数据的索引需要减 1
 			isDisplayData(position) -> if (isHaveHeader()) position - 1 else position
 			else -> position
 		}
-	}
-
-	private inner class EmptyItemProvider : BaseItemProvider<T>() {
-
-		override var layoutView = emptyView
-
-		override val layoutId: Int = 0
-
-		override val itemViewType: Int = ItemViewType.EMPTY.ordinal
-
-		override fun onItemBind(viewHolder: BaseViewHolder<T>, itemData: T) {}
 	}
 
 	private inner class HeaderItemProvider : BaseItemProvider<T>() {
@@ -229,11 +208,23 @@ abstract class BaseAbstractAdapter2<T>(private var adapterData: MutableList<T>) 
 		override val itemViewType: Int = ItemViewType.DATA.ordinal
 
 		override fun onItemInit(viewHolder: BaseViewHolder<T>) {
-			this@BaseAbstractAdapter2.onItemInit(viewHolder)
+			this@BaseSingleAdapter.onItemInit(viewHolder)
+		}
+
+		override fun onItemBind(helper: BaseViewHolder<T>, itemData: T, payloads: List<Any>) {
+			this@BaseSingleAdapter.onItemBind(helper, itemData, payloads)
+		}
+
+		override fun onItemClick(itemView: View, position: Int, itemData: T) {
+			this@BaseSingleAdapter.onItemClick(itemView, position, itemData)
+		}
+
+		override fun onItemLongClick(itemView: View, position: Int, itemData: T) {
+			this@BaseSingleAdapter.onItemLongClick(itemView, position, itemData)
 		}
 
 		override fun onItemBind(viewHolder: BaseViewHolder<T>, itemData: T) {
-			this@BaseAbstractAdapter2.onItemBind(viewHolder, itemData)
+			this@BaseSingleAdapter.onItemBind(viewHolder, itemData)
 		}
 	}
 }

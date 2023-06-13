@@ -1,5 +1,6 @@
 package com.hl.utils
 
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 
 /**
@@ -15,4 +16,11 @@ fun RecyclerView.setItemDecoration(decor: RecyclerView.ItemDecoration) {
         this.removeItemDecoration(this.getItemDecorationAt(i))
     }
     this.addItemDecoration(decor)
+}
+
+/**
+ * 给 RecyclerView 每项设置触摸处理
+ */
+fun RecyclerView.setItemTouchHelper(callBack: ItemTouchHelper.Callback) {
+    ItemTouchHelper(callBack).attachToRecyclerView(this)
 }

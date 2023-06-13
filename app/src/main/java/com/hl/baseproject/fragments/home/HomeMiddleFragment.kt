@@ -1,11 +1,15 @@
 package com.hl.baseproject.fragments.home
 
 import android.os.Bundle
+import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import com.elvishew.xlog.XLog
-import com.hl.arch.adapters.BaseAbstractAdapter
+import com.hl.arch.adapters.BaseSingleAdapter
+import com.hl.arch.adapters.drag.ItemDragCallBack
+import com.hl.arch.adapters.viewholder.BaseViewHolder
 import com.hl.arch.mvvm.vm.activityViewModels
+import com.hl.arch.utils.getColorByRes
 import com.hl.arch.web.navigateToWeb
 import com.hl.baseproject.R
 import com.hl.baseproject.base.BaseFragment
@@ -13,10 +17,10 @@ import com.hl.baseproject.databinding.FragmentHomeMiddleBinding
 import com.hl.baseproject.repository.network.bean.Article
 import com.hl.baseproject.viewmodels.DataViewModel
 import com.hl.baseproject.viewmodels.HomeViewModel
-import com.hl.uikit.onClick
 import com.hl.utils.GlideUtil
 import com.hl.utils.date.toFormatString
 import com.hl.utils.onceLastObserve
+import com.hl.utils.setItemTouchHelper
 import com.hl.utils.showImage
 import java.security.SecureRandom
 import java.util.Date
@@ -30,7 +34,7 @@ class HomeMiddleFragment : BaseFragment<FragmentHomeMiddleBinding>() {
 	private val homeViewModel by activityViewModels<HomeViewModel>()
 	private val dataViewModel by activityViewModels<DataViewModel>()
 
-	private lateinit var homeArticledAdapter: BaseAbstractAdapter<Article>
+	private lateinit var homeArticledAdapter: BaseSingleAdapter<Article>
 
 	private var curPage = 0
 
@@ -73,26 +77,22 @@ class HomeMiddleFragment : BaseFragment<FragmentHomeMiddleBinding>() {
 	}
 
 	private fun initHomeArticleAdapter(images: List<String>) {
-		homeArticledAdapter = object : BaseAbstractAdapter<Article>(mutableListOf()) {
+		homeArticledAdapter = object : BaseSingleAdapter<Article>(mutableListOf()) {
 
 			override val itemLayout: Int = R.layout.item_home_article
 
-			override fun onItemInit(viewHolder: ViewHolder, position: Int, itemData: Article?) {
-				itemData ?: return
+			override fun onItemClick(itemView: View, position: Int, itemData: Article) {
+				itemView.navigateToWeb(itemData.link ?: return, isNeedTitle = true)
+			}
 
-				viewHolder.itemView.onClick {
-					it.navigateToWeb(itemData.link ?: return@onClick, isNeedTitle = true)
-				}
-
-				viewHolder.getView<ImageView>(R.id.item_article_image)?.onClick {
-					val imageUrl = it.getTag()
-					it.context.showImage(it as ImageView, imageUrl)
+			override fun onItemInit(viewHolder: BaseViewHolder<Article>) {
+				viewHolder.setChildClick(R.id.item_article_image) { childView, _, _ ->
+					val imageUrl = childView.getTag()
+					childView.context.showImage(childView as ImageView, imageUrl)
 				}
 			}
 
-			override fun onItemBind(viewHolder: ViewHolder, itemData: Article?) {
-				itemData ?: return
-
+			override fun onItemBind(viewHolder: BaseViewHolder<Article>, itemData: Article) {
 				// SecureRandom 可产生真随机数
 				val randomImageUrl = images[SecureRandom().nextInt(images.size)]
 				viewHolder.getView<ImageView>(R.id.item_article_image)?.run {
@@ -111,6 +111,11 @@ class HomeMiddleFragment : BaseFragment<FragmentHomeMiddleBinding>() {
 
 		viewBinding.homeArticleList.run {
 			this.adapter = homeArticledAdapter
+
+			val itemDragCallBack = ItemDragCallBack(homeArticledAdapter.getData(), true).apply {
+				this.longPressColor = getColorByRes(com.hl.arch.R.color.main_color)
+			}
+			this.setItemTouchHelper(itemDragCallBack)
 		}
 	}
 }

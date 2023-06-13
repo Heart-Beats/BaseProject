@@ -32,6 +32,13 @@ abstract class BaseItemProvider<T> {
 	 */
 	abstract val itemViewType: Int
 
+
+	/**
+	 * ViewHolder 已完成初始化
+	 */
+	open fun onItemInit(viewHolder: BaseViewHolder<T>) {
+	}
+
 	/**
 	 * 刷新 ViewHolder 的整体视图数据，
 	 */
@@ -41,12 +48,6 @@ abstract class BaseItemProvider<T> {
 	 * 刷新 ViewHolder 的视图上的局部数据，
 	 */
 	open fun onItemBind(helper: BaseViewHolder<T>, itemData: T, payloads: List<Any>) {}
-
-	/**
-	 * ViewHolder 已完成初始化
-	 */
-	open fun onItemInit(viewHolder: BaseViewHolder<T>) {
-	}
 
 	/**
 	 * item 的点击事件

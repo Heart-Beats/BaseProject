@@ -16,7 +16,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="@dimen/dp_20"
-        android:id="@+id/text_recycler_view"
+        android:id="@+id/test_recycler_view_1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@color/pale_green"
@@ -24,8 +24,45 @@
         app:spanCount="5"
         tools:listitem="@layout/item_text" />
 
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="@dimen/dp_20">
+
+        <TextView
+            android:id="@+id/add_data"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_20"
+            android:background="@color/main_color"
+            android:padding="@dimen/dp_5"
+            android:text="添加数据"
+            android:textColor="@color/white" />
+
+        <TextView
+            android:id="@+id/remove_data"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_20"
+            android:background="@color/main_color"
+            android:padding="@dimen/dp_5"
+            android:text="删除数据"
+            android:textColor="@color/white" />
+
+        <TextView
+            android:id="@+id/update_data"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_20"
+            android:background="@color/main_color"
+            android:padding="@dimen/dp_5"
+            android:text="更新数据"
+            android:textColor="@color/white" />
+    </LinearLayout>
+
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/test_recycler_view"
+        android:id="@+id/test_recycler_view_2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
