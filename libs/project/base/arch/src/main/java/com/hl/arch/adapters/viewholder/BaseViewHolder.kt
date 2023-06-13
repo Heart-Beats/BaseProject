@@ -36,23 +36,23 @@ abstract class BaseViewHolder<T>(val adapter: RecyclerView.Adapter<BaseViewHolde
 	/**
 	 * 刷新 ViewHolder 的整体视图数据
 	 */
-	abstract fun onBindView(itemData: T)
+	internal abstract fun onBindView(itemData: T)
 
 	/**
 	 * 刷新 ViewHolder 的视图上的局部数据，具体参见 @see [RecyclerView.Adapter.onBindViewHolder]  的三个参数方法
 	 */
-	open fun onBindView(itemData: T, payloads: MutableList<Any>) {}
+	internal open fun onBindView(itemData: T, payloads: MutableList<Any>) {}
 
 	/**
 	 * item 的点击事件
 	 */
-	open fun onItemClick(itemView: View, position: Int, itemData: T) {
+	protected open fun onItemClick(itemView: View, position: Int, itemData: T) {
 	}
 
 	/**
 	 * item 的长按事件
 	 */
-	open fun onItemLongClick(itemView: View, position: Int, itemData: T) {
+	protected open fun onItemLongClick(itemView: View, position: Int, itemData: T) {
 	}
 
 	/**********************************  相关 API   *************************************************/
