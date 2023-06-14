@@ -17,7 +17,7 @@ import kotlin.math.roundToInt
  * @return          最终设置过透明度的颜色值
  */
 @ColorInt
-fun @receiver:ColorInt Int.convertAlpha(@FloatRange(from = 0.0, to = 1.0) percent: Float): Int {
+fun @receiver:ColorInt Int.alpha(@FloatRange(from = 0.0, to = 1.0) percent: Float): Int {
 	val blue = Color.blue(this)
 	val green = Color.green(this)
 	val red = Color.red(this)

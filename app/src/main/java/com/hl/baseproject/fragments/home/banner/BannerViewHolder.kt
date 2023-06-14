@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.annotation.LayoutRes
 import androidx.recyclerview.widget.RecyclerView
-import com.hl.arch.utils.getColorByRes
+import com.hl.utils.getColorByRes
 import com.hl.baseproject.R
 import com.hl.baseproject.repository.network.bean.BannerData
 import com.hl.utils.GlideUtil

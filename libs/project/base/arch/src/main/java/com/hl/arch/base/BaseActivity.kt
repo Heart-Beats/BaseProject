@@ -18,7 +18,7 @@ import androidx.lifecycle.MutableLiveData
 import com.gyf.immersionbar.ImmersionBar
 import com.gyf.immersionbar.ktx.immersionBar
 import com.hl.arch.R
-import com.hl.arch.utils.getColorByRes
+import com.hl.utils.getColorByRes
 import com.hl.utils.*
 
 

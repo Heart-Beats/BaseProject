@@ -3,7 +3,7 @@ package com.hl.baseproject.fragments.home
 import android.graphics.Color
 import android.os.Bundle
 import com.hl.arch.mvvm.vm.activityViewModels
-import com.hl.arch.utils.getColorByRes
+import com.hl.utils.getColorByRes
 import com.hl.arch.web.navigateToWeb
 import com.hl.baseproject.base.BaseFragment
 import com.hl.baseproject.databinding.FragmentHomeBinding

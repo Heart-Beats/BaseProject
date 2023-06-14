@@ -9,7 +9,6 @@ import com.hl.arch.adapters.BaseSingleAdapter
 import com.hl.arch.adapters.drag.ItemDragCallBack
 import com.hl.arch.adapters.viewholder.BaseViewHolder
 import com.hl.arch.mvvm.vm.activityViewModels
-import com.hl.arch.utils.getColorByRes
 import com.hl.arch.web.navigateToWeb
 import com.hl.baseproject.R
 import com.hl.baseproject.base.BaseFragment
@@ -112,9 +111,7 @@ class HomeMiddleFragment : BaseFragment<FragmentHomeMiddleBinding>() {
 		viewBinding.homeArticleList.run {
 			this.adapter = homeArticledAdapter
 
-			val itemDragCallBack = ItemDragCallBack(homeArticledAdapter.getData(), true).apply {
-				this.longPressColor = getColorByRes(com.hl.arch.R.color.main_color)
-			}
+			val itemDragCallBack = ItemDragCallBack(homeArticledAdapter.getData(), true)
 			this.setItemTouchHelper(itemDragCallBack)
 		}
 	}
