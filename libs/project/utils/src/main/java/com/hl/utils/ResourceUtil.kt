@@ -1,4 +1,4 @@
-package com.hl.arch.utils
+package com.hl.utils
 
 import android.content.Context
 import android.graphics.drawable.Drawable
@@ -27,6 +27,10 @@ fun View.getColorByRes(@ColorRes colorRes: Int): Int {
 	return context.getColorByRes(colorRes)
 }
 
+fun getColorByRes(@ColorRes colorRes: Int): Int {
+	return BaseUtil.app.getColorByRes(colorRes)
+}
+
 fun Context.getPxByRes(@DimenRes dimenRes: Int): Int {
 	return resources.getDimensionPixelOffset(dimenRes)
 }
@@ -37,6 +41,10 @@ fun Fragment.getPxByRes(@DimenRes dimenRes: Int): Int {
 
 fun View.getPxByRes(@DimenRes dimenRes: Int): Int {
 	return context.getPxByRes(dimenRes)
+}
+
+fun getPxByRes(@DimenRes dimenRes: Int): Int {
+	return BaseUtil.app.getPxByRes(dimenRes)
 }
 
 fun Context.getTextByRes(@StringRes stringRes: Int): CharSequence {
@@ -51,6 +59,10 @@ fun View.geTextByRes(@StringRes stringRes: Int): CharSequence {
 	return context.getTextByRes(stringRes)
 }
 
+fun geTextByRes(@StringRes stringRes: Int): CharSequence {
+	return BaseUtil.app.getTextByRes(stringRes)
+}
+
 fun Context.getDrawableByRes(@DrawableRes drawableRes: Int): Drawable? {
 	return ContextCompat.getDrawable(this, drawableRes)
 }
@@ -61,4 +73,8 @@ fun Fragment.getDrawableByRes(@DrawableRes drawableRes: Int): Drawable? {
 
 fun View.getDrawableByRes(@DrawableRes drawableRes: Int): Drawable? {
 	return context.getDrawableByRes(drawableRes)
+}
+
+fun getDrawableByRes(@DrawableRes drawableRes: Int): Drawable? {
+	return BaseUtil.app.getDrawableByRes(drawableRes)
 }

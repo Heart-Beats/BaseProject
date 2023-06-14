@@ -1,6 +1,8 @@
 package com.hl.arch.adapters.drag
 
+import android.content.res.ColorStateList
 import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.ColorStateListDrawable
 import android.graphics.drawable.Drawable
 import android.util.Log
 import androidx.annotation.ColorInt
@@ -9,6 +11,9 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.hl.utils.BuildVersionUtil
+import com.hl.utils.alpha
+import com.hl.utils.getColorByRes
 import java.util.Collections
 
 /**
@@ -30,11 +35,16 @@ class ItemDragCallBack<T>(private val adapterData: MutableList<T>, private val i
 	 * 长按时的背景选中色
 	 */
 	@ColorInt
-	var longPressColor: Int? = null
+	var longPressColor: Int = getColorByRes(com.hl.arch.R.color.main_color).alpha(0.3F)
 
 	private lateinit var recyclerView: RecyclerView
 
 	private var lastItemViewBackground: Drawable? = null
+
+	/**
+	 * 拖拽或滑动是否结束
+	 */
+	private var isClearViewFlag = true
 
 	/**
 	 * 创建交互方式，交互方式分为两种：
@@ -128,6 +138,12 @@ class ItemDragCallBack<T>(private val adapterData: MutableList<T>, private val i
 		Log.d(TAG, "onSelectedChanged:   actionState == $actionState")
 
 		if (actionState != ItemTouchHelper.ACTION_STATE_IDLE) {
+
+			if (!isClearViewFlag) {
+				Log.d(TAG, "onSelectedChanged:   拖拽或滑动是否结束 == $isClearViewFlag")
+				return
+			}
+
 			viewHolder?.let {
 				val itemView = it.itemView
 
@@ -138,20 +154,30 @@ class ItemDragCallBack<T>(private val adapterData: MutableList<T>, private val i
 					}
 
 					is LinearLayoutManager -> {
-						// 线性布局 设置背景颜色
-						val drawable = itemView.background
-						// 保存原有背景效果
-						lastItemViewBackground = drawable
 
 						// 长按时修改背景色
 						longPressColor?.run {
-							itemView.background = ColorDrawable(this)
+
+							// 保存原有背景效果
+							lastItemViewBackground = itemView.background
+
+							val drawable = if (BuildVersionUtil.isOver10()) {
+								val states = arrayOf(intArrayOf(android.R.attr.state_pressed))
+								val colors = intArrayOf(this)
+								ColorStateListDrawable(ColorStateList(states, colors))
+							} else {
+								ColorDrawable(this)
+							}
+
+							itemView.background = drawable
 						}
 					}
 
 					else -> {}
 				}
 			}
+
+			isClearViewFlag = false
 		}
 		super.onSelectedChanged(viewHolder, actionState)
 	}
@@ -176,6 +202,8 @@ class ItemDragCallBack<T>(private val adapterData: MutableList<T>, private val i
 			}
 		}
 		super.clearView(recyclerView, viewHolder)
+
+		isClearViewFlag = true
 	}
 
 

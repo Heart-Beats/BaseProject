@@ -22,6 +22,7 @@ import com.hl.arch.R
 import com.hl.arch.utils.*
 import com.hl.utils.OnPaletteColorParse
 import com.hl.utils.PaletteUtil
+import com.hl.utils.getColorByRes
 import com.hl.utils.initInsetPadding
 import com.hl.utils.navigation.findNavController
 import com.hl.utils.navigation.getCurrentDestination
