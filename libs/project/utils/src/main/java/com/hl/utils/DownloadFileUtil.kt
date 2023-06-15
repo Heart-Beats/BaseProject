@@ -140,8 +140,9 @@ object DownloadFileUtil {
 					XLog.i("下载文件已存在，跳过下载")
 
 					// 文件已下载完成时跳过下载过程
-					listener.onComplete(saveFile)
-					listener.onEnd(saveFile)
+					listener.onDownloadProgressChange(saveFile, 100)
+					listener.onDownloadSuccess(saveFile)
+					listener.onDownloadEnd(saveFile)
 
 					return@launch
 				}
@@ -155,25 +156,31 @@ object DownloadFileUtil {
 			downloadRequest
 				.file(saveFile)
 				.listener(object : OnDownloadListener {
-					override fun onStart(file: File?) {
-						listener.onStart(file)
+					override fun onDownloadProgressChange(file: File?, progress: Int) {
+						listener.onDownloadProgressChange(file, progress)
 					}
 
-					override fun onProgress(file: File?, progress: Int) {
-						listener.onProgress(file, progress)
+					override fun onDownloadSuccess(file: File?) {
+						listener.onDownloadSuccess(file)
 					}
 
-					override fun onComplete(file: File?) {
-						listener.onComplete(file)
+					override fun onDownloadFail(file: File?, e: Exception?) {
+						listener.onDownloadFail(file, e)
 					}
 
-					override fun onError(file: File?, e: Exception?) {
-						listener.onError(file, e)
+					override fun onDownloadSuccess(file: File?, cache: Boolean) {
+						listener.onDownloadSuccess(file, cache)
 					}
 
-					override fun onEnd(file: File?) {
-						listener.onEnd(file)
+					override fun onDownloadStart(file: File?) {
+						listener.onDownloadStart(file)
+					}
 
+					override fun onDownloadByteChange(file: File?, totalByte: Long, downloadByte: Long) {
+						listener.onDownloadByteChange(file, totalByte, downloadByte)
+					}
+
+					override fun onDownloadEnd(file: File?) {
 						// 下载结束移除该请求
 						if (downloadRequestMap.contains(downloadRequest)) {
 							downloadRequestMap.remove(downloadRequest)

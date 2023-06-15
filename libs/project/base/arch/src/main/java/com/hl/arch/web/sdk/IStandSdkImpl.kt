@@ -456,20 +456,16 @@ class IStandSdkImpl(private val webViewFragment: Fragment, val bridgeWebView: Br
 				downLoadFileParam.fileUrl,
 				downLoadFileParam.fileName,
 				listener = object : OnDownloadListener {
-					override fun onStart(file: File?) {}
 
-					override fun onProgress(file: File?, progress: Int) {}
+					override fun onDownloadProgressChange(file: File?, progress: Int) {}
 
-					override fun onComplete(file: File?) {
+					override fun onDownloadSuccess(file: File?) {
 						ScanFileActionUtil.scanMedia(webViewFragment.requireContext(), file?.absolutePath ?: "")
 						function.onSuccess(file?.absolutePath)
 					}
 
-					override fun onError(file: File?, e: Exception?) {
+					override fun onDownloadFail(file: File?, e: java.lang.Exception?) {
 						function.onFail(e?.message)
-					}
-
-					override fun onEnd(file: File?) {
 					}
 				})
 		}

@@ -5,14 +5,13 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.fragment.app.FragmentActivity
 import com.elvishew.xlog.XLog
-import com.hjq.http.EasyHttp
 import com.hjq.http.listener.OnDownloadListener
-import com.hjq.http.model.HttpMethod
 import com.hl.uikit.onClick
 import com.hl.uikit.toast
+import com.hl.utils.DownloadFileUtil
 import com.hl.utils.R
 import com.lxj.xpopup.core.BottomPopupView
-import kotlinx.android.synthetic.main.hl_utils_item_file_download.view.*
+import kotlinx.android.synthetic.main.hl_utils_item_file_download.view.cancel_download
 import java.io.File
 
 /**
@@ -38,31 +37,23 @@ class DownloadPop(private val fragmentActivity: FragmentActivity, private val do
         cancelDownload.onClick {
             dismiss()
 
-            EasyHttp.cancel(downloadUrl)
+            DownloadFileUtil.stopDownload(downloadUrl)
         }
 
         startDownload(downloadProgressBar)
     }
 
     private fun startDownload(downloadProgressBar: ProgressBar) {
-        EasyHttp
-            .download(fragmentActivity)
-            .method(HttpMethod.GET)
-            .file(getDownLoadFile())
-            .tag(downloadUrl)
-            .url(downloadUrl)
-            .listener(object : OnDownloadListener {
-                override fun onStart(file: File?) {
-                    XLog.d("开始下载文件 ----------------> $downloadUrl")
-                }
-
-                override fun onProgress(file: File?, progress: Int) {
+        DownloadFileUtil.startDownLoad(
+            fragmentActivity, downloadUrl, getDownLoadFile().absolutePath,
+            listener = object : OnDownloadListener {
+                override fun onDownloadProgressChange(file: File?, progress: Int) {
                     XLog.d("文件下载中 ----------------> $progress")
 
                     downloadProgressBar.progress = progress
                 }
 
-                override fun onComplete(file: File?) {
+                override fun onDownloadSuccess(file: File?) {
                     XLog.d("下载文件完成 ----------------> $file")
 
                     this@DownloadPop.popupInfo.run {
@@ -75,14 +66,10 @@ class DownloadPop(private val fragmentActivity: FragmentActivity, private val do
                     cancel_download.text = "完成"
                 }
 
-                override fun onError(file: File?, e: Exception?) {
+                override fun onDownloadFail(file: File?, e: Exception?) {
                     XLog.d("下载文件出错 ----------------> $file", e)
                 }
-
-                override fun onEnd(file: File?) {
-                }
             })
-            .start()
     }
 
     private fun getDownLoadFile(): File {

@@ -15,7 +15,6 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
 import com.elvishew.xlog.XLog
 import com.gyf.immersionbar.ImmersionBar
-import com.hjq.http.EasyHttp
 import com.hjq.http.listener.OnDownloadListener
 import com.hl.uikit.gone
 import com.hl.uikit.onClick
@@ -23,15 +22,29 @@ import com.hl.uikit.progressbar.UIKitCircleProgressBar
 import com.hl.uikit.toast
 import com.hl.uikit.video.UIKitMyStandardGSYVideoPlayer
 import com.hl.uikit.visible
-import com.hl.utils.*
+import com.hl.utils.DownloadFileUtil
+import com.hl.utils.GlideUtil
+import com.hl.utils.R
+import com.hl.utils.getHttpContentLength
 import com.hl.utils.mimetype.MimeType
 import com.hl.utils.previewFie.superFileView.DocView
+import com.hl.utils.replaceFragment
+import com.hl.utils.reqPermissions
 import com.hl.utils.share.ShareUtil
+import com.hl.utils.showPop
+import com.hl.utils.startAct
 import com.hl.utils.videoplayer.initPlayer
-import kotlinx.android.synthetic.main.hl_utils_activity_preview_file.*
+import kotlinx.android.synthetic.main.hl_utils_activity_preview_file.back
+import kotlinx.android.synthetic.main.hl_utils_activity_preview_file.dot
+import kotlinx.android.synthetic.main.hl_utils_activity_preview_file.img
+import kotlinx.android.synthetic.main.hl_utils_activity_preview_file.mSuperFileView
+import kotlinx.android.synthetic.main.hl_utils_activity_preview_file.no_support_file_container
+import kotlinx.android.synthetic.main.hl_utils_activity_preview_file.preview_file_content
+import kotlinx.android.synthetic.main.hl_utils_activity_preview_file.titleTv
+import kotlinx.android.synthetic.main.hl_utils_activity_preview_file.video_player
 import kotlinx.coroutines.launch
 import java.io.File
-import java.util.*
+import java.util.Locale
 
 
 class PreviewFileActivity : FragmentActivity() {
@@ -156,32 +169,24 @@ class PreviewFileActivity : FragmentActivity() {
                         //系统分享
                         ShareUtil.shareFile(this, cacheFile.absolutePath)
                     } else {
-                        EasyHttp.download(this)
-                            .url(fileUrl)
-                            .file(cacheFile)
-                            .listener(object : OnDownloadListener {
-                                override fun onStart(file: File?) {
-                                    XLog.d("开始下载 -------------> $file")
-                                }
-
-                                override fun onProgress(file: File?, progress: Int) {
+                        DownloadFileUtil.startDownLoad(
+                            this@PreviewFileActivity, fileUrl, cacheFile.absolutePath,
+                            listener = object : OnDownloadListener {
+                                override fun onDownloadProgressChange(file: File?, progress: Int) {
                                     XLog.d("下载中 -------------> $progress")
                                 }
 
-                                override fun onComplete(file: File?) {
+                                override fun onDownloadSuccess(file: File?) {
                                     XLog.d("下载完成 ------------->")
 
                                     ShareUtil.shareFile(this@PreviewFileActivity, cacheFile.absolutePath)
                                 }
 
-                                override fun onError(file: File?, e: Exception?) {
+                                override fun onDownloadFail(file: File?, e: Exception?) {
                                     XLog.d("$file 下载失败  ------------> $e")
                                     toast("文件下载失败，无法分享")
                                 }
-
-                                override fun onEnd(file: File?) {}
                             })
-                            .start()
                     }
                 }
                 R.id.menu_save_file -> {
@@ -275,26 +280,21 @@ class PreviewFileActivity : FragmentActivity() {
 
             progressBar.visibility = View.VISIBLE
 
-            EasyHttp.download(this@PreviewFileActivity)
-                .url(url)
-                .file(cacheFile)
-                .listener(object : OnDownloadListener {
-                    override fun onStart(file: File?) {
-                        XLog.d("开始下载 -------------> $file")
-                    }
-
-                    override fun onProgress(file: File?, progress: Int) {
+            DownloadFileUtil.startDownLoad(
+                this@PreviewFileActivity, url, cacheFile.absolutePath,
+                listener = object : OnDownloadListener {
+                    override fun onDownloadProgressChange(file: File?, progress: Int) {
                         XLog.d("下载中 -------------> $progress")
                         progressBar.progress = progress.toFloat()
                     }
 
-                    override fun onComplete(file: File?) {
+                    override fun onDownloadSuccess(file: File?) {
                         XLog.d("下载完成，准备展示文件 ------------->")
 
                         mDocView.displayFile(file)
                     }
 
-                    override fun onError(file: File?, e: Exception?) {
+                    override fun onDownloadFail(file: File?, e: Exception?) {
                         XLog.d("$file 下载失败  ------------> $e")
 
                         if (file?.exists() == true) {
@@ -305,11 +305,10 @@ class PreviewFileActivity : FragmentActivity() {
                         toast("下载预览文件失败")
                     }
 
-                    override fun onEnd(file: File?) {
+                    override fun onDownloadEnd(file: File?) {
                         progressBar.visibility = View.GONE
                     }
                 })
-                .start()
         }
     }
 
