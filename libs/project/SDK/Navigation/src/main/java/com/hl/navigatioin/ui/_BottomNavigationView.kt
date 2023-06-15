@@ -77,8 +77,8 @@ private fun BottomNavigationView.setBottomNavigationViewVisibility(
 
 private fun onNavDestinationSelected(item: MenuItem, navController: NavController): Boolean {
 	val navOptions = NavOptions.Builder()
-		.setLaunchSingleTop(true)
-		.setRestoreState(true)    // 是否保存 fragment 的状态
+		.setLaunchSingleTop(true) // 确保返回堆栈顶部最多只有给定目的地的一个副本
+		.setRestoreState(true)    // 是否恢复之前保存的状态
 		.also {
 			it.setEnterAnim(com.hl.navigatioin.NavAnimations.NO_ANIM)
 				.setExitAnim(com.hl.navigatioin.NavAnimations.NO_ANIM)
@@ -90,9 +90,9 @@ private fun onNavDestinationSelected(item: MenuItem, navController: NavControlle
 
 				/*
 				*
-				导航堆栈： A-->B---> C ---> A
-					   setPopUpTo(A, true)： 弹出 A 与目的地之间的堆栈，同时也弹出 A，堆栈中仅有一个目的地
-					   setPopUpTo(A, false) ： 弹出 A 与目的地之间的堆栈，不弹出 A，堆栈中有两个目的地
+				导航堆栈： A1-->B---> C ---> A2
+					   setPopUpTo(A1, true)： 弹出 A1 与目的地之间的堆栈，同时也弹出 A1，堆栈中仅有一个目的地 --- A2
+					   setPopUpTo(A1, false) ： 弹出 A1 与目的地之间的堆栈，不弹出 A1，堆栈中有两个目的地 --- A1、A2
 				*
 				* */
 				setPopUpTo(navController.graph.findStartDestination().id, inclusive = true, saveState = true)
