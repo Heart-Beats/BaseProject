@@ -16,9 +16,7 @@ import com.hl.uikit.toast
 </Presenter> */
 abstract class MvpBaseFragment<Presenter : MvpBasePresenter<out MvpBaseView>> : BaseFragment(), MvpBaseView {
 
-    protected val TAG = this.javaClass.simpleName
-
-    var presenter: Presenter? = null
+    protected var presenter: Presenter? = null
         private set
 
     override fun onCreateView(

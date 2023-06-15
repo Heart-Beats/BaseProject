@@ -40,34 +40,17 @@ android {
     kotlinOptions {
         jvmTarget = '11'
     }
-
-    buildFeatures {
-        viewBinding true
-        compose true
-
-        // 默认不生成 BuildConfig 类
-        buildConfig true
-    }
-
-    composeOptions {
-        // 定义 Kotlin 编译器扩展版本与 Kotlin 版本相关联，需与项目的 Kotlin 版本匹配，详见：https://developer.android.com/jetpack/androidx/releases/compose-kotlin?hl=zh-cn
-        kotlinCompilerExtensionVersion = '1.4.5'
-    }
 }
 
 dependencies {
+    api project(path: ':base-ui')
     api project(path: ':utils')
     api project(path: ':SDK:Navigation')
     api project(path: ':SDK:Umeng')
 
     api Deps.AndroidX.core_ktx
     api Deps.AndroidX.collection_ktx
-    api Deps.AndroidX.appcompat
-    api Deps.AndroidX.activity
-    api Deps.AndroidX.fragment
-    api Deps.AndroidX.activity_ktx
-    api Deps.AndroidX.fragment_ktx
-    api Deps.AndroidX.view_binding
+
     api Deps.Material.material
     api Deps.AndroidX.recyclerview
     api Deps.Lifecycle.lifecycle_viewmodel_ktx
@@ -75,8 +58,6 @@ dependencies {
     api Deps.Lifecycle.lifecycle_extensions
     api Deps.Lifecycle.lifecycle_runtime_ktx
 
-    api Deps.Status_Bar.immersionbar
-    api Deps.Status_Bar.immersionbar_ktx
     api Deps.ImageLoader.Glide.glide
     api Deps.Json.gson
     api Deps.Jetpack.Navigation.navigation_ui

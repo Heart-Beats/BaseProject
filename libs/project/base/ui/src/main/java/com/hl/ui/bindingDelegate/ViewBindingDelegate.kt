@@ -1,4 +1,4 @@
-package com.hl.arch.bindingDelegate
+package com.hl.ui.bindingDelegate
 
 import android.view.LayoutInflater
 import android.view.View

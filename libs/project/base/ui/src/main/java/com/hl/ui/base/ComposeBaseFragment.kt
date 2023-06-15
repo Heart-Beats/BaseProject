@@ -1,9 +1,9 @@
-package com.hl.arch.base
+package com.hl.ui.base
 
 import android.os.Bundle
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.ViewCompositionStrategy
-import com.hl.arch.databinding.FragmentComposeBaseBinding
+import com.hl.ui.databinding.FragmentComposeBaseBinding
 
 /**
  * @author  张磊  on  2023/04/28 at 17:24

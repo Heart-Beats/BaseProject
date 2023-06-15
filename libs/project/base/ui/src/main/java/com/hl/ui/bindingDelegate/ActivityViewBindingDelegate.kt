@@ -1,10 +1,10 @@
-package com.hl.arch.bindingDelegate
+package com.hl.ui.bindingDelegate
 
 import android.view.LayoutInflater
 import android.view.View
 import androidx.lifecycle.LifecycleOwner
 import androidx.viewbinding.ViewBinding
-import com.hl.utils.viewbinding.ViewBindingUtil
+import com.hl.ui.utils.ViewBindingUtil
 
 /**
  * @author  张磊  on  2023/02/10 at 17:22

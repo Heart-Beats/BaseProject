@@ -9,10 +9,10 @@ internal object Versions {
     const val CORE_KTX = "1.6.0"
     const val COLLECTION_KTX = "1.2.0"
 
-    const val APPCOMPAT = "1.6.0"
+    const val APPCOMPAT = "1.6.1"
     const val CONSTRAINT_LAYOUT = "2.1.4"
-    const val ACTIVITY = "1.4.0"
-    const val FRAGMENT = "1.4.0"
+    const val ACTIVITY = "1.7.2"
+    const val FRAGMENT = "1.6.0"
     const val SECURITY_CRYPTO = "1.0.0"
     const val RECYCLERVIEW = "1.2.1"
     const val DATA_BINDING = "7.2.2"
@@ -181,12 +181,12 @@ class Deps {
             /**
              * 集成  compose 对于 activity 的扩展， 否则无法在 activity 中使用  setContent { } 方法
              */
-            const val activity = "androidx.activity:activity-compose:1.6.1"
+            const val activity = "androidx.activity:activity-compose:${Versions.ACTIVITY}"
 
             /**
              * 集成  compose 对于 ViewModel 的扩展
              */
-            const val viewmodel = "androidx.lifecycle:lifecycle-viewmodel-compose:2.5.1"
+            const val viewmodel = "androidx.lifecycle:lifecycle-viewmodel-compose:${Versions.LIFECYCLE}"
         }
     }
 

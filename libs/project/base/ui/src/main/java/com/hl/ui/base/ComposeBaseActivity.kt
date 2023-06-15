@@ -1,8 +1,8 @@
-package com.hl.arch.base
+package com.hl.ui.base
 
 import android.os.Bundle
 import androidx.compose.runtime.Composable
-import com.hl.arch.databinding.ActivityComposeBaseBinding
+import com.hl.ui.databinding.ActivityComposeBaseBinding
 
 /**
  * @author  张磊  on  2023/04/28 at 17:24

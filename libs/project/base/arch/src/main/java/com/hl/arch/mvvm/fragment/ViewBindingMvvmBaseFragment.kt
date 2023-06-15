@@ -4,8 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import androidx.viewbinding.ViewBinding
-import com.hl.arch.bindingDelegate.FragmentBindingDelegate
-import com.hl.arch.bindingDelegate.ViewBindingDelegate
+import com.hl.ui.bindingDelegate.FragmentBindingDelegate
+import com.hl.ui.bindingDelegate.ViewBindingDelegate
 
 /**
  * @Author  张磊  on  2021/03/02 at 12:44

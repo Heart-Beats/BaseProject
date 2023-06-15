@@ -5,6 +5,7 @@ pluginManagement {
         maven { url 'https://maven.aliyun.com/repository/google' }
         maven { url 'https://maven.aliyun.com/repository/gradle-plugin' }
         maven { url 'https://jitpack.io' }
+        google()  // 阿里云对于有些库会有丢失，加入进行兜底
         mavenCentral()
         gradlePluginPortal()
     }
@@ -32,6 +33,7 @@ dependencyResolutionManagement {
         maven { url 'https://maven.aliyun.com/repository/public' } // central 和 jcenter 的聚合仓
         maven { url 'https://maven.aliyun.com/repository/google' }
         maven { url 'https://jitpack.io' }
+        google()  // 阿里云对于有些库会有丢失，加入进行兜底
         mavenCentral()
     }
 
@@ -56,15 +58,16 @@ includeSDK()
 include ':utils'
 
 def includeBase() {
-    include ':base-api', ':base-arch', ':base-app-res'
+    include ':base-api', ':base-app-res', ':base-ui', ':base-arch'
 
     project(':base-api').projectDir = file('./base/api')
-    project(':base-arch').projectDir = file('./base/arch')
     project(':base-app-res').projectDir = file('./base/app-res')
+    project(':base-ui').projectDir = file('./base/ui')
+    project(':base-arch').projectDir = file('./base/arch')
 }
 
 def includeSDK() {
-    include ':SDK:Umeng', ':SDK:Pay', ':SDK:TencentCloud', ':SDK:UniMP', 'SDK:Navigation'
+    include ':SDK:Umeng', ':SDK:Pay', ':SDK:TencentCloud', ':SDK:UniMP', 'SDK:Navigation' /*, ':SDK:Web'*/
 
     includeShadow()
 
