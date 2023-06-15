@@ -63,7 +63,7 @@ object BaseUtil {
 			// 设置请求处理策略
 			.setHandler(object : IRequestHandler {
 
-				override fun requestSucceed(httpRequest: HttpRequest<*>, response: Response, type: Type): Any {
+				override fun requestSuccess(httpRequest: HttpRequest<*>, response: Response, type: Type): Any {
 					//定义成功时的返回数据，请求时的接收类型需要与其保持一致
 					return response
 				}
