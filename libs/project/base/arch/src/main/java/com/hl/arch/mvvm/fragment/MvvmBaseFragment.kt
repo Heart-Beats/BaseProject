@@ -1,6 +1,7 @@
 package com.hl.arch.mvvm.fragment
 
 import com.hl.arch.base.BaseFragment
+
 import com.hl.arch.mvvm.vmDelegate.BaseViewModelDelegate
 import com.hl.arch.mvvm.vmDelegate.ViewModelDelegate
 

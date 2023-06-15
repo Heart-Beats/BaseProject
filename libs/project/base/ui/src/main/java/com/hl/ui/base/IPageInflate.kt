@@ -1,4 +1,4 @@
-package com.hl.arch.base
+package com.hl.ui.base
 
 import android.view.LayoutInflater
 import android.view.View

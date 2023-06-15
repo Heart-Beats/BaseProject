@@ -1,11 +1,11 @@
-package com.hl.arch.base
+package com.hl.ui.base
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import androidx.viewbinding.ViewBinding
-import com.hl.arch.bindingDelegate.FragmentBindingDelegate
-import com.hl.arch.bindingDelegate.ViewBindingDelegate
+import com.hl.ui.bindingDelegate.FragmentBindingDelegate
+import com.hl.ui.bindingDelegate.ViewBindingDelegate
 
 /**
  * @author  张磊  on  2023/02/10 at 17:48

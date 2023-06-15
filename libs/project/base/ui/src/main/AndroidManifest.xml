@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- requestLegacyExternalStorage: 禁用分区存储, 但在 Android 11 会忽略该字段，强制开启分区存储-->
+    <application android:requestLegacyExternalStorage="true">
+
+        <!-- configChanges 属性可配置 activity 自主处理的配置变更项，可在 onConfigurationChanged 方法中处理， 自主处理后变更时不会引起 activity 重建 -->
+        <activity
+            android:name="com.hl.ui.base.FragmentContainerActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
+    </application>
+</manifest>
