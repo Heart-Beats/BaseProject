@@ -1,4 +1,4 @@
-package com.hl.utils.activityResult
+package com.hl.activityresult
 
 import android.app.Activity
 import android.content.Context
@@ -6,11 +6,9 @@ import android.content.Intent
 import android.os.Build
 import androidx.activity.result.ActivityResultCaller
 import androidx.activity.result.ActivityResultLauncher
-import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityOptionsCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
-import com.hl.utils.BuildVersionUtil
 
 /**
  * @author  张磊  on  2022/07/04 at 10:47
@@ -39,7 +37,7 @@ class ActivityResultHelper(private val activityResultCaller: ActivityResultCalle
 
 					val dataIntent = activityResult.data
 
-					val intentIdentifier = if (BuildVersionUtil.isOver10()) {
+					val intentIdentifier = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
 						// Android 10 以上可直接设置获取 intent 的标识符， 以下通过 bundle 进行传输
 						dataIntent?.identifier
 					} else {
@@ -75,7 +73,7 @@ class ActivityResultHelper(private val activityResultCaller: ActivityResultCalle
 		val context: Context = when (activityResultCaller) {
 			is FragmentActivity -> activityResultCaller
 			is Fragment -> activityResultCaller.requireContext()
-			else -> throw IllegalStateException("仅可在 Activity 或 Fragment 中支持使用")
+			else -> error("仅可在 Activity 或 Fragment 中支持使用")
 		}
 
 		launchIntent(Intent(context, launchActivityCls), activityOptionsCompat, callback)
@@ -99,7 +97,7 @@ class ActivityResultHelper(private val activityResultCaller: ActivityResultCalle
 		val intentHashCode = launchIntent.hashCode().toString()
 
 		// Android 10 以上可直接设置获取 intent 的标识符， 以下通过 bundle 进行传输
-		if (BuildVersionUtil.isOver10()) {
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
 			launchIntent.identifier = intentHashCode
 		} else {
 			launchIntent.putExtra(MyStartActivityForResult.INTENT_IDENTIFIER_KEY, intentHashCode)

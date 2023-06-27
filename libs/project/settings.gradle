@@ -67,7 +67,8 @@ def includeBase() {
 }
 
 def includeSDK() {
-    include ':SDK:Umeng', ':SDK:Pay', ':SDK:TencentCloud', ':SDK:UniMP', 'SDK:Navigation' /*, ':SDK:Web'*/
+    include ':SDK:Umeng', ':SDK:Pay', ':SDK:TencentCloud', ':SDK:UniMP', 'SDK:Navigation' , ':SDK:Web' ,
+            ':SDK:ActivityResult'
 
     includeShadow()
 

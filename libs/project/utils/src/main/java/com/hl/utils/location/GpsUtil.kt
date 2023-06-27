@@ -6,8 +6,8 @@ import android.location.LocationManager
 import android.provider.Settings
 import com.blankj.utilcode.util.ActivityUtils
 import com.hl.utils.BaseUtil
-import com.hl.utils.activityResult.ActivityResultHelper
-import com.hl.utils.activityResult.OnActivityResult
+import com.hl.activityresult.ActivityResultHelper
+import com.hl.activityresult.OnActivityResult
 import com.hl.utils.showPop
 
 /**
@@ -19,7 +19,7 @@ object GpsUtil {
 	/**
 	 * 检测 GPS 是否可用， 不可用时会引导用户打开
 	 */
-	fun checkGpsEnable(activityResultHelper: ActivityResultHelper, onResult: (isGpsEnable: Boolean) -> Unit) {
+	fun checkGpsEnable(activityResultHelper: com.hl.activityresult.ActivityResultHelper, onResult: (isGpsEnable: Boolean) -> Unit) {
 		if (isGpsEnable()) {
 			onResult(true)
 			return
@@ -49,12 +49,12 @@ object GpsUtil {
 	 * 前往打开 GPS 开关页面
 	 */
 	fun gotoLocationSourceSettingPage(
-		activityResultHelper: ActivityResultHelper,
+		activityResultHelper: com.hl.activityresult.ActivityResultHelper,
 		onResult: (isGpsEnable: Boolean) -> Unit
 	) {
 
 		val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
-		activityResultHelper.launchIntent(intent, callback = object : OnActivityResult {
+		activityResultHelper.launchIntent(intent, callback = object : com.hl.activityresult.OnActivityResult {
 			override fun onResultOk(data: Intent?) {}
 
 			override fun onResultCanceled(data: Intent?) {
