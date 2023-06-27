@@ -1,4 +1,4 @@
-package com.hl.utils.activityResult
+package com.hl.activityresult
 
 import android.content.Intent
 

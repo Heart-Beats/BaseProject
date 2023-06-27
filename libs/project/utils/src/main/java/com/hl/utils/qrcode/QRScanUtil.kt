@@ -3,8 +3,8 @@ package com.hl.utils.qrcode
 import android.content.Intent
 import androidx.activity.result.ActivityResultCaller
 import androidx.core.app.ActivityOptionsCompat
-import com.hl.utils.activityResult.ActivityResultHelper
-import com.hl.utils.activityResult.OnActivityResult
+import com.hl.activityresult.ActivityResultHelper
+import com.hl.activityresult.OnActivityResult
 import com.king.zxing.CameraScan
 import com.king.zxing.CaptureActivity
 
@@ -15,7 +15,7 @@ import com.king.zxing.CaptureActivity
  */
 class QRScanUtil(activityResultCaller: ActivityResultCaller) {
 
-    private val activityResultHelper = ActivityResultHelper(activityResultCaller)
+    private val activityResultHelper = com.hl.activityresult.ActivityResultHelper(activityResultCaller)
 
     /**
      * 启动默认扫码页面
@@ -29,7 +29,7 @@ class QRScanUtil(activityResultCaller: ActivityResultCaller) {
         scanResultAction: (String?) -> Unit
     ) {
         activityResultHelper.launchActivity(CaptureActivity::class.java, activityOptionsCompat,
-            callback = object : OnActivityResult {
+            callback = object : com.hl.activityresult.OnActivityResult {
                 override fun onResultOk(data: Intent?) {
                     scanResultAction(CameraScan.parseScanResult(data))
                 }

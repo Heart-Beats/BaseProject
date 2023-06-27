@@ -1,10 +1,10 @@
-package com.hl.utils.activityResult
+package com.hl.activityresult
 
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContract
-import com.hl.utils.BuildVersionUtil
 
 /**
  * @author  张磊  on  2022/07/04 at 13:38
@@ -20,7 +20,7 @@ internal class MyStartActivityForResult : ActivityResultContract<Intent, Activit
 	private var intentIdentifier: String? = null
 
 	override fun createIntent(context: Context, input: Intent): Intent {
-		intentIdentifier = if (BuildVersionUtil.isOver10()) {
+		intentIdentifier = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
 			// Android 10 以上可直接设置获取 intent 的标识符， 以下通过 bundle 进行传输
 			input.identifier
 		} else {
@@ -37,7 +37,7 @@ internal class MyStartActivityForResult : ActivityResultContract<Intent, Activit
 
 		val activityResult = ActivityResult(resultCode, data.apply {
 			// 设置返回数据 intent 的 identifier 唯一标识符， 该 identifier 等于启动的 Intent 的 identifier
-			if (BuildVersionUtil.isOver10()) {
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
 				// Android 10 以上可直接设置获取 intent 的标识符， 以下通过 bundle 进行传输
 				this.identifier = intentIdentifier
 			} else {
