@@ -12,14 +12,14 @@ package com.hl.utils
  * 将 Collection 转为 Json 字符串
  */
 fun <E> Collection<E>.toJsonString(): String {
-	return GsonUtil.toJson(this)
+	return com.hl.json.GsonUtil.toJson(this)
 }
 
 /**
  * 将 Map 转为 Json 字符串
  */
 fun <K, V> Map<K, V>.toJsonString(): String {
-	return GsonUtil.toJson(this)
+	return com.hl.json.GsonUtil.toJson(this)
 }
 
 /**

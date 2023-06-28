@@ -7,8 +7,10 @@ plugins {
 }
 
 android {
-	namespace = "com.hl.navigation"
+	namespace = "com.hl.xloginit"
 	compileSdk = AndroidVersions.COMPILE_SDK
+
+	this.resourcePrefix = "hl_xlog_init_"
 
 	defaultConfig {
 		minSdk = AndroidVersions.MIN_SDK
@@ -17,6 +19,7 @@ android {
 		testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 		consumerProguardFiles("consumer-rules.pro")
 	}
+
 
 	buildTypes {
 		release {
@@ -34,9 +37,6 @@ android {
 }
 
 dependencies {
-	implementation(Deps.Material.material)
-	api(Deps.Jetpack.Navigation.smooth_navigation)
-	api(Deps.Jetpack.Navigation.navigation_fragment_ktx)
-	api(Deps.Jetpack.Navigation.navigation_ui)
-	api(Deps.Jetpack.Navigation.navigation_ui_ktx)
+	api(Deps.XLog.xlog)
+	api(project(":SDK:MMKVSharedPreferences"))
 }

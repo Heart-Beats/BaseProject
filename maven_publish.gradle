@@ -8,6 +8,7 @@ task buildSdk() {
 
     dependsOn gradle.includedBuild('project').task(':base-api:assembleRelease')
     dependsOn gradle.includedBuild('project').task(':base-app-res:assembleRelease')
+    dependsOn gradle.includedBuild('project').task(':base-ui:assembleRelease')
     dependsOn gradle.includedBuild('project').task(':base-arch:assembleRelease')
     dependsOn gradle.includedBuild('project').task(':utils:assembleRelease')
     dependsOn gradle.includedBuild('project').task(':navigation:assembleRelease')
@@ -20,6 +21,11 @@ task buildSdk() {
     dependsOn gradle.includedBuild('project').task(':SDK:shadow-init:assembleRelease')
 
     dependsOn gradle.includedBuild('project').task(':SDK:UniMP:assembleRelease')
+    dependsOn gradle.includedBuild('project').task(':SDK:Web:assembleRelease')
+    dependsOn gradle.includedBuild('project').task(':SDK:ActivityResult:assembleRelease')
+    dependsOn gradle.includedBuild('project').task(':SDK:XLogInit:assembleRelease')
+    dependsOn gradle.includedBuild('project').task(':SDK:MMKVSharedPreferences:assembleRelease')
+    dependsOn gradle.includedBuild('project').task(':SDK:JsonUtil:assembleRelease')
 }
 
 //引入配置设置
@@ -28,28 +34,15 @@ apply plugin: 'maven-publish'
 
 /**
  *
- * 生成 Maven 依赖节点
- */
-static def getDependencyNode(scope, groupId, artifactId, version) {
-    Node node = new Node(null, 'dependency')
-    node.appendNode('scope', scope)
-    node.appendNode('groupId', groupId)
-    node.appendNode('artifactId', artifactId)
-    node.appendNode('version', version)
-    return node
-}
-
-/**
- *
  * 设置 pom 文件的 dependencies节点
  *      别的项目依赖该 pom  文件时，会从 dependencies节点下根据 scope 来选择是否下载依赖库
  *
  *  scope 有如下取值：
- *      compile：    默认值，compile 表示被依赖的 Jar 包，参与当前项目的编译，并且后续的测试和运行阶段也参与其中
- *      test：       表示依赖项目仅参与测试阶段相关的工作，包括测试代码的编译，执行
- *      runntime：   表示依赖项目并不参与项目的编译阶段工作，但是后续的测试和运行阶段的工作要其参与其中。这个作用域日常工作中使用的比较少
- *      provided：   与 compile 类似，唯一的区别就是在打包的时候会跳过作用域是 provided 的项目，一般用于系统内置相关 sdk
- *      system：     与 provide 的作用范围类似，唯一的区别就是不会从 Maven 仓库抓取 Jar 包，而是从本地文件系统获取
+ *      compile：      如果没有指定 scope 标签，maven 默认为这个范围。编译依赖关系在所有 classpath 中都可用。此外，这些依赖关系被传播到依赖项目
+ *      provided：    与 compile 类似，但是表示您希望 jdk 或容器在运行时提供它。它只适用于编译和测试 classpath，不可传递
+ *      runtime：    此范围表示编译不需要依赖关系，而是用于执行。它是在运行时和测试 classpath，但不是编译 classpath
+ *      test：      此范围表示正常使用应用程序不需要依赖关系，仅适用于测试编译和执行阶段。它不是传递的。
+ *      system：   此范围与 provided 类似，除了您必须提供明确包含它的 jar。该 artifact 始终可用，并且不是在仓库中查找。
  */
 def setDependencyNode(root, scope, groupId, artifactId, version) {
     println "添加依赖项：  $scope ---> $groupId:$artifactId:$version"
@@ -62,6 +55,19 @@ def setDependencyNode(root, scope, groupId, artifactId, version) {
     }
 
     dependencies.append(getDependencyNode(scope, groupId, artifactId, version))
+}
+
+/**
+ *
+ * 生成 Maven 依赖节点
+ */
+static def getDependencyNode(scope, groupId, artifactId, version) {
+    Node node = new Node(null, 'dependency')
+    node.appendNode('scope', scope)
+    node.appendNode('groupId', groupId)
+    node.appendNode('artifactId', artifactId)
+    node.appendNode('version', version)
+    return node
 }
 
 /**
@@ -99,7 +105,7 @@ def setScm(root) {
 /**
  * 设置发布依赖的 pom 文件名以及编译项目|
  *
- *  pom.xml 配置文件具体使用说明见： https://www.jianshu.com/p/0e3a1f9c9ce7
+ *  pom.xml 配置文件具体使用说明见： https://juejin.cn/post/6844903824524574734#heading-6
  *
  */
 def setGeneratePomFileAndDepends(publicationName) {
@@ -145,6 +151,7 @@ setGeneratePomFileAndDepends('uikitRes')
 setGeneratePomFileAndDepends('uikitToast')
 setGeneratePomFileAndDepends('baseApi')
 setGeneratePomFileAndDepends('baseAppRes')
+setGeneratePomFileAndDepends('baseUi')
 setGeneratePomFileAndDepends('baseArch')
 setGeneratePomFileAndDepends('utils')
 setGeneratePomFileAndDepends('navigation')
@@ -153,6 +160,11 @@ setGeneratePomFileAndDepends('Umeng')
 setGeneratePomFileAndDepends('TencentCloud')
 setGeneratePomFileAndDepends('shadowLib')
 setGeneratePomFileAndDepends('shadowInit')
+setGeneratePomFileAndDepends('Web')
+setGeneratePomFileAndDepends('ActivityResult')
+setGeneratePomFileAndDepends('XLogInit')
+setGeneratePomFileAndDepends('MMKVSharedPreferences')
+setGeneratePomFileAndDepends('JsonUtil')
 
 // 设置 UniApp 相关的 POM 文件
 setUniAppGeneratePomFileAndDepends()
@@ -214,7 +226,6 @@ project.afterEvaluate {
                     setDependencyNode(root, 'compile', 'com.github.bumptech.glide', 'glide', libs.versions.glide.get())
                     setDependencyNode(root, 'compile', 'com.guolindev.permissionx', 'permissionx', libs.versions.permissionX.get())
                     setDependencyNode(root, 'compile', 'com.github.CarGuo.GSYVideoPlayer', 'GSYVideoPlayer', libs.versions.gsyVideoPlayer.get())
-                    setDependencyNode(root, 'compile', 'com.github.lzyzsd', 'jsbridge', libs.versions.jsBridge.get())
                     setDependencyNode(root, 'compile', 'com.github.getActivity', 'ShapeView', libs.versions.shapeView.get())
                     setScm(root)
                 }
@@ -248,6 +259,7 @@ project.afterEvaluate {
 
                 pom.withXml {
                     def root = asNode()
+                    setDependencyNode(root, 'provided ', 'androidx.appcompat', 'appcompat', libs.versions.appcompat.get())
                     setScm(root)
                 }
             }
@@ -291,6 +303,37 @@ project.afterEvaluate {
                 }
             }
 
+            baseUi(MavenPublication) {
+                def moduleName = 'base-ui'
+                def modulePath = "$libProjectPath/base/ui"
+
+                groupId myGroupId
+                artifactId moduleName
+                version getPublicationVersion()
+                artifact("$modulePath/build/outputs/aar/${moduleName}-release.aar")
+                artifact sourceAar(moduleName, modulePath)
+
+                pom.withXml {
+                    def root = asNode()
+
+                    setDependencyNode(root, 'compile', 'androidx.appcompat', 'appcompat', libs.versions.appcompat.get())
+                    setDependencyNode(root, 'compile', 'androidx.activity', 'activity', libs.versions.activity.get())
+                    setDependencyNode(root, 'compile', 'androidx.fragment', 'fragment', libs.versions.fragment.get())
+                    setDependencyNode(root, 'compile', 'androidx.activity', 'activity-ktx', libs.versions.activity.get())
+                    setDependencyNode(root, 'compile', 'androidx.fragment', 'fragment-ktx', libs.versions.fragment.get())
+
+                    setDependencyNode(root, 'compile', 'androidx.databinding', 'viewbinding', libs.versions.dataBinding.get())
+
+                    setDependencyNode(root, 'compile', 'com.geyifeng.immersionbar', 'immersionbar', libs.versions.immersionBar.get())
+                    setDependencyNode(root, 'compile', 'com.geyifeng.immersionbar', 'immersionbar-ktx', libs.versions.immersionBar.get())
+
+
+                    // setDependencyNode(root, 'compile', 'androidx.compose', 'compose-bom', libs.versions.jetpackComposeBom.get())
+                    // setDependencyNode(root, 'compile', 'androidx.compose.ui', 'ui', '')
+                    setScm(root)
+                }
+            }
+
             baseArch(MavenPublication) {
                 def moduleName = 'base-arch'
                 def modulePath = "$libProjectPath/base/arch"
@@ -303,33 +346,13 @@ project.afterEvaluate {
 
                 pom.withXml {
                     def root = asNode()
+                    setDependencyNode(root, 'compile', myGroupId, 'base-ui', getPublicationVersion())
                     setDependencyNode(root, 'compile', myGroupId, 'utils', getPublicationVersion())
                     setDependencyNode(root, 'compile', myGroupId, 'navigation', getPublicationVersion())
                     setDependencyNode(root, 'compile', myGroupId, 'Umeng', getPublicationVersion())
 
-                    setDependencyNode(root, 'compile', 'androidx.core', 'core-ktx', libs.versions.coreKtx.get())
                     setDependencyNode(root, 'compile', 'androidx.collection', 'collection-ktx', libs.versions.collectionKtx.get())
-                    setDependencyNode(root, 'compile', 'androidx.appcompat', 'appcompat', libs.versions.appcompat.get())
-                    setDependencyNode(root, 'compile', 'androidx.activity', 'activity', libs.versions.activity.get())
-                    setDependencyNode(root, 'compile', 'androidx.fragment', 'fragment', libs.versions.fragment.get())
-                    setDependencyNode(root, 'compile', 'androidx.activity', 'activity-ktx', libs.versions.activity.get())
-                    setDependencyNode(root, 'compile', 'androidx.fragment', 'fragment-ktx', libs.versions.fragment.get())
-                    setDependencyNode(root, 'compile', 'androidx.databinding', 'viewbinding', libs.versions.dataBinding.get())
-                    setDependencyNode(root, 'compile', 'com.google.android.material', 'material', libs.versions.material.get())
                     setDependencyNode(root, 'compile', 'androidx.recyclerview', 'recyclerview', libs.versions.recyclerview.get())
-                    setDependencyNode(root, 'compile', 'androidx.lifecycle', 'lifecycle-viewmodel-ktx', libs.versions.lifecycle.get())
-                    setDependencyNode(root, 'compile', 'androidx.lifecycle', 'lifecycle-livedata-ktx', libs.versions.lifecycle.get())
-                    setDependencyNode(root, 'compile', 'androidx.lifecycle', 'lifecycle-extensions', '2.2.0')
-                    setDependencyNode(root, 'compile', 'androidx.lifecycle', 'lifecycle-runtime-ktx', libs.versions.lifecycle.get())
-                    setDependencyNode(root, 'compile', 'androidx.navigation', 'navigation-ui', libs.versions.navigation.get())
-
-                    setDependencyNode(root, 'compile', 'com.geyifeng.immersionbar', 'immersionbar', libs.versions.immersionBar.get())
-                    setDependencyNode(root, 'compile', 'com.geyifeng.immersionbar', 'immersionbar-ktx', libs.versions.immersionBar.get())
-                    setDependencyNode(root, 'compile', 'com.github.bumptech.glide', 'glide', libs.versions.glide.get())
-                    setDependencyNode(root, 'compile', 'com.google.code.gson', 'gson', libs.versions.gson.get())
-                    setDependencyNode(root, 'compile', 'com.github.li-xiaojun', 'XPopup', libs.versions.xpopup.get())
-                    setDependencyNode(root, 'compile', 'com.blankj', 'utilcodex', libs.versions.utilCodeX.get())
-                    setDependencyNode(root, 'compile', 'com.github.lzyzsd', 'jsbridge', libs.versions.jsBridge.get())
 
                     // todo compose 未添加
                     setScm(root)
@@ -351,9 +374,8 @@ project.afterEvaluate {
                     setDependencyNode(root, 'compile', myGroupId, 'uikit', getPublicationVersion())
                     setDependencyNode(root, 'compile', myGroupId, 'uikit-toast', getPublicationVersion())
                     setDependencyNode(root, 'compile', myGroupId, 'base-app-res', getPublicationVersion())
+                    setDependencyNode(root, 'compile', myGroupId, 'activity-result', getPublicationVersion())
 
-                    setDependencyNode(root, 'compile', 'androidx.startup', 'startup-runtime', libs.versions.startup.get())
-                    setDependencyNode(root, 'compile', 'androidx.core', 'core-ktx', libs.versions.coreKtx.get())
                     setDependencyNode(root, 'compile', 'androidx.appcompat', 'appcompat', libs.versions.appcompat.get())
                     setDependencyNode(root, 'compile', 'androidx.activity', 'activity', libs.versions.activity.get())
                     setDependencyNode(root, 'compile', 'androidx.fragment', 'fragment', libs.versions.fragment.get())
@@ -361,13 +383,13 @@ project.afterEvaluate {
                     setDependencyNode(root, 'compile', 'androidx.fragment', 'fragment-ktx', libs.versions.fragment.get())
                     setDependencyNode(root, 'compile', 'com.google.android.material', 'material', libs.versions.material.get())
                     setDependencyNode(root, 'compile', 'androidx.databinding', 'databinding-runtime', libs.versions.dataBinding.get())
+
+                    setDependencyNode(root, 'compile', 'androidx.lifecycle', 'lifecycle-extensions', '2.2.0')
                     setDependencyNode(root, 'compile', 'androidx.lifecycle', 'lifecycle-viewmodel-ktx', libs.versions.lifecycle.get())
                     setDependencyNode(root, 'compile', 'androidx.lifecycle', 'lifecycle-livedata-ktx', libs.versions.lifecycle.get())
                     setDependencyNode(root, 'compile', 'androidx.lifecycle', 'lifecycle-runtime-ktx', libs.versions.lifecycle.get())
 
                     setDependencyNode(root, 'compile', 'com.guolindev.permissionx', 'permissionx', libs.versions.permissionX.get())
-                    setDependencyNode(root, 'compile', 'com.google.code.gson', 'gson', libs.versions.gson.get())
-                    setDependencyNode(root, 'compile', 'androidx.security', 'security-crypto', libs.versions.securityCrypto.get())
                     setDependencyNode(root, 'compile', 'com.github.bumptech.glide', 'glide', libs.versions.glide.get())
                     setDependencyNode(root, 'compile', 'com.github.jenly1314', 'zxing-lite', libs.versions.zxingLite.get())
                     setDependencyNode(root, 'compile', 'io.github.youth5201314', 'banner', libs.versions.banner.get())
@@ -376,9 +398,7 @@ project.afterEvaluate {
 
                     setDependencyNode(root, 'compile', 'com.github.CarGuo.GSYVideoPlayer', 'GSYVideoPlayer', libs.versions.gsyVideoPlayer.get())
 
-                    setDependencyNode(root, 'compile', 'com.elvishew', 'xlog', libs.versions.xlog.get())
                     setDependencyNode(root, 'compile', 'com.tencent.tbs', 'tbssdk', libs.versions.tbsSdk.get())
-                    setDependencyNode(root, 'compile', 'com.tencent', 'mmkv', libs.versions.mmkv.get())
                     setDependencyNode(root, 'compile', 'com.github.getActivity', 'EasyHttp', libs.versions.easyHttp.get())
                     setDependencyNode(root, 'compile', 'com.github.li-xiaojun', 'XPopup', libs.versions.xpopup.get())
                     setDependencyNode(root, 'compile', 'com.squareup.okhttp3', 'okhttp', libs.versions.okhttp.get())
@@ -404,10 +424,11 @@ project.afterEvaluate {
 
                 pom.withXml {
                     def root = asNode()
-                    setDependencyNode(root, 'compile', 'com.google.android.material', 'material', libs.versions.material.get())
 
                     setDependencyNode(root, 'compile', 'com.kunminx.arch', 'smooth-navigation', libs.versions.smoothNavigation.get())
                     setDependencyNode(root, 'compile', 'androidx.navigation', 'navigation-fragment-ktx', libs.versions.navigation.get())
+                    setDependencyNode(root, 'compile', 'androidx.navigation', 'navigation-ui', libs.versions.navigation.get())
+                    setDependencyNode(root, 'compile', 'androidx.navigation', 'navigation-ui-ktx', libs.versions.navigation.get())
 
                     setScm(root)
                 }
@@ -539,6 +560,117 @@ project.afterEvaluate {
                     setDependencyNode(root, 'compile', 'com.tencent.shadow.dynamic', 'host-multi-loader-ext', libs.versions.shadow.get())
                     setDependencyNode(root, 'compile', 'com.tencent.shadow.dynamic', 'manager-multi-loader-ext', libs.versions.shadow.get())
 
+                    setScm(root)
+                }
+            }
+
+            Web(MavenPublication) {
+                def moduleName = 'Web'
+                def publishModuleName = 'web'
+
+                def modulePath = "$libProjectPath/SDK/Shadow/$moduleName"
+
+                groupId myGroupId
+                artifactId publishModuleName
+                version getPublicationVersion()
+                artifact("$modulePath/build/outputs/aar/${moduleName}-release.aar")
+                artifact sourceAar(publishModuleName, modulePath)
+
+                pom.withXml {
+                    def root = asNode()
+                    setDependencyNode(root, 'compile', myGroupId, 'base-ui', getPublicationVersion())
+                    setDependencyNode(root, 'compile', myGroupId, 'activity-result', getPublicationVersion())
+                    setDependencyNode(root, 'compile', myGroupId, 'xlog-init', getPublicationVersion())
+
+                    setDependencyNode(root, 'compile', 'com.github.lzyzsd', 'jsbridge', libs.versions.jsBridge.get())
+
+                    setScm(root)
+                }
+            }
+
+
+            ActivityResult(MavenPublication) {
+                def moduleName = 'ActivityResult'
+                def publishModuleName = 'activity-result'
+
+                def modulePath = "$libProjectPath/SDK/$moduleName"
+
+                groupId myGroupId
+                artifactId publishModuleName
+                version getPublicationVersion()
+
+                artifact("$modulePath/build/outputs/aar/${moduleName}-release.aar")
+                artifact sourceAar(publishModuleName, modulePath)
+
+                pom.withXml {
+                    def root = asNode()
+                    setDependencyNode(root, 'compile', 'androidx.activity', 'activity', libs.versions.activity.get())
+                    setDependencyNode(root, 'compile', 'androidx.fragment', 'fragment', libs.versions.fragment.get())
+                    setScm(root)
+                }
+            }
+
+            XLogInit(MavenPublication) {
+                def moduleName = 'XLogInit'
+                def publishModuleName = 'xlog-init'
+
+                def modulePath = "$libProjectPath/SDK/$moduleName"
+
+                groupId myGroupId
+                artifactId publishModuleName
+                version getPublicationVersion()
+
+                artifact("$modulePath/build/outputs/aar/${moduleName}-release.aar")
+                artifact sourceAar(publishModuleName, modulePath)
+
+                pom.withXml {
+                    def root = asNode()
+                    setDependencyNode(root, 'compile', 'com.elvishew', 'xlog', libs.versions.xlog.get())
+                    setDependencyNode(root, 'compile', myGroupId, 'mmkv-sp', getPublicationVersion())
+                    setScm(root)
+                }
+            }
+
+            MMKVSharedPreferences(MavenPublication) {
+                def moduleName = 'MMKVSharedPreferences'
+                def publishModuleName = 'mmkv-sp'
+
+                def modulePath = "$libProjectPath/SDK/$moduleName"
+
+                groupId myGroupId
+                artifactId publishModuleName
+                version getPublicationVersion()
+
+                artifact("$modulePath/build/outputs/aar/${moduleName}-release.aar")
+                artifact sourceAar(publishModuleName, modulePath)
+
+                pom.withXml {
+                    def root = asNode()
+                    setDependencyNode(root, 'compile', 'androidx.startup', 'startup-runtime', libs.versions.startup.get())
+                    setDependencyNode(root, 'compile', 'androidx.security', 'security-crypto', libs.versions.securityCrypto.get())
+                    setDependencyNode(root, 'compile', 'androidx.core', 'core-ktx', libs.versions.coreKtx.get())
+                    setDependencyNode(root, 'compile', 'com.tencent', 'mmkv', libs.versions.mmkv.get())
+                    setDependencyNode(root, 'compile', myGroupId, 'json-util', getPublicationVersion())
+                    setScm(root)
+                }
+            }
+
+            JsonUtil(MavenPublication) {
+                def moduleName = 'JsonUtil'
+                def publishModuleName = 'json-util'
+
+                def modulePath = "$libProjectPath/SDK/$moduleName"
+
+                groupId myGroupId
+                artifactId publishModuleName
+                version getPublicationVersion()
+
+                artifact("$modulePath/build/outputs/aar/${moduleName}-release.aar")
+                artifact sourceAar(publishModuleName, modulePath)
+
+                pom.withXml {
+                    def root = asNode()
+                    setDependencyNode(root, 'compile', 'com.google.code.gson', 'gson', libs.versions.gson.get())
                     setScm(root)
                 }
             }

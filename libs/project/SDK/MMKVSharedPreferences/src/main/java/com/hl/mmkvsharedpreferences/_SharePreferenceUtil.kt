@@ -1,10 +1,10 @@
-package com.hl.utils
+package com.hl.mmkvsharedpreferences
 
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKeys
-import com.google.gson.Gson
+import com.hl.json.GsonUtil
 
 
 private const val SHARE_PREFS_NAME = "com.hl.sharedPreferences"
@@ -15,12 +15,14 @@ private fun getPreferences(
     isMultiProcess: Boolean = false,
     isEncrypted: Boolean = false
 ): SharedPreferences {
-    val app = BaseUtil.app
+    val app = getApp()
 
     return if (isUseMMKV) {
         // 使用 MMKV  时
         getPreferencesByMMKV(name, isMultiProcess, isEncrypted)
     } else {
+        if (isMultiProcess) error("仅 MMKV 支持多进程存储共享数据！")
+
         // 使用 SP  时， 多进程间通过  SP 来共享数据是不安全的, 因此不支持 isMultiProcess 参数
         when (isEncrypted) {
             true -> {
@@ -45,8 +47,8 @@ private fun getPreferences(
  * @param isEncrypted     是否对存储数据进行加密
  */
 @JvmOverloads
-fun Any.sharedPreferences(
-    name: String = "${BaseUtil.app.packageName}.sharedPreferences",
+fun sharedPreferences(
+    name: String = "${getApp().packageName}.sharedPreferences",
     isUseMMKV: Boolean = true,
     isMultiProcess: Boolean = false,
     isEncrypted: Boolean = false
@@ -56,8 +58,7 @@ fun Any.sharedPreferences(
 
 
 fun SharedPreferences.Editor.putObject(key: String, obj: Any) {
-    val gson = Gson()
-    putString(key, gson.toJson(obj))
+    putString(key, GsonUtil.toJson(obj))
 }
 
 inline fun <reified T> SharedPreferences.getObject(key: String): T? {

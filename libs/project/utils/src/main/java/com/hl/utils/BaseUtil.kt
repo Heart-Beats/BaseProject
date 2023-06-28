@@ -1,14 +1,10 @@
 package com.hl.utils
 
 import android.app.Application
-import com.elvishew.xlog.LogConfiguration
-import com.elvishew.xlog.LogLevel
-import com.elvishew.xlog.XLog
 import com.hjq.http.EasyConfig
 import com.hjq.http.config.IRequestHandler
 import com.hjq.http.request.HttpRequest
 import com.hjq.http.ssl.HttpSslFactory
-import com.tencent.mmkv.MMKV
 import okhttp3.OkHttpClient
 import okhttp3.Response
 import java.lang.reflect.Type
@@ -26,25 +22,10 @@ object BaseUtil {
 		this.app = app
 		val debug = BuildConfig.DEBUG
 
-		initXlog(debug)
-
 		// 异步初始化相关库
 		thread {
-			// 初始化 MMKV
-			MMKV.initialize(app)
-
 			initEasyHttp("https://www.baidu.com/", debug)
 		}
-	}
-
-
-	private fun initXlog(isPrintLog: Boolean) {
-		val logConfig = LogConfiguration.Builder()
-			.tag("X-LOG")
-			.logLevel(if (isPrintLog) LogLevel.ALL else LogLevel.INFO)
-			.enableStackTrace(1)
-			.build()
-		XLog.init(logConfig)
 	}
 
 

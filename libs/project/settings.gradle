@@ -67,12 +67,12 @@ def includeBase() {
 }
 
 def includeSDK() {
-    include ':SDK:Umeng', ':SDK:Pay', ':SDK:TencentCloud', ':SDK:UniMP', 'SDK:Navigation' , ':SDK:Web' ,
-            ':SDK:ActivityResult'
+    include ':SDK:Umeng', ':SDK:Pay', ':SDK:TencentCloud', 'SDK:Navigation', /*':SDK:Web',*/
+            ':SDK:ActivityResult', ':SDK:XLogInit', ':SDK:MMKVSharedPreferences', ':SDK:JsonUtil'
 
     includeShadow()
 
-    includeLocalAARS()
+    includeUniApp()
 }
 
 def includeShadow() {
@@ -84,7 +84,9 @@ def includeShadow() {
     project(':SDK:shadow-init').projectDir = file('./SDK/Shadow/shadow-init')
 }
 
-def includeLocalAARS() {
+def includeUniApp() {
+    include ':SDK:UniMP'
+
     // 加入 UniApp 需要依赖的本地 AAR
     includeUniAppAARS()
 }

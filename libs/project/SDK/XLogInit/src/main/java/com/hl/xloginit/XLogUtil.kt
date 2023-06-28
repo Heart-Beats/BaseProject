@@ -1,4 +1,4 @@
-package com.hl.utils
+package com.hl.xloginit
 
 import com.elvishew.xlog.LogLevel
 import com.elvishew.xlog.flattener.ClassicFlattener
@@ -10,6 +10,7 @@ import com.elvishew.xlog.printer.file.clean.FileLastModifiedCleanStrategy
 import com.elvishew.xlog.printer.file.naming.ChangelessFileNameGenerator
 import com.elvishew.xlog.printer.file.naming.DateFileNameGenerator
 import com.elvishew.xlog.printer.file.naming.FileNameGenerator
+import com.hl.mmkvsharedpreferences.getApp
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
@@ -23,8 +24,8 @@ object XLogUtil {
 	/**
 	 * 默认 XLog 日志保存文件夹的路径： sdcard/Android/data/包名/files/XLog
 	 */
-	val defaultLogFolderPath by lazy {
-		val externalFilesDir = BaseUtil.app.getExternalFilesDir(null)
+	val defaultLogFolderPath: String by lazy {
+		val externalFilesDir = getApp().getExternalFilesDir(null)
 		File(externalFilesDir, "XLog").absolutePath
 	}
 

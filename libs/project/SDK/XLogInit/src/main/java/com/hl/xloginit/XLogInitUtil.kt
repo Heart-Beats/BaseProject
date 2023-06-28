@@ -1,4 +1,4 @@
-package com.hl.utils
+package com.hl.xloginit
 
 import androidx.core.content.edit
 import androidx.core.text.isDigitsOnly
@@ -9,11 +9,12 @@ import com.elvishew.xlog.internal.DefaultsFactory
 import com.elvishew.xlog.printer.file.FilePrinter
 import com.elvishew.xlog.printer.file.backup.NeverBackupStrategy
 import com.elvishew.xlog.printer.file.clean.NeverCleanStrategy
-import com.hl.utils.date.DatePattern
-import com.hl.utils.date.toFormatString
+import com.hl.mmkvsharedpreferences.sharedPreferences
 import java.io.File
 import java.io.FileFilter
-import java.util.*
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 /**
  * @author  张磊  on  2022/08/24 at 15:41
@@ -27,6 +28,11 @@ object XLogInitUtil {
 	private const val LAST_WRITE_X_LOG_FILE_NAME_KEY = "LAST_WRITE_X_LOG_FILE_NAME_KEY"
 
 
+	/**
+	 * 初始化 XLog
+	 *
+	 * @param config 相关配置选项
+	 */
 	fun init(config: XLogInitConfig.() -> Unit = {}) {
 		val initConfig = XLogInitConfig().apply(config)
 
@@ -46,40 +52,44 @@ object XLogInitUtil {
 
 
 	/**
-	 * @param isWrite2File          是否需要写入日志到文件
+	 * 初始化 XLog, 默认日志写入文件中
+	 *
+	 * @param tagName    日志文件最小上传大小, 单位: MB
+	 * @param isPrintLog    日志文件最小上传大小, 单位: MB
 	 * @param logFileMinUploadMB    日志文件最小上传大小, 单位: MB
 	 * @param onUploadFiles        需要上传的日志文件集合
 	 */
 	fun initWithWriteFile(
-		isWrite2File: Boolean = true,
+		tagName: String = "X-LOG",
+		isPrintLog: Boolean = true,
 		logFileMinUploadMB: Long = 5L,
 		onUploadFiles: (List<File>) -> Unit = {}
 	) {
 		val triple = getFilePrinter(logFileMinUploadMB)
-		var lastLogFileName = triple.first
+		val lastLogFileName = triple.first
 		val parentFile = triple.second
 		val filePrinter = triple.third
 
 		// 初始化 X-Log
 		init {
-			this.filePrinter = if (isWrite2File) filePrinter else null
+			this.tagName = tagName
+			this.isPrintLog = isPrintLog
+			this.filePrinter = filePrinter
 		}
 
-		// 仅有日志写入文件时，才通知需要上传的文件
-		if (isWrite2File) {
-			val uploadFiles = parentFile.listFiles(FileFilter {
-				it.name != lastLogFileName
-			})?.toList()
+		val uploadFiles = parentFile.listFiles(FileFilter {
+			it.name != lastLogFileName
+		})?.toList()
 
-			onUploadFiles(uploadFiles ?: listOf())
-		}
+		onUploadFiles(uploadFiles ?: listOf())
 	}
 
 	private fun getFilePrinter(logFileMinUploadMB: Long): Triple<String, File, FilePrinter> {
-		val nowDate = Date().toFormatString(DatePattern.YMD)
+		val format = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
+		val nowDate = format.format(Date())
 		val defaultLogFileName = "${nowDate}_log.txt"
 
-		val sharedPreferences = BaseUtil.app.sharedPreferences()
+		val sharedPreferences = sharedPreferences()
 		var lastLogFileName = sharedPreferences.getString(LAST_WRITE_X_LOG_FILE_NAME_KEY, defaultLogFileName)
 			?: defaultLogFileName
 
@@ -123,7 +133,18 @@ object XLogInitUtil {
 
 
 data class XLogInitConfig(
+	/**
+	 * 日志 Tag
+	 */
 	var tagName: String = "X-LOG",
+
+	/**
+	 * 是否打印日志
+	 */
 	var isPrintLog: Boolean = true,
+
+	/**
+	 * 日志文件打印
+	 */
 	var filePrinter: FilePrinter? = null,
 )

@@ -48,22 +48,8 @@ dependencies {
     api project(path: ':SDK:Navigation')
     api project(path: ':SDK:Umeng')
 
-    api Deps.AndroidX.core_ktx
     api Deps.AndroidX.collection_ktx
-
-    api Deps.Material.material
     api Deps.AndroidX.recyclerview
-    api Deps.Lifecycle.lifecycle_viewmodel_ktx
-    api Deps.Lifecycle.lifecycle_livedata_ktx
-    api Deps.Lifecycle.lifecycle_extensions
-    api Deps.Lifecycle.lifecycle_runtime_ktx
-
-    api Deps.ImageLoader.Glide.glide
-    api Deps.Json.gson
-    api Deps.Jetpack.Navigation.navigation_ui
-    api Deps.Popup.x_popup
-    api Deps.UtilCodeX.utilcodex
-    api Deps.JsBridge.jsbridge
 
     api platform(libs.jetpack.compose.bom)
     api libs.bundles.compose
