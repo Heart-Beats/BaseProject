@@ -1,4 +1,4 @@
-package com.hl.utils
+package com.hl.mmkvsharedpreferences
 
 import android.content.SharedPreferences
 import androidx.core.content.edit
@@ -33,5 +33,5 @@ fun MMKV.loadDataFromSP(name: String, isMultiProcess: Boolean, isEncrypted: Bool
 
 	this.importFromSharedPreferences(oldSharedPreferences)
 
-	oldSharedPreferences.edit(true) { clear() }
+	oldSharedPreferences.edit(commit = true) { clear() }
 }

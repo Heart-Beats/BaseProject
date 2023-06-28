@@ -1,4 +1,4 @@
-package com.hl.utils
+package com.hl.json
 
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken

@@ -73,8 +73,9 @@ dependencies {
     api 'com.hl:uikit'
     api 'com.hl:uikit-toast'
     api project(path: ':base-app-res')
+    api project(':SDK:ActivityResult')
+    api project(':SDK:XLogInit')
 
-    implementation Deps.AndroidX.startup
     implementation Deps.AndroidX.core_ktx
     implementation Deps.AndroidX.appcompat
     implementation Deps.AndroidX.activity
@@ -85,14 +86,13 @@ dependencies {
 
     implementation Deps.AndroidX.databinding_runtime
 
-    implementation Deps.Lifecycle.lifecycle_extensions
-    implementation Deps.Lifecycle.lifecycle_livedata_ktx
-    implementation Deps.Lifecycle.lifecycle_viewmodel_ktx
+    api Deps.Lifecycle.lifecycle_extensions
+    api Deps.Lifecycle.lifecycle_extensions
+    api Deps.Lifecycle.lifecycle_livedata_ktx
+    api Deps.Lifecycle.lifecycle_viewmodel_ktx
 
     implementation Deps.PermissionX.permission_x
-    implementation Deps.Json.gson
-    implementation Deps.AndroidX.security_crypto
-    implementation Deps.ImageLoader.Glide.glide
+    api Deps.ImageLoader.Glide.glide
     api Deps.ZXing.zxing_lite
 
     api Deps.Banner.banner
@@ -101,9 +101,7 @@ dependencies {
 
     api Deps.GSYVideoPlayer.gsy_video_player
 
-    api Deps.XLog.xlog
     api Deps.Tencent.tbs_sdk
-    api Deps.Tencent.mmkv
     api Deps.Okhttp.easy_http
     api Deps.Popup.x_popup
     api Deps.Okhttp.okhttp

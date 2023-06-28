@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <application>
+
+        <!-- 使用 startup 完成初始化并进行启动优化-->
+        <provider
+            android:name="androidx.startup.InitializationProvider"
+            android:authorities="${applicationId}.androidx-startup"
+            android:exported="false"
+            tools:node="merge">
+
+            <!--可使用  tools:node="remove" 标签移除 Initializer 的初始化或者 startup -->
+            <meta-data
+                android:name="com.hl.mmkvsharedpreferences.SharedPreferencesInitializer"
+                android:value="androidx.startup" />
+        </provider>
+    </application>
+</manifest>

@@ -37,7 +37,7 @@ android {
 		compose = true
 
 		// 默认不生成 BuildConfig 类
-		buildConfig = true
+		buildConfig = false
 	}
 
 	composeOptions {
