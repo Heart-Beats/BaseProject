@@ -1,9 +1,10 @@
-package com.hl.utils
+package com.hl.imageload
 
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
-import android.text.TextUtils
+import android.os.Handler
+import android.os.Looper
 import android.widget.ImageView
 import androidx.annotation.DrawableRes
 import androidx.core.content.ContextCompat
@@ -11,8 +12,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DecodeFormat
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
-import com.bumptech.glide.request.target.Target
-import com.hl.res.R
+import  com.bumptech.glide.request.target.Target
 import kotlin.concurrent.thread
 
 object GlideUtil {
@@ -21,9 +21,9 @@ object GlideUtil {
     @JvmStatic
     fun loadHead(context: Context, url: String?, imageView: ImageView, isGentleman: Boolean?) {
         val headImageHead = when {
-            isGentleman == true -> R.drawable.hl_res_icon_avatar_gentlemen
-            isGentleman == false -> R.drawable.hl_res_icon_avatar_lady
-            else -> R.drawable.hl_res_icon_avatar_genderless
+            isGentleman == true -> R.drawable.hl_image_load_avatar_gentlemen
+            isGentleman == false -> R.drawable.hl_image_load_avatar_lady
+            else -> R.drawable.hl_image_load_avatar_genderless
         }
         Glide.with(context).load(url)
             .placeholder(context.resources.getDrawable(headImageHead))
@@ -31,10 +31,6 @@ object GlideUtil {
             .into(imageView)
     }
 
-
-    private fun isBase64Img(imgUrl: String): Boolean {
-        return !TextUtils.isEmpty(imgUrl) && imgUrl.matches(Regex("^data:image/(png|jpg|\\*);base64,.*$"))
-    }
 
     /**
      * 加载网络图片
@@ -52,7 +48,7 @@ object GlideUtil {
         context: Context,
         url: String?,
         imageView: ImageView,
-        @DrawableRes placeholderResId: Int = R.drawable.hl_res_loading_img_small,
+        @DrawableRes placeholderResId: Int = R.drawable.hl_image_load_loading_img_small,
         roundPx: Int = 0,
         requestOptionsBlock: RequestOptions.() -> Unit = {}
     ) {
@@ -114,7 +110,7 @@ object GlideUtil {
         roundPx: Int = 0,
         requestOptionsBlock: RequestOptions.() -> Unit = {}
     ) {
-        val drawable = ContextCompat.getDrawable(context, R.drawable.hl_res_loading_img_small)
+        val drawable = ContextCompat.getDrawable(context, R.drawable.hl_image_load_loading_img_small)
 
         val requestOptions = RequestOptions()
             .placeholder(drawable)
@@ -132,7 +128,7 @@ object GlideUtil {
     @JvmOverloads
     @JvmStatic
     fun load(context: Context, url: String, target: Target<Drawable>) {
-        val drawable = ContextCompat.getDrawable(context, R.drawable.hl_res_loading_img_small)
+        val drawable = ContextCompat.getDrawable(context, R.drawable.hl_image_load_loading_img_small)
 
         val requestOptions = RequestOptions()
             .placeholder(drawable)
@@ -158,5 +154,9 @@ object GlideUtil {
                 callback(bitmap)
             }
         }
+    }
+
+    private fun runOnUiThread(runnable: () -> Unit) {
+        Handler(Looper.getMainLooper()).post(runnable)
     }
 }

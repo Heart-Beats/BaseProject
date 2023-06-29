@@ -26,6 +26,9 @@ task buildSdk() {
     dependsOn gradle.includedBuild('project').task(':SDK:XLogInit:assembleRelease')
     dependsOn gradle.includedBuild('project').task(':SDK:MMKVSharedPreferences:assembleRelease')
     dependsOn gradle.includedBuild('project').task(':SDK:JsonUtil:assembleRelease')
+    dependsOn gradle.includedBuild('project').task(':SDK:Permission:assembleRelease')
+    dependsOn gradle.includedBuild('project').task(':SDK:PictureSelector:assembleRelease')
+    dependsOn gradle.includedBuild('project').task(':SDK:ImageLoad:assembleRelease')
 }
 
 //引入配置设置
@@ -43,8 +46,28 @@ apply plugin: 'maven-publish'
  *      runtime：    此范围表示编译不需要依赖关系，而是用于执行。它是在运行时和测试 classpath，但不是编译 classpath
  *      test：      此范围表示正常使用应用程序不需要依赖关系，仅适用于测试编译和执行阶段。它不是传递的。
  *      system：   此范围与 provided 类似，除了您必须提供明确包含它的 jar。该 artifact 始终可用，并且不是在仓库中查找。
+ *
+ *      常用类比总结：
+ *
+ *       maven 中     |    gradle 中
+ *       ---------------------------
+ *        compile    |       api
+ *       provided    | implementation
+ *       runtime     |     compile
+ *
  */
-def setDependencyNode(root, scope, groupId, artifactId, version) {
+
+enum Scope {
+    COMPILE('compile'), PROVIDED('provided'), RUNTIME('runtime'), TEST('test'), SYSTEM('system')
+
+    String pomScope
+
+    Scope(String pomScope) {
+        this.pomScope = pomScope
+    }
+}
+
+def setDependencyNode(root, Scope scope, groupId, artifactId, version) {
     println "添加依赖项：  $scope ---> $groupId:$artifactId:$version"
     Node dependencies
     NodeList dependenciesList = root.get('dependencies')
@@ -54,7 +77,7 @@ def setDependencyNode(root, scope, groupId, artifactId, version) {
         dependencies = (Node) dependenciesList[0]
     }
 
-    dependencies.append(getDependencyNode(scope, groupId, artifactId, version))
+    dependencies.append(getDependencyNode(scope.pomScope, groupId, artifactId, version))
 }
 
 /**
@@ -165,6 +188,9 @@ setGeneratePomFileAndDepends('ActivityResult')
 setGeneratePomFileAndDepends('XLogInit')
 setGeneratePomFileAndDepends('MMKVSharedPreferences')
 setGeneratePomFileAndDepends('JsonUtil')
+setGeneratePomFileAndDepends('Permission')
+setGeneratePomFileAndDepends('PictureSelector')
+setGeneratePomFileAndDepends('ImageLoad')
 
 // 设置 UniApp 相关的 POM 文件
 setUniAppGeneratePomFileAndDepends()
@@ -224,7 +250,6 @@ project.afterEvaluate {
                     setDependencyNode(root, 'compile', 'io.github.lucksiege', 'pictureselector', libs.versions.pictureSelector.get())
                     setDependencyNode(root, 'compile', 'io.github.lucksiege', 'compress', libs.versions.pictureSelector.get())
                     setDependencyNode(root, 'compile', 'com.github.bumptech.glide', 'glide', libs.versions.glide.get())
-                    setDependencyNode(root, 'compile', 'com.guolindev.permissionx', 'permissionx', libs.versions.permissionX.get())
                     setDependencyNode(root, 'compile', 'com.github.CarGuo.GSYVideoPlayer', 'GSYVideoPlayer', libs.versions.gsyVideoPlayer.get())
                     setDependencyNode(root, 'compile', 'com.github.getActivity', 'ShapeView', libs.versions.shapeView.get())
                     setScm(root)
@@ -389,8 +414,6 @@ project.afterEvaluate {
                     setDependencyNode(root, 'compile', 'androidx.lifecycle', 'lifecycle-livedata-ktx', libs.versions.lifecycle.get())
                     setDependencyNode(root, 'compile', 'androidx.lifecycle', 'lifecycle-runtime-ktx', libs.versions.lifecycle.get())
 
-                    setDependencyNode(root, 'compile', 'com.guolindev.permissionx', 'permissionx', libs.versions.permissionX.get())
-                    setDependencyNode(root, 'compile', 'com.github.bumptech.glide', 'glide', libs.versions.glide.get())
                     setDependencyNode(root, 'compile', 'com.github.jenly1314', 'zxing-lite', libs.versions.zxingLite.get())
                     setDependencyNode(root, 'compile', 'io.github.youth5201314', 'banner', libs.versions.banner.get())
                     setDependencyNode(root, 'compile', 'com.teprinciple', 'updateapputilsx', libs.versions.updateAppUtilsx.get())
@@ -671,6 +694,72 @@ project.afterEvaluate {
                 pom.withXml {
                     def root = asNode()
                     setDependencyNode(root, 'compile', 'com.google.code.gson', 'gson', libs.versions.gson.get())
+                    setScm(root)
+                }
+            }
+
+            Permission(MavenPublication) {
+                def moduleName = 'Permission'
+                def publishModuleName = 'permission'
+
+                def modulePath = "$libProjectPath/SDK/$moduleName"
+
+                groupId myGroupId
+                artifactId publishModuleName
+                version getPublicationVersion()
+
+                artifact("$modulePath/build/outputs/aar/${moduleName}-release.aar")
+                artifact sourceAar(publishModuleName, modulePath)
+
+                pom.withXml {
+                    def root = asNode()
+                    setDependencyNode(root, Scope.RUNTIME, 'androidx.activity', 'activity', libs.versions.activity.get())
+                    setDependencyNode(root, Scope.RUNTIME, 'androidx.fragment', 'fragment', libs.versions.fragment.get())
+                    setDependencyNode(root, Scope.PROVIDED, 'com.guolindev.permissionx', 'permissionx', libs.versions.permissionX.get())
+                    setScm(root)
+                }
+            }
+
+            PictureSelector(MavenPublication) {
+                def moduleName = 'PictureSelector'
+                def publishModuleName = 'picture-selector'
+
+                def modulePath = "$libProjectPath/SDK/$moduleName"
+
+                groupId myGroupId
+                artifactId publishModuleName
+                version getPublicationVersion()
+
+                artifact("$modulePath/build/outputs/aar/${moduleName}-release.aar")
+                artifact sourceAar(publishModuleName, modulePath)
+
+                pom.withXml {
+                    def root = asNode()
+                    setDependencyNode(root, Scope.COMPILE, myGroupId, 'image-load', getPublicationVersion())
+
+                    setDependencyNode(root, Scope.COMPILE, 'io.github.lucksiege', 'pictureselector', libs.versions.pictureSelector.get())
+                    setDependencyNode(root, Scope.COMPILE, 'io.github.lucksiege', 'compress', libs.versions.pictureSelector.get())
+                    setDependencyNode(root, Scope.COMPILE, 'io.github.lucksiege', 'ucrop', libs.versions.pictureSelector.get())
+                    setScm(root)
+                }
+            }
+
+            ImageLoad(MavenPublication) {
+                def moduleName = 'ImageLoad'
+                def publishModuleName = 'image-load'
+
+                def modulePath = "$libProjectPath/SDK/$moduleName"
+
+                groupId myGroupId
+                artifactId publishModuleName
+                version getPublicationVersion()
+
+                artifact("$modulePath/build/outputs/aar/${moduleName}-release.aar")
+                artifact sourceAar(publishModuleName, modulePath)
+
+                pom.withXml {
+                    def root = asNode()
+                    setDependencyNode(root, Scope.COMPILE, 'com.github.bumptech.glide', 'glide', libs.versions.glide.get())
                     setScm(root)
                 }
             }

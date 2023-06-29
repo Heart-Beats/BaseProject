@@ -1,6 +1,5 @@
-package com.hl.utils
+package com.hl.permission
 
-import android.Manifest
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import com.permissionx.guolindev.PermissionX
@@ -10,15 +9,8 @@ import com.permissionx.guolindev.PermissionX
  * Email: 913305160@qq.com
  */
 
-val permissionsList = arrayOf(
-    Manifest.permission.READ_EXTERNAL_STORAGE,
-    Manifest.permission.WRITE_EXTERNAL_STORAGE,
-    Manifest.permission.INTERNET,
-    Manifest.permission.READ_PHONE_STATE
-)
-
 fun FragmentActivity.reqPermissions(
-    vararg permissions: String = permissionsList,
+    vararg permissions: String,
     needExplainRequestReason: Boolean = false,
     deniedAction: (List<String>) -> Unit = {},
     allGrantedAction: (List<String>) -> Unit = {},
@@ -47,7 +39,7 @@ fun FragmentActivity.reqPermissions(
 }
 
 fun Fragment.reqPermissions(
-    vararg permissions: String = permissionsList,
+    vararg permissions: String,
     needExplainRequestReason: Boolean = false,
     deniedAction: (List<String>) -> Unit = {},
     allGrantedAction: (List<String>) -> Unit = {}

@@ -4,12 +4,12 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewGroup.LayoutParams
 import android.webkit.WebView
 import android.widget.ProgressBar
 import androidx.core.content.ContextCompat
-import com.github.lzyzsd.jsbridge.BridgeWebView
 
-class ProgressWebView : BridgeWebView {
+class ProgressWebView : WebView {
 
     private var isDisplay: Boolean = true
         set(value) {

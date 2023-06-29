@@ -56,7 +56,7 @@ internal object Versions {
     const val BANNER = "2.2.2"
     const val JS_BRIDGE = "1.0.4"
     const val SMART_REFRESH_LAYOUT = "2.0.5"
-    const val PICTURE_SELECTOR = "v3.0.6"
+    const val PICTURE_SELECTOR = "v3.11.1"
     const val ANDROID_FILE_PICKER = "0.8.3"
     const val SHAPE_VIEW = "8.5"
     const val CALENDAR_VIEW = "3.7.1.37"

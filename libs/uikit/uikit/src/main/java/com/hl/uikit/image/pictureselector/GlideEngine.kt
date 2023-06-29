@@ -19,7 +19,7 @@ import com.luck.picture.lib.interfaces.OnCallbackListener
  * @date：2019-11-13 17:02
  * @describe：Glide加载引擎
  */
-class GlideEngine private constructor() : ImageEngine {
+internal class GlideEngine private constructor() : ImageEngine {
     /**
      * 加载图片
      *

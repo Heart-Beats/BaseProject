@@ -23,13 +23,13 @@ import com.hl.uikit.toast
 import com.hl.uikit.video.UIKitMyStandardGSYVideoPlayer
 import com.hl.uikit.visible
 import com.hl.utils.DownloadFileUtil
-import com.hl.utils.GlideUtil
+import com.hl.imageload.GlideUtil
 import com.hl.utils.R
 import com.hl.utils.getHttpContentLength
 import com.hl.utils.mimetype.MimeType
 import com.hl.utils.previewFie.superFileView.DocView
 import com.hl.utils.replaceFragment
-import com.hl.utils.reqPermissions
+import com.hl.permission.reqPermissions
 import com.hl.utils.share.ShareUtil
 import com.hl.utils.showPop
 import com.hl.utils.startAct
@@ -103,7 +103,7 @@ class PreviewFileActivity : FragmentActivity() {
                 mSuperFileView.visibility = View.GONE
                 no_support_file_container.visibility = View.GONE
                 img.visibility = View.VISIBLE
-                GlideUtil.load(this, fileUrl, img)
+                com.hl.imageload.GlideUtil.load(this, fileUrl, img)
             }
             mimeType?.isVideo() == true -> {
                 mSuperFileView.visibility = View.GONE

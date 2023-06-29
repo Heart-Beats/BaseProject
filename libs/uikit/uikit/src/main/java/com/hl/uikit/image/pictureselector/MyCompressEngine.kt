@@ -19,7 +19,7 @@ import java.io.File
  * @author  张磊  on  2022/03/18 at 17:02
  * Email: 913305160@qq.com
  */
-class MyCompressEngine(val needDeleteOrigin: Boolean = false) : CompressEngine {
+internal class MyCompressEngine(val needDeleteOrigin: Boolean = false) : CompressEngine {
 
     private val TAG = "MyCompressEngine"
 

@@ -5,7 +5,6 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.util.Log
-import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentActivity
 import com.blankj.utilcode.util.FileUtils
 import com.blankj.utilcode.util.ImageUtils
@@ -17,7 +16,7 @@ import com.gyf.immersionbar.ktx.immersionBar
 import com.hl.uikit.image.pictureselector.MyCompressEngine
 import com.hl.uikit.toast
 import com.hl.utils.R
-import com.hl.utils.reqPermissions
+import com.hl.permission.reqPermissions
 import com.hl.utils.startActForResult
 import java.io.File
 import java.text.SimpleDateFormat
