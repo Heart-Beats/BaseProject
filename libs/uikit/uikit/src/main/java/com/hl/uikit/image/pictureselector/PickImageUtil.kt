@@ -23,7 +23,7 @@ import com.luck.picture.lib.interfaces.OnResultCallbackListener
  * Email: 913305160@qq.com
  */
 
-object PickImageUtil {
+internal object PickImageUtil {
 
     /**
      *

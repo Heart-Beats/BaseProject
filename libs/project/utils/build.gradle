@@ -75,6 +75,8 @@ dependencies {
     api project(path: ':base-app-res')
     api project(':SDK:ActivityResult')
     api project(':SDK:XLogInit')
+    api project(':SDK:Permission')
+    api project(':SDK:ImageLoad')
 
     implementation Deps.AndroidX.core_ktx
     implementation Deps.AndroidX.appcompat
@@ -91,8 +93,6 @@ dependencies {
     api Deps.Lifecycle.lifecycle_livedata_ktx
     api Deps.Lifecycle.lifecycle_viewmodel_ktx
 
-    implementation Deps.PermissionX.permission_x
-    api Deps.ImageLoader.Glide.glide
     api Deps.ZXing.zxing_lite
 
     api Deps.Banner.banner

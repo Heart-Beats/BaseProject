@@ -29,7 +29,7 @@ object AppInstallUtil {
 	fun installApk(context: Context, filePath: String) {
 		try {
 			//8.0需要申请安装权限
-			if (Build.VERSION.SDK_INT >= 26) {
+			if (BuildVersionUtil.isOver8()) {
 				val b = context.packageManager.canRequestPackageInstalls()
 				if (b) {
 					val installAppIntent = getInstallAppIntent(context, filePath)

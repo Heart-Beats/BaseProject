@@ -11,6 +11,7 @@ import com.elvishew.xlog.XLog
 import com.hjq.http.EasyHttp
 import com.hjq.http.listener.OnDownloadListener
 import com.hjq.http.request.DownloadRequest
+import com.hl.permission.reqPermissions
 import com.hl.uikit.toast
 import kotlinx.coroutines.launch
 import java.io.File

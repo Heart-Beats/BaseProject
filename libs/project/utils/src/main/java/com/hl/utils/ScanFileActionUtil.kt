@@ -12,6 +12,7 @@ import android.os.Environment
 import android.provider.MediaStore
 import androidx.fragment.app.FragmentActivity
 import com.blankj.utilcode.util.UriUtils
+import com.hl.permission.reqPermissions
 import com.hl.utils.mimetype.MimeType
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
