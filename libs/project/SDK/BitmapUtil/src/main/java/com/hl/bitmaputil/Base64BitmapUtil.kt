@@ -1,4 +1,4 @@
-package com.hl.utils
+package com.hl.bitmaputil
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory

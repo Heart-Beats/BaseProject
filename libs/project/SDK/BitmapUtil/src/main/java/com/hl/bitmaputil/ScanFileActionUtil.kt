@@ -1,4 +1,4 @@
-package com.hl.utils
+package com.hl.bitmaputil
 
 import android.Manifest
 import android.content.ContentResolver
@@ -11,13 +11,16 @@ import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
 import androidx.fragment.app.FragmentActivity
+import com.blankj.utilcode.util.FileUtils
 import com.blankj.utilcode.util.UriUtils
+import com.hl.mimetype.MimeType
 import com.hl.permission.reqPermissions
-import com.hl.utils.mimetype.MimeType
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import java.io.File
-import java.util.*
+import java.nio.file.Files
+import java.nio.file.Paths
+import java.util.Locale
 
 
 /**
@@ -60,7 +63,7 @@ object ScanFileActionUtil {
         vararg mediaFilePathS: String,
         scanResultCallBack: ScanResultCallBack? = null
     ) {
-        this.scanResultCallBack = scanResultCallBack
+        ScanFileActionUtil.scanResultCallBack = scanResultCallBack
 
         if (context is FragmentActivity) {
             context.reqPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE, deniedAction = {
@@ -86,11 +89,11 @@ object ScanFileActionUtil {
      * 拷贝媒体文件到公共目录下
      */
     private fun copyMediaFile2PublicDirectory(mediaFilePath: String): Triple<File, File, File?> {
-        val mimeTypeName = MimeType.getByExtension(File(mediaFilePath).extension)?.mMimeTypeName ?: ""
+        val mimeType = MimeType.getByExtension(File(mediaFilePath).extension)
 
         val publicDirectory = when {
-            mimeTypeName.matches(Regex("image/.*")) -> Environment.DIRECTORY_PICTURES
-            mimeTypeName.matches(Regex("video/.*")) -> Environment.DIRECTORY_MOVIES
+            mimeType.isImage() -> Environment.DIRECTORY_PICTURES
+            mimeType.isVideo() -> Environment.DIRECTORY_MOVIES
             else -> Environment.DIRECTORY_DOWNLOADS
         }
 
@@ -105,7 +108,9 @@ object ScanFileActionUtil {
             copyFile = srcFile
         } else {
             copyOutputFile = File(externalStoragePublicDirectory, srcFile.name)
-            copyFile = FileUtil.copyFile(mediaFilePath, copyOutputFile.absolutePath)
+            val copySuccess = FileUtils.copy(mediaFilePath, copyOutputFile.absolutePath)
+
+            copyFile = if (copySuccess) copyOutputFile else null
         }
 
         return Triple(srcFile, copyOutputFile, copyFile)
@@ -150,7 +155,7 @@ object ScanFileActionUtil {
         duration: Long = 0,
         scanResultCallBack: ScanResultCallBack? = null
     ) {
-        this.scanResultCallBack = scanResultCallBack
+        ScanFileActionUtil.scanResultCallBack = scanResultCallBack
 
         if (!checkFile(mediaFilePath)) {
             scanResultCallBack?.onScanFail("$mediaFilePath 不存在")
@@ -282,7 +287,7 @@ object ScanFileActionUtil {
             // 拷贝到指定 uri, 如果没有这步操作，android11以上无法在相册显示
             try {
                 contentResolver.openOutputStream(uri)?.also {
-                    FileUtil.copyFile(mediaFilePath, it)
+                    Files.copy(Paths.get(mediaFilePath), it)
                 } ?: scanResultCallBack?.onScanInfo("notifyOverstepQ  调用 openOutputStream($uri) 返回 null")
             } catch (e: Exception) {
                 scanResultCallBack?.onScanInfo("拷贝${mediaFilePath}到${uri} 异常.")
@@ -300,7 +305,7 @@ object ScanFileActionUtil {
      * @return ContentValues
      */
     private fun initCommonContentValues(mediaFile: File, createTime: Long): ContentValues {
-        val mMimeTypeName = MimeType.getByExtension(mediaFile.extension)?.mMimeTypeName ?: ""
+        val mMimeTypeName = MimeType.getByExtension(mediaFile.extension)?.mMimeTypeName
 
         val values = ContentValues()
         val timeMillis: Long = getTimeWrap(createTime)

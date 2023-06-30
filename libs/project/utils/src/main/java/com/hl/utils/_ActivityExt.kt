@@ -13,13 +13,6 @@ fun FragmentActivity.getFragmentById(@IdRes id: Int): Fragment? {
     return supportFragmentManager.findFragmentById(id)
 }
 
-/**
- * 获取 navigation 当前使用的 Fragment
- */
-fun FragmentActivity.getCurrentNavigationFragment(): Fragment? {
-    return supportFragmentManager.primaryNavigationFragment?.childFragmentManager?.fragments?.firstOrNull()
-}
-
 
 /**
  *  Activity 中替换指定 view 为 Fragment

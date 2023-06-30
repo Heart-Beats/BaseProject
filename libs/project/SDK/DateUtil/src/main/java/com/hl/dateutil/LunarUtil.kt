@@ -1,4 +1,4 @@
-package com.hl.utils.date
+package com.hl.dateutil
 
 import java.text.ParseException
 import java.text.SimpleDateFormat
@@ -50,7 +50,8 @@ object LunarUtil {
 		"0827 先师诞",
 		"0909 重阳节",
 		"1208 腊八节  释迦如来成道日",
-		"1223 小年",
+		"1223 北方小年",
+		"1224 南方小年",
 		"0100 除夕"
 	)
 

@@ -8,7 +8,7 @@ import androidx.navigation.NavDestination
 import androidx.navigation.NavGraph
 import androidx.navigation.fragment.NavHostFragment
 import com.hl.navigatioin.utils.ReflectHelper
-import java.util.*
+import java.util.Deque
 
 /**
  * @author  张磊  on  2023/02/22 at 17:03

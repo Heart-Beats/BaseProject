@@ -3,7 +3,6 @@ package com.hl.utils
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
-import android.os.Build
 import com.blankj.utilcode.util.ClipboardUtils
 
 /**
@@ -29,8 +28,7 @@ class ClipboardHelper(context: Context) {
 	 * 清除剪切板内容
 	 */
 	fun clearText() {
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-			//要api28以上
+		if (BuildVersionUtil.isOver9()) {
 			cm.clearPrimaryClip()
 		} else {
 			cm.setPrimaryClip(ClipData.newPlainText(null, null))

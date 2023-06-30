@@ -1,25 +1,21 @@
-import com.buildsrc.AndroidVersions
-import com.buildsrc.Deps
-
 plugins {
 	alias(libs.plugins.android.library)
 	alias(libs.plugins.kotlin.android)
 }
 
 android {
-	namespace = "com.hl.imageload"
-	compileSdk = AndroidVersions.COMPILE_SDK
+	namespace = "com.hl.bitmaputil"
+	compileSdk = com.buildsrc.AndroidVersions.COMPILE_SDK
 
-	this.resourcePrefix = "hl_image_load_"
+	this.resourcePrefix = "hl_bitmap_util_"
 
 	defaultConfig {
-		minSdk = AndroidVersions.MIN_SDK
-		targetSdk = AndroidVersions.TARGET_SDK
+		minSdk = com.buildsrc.AndroidVersions.MIN_SDK
+		targetSdk = com.buildsrc.AndroidVersions.TARGET_SDK
 
 		testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 		consumerProguardFiles("consumer-rules.pro")
 	}
-
 
 	buildTypes {
 		release {
@@ -37,5 +33,7 @@ android {
 }
 
 dependencies {
-	api(Deps.ImageLoader.Glide.glide)
+	implementation(project(":SDK:Permission"))
+	implementation(project(":SDK:MimeType"))
+	implementation(com.buildsrc.Deps.UtilCodeX.utilcodex)
 }

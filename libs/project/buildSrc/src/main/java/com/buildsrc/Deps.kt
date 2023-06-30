@@ -6,6 +6,7 @@ internal object Versions {
     const val ESPRESSO_CORE = "3.4.0"
     const val KOTLIN = "1.8.0"
     const val KOTLIN_COROUTINES = "1.4.2"
+    const val ANNOTATION = "1.6.0"
     const val CORE_KTX = "1.6.0"
     const val COLLECTION_KTX = "1.2.0"
 
@@ -23,7 +24,7 @@ internal object Versions {
     const val COMPOSE_BOM = "2023.01.00"
 
     const val LIFECYCLE = "2.5.1"
-    const val NAV_VERSION = "2.5.3"
+    const val NAV_VERSION = "2.6.0"
     const val SMOOTH_NAVIGATION = "4.0.0"
 
     const val MATERIAL = "1.8.0"
@@ -94,7 +95,6 @@ class Deps {
     }
 
     object Jetpack {
-
         object Navigation {
             /**
              * 提供安全可靠 Navigation 操作，解决 GitHub 上 "Navigation Add Hide 修改版" 普遍存在 "popUpToInclusive 导致 Fragment 不符预期加载" 等问题。
@@ -102,19 +102,23 @@ class Deps {
              */
             const val smooth_navigation = "com.kunminx.arch:smooth-navigation:${Versions.SMOOTH_NAVIGATION}"
 
-            // Java language implementation
+            // 正常情况下不用依赖 runtime, 因为添加后面的库自动依赖
+            const val navigation_runtime = "androidx.navigation:navigation-runtime:${Versions.NAV_VERSION}"
+            const val navigation_runtime_ktx = "androidx.navigation:navigation-runtime-ktx:${Versions.NAV_VERSION}"
+
+            // Java 版本
             const val navigation_fragment = "androidx.navigation:navigation-fragment:${Versions.NAV_VERSION}"
             const val navigation_ui = "androidx.navigation:navigation-ui:${Versions.NAV_VERSION}"
 
-            // Kotlin
+            // Kotlin 版本
             const val navigation_fragment_ktx = "androidx.navigation:navigation-fragment-ktx:${Versions.NAV_VERSION}"
             const val navigation_ui_ktx = "androidx.navigation:navigation-ui-ktx:${Versions.NAV_VERSION}"
 
-            // Feature module Support
+            // 动态模块支持
             const val navigation_dynamic_features_fragment =
                 "androidx.navigation:navigation-dynamic-features-fragment:${Versions.NAV_VERSION}"
 
-            // Jetpack Compose Integration
+            // Jetpack Compose Navigation 集成
             const val navigation_compose = "androidx.navigation:navigation-compose:${Versions.NAV_VERSION}"
         }
 
@@ -191,6 +195,7 @@ class Deps {
     }
 
     object AndroidX {
+        const val annotation = "androidx.annotation:annotation:${Versions.ANNOTATION}"
         const val core_ktx = "androidx.core:core-ktx:${Versions.CORE_KTX}"
         const val collection_ktx = "androidx.collection:collection-ktx:${Versions.COLLECTION_KTX}"
         const val appcompat = "androidx.appcompat:appcompat:${Versions.APPCOMPAT}"

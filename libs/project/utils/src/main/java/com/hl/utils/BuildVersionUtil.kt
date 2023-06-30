@@ -44,6 +44,14 @@ object BuildVersionUtil {
 	}
 
 	/**
+	 * 是否 Android 9.0  及以上
+	 */
+	@JvmStatic
+	fun isOver9(): Boolean {
+		return Build.VERSION.SDK_INT >= Build.VERSION_CODES.P
+	}
+
+	/**
 	 * 是否 Android 8.0  及以上
 	 */
 	@JvmStatic

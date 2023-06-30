@@ -1,15 +1,15 @@
-package com.hl.utils
+package com.hl.bitmaputil
 
 import android.Manifest
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Environment
+import android.util.Log
 import android.view.View
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
 import com.blankj.utilcode.util.ImageUtils
-import com.elvishew.xlog.XLog
 import com.hl.permission.reqPermissions
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -31,6 +31,8 @@ fun View.toBitmap(): Bitmap? {
 
 object BitmapUtil {
 
+    private const val TAG = "BitmapUtil"
+
     suspend fun getBitmapFromUrl(imageUrl: String): Bitmap? {
         return withContext(Dispatchers.IO) {
             var bitmap: Bitmap?
@@ -42,9 +44,9 @@ object BitmapUtil {
                 conn.connect()
                 `is` = conn.inputStream
                 bitmap = BitmapFactory.decodeStream(`is`)
-                XLog.d("image download finished. ---- $imageUrl")
+                Log.d(TAG, "image download finished. ---- $imageUrl")
             } catch (e: Exception) {
-                XLog.d("get bitmap fail !", e)
+                Log.d(TAG, "get bitmap fail !", e)
                 bitmap = null
             } finally {
                 `is`?.close()
@@ -119,7 +121,7 @@ object BitmapUtil {
                             }
 
                             override fun onScanInfo(msg: String) {
-                                XLog.d("onScanInfo: $msg")
+                                Log.d(TAG, "onScanInfo: $msg")
                             }
                         }
 
