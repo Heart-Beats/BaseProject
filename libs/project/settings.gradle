@@ -69,7 +69,7 @@ def includeBase() {
 def includeSDK() {
     include ':SDK:Umeng', ':SDK:Pay', ':SDK:TencentCloud', 'SDK:Navigation', ':SDK:Web', ':SDK:ActivityResult',
             ':SDK:XLogInit', ':SDK:MMKVSharedPreferences', ':SDK:JsonUtil', ':SDK:Permission', ':SDK:PictureSelector',
-            ':SDK:ImageLoad'
+            ':SDK:ImageLoad', ':SDK:DateUtil', ':SDK:BitmapUtil', ':SDK:MimeType'
 
     includeShadow()
 

@@ -23,10 +23,9 @@ import com.hl.uikit.toast
 import com.hl.uikit.video.UIKitMyStandardGSYVideoPlayer
 import com.hl.uikit.visible
 import com.hl.utils.DownloadFileUtil
-import com.hl.imageload.GlideUtil
 import com.hl.utils.R
 import com.hl.utils.getHttpContentLength
-import com.hl.utils.mimetype.MimeType
+import com.hl.mimetype.MimeType
 import com.hl.utils.previewFie.superFileView.DocView
 import com.hl.utils.replaceFragment
 import com.hl.permission.reqPermissions

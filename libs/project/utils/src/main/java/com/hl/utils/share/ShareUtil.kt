@@ -5,9 +5,9 @@ import android.content.Intent
 import android.os.Build
 import androidx.annotation.RequiresApi
 import com.blankj.utilcode.util.UriUtils
+import com.hl.mimetype.MimeType
 import com.hl.uikit.toast
 import com.hl.utils.isSingle
-import com.hl.utils.mimetype.MimeType
 import com.hl.utils.toArrayList
 import java.io.File
 
@@ -94,7 +94,9 @@ object ShareUtil {
     private fun Intent.setShareType(shareFiles: List<File>) {
         val mimeTypes = shareFiles.map {
             //获取分享文件的类型, 默认使用 "image/jpeg", 通常用于分享图片，但也可以用于分享任何类型的二进制内容
-            MimeType.getByExtension(it.extension) ?: MimeType.JPEG
+            MimeType.getByExtension(it.extension).run {
+                if (this == MimeType.UNKNOWN) MimeType.JPEG else this
+            }
         }
 
         when {

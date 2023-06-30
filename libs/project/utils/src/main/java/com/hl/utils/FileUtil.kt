@@ -22,12 +22,12 @@ object FileUtil {
 
 		val bos = BufferedOutputStream(FileOutputStream(File(desPath)))
 
-		return if (copyFile(srcPath, bos)) outputFile else null
+		return if (copyStream(FileInputStream(srcPath), bos)) outputFile else null
 	}
 
-	fun copyFile(srcPath: String, outputStream: OutputStream): Boolean {
+	fun copyStream(inputStream: InputStream, outputStream: OutputStream): Boolean {
 		try {
-			val bis = BufferedInputStream(FileInputStream(srcPath))
+			val bis = BufferedInputStream(inputStream)
 			val bos = BufferedOutputStream(outputStream)
 			bis.use {
 				it.copyTo(bos)

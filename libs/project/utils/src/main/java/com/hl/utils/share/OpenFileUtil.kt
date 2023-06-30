@@ -5,7 +5,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import com.blankj.utilcode.util.UriUtils
 import com.hl.uikit.toast
-import com.hl.utils.mimetype.MimeType
+import com.hl.mimetype.MimeType
 import java.io.File
 
 /**
@@ -20,7 +20,7 @@ object OpenFileUtil {
         val shareFile = File(path)
 
         // 获取分享文件的类型
-        val mimeType = MimeType.getByExtension(shareFile.extension)?.mMimeTypeName ?: "*/*"
+        val mimeType = MimeType.getByExtension(shareFile.extension).mMimeTypeName
 
         val shareIntent = Intent().apply {
             this.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
@@ -41,7 +41,7 @@ object OpenFileUtil {
         try {
             val shareFile = File(path)
             // 获取分享文件的类型
-            val mimeType = MimeType.getByExtension(shareFile.extension)?.mMimeTypeName ?: "*/*"
+            val mimeType = MimeType.getByExtension(shareFile.extension).mMimeTypeName
 
             val intent = Intent().apply {
                 //设置intent的Action属性

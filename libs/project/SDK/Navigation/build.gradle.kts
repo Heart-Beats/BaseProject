@@ -34,7 +34,9 @@ android {
 }
 
 dependencies {
+	implementation(Deps.AndroidX.activity_ktx)
 	implementation(Deps.Material.material)
+
 	api(Deps.Jetpack.Navigation.smooth_navigation)
 	api(Deps.Jetpack.Navigation.navigation_fragment_ktx)
 	api(Deps.Jetpack.Navigation.navigation_ui)

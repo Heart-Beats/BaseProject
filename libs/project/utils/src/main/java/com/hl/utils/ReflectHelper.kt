@@ -14,6 +14,13 @@ class ReflectHelper<T>(private val clazz: Class<T>) {
         private const val TAG = "ReflectHelper"
     }
 
+
+    /**
+     * 获取对象的属性值
+     * @param [obj]  对象
+     * @param [filedName] 属性名
+     * @return [V?]  对应的属性值
+     */
     fun <V> getFiledValue(obj: T, filedName: String): V? {
         return try {
             val field = clazz.getDeclaredField(filedName)
@@ -27,6 +34,13 @@ class ReflectHelper<T>(private val clazz: Class<T>) {
         }
     }
 
+
+    /**
+     * 设置对象的属性值
+     * @param [obj] 对象
+     * @param [filedName] 属性名
+     * @param [value] 设置的属性值
+     */
     fun setFiledValue(obj: T, filedName: String, value: Any?) {
         try {
             val field = clazz.getDeclaredField(filedName)
@@ -38,6 +52,13 @@ class ReflectHelper<T>(private val clazz: Class<T>) {
         }
     }
 
+    /**
+     * 调用对象的方法
+     * @param [obj] 对象
+     * @param [methodName] 方法名称
+     * @param [params] 参数
+     * @return [Any?]  方法调用的返回值
+     */
     fun callMethod(obj: T, methodName: String, vararg params: Any): Any? {
         return try {
             val method = clazz.getDeclaredMethod(methodName, *params.map { it::class.java }.toTypedArray())

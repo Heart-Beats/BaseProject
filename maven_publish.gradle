@@ -29,6 +29,9 @@ task buildSdk() {
     dependsOn gradle.includedBuild('project').task(':SDK:Permission:assembleRelease')
     dependsOn gradle.includedBuild('project').task(':SDK:PictureSelector:assembleRelease')
     dependsOn gradle.includedBuild('project').task(':SDK:ImageLoad:assembleRelease')
+    dependsOn gradle.includedBuild('project').task(':SDK:DateUtil:assembleRelease')
+    dependsOn gradle.includedBuild('project').task(':SDK:BitmapUtil:assembleRelease')
+    dependsOn gradle.includedBuild('project').task(':SDK:MimeType:assembleRelease')
 }
 
 //引入配置设置
@@ -58,7 +61,24 @@ apply plugin: 'maven-publish'
  */
 
 enum Scope {
-    COMPILE('compile'), PROVIDED('provided'), RUNTIME('runtime'), TEST('test'), SYSTEM('system')
+    /**
+     *  类比 Gradle 中 api
+     **/
+    COMPILE('compile'),
+
+    /**
+     *  类比 Gradle 中 implementation
+     **/
+    PROVIDED('provided'),
+
+    /**
+     *  类比 Gradle 中 compile
+     **/
+    RUNTIME('runtime'),
+
+    TEST('test'),
+
+    SYSTEM('system')
 
     String pomScope
 
@@ -191,6 +211,9 @@ setGeneratePomFileAndDepends('JsonUtil')
 setGeneratePomFileAndDepends('Permission')
 setGeneratePomFileAndDepends('PictureSelector')
 setGeneratePomFileAndDepends('ImageLoad')
+setGeneratePomFileAndDepends('DateUtil')
+setGeneratePomFileAndDepends('BitmapUtil')
+setGeneratePomFileAndDepends('MimeType')
 
 // 设置 UniApp 相关的 POM 文件
 setUniAppGeneratePomFileAndDepends()
@@ -400,6 +423,11 @@ project.afterEvaluate {
                     setDependencyNode(root, 'compile', myGroupId, 'uikit-toast', getPublicationVersion())
                     setDependencyNode(root, 'compile', myGroupId, 'base-app-res', getPublicationVersion())
                     setDependencyNode(root, 'compile', myGroupId, 'activity-result', getPublicationVersion())
+                    setDependencyNode(root, 'compile', myGroupId, 'xlog-init', getPublicationVersion())
+                    setDependencyNode(root, 'compile', myGroupId, 'permission', getPublicationVersion())
+                    setDependencyNode(root, 'compile', myGroupId, 'image-load', getPublicationVersion())
+                    setDependencyNode(root, 'compile', myGroupId, 'date-util', getPublicationVersion())
+                    setDependencyNode(root, Scope.COMPILE, myGroupId, 'mime-type', getPublicationVersion())
 
                     setDependencyNode(root, 'compile', 'androidx.appcompat', 'appcompat', libs.versions.appcompat.get())
                     setDependencyNode(root, 'compile', 'androidx.activity', 'activity', libs.versions.activity.get())
@@ -447,6 +475,8 @@ project.afterEvaluate {
 
                 pom.withXml {
                     def root = asNode()
+                    setDependencyNode(root, Scope.PROVIDED, 'androidx.activity', 'activity-ktx', libs.versions.activity.get())
+                    setDependencyNode(root, Scope.PROVIDED, 'com.google.android.material', 'material', libs.versions.material.get())
 
                     setDependencyNode(root, 'compile', 'com.kunminx.arch', 'smooth-navigation', libs.versions.smoothNavigation.get())
                     setDependencyNode(root, 'compile', 'androidx.navigation', 'navigation-fragment-ktx', libs.versions.navigation.get())
@@ -761,6 +791,67 @@ project.afterEvaluate {
                     def root = asNode()
                     setDependencyNode(root, Scope.COMPILE, 'com.github.bumptech.glide', 'glide', libs.versions.glide.get())
                     setScm(root)
+                }
+            }
+
+            DateUtil(MavenPublication) {
+                def moduleName = 'DateUtil'
+                def publishModuleName = 'date-util'
+
+                def modulePath = "$libProjectPath/SDK/$moduleName"
+
+                groupId myGroupId
+                artifactId publishModuleName
+                version getPublicationVersion()
+
+                artifact("$modulePath/build/outputs/aar/${moduleName}-release.aar")
+                artifact sourceAar(publishModuleName, modulePath)
+
+                pom.withXml {
+                    def root = asNode()
+                    setDependencyNode(root, Scope.PROVIDED, 'androidx.annotation', 'annotation', libs.versions.annotation.get())
+                    setScm(root)
+                }
+            }
+
+            BitmapUtil(MavenPublication) {
+                def moduleName = 'BitmapUtil'
+                def publishModuleName = 'bitmap-util'
+
+                def modulePath = "$libProjectPath/SDK/$moduleName"
+
+                groupId myGroupId
+                artifactId publishModuleName
+                version getPublicationVersion()
+
+                artifact("$modulePath/build/outputs/aar/${moduleName}-release.aar")
+                artifact sourceAar(publishModuleName, modulePath)
+
+                pom.withXml {
+                    def root = asNode()
+                    setDependencyNode(root, Scope.PROVIDED, myGroupId, 'permission', getPublicationVersion())
+                    setDependencyNode(root, Scope.PROVIDED, myGroupId, 'mime-type', getPublicationVersion())
+                    setDependencyNode(root, Scope.PROVIDED, 'com.blankj', 'utilcodex', libs.versions.utilCodeX.get())
+                    setScm(root)
+                }
+            }
+
+            MimeType(MavenPublication) {
+                def moduleName = 'MimeType'
+                def publishModuleName = 'mime-type'
+
+                def modulePath = "$libProjectPath/SDK/$moduleName"
+
+                groupId myGroupId
+                artifactId publishModuleName
+                version getPublicationVersion()
+
+                // 非 aar 包的相关路径定义
+                artifact("$modulePath/build/libs/${moduleName}.jar")
+                artifact sourceAar(publishModuleName, modulePath)
+
+                pom.withXml {
+
                 }
             }
 

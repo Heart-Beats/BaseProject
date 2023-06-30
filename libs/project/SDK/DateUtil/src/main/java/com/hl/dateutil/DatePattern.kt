@@ -1,4 +1,4 @@
-package com.hl.utils.date
+package com.hl.dateutil
 
 import androidx.annotation.StringDef
 import java.lang.annotation.Retention

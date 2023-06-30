@@ -1,6 +1,5 @@
-package com.hl.utils.date
+package com.hl.dateutil
 
-import com.hl.utils.toFormatString
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.ZoneId
