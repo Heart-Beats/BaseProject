@@ -32,6 +32,10 @@ task buildSdk() {
     dependsOn gradle.includedBuild('project').task(':SDK:DateUtil:assembleRelease')
     dependsOn gradle.includedBuild('project').task(':SDK:BitmapUtil:assembleRelease')
     dependsOn gradle.includedBuild('project').task(':SDK:MimeType:assembleRelease')
+    dependsOn gradle.includedBuild('project').task(':SDK:Download:assembleRelease')
+    dependsOn gradle.includedBuild('project').task(':SDK:QRCode:assembleRelease')
+    dependsOn gradle.includedBuild('project').task(':SDK:Popup:assembleRelease')
+    dependsOn gradle.includedBuild('project').task(':SDK:SmsUtil:assembleRelease')
 }
 
 //引入配置设置
@@ -56,7 +60,7 @@ apply plugin: 'maven-publish'
  *       ---------------------------
  *        compile    |       api
  *       provided    | implementation
- *       runtime     |     compile
+ *       runtime     |     compileOnly
  *
  */
 
@@ -72,7 +76,7 @@ enum Scope {
     PROVIDED('provided'),
 
     /**
-     *  类比 Gradle 中 compile
+     *  类比 Gradle 中 compileOnly
      **/
     RUNTIME('runtime'),
 
@@ -214,6 +218,10 @@ setGeneratePomFileAndDepends('ImageLoad')
 setGeneratePomFileAndDepends('DateUtil')
 setGeneratePomFileAndDepends('BitmapUtil')
 setGeneratePomFileAndDepends('MimeType')
+setGeneratePomFileAndDepends('Download')
+setGeneratePomFileAndDepends('QRCode')
+setGeneratePomFileAndDepends('Popup')
+setGeneratePomFileAndDepends('SmsUtil')
 
 // 设置 UniApp 相关的 POM 文件
 setUniAppGeneratePomFileAndDepends()
@@ -442,7 +450,6 @@ project.afterEvaluate {
                     setDependencyNode(root, 'compile', 'androidx.lifecycle', 'lifecycle-livedata-ktx', libs.versions.lifecycle.get())
                     setDependencyNode(root, 'compile', 'androidx.lifecycle', 'lifecycle-runtime-ktx', libs.versions.lifecycle.get())
 
-                    setDependencyNode(root, 'compile', 'com.github.jenly1314', 'zxing-lite', libs.versions.zxingLite.get())
                     setDependencyNode(root, 'compile', 'io.github.youth5201314', 'banner', libs.versions.banner.get())
                     setDependencyNode(root, 'compile', 'com.teprinciple', 'updateapputilsx', libs.versions.updateAppUtilsx.get())
                     setDependencyNode(root, 'compile', 'com.blankj', 'utilcodex', libs.versions.utilCodeX.get())
@@ -450,8 +457,6 @@ project.afterEvaluate {
                     setDependencyNode(root, 'compile', 'com.github.CarGuo.GSYVideoPlayer', 'GSYVideoPlayer', libs.versions.gsyVideoPlayer.get())
 
                     setDependencyNode(root, 'compile', 'com.tencent.tbs', 'tbssdk', libs.versions.tbsSdk.get())
-                    setDependencyNode(root, 'compile', 'com.github.getActivity', 'EasyHttp', libs.versions.easyHttp.get())
-                    setDependencyNode(root, 'compile', 'com.github.li-xiaojun', 'XPopup', libs.versions.xpopup.get())
                     setDependencyNode(root, 'compile', 'com.squareup.okhttp3', 'okhttp', libs.versions.okhttp.get())
                     setDependencyNode(root, 'compile', 'com.geyifeng.immersionbar', 'immersionbar', libs.versions.immersionBar.get())
                     setDependencyNode(root, 'compile', 'com.geyifeng.immersionbar', 'immersionbar-ktx', libs.versions.immersionBar.get())
@@ -634,6 +639,15 @@ project.afterEvaluate {
                     setDependencyNode(root, 'compile', myGroupId, 'base-ui', getPublicationVersion())
                     setDependencyNode(root, 'compile', myGroupId, 'activity-result', getPublicationVersion())
                     setDependencyNode(root, 'compile', myGroupId, 'xlog-init', getPublicationVersion())
+                    setDependencyNode(root, 'compile', myGroupId, 'umeng', getPublicationVersion())
+                    setDependencyNode(root, 'compile', myGroupId, 'permission', getPublicationVersion())
+                    setDependencyNode(root, 'compile', myGroupId, 'picture-selector', getPublicationVersion())
+                    setDependencyNode(root, 'compile', myGroupId, 'date-util', getPublicationVersion())
+                    setDependencyNode(root, 'compile', myGroupId, 'bitmap-util', getPublicationVersion())
+                    setDependencyNode(root, 'compile', myGroupId, 'download', getPublicationVersion())
+                    setDependencyNode(root, 'compile', myGroupId, 'qrcode', getPublicationVersion())
+                    setDependencyNode(root, 'compile', myGroupId, 'popup', getPublicationVersion())
+                    setDependencyNode(root, 'compile', myGroupId, 'sms-util', getPublicationVersion())
 
                     setDependencyNode(root, 'compile', 'com.github.lzyzsd', 'jsbridge', libs.versions.jsBridge.get())
 
@@ -657,8 +671,8 @@ project.afterEvaluate {
 
                 pom.withXml {
                     def root = asNode()
-                    setDependencyNode(root, 'compile', 'androidx.activity', 'activity', libs.versions.activity.get())
-                    setDependencyNode(root, 'compile', 'androidx.fragment', 'fragment', libs.versions.fragment.get())
+                    setDependencyNode(root, Scope.COMPILE, 'androidx.activity', 'activity', libs.versions.activity.get())
+                    setDependencyNode(root, Scope.COMPILE, 'androidx.fragment', 'fragment', libs.versions.fragment.get())
                     setScm(root)
                 }
             }
@@ -852,6 +866,106 @@ project.afterEvaluate {
 
                 pom.withXml {
 
+                }
+            }
+
+            Download(MavenPublication) {
+                def moduleName = 'Download'
+                def publishModuleName = 'download'
+
+                def modulePath = "$libProjectPath/SDK/$moduleName"
+
+                groupId myGroupId
+                artifactId publishModuleName
+                version getPublicationVersion()
+
+                artifact("$modulePath/build/outputs/aar/${moduleName}-release.aar")
+                artifact sourceAar(publishModuleName, modulePath)
+
+                pom.withXml {
+                    def root = asNode()
+                    setDependencyNode(root, Scope.PROVIDED, 'androidx.activity', 'activity', libs.versions.activity.get())
+                    setDependencyNode(root, Scope.PROVIDED, 'androidx.fragment', 'fragment', libs.versions.fragment.get())
+
+                    setDependencyNode(root, Scope.PROVIDED, myGroupId, 'uikit-toast', getPublicationVersion())
+                    setDependencyNode(root, Scope.PROVIDED, myGroupId, 'permission', getPublicationVersion())
+                    setDependencyNode(root, Scope.PROVIDED, myGroupId, 'xlog-init', getPublicationVersion())
+
+                    setDependencyNode(root, Scope.PROVIDED, 'com.squareup.okhttp3', 'okhttp', libs.versions.okhttp.get())
+                    setDependencyNode(root, Scope.COMPILE, 'com.github.getActivity', 'EasyHttp', libs.versions.easyHttp.get())
+                    setScm(root)
+                }
+            }
+
+            QRCode(MavenPublication) {
+                def moduleName = 'QRCode'
+                def publishModuleName = 'qrcode'
+
+                def modulePath = "$libProjectPath/SDK/$moduleName"
+
+                groupId myGroupId
+                artifactId publishModuleName
+                version getPublicationVersion()
+
+                artifact("$modulePath/build/outputs/aar/${moduleName}-release.aar")
+                artifact sourceAar(publishModuleName, modulePath)
+
+                pom.withXml {
+                    def root = asNode()
+
+                    setDependencyNode(root, Scope.PROVIDED, myGroupId, 'activity-result', getPublicationVersion())
+                    setDependencyNode(root, Scope.compile, 'com.github.jenly1314', 'zxing-lite', libs.versions.zxingLite.get())
+
+                    setScm(root)
+                }
+            }
+
+            Popup(MavenPublication) {
+                def moduleName = 'Popup'
+                def publishModuleName = 'popup'
+
+                def modulePath = "$libProjectPath/SDK/$moduleName"
+
+                groupId myGroupId
+                artifactId publishModuleName
+                version getPublicationVersion()
+
+                artifact("$modulePath/build/outputs/aar/${moduleName}-release.aar")
+                artifact sourceAar(publishModuleName, modulePath)
+
+                pom.withXml {
+                    def root = asNode()
+
+                    setDependencyNode(root, Scope.PROVIDED, 'androidx.appcompat', 'appcompat', libs.versions.appcompat.get())
+                    setDependencyNode(root, Scope.PROVIDED, 'androidx.recyclerview', 'recyclerview', libs.versions.recyclerview.get())
+                    setDependencyNode(root, Scope.PROVIDED, 'com.google.android.material', 'material', libs.versions.material.get())
+
+                    setDependencyNode(root, Scope.COMPILE, 'com.github.li-xiaojun', 'XPopup', libs.versions.xpopup.get())
+
+                    setScm(root)
+                }
+            }
+
+            SmsUtil(MavenPublication) {
+                def moduleName = 'SmsUtil'
+                def publishModuleName = 'sms-util'
+
+                def modulePath = "$libProjectPath/SDK/$moduleName"
+
+                groupId myGroupId
+                artifactId publishModuleName
+                version getPublicationVersion()
+
+                artifact("$modulePath/build/outputs/aar/${moduleName}-release.aar")
+                artifact sourceAar(publishModuleName, modulePath)
+
+                pom.withXml {
+                    def root = asNode()
+
+                    setDependencyNode(root, Scope.PROVIDED, 'androidx.activity', 'activity', libs.versions.activity.get())
+                    setDependencyNode(root, Scope.PROVIDED, 'androidx.fragment', 'fragment', libs.versions.fragment.get())
+
+                    setScm(root)
                 }
             }
 

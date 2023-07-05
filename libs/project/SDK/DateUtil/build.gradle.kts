@@ -1,4 +1,5 @@
 import com.buildsrc.Deps
+import  com.buildsrc.AndroidVersions
 
 plugins {
 	alias(libs.plugins.android.library)
@@ -7,13 +8,13 @@ plugins {
 
 android {
 	namespace = "com.hl.dateutil"
-	compileSdk = com.buildsrc.AndroidVersions.COMPILE_SDK
+	compileSdk = AndroidVersions.COMPILE_SDK
 
 	this.resourcePrefix = "hl_date_util_"
 
 	defaultConfig {
-		minSdk = com.buildsrc.AndroidVersions.MIN_SDK
-		targetSdk = com.buildsrc.AndroidVersions.TARGET_SDK
+		minSdk = AndroidVersions.MIN_SDK
+		targetSdk = AndroidVersions.TARGET_SDK
 
 		testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 		consumerProguardFiles("consumer-rules.pro")

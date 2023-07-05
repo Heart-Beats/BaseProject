@@ -7,10 +7,10 @@ plugins {
 }
 
 android {
-	namespace = "com.hl.bitmaputil"
+	namespace = "com.hl.qrcode"
 	compileSdk = AndroidVersions.COMPILE_SDK
 
-	this.resourcePrefix = "hl_bitmap_util_"
+	this.resourcePrefix = "hl_qrcode_"
 
 	defaultConfig {
 		minSdk = AndroidVersions.MIN_SDK
@@ -19,6 +19,7 @@ android {
 		testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 		consumerProguardFiles("consumer-rules.pro")
 	}
+
 
 	buildTypes {
 		release {
@@ -36,7 +37,6 @@ android {
 }
 
 dependencies {
-	implementation(project(":SDK:Permission"))
-	implementation(project(":SDK:MimeType"))
-	implementation(Deps.UtilCodeX.utilcodex)
+	implementation(project(":SDK:ActivityResult"))
+	api(Deps.ZXing.zxing_lite)
 }

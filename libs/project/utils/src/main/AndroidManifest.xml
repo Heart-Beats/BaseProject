@@ -20,12 +20,6 @@
         android:hardwareAccelerated="true"
         android:requestLegacyExternalStorage="true">
 
-        <!-- zxing_lite 的默认扫码页面需要主动声明 -->
-        <activity
-            android:name="com.king.zxing.CaptureActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/CaptureTheme" />
-
         <activity
             android:name=".previewFie.PreviewFileActivity"
             android:exported="false" />

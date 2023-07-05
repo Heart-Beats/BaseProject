@@ -1,11 +1,8 @@
 package com.hl.utils
 
-import android.app.Dialog
-import androidx.core.text.HtmlCompat
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
-import com.hl.uikit.actionsheet.ArrayListSheetDialogFragment
 import com.hl.uikit.dialog.AlertDialogFragment
 
 /**
@@ -19,18 +16,6 @@ fun DialogFragment.showInFragment(fragment: Fragment, tag: String = this.javaCla
 
 fun DialogFragment.showInActivity(activity: FragmentActivity, tag: String = this.javaClass.simpleName) {
     this.show(activity.supportFragmentManager, tag)
-}
-
-fun Fragment.showAgreeDialog(itemClickListener: (dialog: Dialog, position: Int) -> Unit) {
-    ArrayListSheetDialogFragment<CharSequence>().apply {
-        val serviceAgreement = HtmlCompat.fromHtml("<font color=\"#205BFF\">《慧徕店服务协议》</font>", 0)
-        val privacyAgreement = HtmlCompat.fromHtml("<font color=\"#205BFF\">《慧徕店隐私协议》</font>", 0)
-        this.data = listOf(serviceAgreement, privacyAgreement)
-        this.addNegativeButton()
-        this.itemClickListener = { dialog, position ->
-            itemClickListener(dialog, position)
-        }
-    }.showInFragment(this)
 }
 
 fun FragmentActivity.popConfirmDialog(

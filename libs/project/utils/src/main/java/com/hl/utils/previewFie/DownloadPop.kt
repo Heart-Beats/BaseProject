@@ -8,7 +8,7 @@ import com.elvishew.xlog.XLog
 import com.hjq.http.listener.OnDownloadListener
 import com.hl.uikit.onClick
 import com.hl.uikit.toast
-import com.hl.utils.DownloadFileUtil
+import com.hl.download.DownloadFileUtil
 import com.hl.utils.R
 import com.lxj.xpopup.core.BottomPopupView
 import kotlinx.android.synthetic.main.hl_utils_item_file_download.view.cancel_download
@@ -37,14 +37,14 @@ class DownloadPop(private val fragmentActivity: FragmentActivity, private val do
         cancelDownload.onClick {
             dismiss()
 
-            DownloadFileUtil.stopDownload(downloadUrl)
+            com.hl.download.DownloadFileUtil.stopDownload(downloadUrl)
         }
 
         startDownload(downloadProgressBar)
     }
 
     private fun startDownload(downloadProgressBar: ProgressBar) {
-        DownloadFileUtil.startDownLoad(
+        com.hl.download.DownloadFileUtil.startDownLoad(
             fragmentActivity, downloadUrl, getDownLoadFile().absolutePath,
             listener = object : OnDownloadListener {
                 override fun onDownloadProgressChange(file: File?, progress: Int) {

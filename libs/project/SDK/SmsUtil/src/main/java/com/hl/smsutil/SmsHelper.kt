@@ -1,17 +1,13 @@
-package com.hl.utils
+package com.hl.smsutil
 
 import android.app.Activity
 import android.app.PendingIntent
 import android.content.Intent
-import android.content.IntentFilter
 import android.net.Uri
 import android.telephony.PhoneNumberUtils
 import android.telephony.SmsManager
 import android.util.Log
 import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.DefaultLifecycleObserver
-import androidx.lifecycle.LifecycleOwner
-import com.hl.uikit.toast
 
 
 /**
@@ -37,62 +33,31 @@ class SmsHelper(val activity: FragmentActivity) {
 	 */
 	private var sendSmsResultCallBack: (Boolean) -> Unit = {}
 
-	/**
-	 * 	发送短信状态
-	 */
-	private val sendBroadcastReceiver by lazy {
-		MyBroadcastReceiver { receiver, _, intent ->
-			if (intent.action == SENT_SMS_ACTION) {
-				// 回调通知发送短信结果
-				sendSmsResultCallBack(receiver.resultCode == Activity.RESULT_OK)
-			}
-		}
-	}
-
-
-	/**
-	 * 接收短信状态
-	 */
-	private val deliverBroadcastReceiver by lazy {
-		MyBroadcastReceiver { receiver, context, intent ->
-			if (intent.action == DELIVERED_SMS_ACTION) {
-				Log.d(TAG, "收信人已经成功接收")
-			}
-		}
-	}
-
-
 	private val smsManager: SmsManager by lazy {
 		activity.getSystemService(SmsManager::class.java)
 	}
 
 	init {
-		activity.lifecycle.addObserver(object : DefaultLifecycleObserver {
-			override fun onCreate(owner: LifecycleOwner) {
-				// 注册广播
-				registerReceivers()
-			}
-
-			override fun onDestroy(owner: LifecycleOwner) {
-				// 注销广播
-				unRegisterReceivers()
-			}
-		})
-
+		// 注册广播
+		registerReceivers()
 	}
 
 
 	private fun registerReceivers() {
-		val sendIntentFilter = IntentFilter(SENT_SMS_ACTION)
-		activity.registerReceiver(sendBroadcastReceiver, sendIntentFilter)
+		// 发送短信状态广播
+		activity.registerReceiver(SENT_SMS_ACTION) { receiver, intent ->
+			if (intent.action == SENT_SMS_ACTION) {
+				// 回调通知发送短信结果
+				sendSmsResultCallBack(receiver.resultCode == Activity.RESULT_OK)
+			}
+		}
 
-		val deliverIntentFilter = IntentFilter(DELIVERED_SMS_ACTION)
-		activity.registerReceiver(deliverBroadcastReceiver, deliverIntentFilter)
-	}
-
-	private fun unRegisterReceivers() {
-		activity.unregisterReceiver(sendBroadcastReceiver)
-		activity.unregisterReceiver(deliverBroadcastReceiver)
+		// 接收短信状态广播
+		activity.registerReceiver(DELIVERED_SMS_ACTION) { receiver, intent ->
+			if (intent.action == DELIVERED_SMS_ACTION) {
+				Log.d(TAG, "收信人已经成功接收")
+			}
+		}
 	}
 
 
@@ -148,7 +113,7 @@ class SmsHelper(val activity: FragmentActivity) {
 
 			// 此种情况无法获取发送的结果状态
 		} else {
-			activity.toast("非合法的号码格式！")
+			Log.e(TAG, "非合法的号码格式！")
 			sendSmsResultCallBack(false)
 		}
 	}

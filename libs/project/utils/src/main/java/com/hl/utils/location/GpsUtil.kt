@@ -6,9 +6,7 @@ import android.location.LocationManager
 import android.provider.Settings
 import com.blankj.utilcode.util.ActivityUtils
 import com.hl.utils.BaseUtil
-import com.hl.activityresult.ActivityResultHelper
-import com.hl.activityresult.OnActivityResult
-import com.hl.utils.showPop
+import com.hl.popup.showPop
 
 /**
  * @author  张磊  on  2023/01/12 at 11:48

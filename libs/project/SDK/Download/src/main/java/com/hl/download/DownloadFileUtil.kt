@@ -1,4 +1,4 @@
-package com.hl.utils
+package com.hl.download
 
 import android.Manifest
 import android.os.Environment
@@ -6,11 +6,13 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
-import com.blankj.utilcode.util.FileUtils
 import com.elvishew.xlog.XLog
 import com.hjq.http.EasyHttp
 import com.hjq.http.listener.OnDownloadListener
 import com.hjq.http.request.DownloadRequest
+import com.hl.download.utils.FileUtil
+import com.hl.download.utils.getHttpContentLength
+import com.hl.mmkvsharedpreferences.getApp
 import com.hl.permission.reqPermissions
 import com.hl.uikit.toast
 import kotlinx.coroutines.launch
@@ -65,7 +67,7 @@ object DownloadFileUtil {
 		listener: OnDownloadListener
 	) {
 		val cacheFile = File(savePath)
-		val externalFilesDir = BaseUtil.app.getExternalFilesDir(null)
+		val externalFilesDir = getApp().getExternalFilesDir(null)
 
 		// 是否保存在 APP 私有目录下
 		val isSave2AppDir = cacheFile.absolutePath.contains(externalFilesDir?.absolutePath ?: "")
@@ -114,7 +116,7 @@ object DownloadFileUtil {
 				}
 			}
 			else -> {
-				throw IllegalArgumentException("lifecycleOwner 必须为 FragmentActivity 或 Fragment 类型")
+				throw error("lifecycleOwner 必须为 FragmentActivity 或 Fragment 类型")
 			}
 		}
 	}
@@ -130,7 +132,7 @@ object DownloadFileUtil {
 		listener: OnDownloadListener
 	) {
 		// 创建文件
-		if (!FileUtils.createOrExistsFile(saveFile)) {
+		if (!FileUtil.createOrExistsFile(saveFile)) {
 			XLog.i("创建下载文件失败")
 		}
 
@@ -194,7 +196,7 @@ object DownloadFileUtil {
 
 	private fun getCacheFile(isSave2AppDir: Boolean, fileUrl: String, fileName: String?): File {
 		val downloads = Environment.DIRECTORY_DOWNLOADS
-		val saveDir = if (isSave2AppDir) BaseUtil.app.getExternalFilesDir(downloads)
+		val saveDir = if (isSave2AppDir) getApp().getExternalFilesDir(downloads)
 		else Environment.getExternalStoragePublicDirectory(downloads)
 		val fileName = fileName ?: fileUrl.substringAfterLast("/")
 		return File(saveDir, fileName)
