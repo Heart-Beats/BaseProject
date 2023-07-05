@@ -22,7 +22,7 @@ import com.hl.uikit.progressbar.UIKitCircleProgressBar
 import com.hl.uikit.toast
 import com.hl.uikit.video.UIKitMyStandardGSYVideoPlayer
 import com.hl.uikit.visible
-import com.hl.utils.DownloadFileUtil
+import com.hl.download.DownloadFileUtil
 import com.hl.utils.R
 import com.hl.utils.getHttpContentLength
 import com.hl.mimetype.MimeType
@@ -30,7 +30,7 @@ import com.hl.utils.previewFie.superFileView.DocView
 import com.hl.utils.replaceFragment
 import com.hl.permission.reqPermissions
 import com.hl.utils.share.ShareUtil
-import com.hl.utils.showPop
+import com.hl.popup.showPop
 import com.hl.utils.startAct
 import com.hl.utils.videoplayer.initPlayer
 import kotlinx.android.synthetic.main.hl_utils_activity_preview_file.back
@@ -168,7 +168,7 @@ class PreviewFileActivity : FragmentActivity() {
                         //系统分享
                         ShareUtil.shareFile(this, cacheFile.absolutePath)
                     } else {
-                        DownloadFileUtil.startDownLoad(
+                        com.hl.download.DownloadFileUtil.startDownLoad(
                             this@PreviewFileActivity, fileUrl, cacheFile.absolutePath,
                             listener = object : OnDownloadListener {
                                 override fun onDownloadProgressChange(file: File?, progress: Int) {
@@ -279,7 +279,7 @@ class PreviewFileActivity : FragmentActivity() {
 
             progressBar.visibility = View.VISIBLE
 
-            DownloadFileUtil.startDownLoad(
+            com.hl.download.DownloadFileUtil.startDownLoad(
                 this@PreviewFileActivity, url, cacheFile.absolutePath,
                 listener = object : OnDownloadListener {
                     override fun onDownloadProgressChange(file: File?, progress: Int) {

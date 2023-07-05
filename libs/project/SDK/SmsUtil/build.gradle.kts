@@ -7,10 +7,10 @@ plugins {
 }
 
 android {
-	namespace = "com.hl.bitmaputil"
+	namespace = "com.hl.smsutil"
 	compileSdk = AndroidVersions.COMPILE_SDK
 
-	this.resourcePrefix = "hl_bitmap_util_"
+	this.resourcePrefix = "hl_sms_util_"
 
 	defaultConfig {
 		minSdk = AndroidVersions.MIN_SDK
@@ -19,6 +19,7 @@ android {
 		testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 		consumerProguardFiles("consumer-rules.pro")
 	}
+
 
 	buildTypes {
 		release {
@@ -35,8 +36,8 @@ android {
 	}
 }
 
+
 dependencies {
-	implementation(project(":SDK:Permission"))
-	implementation(project(":SDK:MimeType"))
-	implementation(Deps.UtilCodeX.utilcodex)
+	implementation(Deps.AndroidX.activity_ktx)
+	implementation(Deps.AndroidX.fragment_ktx)
 }

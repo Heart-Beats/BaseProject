@@ -95,8 +95,6 @@ dependencies {
     api Deps.Lifecycle.lifecycle_livedata_ktx
     api Deps.Lifecycle.lifecycle_viewmodel_ktx
 
-    api Deps.ZXing.zxing_lite
-
     api Deps.Banner.banner
     api Deps.Update.update_app_utilsx
     api Deps.UtilCodeX.utilcodex
@@ -104,9 +102,7 @@ dependencies {
     api Deps.GSYVideoPlayer.gsy_video_player
 
     api Deps.Tencent.tbs_sdk
-    api Deps.Okhttp.easy_http
-    api Deps.Popup.x_popup
-    api Deps.Okhttp.okhttp
+    implementation Deps.Okhttp.okhttp
     api Deps.Status_Bar.immersionbar
     api Deps.Status_Bar.immersionbar_ktx
     api Deps.Camera.camera

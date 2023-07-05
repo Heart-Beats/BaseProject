@@ -7,10 +7,10 @@ plugins {
 }
 
 android {
-	namespace = "com.hl.bitmaputil"
+	namespace = "com.hl.download"
 	compileSdk = AndroidVersions.COMPILE_SDK
 
-	this.resourcePrefix = "hl_bitmap_util_"
+	this.resourcePrefix = "hl_download_"
 
 	defaultConfig {
 		minSdk = AndroidVersions.MIN_SDK
@@ -36,7 +36,13 @@ android {
 }
 
 dependencies {
+	implementation(Deps.AndroidX.activity)
+	implementation(Deps.AndroidX.fragment)
+
+	implementation("com.hl:uikit-toast")
 	implementation(project(":SDK:Permission"))
-	implementation(project(":SDK:MimeType"))
-	implementation(Deps.UtilCodeX.utilcodex)
+	implementation(project(":SDK:XLogInit"))
+
+	implementation(Deps.Okhttp.okhttp)
+	api(Deps.Okhttp.easy_http)
 }
