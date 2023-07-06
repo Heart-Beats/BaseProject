@@ -35,6 +35,6 @@ android {
 }
 
 dependencies {
-	api(Deps.AndroidX.activity)
-	api(Deps.AndroidX.fragment)
+	api(Deps.AndroidX.activity_ktx)
+	api(Deps.AndroidX.fragment_ktx)
 }

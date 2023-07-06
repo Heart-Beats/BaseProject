@@ -79,6 +79,11 @@ dependencies {
     api project(':SDK:ImageLoad')
     api project(':SDK:DateUtil')
     api project(':SDK:MimeType')
+    api project(':SDK:Popup')
+
+    // camera 里使用到这两个依赖，也需抽出
+    api project(':base-ui')
+    api project(':SDK:PictureSelector')
 
     implementation Deps.AndroidX.core_ktx
     implementation Deps.AndroidX.appcompat
@@ -99,9 +104,6 @@ dependencies {
     api Deps.Update.update_app_utilsx
     api Deps.UtilCodeX.utilcodex
 
-    api Deps.GSYVideoPlayer.gsy_video_player
-
-    api Deps.Tencent.tbs_sdk
     implementation Deps.Okhttp.okhttp
     api Deps.Status_Bar.immersionbar
     api Deps.Status_Bar.immersionbar_ktx

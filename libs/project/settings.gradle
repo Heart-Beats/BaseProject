@@ -70,7 +70,7 @@ def includeSDK() {
     include ':SDK:Umeng', ':SDK:Pay', ':SDK:TencentCloud', 'SDK:Navigation', ':SDK:Web', ':SDK:ActivityResult',
             ':SDK:XLogInit', ':SDK:MMKVSharedPreferences', ':SDK:JsonUtil', ':SDK:Permission', ':SDK:PictureSelector',
             ':SDK:ImageLoad', ':SDK:DateUtil', ':SDK:BitmapUtil', ':SDK:MimeType', ':SDK:Download', ':SDK:QRCode',
-            ':SDK:Popup', ':SDK:SmsUtil'
+            ':SDK:Popup', ':SDK:SmsUtil', ':SDK:PreviewFile', ':SDK:Share', ':SDK:VideoPlayer'
 
     includeShadow()
 

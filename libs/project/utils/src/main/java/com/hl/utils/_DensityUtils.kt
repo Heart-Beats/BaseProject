@@ -3,17 +3,18 @@ package com.hl.utils
 import android.content.res.Resources
 import android.util.TypedValue
 
-val Int.dpInt
-	get() = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, this.toFloat(), Resources.getSystem().displayMetrics).toInt()
+internal val Int.dpInt
+	get() = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, this.toFloat(), Resources.getSystem().displayMetrics)
+		.toInt()
 
-val Int.dp
+internal val Int.dp
 	get() = this.dpInt
 
-val Int.sp
+internal val Int.sp
 	get() = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, this.toFloat(), Resources.getSystem().displayMetrics)
 
-val Float.dp
+internal val Float.dp
 	get() = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, this, Resources.getSystem().displayMetrics)
 
-val Float.sp
+internal val Float.sp
 	get() = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, this, Resources.getSystem().displayMetrics)

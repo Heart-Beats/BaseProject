@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <declare-styleable name="UIKitCircleProgressBar" tools:ignore="ResourceName">
+        <attr name="uikit_cpb_background" format="color|reference" />
+        <attr name="uikit_cpb_background_width" format="dimension|reference" />
+        <attr name="uikit_cpb_color" format="color|reference" />
+        <attr name="uikit_cpb_width" format="dimension|reference" />
+        <attr name="uikit_cpb_max_progress" format="float" />
+        <attr name="uikit_cpb_progress" format="float" />
+    </declare-styleable>
+</resources>

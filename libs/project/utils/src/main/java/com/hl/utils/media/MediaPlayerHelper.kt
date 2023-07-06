@@ -282,7 +282,7 @@ class MediaPlayerHelper(private val seekBar: SeekBar? = null, private val playLi
 		}
 
 		// 不进行自动播放，由用户自己控制
-		// play()
+		play()
 	}
 
 	// 目前无法收到播放完成的回调，通过进度判断手动发出通知

@@ -65,7 +65,7 @@ internal object Versions {
     const val FLOW_LAYOUT = "1.1.2"
     const val CAMERA = "1.1.9"
     const val VERIFICATION_CODE_INPUT_VIEW = "1.0.2"
-    const val GSY_VIDEO_PLAYER = "v8.2.0-release-jitpack"
+    const val GSY_VIDEO_PLAYER = "v8.3.5-release-jitpack"
     const val WEI_XIN_OPEN_SDK = "+"
     const val TBS_SDK = "44181"
     const val TENCENT_COS = "5.9.+"

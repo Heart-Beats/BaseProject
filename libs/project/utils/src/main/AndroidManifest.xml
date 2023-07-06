@@ -15,42 +15,12 @@
 
     <uses-permission android:name="android.permission.SEND_SMS"/>
 
-    <!-- zxing-android-embedded 使用了 TextureView，因此需要硬件加速 -->
     <application
-        android:hardwareAccelerated="true"
         android:requestLegacyExternalStorage="true">
-
-        <activity
-            android:name=".previewFie.PreviewFileActivity"
-            android:exported="false" />
 
         <activity
             android:name=".camera.MyCaptureActivity"
             android:exported="false" />
-
-        <!--  x5 中需要使用到的  FileProvider  -->
-        <provider
-            android:name="androidx.core.content.FileProvider"
-            android:authorities="${applicationId}.fileprovider"
-            android:exported="false"
-            android:grantUriPermissions="true">
-            <meta-data
-                android:resource="@xml/hl_utils_public_file_paths"
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                tools:replace="android:resource" />
-        </provider>
-
-        <provider
-            android:name="com.tencent.smtt.utils.FileProvider"
-            android:authorities="${applicationId}.provider"
-            android:exported="false"
-            android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-
-                android:resource="@xml/hl_utils_public_file_paths" />
-        </provider>
-        <!--  x5 中需要使用到的  FileProvider  -->
 
 
         <!-- 使用 startup 完成初始化并进行启动优化-->

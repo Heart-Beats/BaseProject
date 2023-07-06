@@ -36,6 +36,9 @@ task buildSdk() {
     dependsOn gradle.includedBuild('project').task(':SDK:QRCode:assembleRelease')
     dependsOn gradle.includedBuild('project').task(':SDK:Popup:assembleRelease')
     dependsOn gradle.includedBuild('project').task(':SDK:SmsUtil:assembleRelease')
+    dependsOn gradle.includedBuild('project').task(':SDK:PreviewFile:assembleRelease')
+    dependsOn gradle.includedBuild('project').task(':SDK:Share:assembleRelease')
+    dependsOn gradle.includedBuild('project').task(':SDK:VideoPlayer:assembleRelease')
 }
 
 //引入配置设置
@@ -222,6 +225,9 @@ setGeneratePomFileAndDepends('Download')
 setGeneratePomFileAndDepends('QRCode')
 setGeneratePomFileAndDepends('Popup')
 setGeneratePomFileAndDepends('SmsUtil')
+setGeneratePomFileAndDepends('PreviewFile')
+setGeneratePomFileAndDepends('Share')
+setGeneratePomFileAndDepends('VideoPlayer')
 
 // 设置 UniApp 相关的 POM 文件
 setUniAppGeneratePomFileAndDepends()
@@ -281,7 +287,6 @@ project.afterEvaluate {
                     setDependencyNode(root, 'compile', 'io.github.lucksiege', 'pictureselector', libs.versions.pictureSelector.get())
                     setDependencyNode(root, 'compile', 'io.github.lucksiege', 'compress', libs.versions.pictureSelector.get())
                     setDependencyNode(root, 'compile', 'com.github.bumptech.glide', 'glide', libs.versions.glide.get())
-                    setDependencyNode(root, 'compile', 'com.github.CarGuo.GSYVideoPlayer', 'GSYVideoPlayer', libs.versions.gsyVideoPlayer.get())
                     setDependencyNode(root, 'compile', 'com.github.getActivity', 'ShapeView', libs.versions.shapeView.get())
                     setScm(root)
                 }
@@ -454,9 +459,6 @@ project.afterEvaluate {
                     setDependencyNode(root, 'compile', 'com.teprinciple', 'updateapputilsx', libs.versions.updateAppUtilsx.get())
                     setDependencyNode(root, 'compile', 'com.blankj', 'utilcodex', libs.versions.utilCodeX.get())
 
-                    setDependencyNode(root, 'compile', 'com.github.CarGuo.GSYVideoPlayer', 'GSYVideoPlayer', libs.versions.gsyVideoPlayer.get())
-
-                    setDependencyNode(root, 'compile', 'com.tencent.tbs', 'tbssdk', libs.versions.tbsSdk.get())
                     setDependencyNode(root, 'compile', 'com.squareup.okhttp3', 'okhttp', libs.versions.okhttp.get())
                     setDependencyNode(root, 'compile', 'com.geyifeng.immersionbar', 'immersionbar', libs.versions.immersionBar.get())
                     setDependencyNode(root, 'compile', 'com.geyifeng.immersionbar', 'immersionbar-ktx', libs.versions.immersionBar.get())
@@ -648,6 +650,7 @@ project.afterEvaluate {
                     setDependencyNode(root, 'compile', myGroupId, 'qrcode', getPublicationVersion())
                     setDependencyNode(root, 'compile', myGroupId, 'popup', getPublicationVersion())
                     setDependencyNode(root, 'compile', myGroupId, 'sms-util', getPublicationVersion())
+                    setDependencyNode(root, 'compile', myGroupId, 'preview-file', getPublicationVersion())
 
                     setDependencyNode(root, 'compile', 'com.github.lzyzsd', 'jsbridge', libs.versions.jsBridge.get())
 
@@ -671,8 +674,8 @@ project.afterEvaluate {
 
                 pom.withXml {
                     def root = asNode()
-                    setDependencyNode(root, Scope.COMPILE, 'androidx.activity', 'activity', libs.versions.activity.get())
-                    setDependencyNode(root, Scope.COMPILE, 'androidx.fragment', 'fragment', libs.versions.fragment.get())
+                    setDependencyNode(root, Scope.COMPILE, 'androidx.activity', 'activity_ktx', libs.versions.activity.get())
+                    setDependencyNode(root, Scope.COMPILE, 'androidx.fragment', 'fragment_ktx', libs.versions.fragment.get())
                     setScm(root)
                 }
             }
@@ -914,6 +917,7 @@ project.afterEvaluate {
                     def root = asNode()
 
                     setDependencyNode(root, Scope.PROVIDED, myGroupId, 'activity-result', getPublicationVersion())
+                    setDependencyNode(root, Scope.PROVIDED, 'androidx.appcompat', 'appcompat', libs.versions.appcompat.get())
                     setDependencyNode(root, Scope.compile, 'com.github.jenly1314', 'zxing-lite', libs.versions.zxingLite.get())
 
                     setScm(root)
@@ -938,7 +942,7 @@ project.afterEvaluate {
 
                     setDependencyNode(root, Scope.PROVIDED, 'androidx.appcompat', 'appcompat', libs.versions.appcompat.get())
                     setDependencyNode(root, Scope.PROVIDED, 'androidx.recyclerview', 'recyclerview', libs.versions.recyclerview.get())
-                    setDependencyNode(root, Scope.PROVIDED, 'com.google.android.material', 'material', libs.versions.material.get())
+                    setDependencyNode(root, Scope.COMPILE, 'com.google.android.material', 'material', libs.versions.material.get())
 
                     setDependencyNode(root, Scope.COMPILE, 'com.github.li-xiaojun', 'XPopup', libs.versions.xpopup.get())
 
@@ -964,6 +968,93 @@ project.afterEvaluate {
 
                     setDependencyNode(root, Scope.PROVIDED, 'androidx.activity', 'activity', libs.versions.activity.get())
                     setDependencyNode(root, Scope.PROVIDED, 'androidx.fragment', 'fragment', libs.versions.fragment.get())
+
+                    setScm(root)
+                }
+            }
+
+            PreviewFile(MavenPublication) {
+                def moduleName = 'PreviewFile'
+                def publishModuleName = 'preview-file'
+
+                def modulePath = "$libProjectPath/SDK/$moduleName"
+
+                groupId myGroupId
+                artifactId publishModuleName
+                version getPublicationVersion()
+
+                artifact("$modulePath/build/outputs/aar/${moduleName}-release.aar")
+                artifact sourceAar(publishModuleName, modulePath)
+
+                pom.withXml {
+                    def root = asNode()
+
+                    setDependencyNode(root, Scope.PROVIDED, myGroupId, 'uikit-toast', getPublicationVersion())
+                    setDependencyNode(root, Scope.PROVIDED, myGroupId, 'base-ui', getPublicationVersion())
+                    setDependencyNode(root, Scope.PROVIDED, myGroupId, 'base-app-res', getPublicationVersion())
+                    setDependencyNode(root, Scope.PROVIDED, myGroupId, 'xlog-init', getPublicationVersion())
+                    setDependencyNode(root, Scope.PROVIDED, myGroupId, 'mime-type', getPublicationVersion())
+                    setDependencyNode(root, Scope.PROVIDED, myGroupId, 'image-load', getPublicationVersion())
+                    setDependencyNode(root, Scope.PROVIDED, myGroupId, 'permission', getPublicationVersion())
+                    setDependencyNode(root, Scope.PROVIDED, myGroupId, 'download', getPublicationVersion())
+                    setDependencyNode(root, Scope.PROVIDED, myGroupId, 'popup', getPublicationVersion())
+                    setDependencyNode(root, Scope.PROVIDED, myGroupId, 'share', getPublicationVersion())
+                    setDependencyNode(root, Scope.PROVIDED, myGroupId, 'video-player', getPublicationVersion())
+
+                    setDependencyNode(root, Scope.PROVIDED, 'com.squareup.okhttp3', 'okhttp', libs.versions.okhttp.get())
+                    setDependencyNode(root, Scope.COMPILE, 'com.tencent.tbs', 'tbssdk', libs.versions.tbsSdk.get())
+
+                    setScm(root)
+                }
+            }
+
+            Share(MavenPublication) {
+                def moduleName = 'Share'
+                def publishModuleName = 'share'
+
+                def modulePath = "$libProjectPath/SDK/$moduleName"
+
+                groupId myGroupId
+                artifactId publishModuleName
+                version getPublicationVersion()
+
+                artifact("$modulePath/build/outputs/aar/${moduleName}-release.aar")
+                artifact sourceAar(publishModuleName, modulePath)
+
+                pom.withXml {
+                    def root = asNode()
+
+                    setDependencyNode(root, Scope.PROVIDED, 'androidx.core', 'core-ktx', libs.versions.coreKtx.get())
+
+                    setDependencyNode(root, Scope.PROVIDED, myGroupId, 'uikit-toast', getPublicationVersion())
+                    setDependencyNode(root, Scope.PROVIDED, myGroupId, 'mime-type', getPublicationVersion())
+
+                    setScm(root)
+                }
+            }
+
+            VideoPlayer(MavenPublication) {
+                def moduleName = 'VideoPlayer'
+                def publishModuleName = 'video-player'
+
+                def modulePath = "$libProjectPath/SDK/$moduleName"
+
+                groupId myGroupId
+                artifactId publishModuleName
+                version getPublicationVersion()
+
+                artifact("$modulePath/build/outputs/aar/${moduleName}-release.aar")
+                artifact sourceAar(publishModuleName, modulePath)
+
+                pom.withXml {
+                    def root = asNode()
+
+                    setDependencyNode(root, Scope.PROVIDED, 'androidx.activity', 'activity', libs.versions.activity.get())
+                    setDependencyNode(root, Scope.PROVIDED, 'androidx.fragment', 'fragment', libs.versions.fragment.get())
+
+                    setDependencyNode(root, Scope.PROVIDED, myGroupId, 'ImageLoad', getPublicationVersion())
+
+                    setDependencyNode(root,Scope.COMPILE, 'com.github.CarGuo.GSYVideoPlayer', 'GSYVideoPlayer', libs.versions.gsyVideoPlayer.get())
 
                     setScm(root)
                 }

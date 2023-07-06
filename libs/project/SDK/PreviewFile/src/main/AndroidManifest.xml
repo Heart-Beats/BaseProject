@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <application>
+
+        <activity
+            android:name="com.hl.previewfile.PreviewFileActivity"
+            android:exported="false"
+            android:theme="@style/Theme.MaterialComponents.Light.NoActionBar.Bridge" />
+
+        <!--  x5 中需要使用到的  FileProvider  -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/hl_res_public_file_paths"
+                tools:replace="android:resource" />
+        </provider>
+
+        <provider
+            android:name="com.tencent.smtt.utils.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+
+                android:resource="@xml/hl_res_public_file_paths" />
+        </provider>
+        <!--  x5 中需要使用到的  FileProvider  -->
+
+        <!-- 使用 startup 完成初始化并进行启动优化-->
+        <provider
+            android:name="androidx.startup.InitializationProvider"
+            android:authorities="${applicationId}.androidx-startup"
+            android:exported="false"
+            tools:node="merge">
+
+            <!--可使用  tools:node="remove" 标签移除 Initializer 的初始化或者 startup -->
+            <meta-data
+                android:name="com.hl.previewfile.PreviewFileInitializer"
+                android:value="androidx.startup" />
+        </provider>
+    </application>
+</manifest>

@@ -1,8 +1,8 @@
 package com.hl.utils.location
 
 import android.content.Context
-import com.hl.uikit.onClick
 import com.hl.utils.R
+import com.hl.utils.onClick
 import com.lxj.xpopup.core.CenterPopupView
 import com.lxj.xpopup.util.XPopupUtils
 import kotlinx.android.synthetic.main.hl_utils_pop_request_open_gps.view.*
