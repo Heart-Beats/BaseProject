@@ -5,7 +5,7 @@ import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import androidx.navigation.navDeepLink
 import com.hl.baseproject.compose.utils.parcelableNavType
-import com.hl.utils.toJson
+import com.hl.json.toJson
 import kotlinx.parcelize.Parcelize
 
 /**

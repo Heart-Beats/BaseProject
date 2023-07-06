@@ -124,7 +124,7 @@ abstract class MvpBaseActivity<Presenter : MvpBasePresenter<out MvpBaseView>> : 
         emptyLayout = findViewById<View>(R.id.emptyLayout) as RelativeLayout
         emptyTV = emptyLayout!!.findViewById(R.id.tvEmtyHit)
         menuTV!!.setOnClickListener { onTvMenuClick() }
-        menuIV!!.setOnClickListener { onIvMenuClick() }
+        menuIV.setOnClickListener { onIvMenuClick() }
         errorLayout!!.setOnClickListener {
             errorLayout!!.visibility = View.GONE
             requestData()
@@ -233,14 +233,14 @@ abstract class MvpBaseActivity<Presenter : MvpBasePresenter<out MvpBaseView>> : 
     }
 
     fun setMenuSrc(id: Int) {
-        menuIV!!.setImageResource(id)
-        menuIV!!.visibility = View.VISIBLE
+        menuIV.setImageResource(id)
+        menuIV.visibility = View.VISIBLE
     }
 
     //增加title
     fun setMenuVisible(visible: Boolean) {
         menuTV!!.visibility = if (visible) View.VISIBLE else View.GONE
-        menuIV!!.visibility = if (visible) View.VISIBLE else View.GONE
+        menuIV.visibility = if (visible) View.VISIBLE else View.GONE
     }
 
     //隐藏无网络布局

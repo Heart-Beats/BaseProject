@@ -12,14 +12,13 @@ import com.hl.baseproject.shadow.pps.TestPluginProcessService
 import com.hl.baseproject.shadow.pps.ZKYPluginProcessService
 import com.hl.shadow.Shadow
 import com.hl.shadow.lib.ShadowConstants
-import com.hl.uikit.onClick
+import com.hl.ui.utils.onClick
 import com.hl.uikit.toast
 import com.hl.utils.AppSizeUtil
 import com.hl.utils.copyAssets2Path
-import com.hl.utils.reqPermissions
+import com.hl.permission.reqPermissions
 import com.lxj.xpopup.XPopup
 import com.tencent.shadow.dynamic.host.EnterCallback
-import kotlinx.coroutines.NonDisposableHandle.parent
 import java.io.File
 
 /**

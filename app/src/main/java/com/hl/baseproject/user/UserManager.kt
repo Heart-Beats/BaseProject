@@ -2,10 +2,9 @@ package com.hl.baseproject.user
 
 import android.text.TextUtils
 import androidx.core.content.edit
-import com.hl.utils.BaseUtil
-import com.hl.utils.getObject
-import com.hl.utils.putObject
-import com.hl.utils.sharedPreferences
+import com.hl.mmkvsharedpreferences.getObject
+import com.hl.mmkvsharedpreferences.putObject
+import com.hl.mmkvsharedpreferences.sharedPreferences
 
 
 /**
@@ -26,12 +25,12 @@ object UserManager {
 			}
 		}
 
-		BaseUtil.app.sharedPreferences().edit {
+		sharedPreferences().edit {
 			putObject(SP_USER_KEY, userInfo ?: "")
 		}
 	}
 
 	fun getUser(): UserInfo {
-		return BaseUtil.app.sharedPreferences().getObject<UserInfo>(SP_USER_KEY) ?: UserInfo()
+		return sharedPreferences().getObject<UserInfo>(SP_USER_KEY) ?: UserInfo()
 	}
 }

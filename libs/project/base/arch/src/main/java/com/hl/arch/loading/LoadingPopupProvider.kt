@@ -4,7 +4,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import com.blankj.utilcode.util.ActivityUtils
-import com.hl.utils.createPop
+import com.hl.popup.createPop
 import com.lxj.xpopup.impl.LoadingPopupView
 import java.lang.ref.WeakReference
 

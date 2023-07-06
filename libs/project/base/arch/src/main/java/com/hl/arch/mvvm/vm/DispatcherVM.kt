@@ -13,7 +13,7 @@ import com.hl.arch.mvvm.liveData.EventLiveData
  * @author  张磊  on  2023/05/30 at 11:32
  * Email: 913305160@qq.com
  */
-open abstract class DispatcherVM : ViewModel(), IApiEventProvider {
+abstract class DispatcherVM : ViewModel(), IApiEventProvider {
 	private val tag = "DispatcherVM"
 
 	/**

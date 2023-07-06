@@ -13,13 +13,11 @@ import com.hl.baseproject.R
 import com.hl.baseproject.databinding.FragmentTestBinding
 import com.hl.tencentcloud.cos.TencentCosUtil
 import com.hl.tencentcloud.cos.TransferListener
-import com.hl.uikit.onClick
+import com.hl.ui.utils.onClick
 import com.hl.uikit.toast
-import com.hl.utils.BitmapUtil
+import com.hl.bitmaputil.BitmapUtil
 import com.hl.utils.TimeUtil
-import com.hl.utils.XLogUtil
-import com.hl.utils.date.DatePattern
-import com.hl.utils.date.toFormatString
+import com.hl.dateutil.toFormatString
 import com.hl.utils.launchHome
 import com.hl.utils.media.MediaPlayerHelper
 import com.hl.utils.media.OnPlayListener
@@ -74,7 +72,7 @@ class TestFragment : ViewBindingMvvmBaseFragment<FragmentTestBinding>() {
 
 		testSaveImage.onClick {
 			val bitmap = ImageUtils.view2Bitmap(testImage)
-			BitmapUtil.saveBitmap(requireContext(), bitmap, "测试图片.png", failAction = {
+			com.hl.bitmaputil.BitmapUtil.saveBitmap(requireContext(), bitmap, "测试图片.png", failAction = {
 				toast(it)
 			}) {
 				toast("保存图片成功")
@@ -87,8 +85,8 @@ class TestFragment : ViewBindingMvvmBaseFragment<FragmentTestBinding>() {
 				"REPLACED", "REPLACED"
 			)
 
-			val date = Date().toFormatString(DatePattern.YMD)
-			val logFile = XLogUtil.logFile
+			val date = Date().toFormatString(com.hl.dateutil.DatePattern.YMD)
+			val logFile = com.hl.xloginit.XLogUtil.logFile
 
 			val cosPath = "YMLog/Test/BaseProject/${date}/Android/${BuildConfig.VERSION_NAME}/测试_${logFile?.name}"
 

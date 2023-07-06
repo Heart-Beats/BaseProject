@@ -11,32 +11,31 @@ import android.os.Environment
 import com.elvishew.xlog.XLog
 import com.github.nisrulz.sensey.Sensey
 import com.github.nisrulz.sensey.ShakeDetector.ShakeListener
-import com.hl.arch.web.navigateToWeb
 import com.hl.baseproject.TestActivity
 import com.hl.baseproject.TestActivity2
 import com.hl.baseproject.base.BaseFragment
 import com.hl.baseproject.databinding.FragmentMainBinding
-import com.hl.uikit.onClick
+import com.hl.permission.reqPermissions
+import com.hl.ui.utils.onClick
 import com.hl.uikit.toast
 import com.hl.unimp.UniMPHelper
 import com.hl.utils.*
-import com.hl.utils.activityResult.ActivityResultHelper
-import com.hl.utils.activityResult.OnActivityResult
 import com.hl.utils.camera.CaptureFeature
 import com.hl.utils.camera.MyCaptureActivity
-import com.hl.utils.location.GpsUtil
 import com.hl.utils.navigation.findNavController
-import com.hl.utils.previewFie.PreviewFileActivity
-import com.hl.utils.qrcode.QRScanUtil
+import com.hl.previewfile.PreviewFileActivity
+import com.hl.ui.utils.onClick
+import com.hl.ui.utils.setImmersiveSystemBar
+import com.hl.web.navigateToWeb
 import com.lxj.xpopup.XPopup
 import java.io.File
 
 
 class MainFragment : BaseFragment<FragmentMainBinding>() {
 
-	private val qrScanUtil = QRScanUtil(this)
+	private val qrScanUtil = com.hl.qrcode.QRScanUtil(this)
 
-	private val activityResultHelper = ActivityResultHelper(this)
+	private val activityResultHelper = com.hl.activityresult.ActivityResultHelper(this)
 
 	private val letterArray: List<String> by lazy {
 		val list = ('A'..'C').map { it.toString() }.toMutableList()
@@ -133,7 +132,8 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
 				val captureIntent = Intent(requireContext(), MyCaptureActivity::class.java).apply {
 					this.putExtra(MyCaptureActivity.CAPTURE_FEATURES, CaptureFeature.BOTH)
 				}
-				activityResultHelper.launchIntent(captureIntent, callback = object : OnActivityResult {
+				activityResultHelper.launchIntent(captureIntent, callback = object :
+					com.hl.activityresult.OnActivityResult {
 					override fun onResultOk(data: Intent?) {
 						val captureFilePath = data?.getStringExtra(MyCaptureActivity.CAPTURE_FILE_PATH)
 						toast("拍摄后路径 == $captureFilePath")
@@ -156,7 +156,8 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
 		}
 
 		gotoTest1.onClick {
-			activityResultHelper.launchActivity(TestActivity::class.java, callback = object : OnActivityResult {
+			activityResultHelper.launchActivity(TestActivity::class.java, callback = object :
+				com.hl.activityresult.OnActivityResult {
 				override fun onResultOk(data: Intent?) {
 					toast(data?.getStringExtra("data") ?: "")
 				}
@@ -164,7 +165,8 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
 		}
 
 		gotoTest2.onClick {
-			activityResultHelper.launchActivity(TestActivity2::class.java, callback = object : OnActivityResult {
+			activityResultHelper.launchActivity(TestActivity2::class.java, callback = object :
+				com.hl.activityresult.OnActivityResult {
 				override fun onResultOk(data: Intent?) {
 					toast(data?.getStringExtra("data") ?: "")
 				}

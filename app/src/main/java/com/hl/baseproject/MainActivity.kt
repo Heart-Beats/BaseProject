@@ -1,9 +1,8 @@
 package com.hl.baseproject
 
 import android.os.Bundle
-import com.hl.arch.base.ViewBindingBaseActivity
 import com.hl.baseproject.databinding.ActivityMainBinding
-import com.hl.navigatioin.MyNavHostFragment
+import com.hl.ui.base.ViewBindingBaseActivity
 
 
 class MainActivity : ViewBindingBaseActivity<ActivityMainBinding>() {

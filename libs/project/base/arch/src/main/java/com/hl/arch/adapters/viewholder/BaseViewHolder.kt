@@ -4,7 +4,7 @@ import android.view.View
 import androidx.annotation.IdRes
 import androidx.recyclerview.widget.RecyclerView
 import com.hl.arch.adapters.IDataOperate
-import com.hl.uikit.onClick
+import com.hl.ui.utils.onClick
 
 /**
  * @author  张磊  on  2022/09/22 at 14:10
