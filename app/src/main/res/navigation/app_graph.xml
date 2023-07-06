@@ -26,9 +26,9 @@
 
     <fragment
         android:id="@+id/webViewFragment"
-        android:name="com.hl.arch.web.WebViewFragment"
+        android:name="com.hl.web.WebViewFragment"
         android:label="WebViewFragment"
-        tools:layout="@layout/fragment_web_view">
+        tools:layout="@layout/hl_web_fragment_web_view">
         <!--<argument-->
         <!--    android:name="title"-->
         <!--    android:defaultValue="@null"-->

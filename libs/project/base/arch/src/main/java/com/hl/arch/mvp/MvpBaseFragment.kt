@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.hl.arch.base.BaseFragment
+import com.hl.arch.base.BaseNavigationFragment
 import com.hl.uikit.toast
 
 /**
@@ -14,7 +14,7 @@ import com.hl.uikit.toast
  * @param <Presenter>
  * @author 91330
 </Presenter> */
-abstract class MvpBaseFragment<Presenter : MvpBasePresenter<out MvpBaseView>> : BaseFragment(), MvpBaseView {
+abstract class MvpBaseFragment<Presenter : MvpBasePresenter<out MvpBaseView>> : BaseNavigationFragment(), MvpBaseView {
 
     protected var presenter: Presenter? = null
         private set

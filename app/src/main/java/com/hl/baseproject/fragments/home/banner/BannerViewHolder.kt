@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.hl.utils.getColorByRes
 import com.hl.baseproject.R
 import com.hl.baseproject.repository.network.bean.BannerData
-import com.hl.utils.GlideUtil
+import com.hl.imageload.GlideUtil
 
 /**
  * @author  张磊  on  2022/09/01 at 21:25

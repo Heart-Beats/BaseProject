@@ -2,14 +2,13 @@ package com.hl.baseproject
 
 import android.content.Intent
 import android.os.Bundle
-import com.hl.arch.base.ViewBindingBaseActivity
 import com.hl.baseproject.databinding.ActivityTest2Binding
-import com.hl.uikit.onClick
+import com.hl.ui.utils.onClick
 import com.hl.uikit.toast
 import com.hl.utils.PaletteUtil
-import com.hl.utils.toBitmap
+import com.hl.bitmaputil.toBitmap
 
-class TestActivity2 : ViewBindingBaseActivity<ActivityTest2Binding>() {
+class TestActivity2 : com.hl.ui.base.ViewBindingBaseActivity<ActivityTest2Binding>() {
 
 	@Deprecated("Deprecated in Java")
 	override fun onBackPressed() {

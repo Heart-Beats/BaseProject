@@ -156,7 +156,7 @@ class ItemDragCallBack<T>(private val adapterData: MutableList<T>, private val i
 					is LinearLayoutManager -> {
 
 						// 长按时修改背景色
-						longPressColor?.run {
+						longPressColor.run {
 
 							// 保存原有背景效果
 							lastItemViewBackground = itemView.background

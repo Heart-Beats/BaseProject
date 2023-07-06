@@ -9,18 +9,18 @@ import com.hl.arch.adapters.BaseSingleAdapter
 import com.hl.arch.adapters.drag.ItemDragCallBack
 import com.hl.arch.adapters.viewholder.BaseViewHolder
 import com.hl.arch.mvvm.vm.activityViewModels
-import com.hl.arch.web.navigateToWeb
 import com.hl.baseproject.R
 import com.hl.baseproject.base.BaseFragment
 import com.hl.baseproject.databinding.FragmentHomeMiddleBinding
 import com.hl.baseproject.repository.network.bean.Article
 import com.hl.baseproject.viewmodels.DataViewModel
 import com.hl.baseproject.viewmodels.HomeViewModel
-import com.hl.utils.GlideUtil
-import com.hl.utils.date.toFormatString
+import com.hl.imageload.GlideUtil
+import com.hl.dateutil.toFormatString
 import com.hl.utils.onceLastObserve
 import com.hl.utils.setItemTouchHelper
-import com.hl.utils.showImage
+import com.hl.popup.showImage
+import com.hl.web.navigateToWeb
 import java.security.SecureRandom
 import java.util.Date
 

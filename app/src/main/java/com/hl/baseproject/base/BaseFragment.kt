@@ -13,7 +13,6 @@ import com.hl.utils.onceLastObserve
  * Email: 913305160@qq.com
  */
 abstract class BaseFragment<Binding : ViewBinding> : ViewBindingMvvmBaseFragment<Binding>() {
-	protected val TAG = this.javaClass.simpleName
 
 	override fun onLiveDataVMCreated(liveDataVM: LiveDataVM) {
 		super.onLiveDataVMCreated(liveDataVM)

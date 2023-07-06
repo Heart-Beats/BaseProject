@@ -39,7 +39,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.hl.arch.base.ComposeBaseFragment
+import com.hl.ui.base.ComposeBaseFragment
 import com.hl.arch.mvvm.vm.viewModels
 import com.hl.baseproject.R
 import com.hl.baseproject.base.FlowBaseViewModel
@@ -75,7 +75,7 @@ import kotlinx.coroutines.launch
  *
  *
  */
-class ComposeSideEffectsFragment : ComposeBaseFragment() {
+class ComposeSideEffectsFragment : com.hl.ui.base.ComposeBaseFragment() {
 
 	val viewModel: ComposeSideEffectsViewModel by viewModels()
 

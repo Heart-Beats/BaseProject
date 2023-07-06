@@ -70,7 +70,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.activityViewModels
-import com.hl.arch.base.ComposeBaseFragment
+import com.hl.ui.base.ComposeBaseFragment
 import com.hl.baseproject.R
 import com.hl.baseproject.compose.AppComposeTheme
 import com.hl.baseproject.compose.randomColor
@@ -84,7 +84,7 @@ import com.hl.baseproject.compose.widgets.VerticalDivider
 import com.hl.baseproject.viewmodels.DataViewModel
 import com.hl.uikit.toast
 
-class ComposeLayoutsFragment : ComposeBaseFragment() {
+class ComposeLayoutsFragment : com.hl.ui.base.ComposeBaseFragment() {
 
 	private val dataViewModel by activityViewModels<DataViewModel>()
 
