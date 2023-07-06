@@ -14,7 +14,7 @@ import androidx.core.view.get
  * @param  findViewType 需要查找的子 View 类型
  * @return 若找到返回第一个找到的 子 View， 否则返回 null
  */
-internal fun <T : View> View.traverseFindFirstViewByType(findViewType: Class<T>): T? {
+fun <T : View> View.traverseFindFirstViewByType(findViewType: Class<T>): T? {
 	val parentView = this
 	if (findViewType.isInstance(parentView)) {
 		@Suppress("UNCHECKED_CAST")
@@ -38,7 +38,7 @@ internal fun <T : View> View.traverseFindFirstViewByType(findViewType: Class<T>)
  * @param  tag 需要查找的子 View 的 tag
  * @return 若找到返回第一个找到的 子 View， 否则返回 null
  */
-internal fun <T : View> View.traverseFindFirstViewByTag(tag: String): T? {
+fun <T : View> View.traverseFindFirstViewByTag(tag: String): T? {
 	val parentView = this
 	if (this.tag == tag) {
 		@Suppress("UNCHECKED_CAST")

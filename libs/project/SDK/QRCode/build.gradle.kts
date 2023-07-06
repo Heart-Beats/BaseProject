@@ -38,5 +38,8 @@ android {
 
 dependencies {
 	implementation(project(":SDK:ActivityResult"))
+
+	implementation(Deps.AndroidX.appcompat) // zxing_lite 使用到 AppCompatActivity， 但未自动依赖，添加此依赖解决编译报错
+
 	api(Deps.ZXing.zxing_lite)
 }

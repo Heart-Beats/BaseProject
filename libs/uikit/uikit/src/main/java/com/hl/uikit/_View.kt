@@ -10,7 +10,7 @@ import android.widget.TextView
 /**
  * 点击事件去除重复点击
  */
-fun View.onClick(interval: Long, listener: (View) -> Unit) {
+internal fun View.onClick(interval: Long, listener: (View) -> Unit) {
     setOnClickListener {
         val time = it.getTag(it.id)?.toString()?.toLongOrNull()
         val currentTime = System.currentTimeMillis()
@@ -24,11 +24,11 @@ fun View.onClick(interval: Long, listener: (View) -> Unit) {
 /**
  * 点击事件去除重复点击， 默认 500 ms
  */
-fun View.onClick(listener: (View) -> Unit) {
+internal fun View.onClick(listener: (View) -> Unit) {
     this.onClick(500, listener)
 }
 
-fun View.getStatusBarHeight(): Int {
+internal fun View.getStatusBarHeight(): Int {
     try {
         var result = 0
         val resourceId = context.resources.getIdentifier("status_bar_height", "dimen", "android")
@@ -42,7 +42,7 @@ fun View.getStatusBarHeight(): Int {
     return 0
 }
 
-fun TextView.setMaxLength(length: Int) {
+internal fun TextView.setMaxLength(length: Int) {
     val filters = this.filters.toMutableList()
     filters.add(InputFilter.LengthFilter(length))
     this.filters = filters.toTypedArray()
@@ -55,19 +55,19 @@ private fun View.setVisible(visibility: Int) {
     }
 }
 
-fun View.visible() {
+internal fun View.visible() {
     setVisible(View.VISIBLE)
 }
 
-fun View.invisible() {
+internal fun View.invisible() {
     setVisible(View.INVISIBLE)
 }
 
-fun View.gone() {
+internal fun View.gone() {
     setVisible(View.GONE)
 }
 
-fun View.visibleOrGone(show: Boolean) {
+internal fun View.visibleOrGone(show: Boolean) {
     if (show) visible() else gone()
 }
 

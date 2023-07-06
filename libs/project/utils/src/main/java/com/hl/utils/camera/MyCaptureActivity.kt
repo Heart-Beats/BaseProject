@@ -13,14 +13,15 @@ import com.cjt2325.cameralibrary.listener.ErrorListener
 import com.cjt2325.cameralibrary.listener.JCameraListener
 import com.gyf.immersionbar.BarHide
 import com.gyf.immersionbar.ktx.immersionBar
-import com.hl.uikit.image.pictureselector.MyCompressEngine
+import com.hl.permission.reqPermissions
+import com.hl.pictureselector.CompressEngine
+import com.hl.ui.utils.startActForResult
 import com.hl.uikit.toast
 import com.hl.utils.R
-import com.hl.permission.reqPermissions
-import com.hl.utils.startActForResult
 import java.io.File
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
+import java.util.Locale
 
 
 /**
@@ -145,7 +146,7 @@ class MyCaptureActivity : FragmentActivity() {
 				if (ImageUtils.save(bitmap, imageSaveFile, Bitmap.CompressFormat.PNG)) {
 					Log.d(TAG, "captureSuccess: 照片保存路径 == ${imageSaveFile.absolutePath}")
 
-					MyCompressEngine().startCompress(this@MyCaptureActivity, listOf(imageSaveFile.absolutePath)) {
+					CompressEngine().startCompress(this@MyCaptureActivity, listOf(imageSaveFile.absolutePath)) {
 
 						captureFilePath = it.firstOrNull()
 						resultFinish()

@@ -23,8 +23,10 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.core.view.updatePadding
+import androidx.core.widget.TextViewCompat
 import com.hl.uikit.search.UIKitSearchBar
-import kotlinx.android.synthetic.main.uikit_toolbar_search.view.*
+import kotlinx.android.synthetic.main.uikit_toolbar_search.view.searchView
+import kotlinx.android.synthetic.main.uikit_toolbar_search.view.tvCancel
 import kotlin.reflect.KProperty1
 
 class UIKitToolbar : Toolbar {
@@ -110,10 +112,10 @@ class UIKitToolbar : Toolbar {
         searchItem.setActionView(R.layout.uikit_toolbar_search)
         searchItem.icon = mRightActionIconRes
         val searchGroup = searchItem.actionView
-        searchView = searchGroup.searchView
+        searchView = searchGroup?.searchView
         val searchAutoComplete =
             searchView?.findViewById<SearchView.SearchAutoComplete>(R.id.search_src_text)
-        val tvCancel = searchGroup.tvCancel
+        val tvCancel = searchGroup?.tvCancel
         inputBuilder?.let { builder ->
             val imeOptions = builder.imeOptions
             if (imeOptions != null) {
@@ -129,7 +131,7 @@ class UIKitToolbar : Toolbar {
                 )
             }
             val closeListener = builder.onQueryCloseListener
-            tvCancel.onClick {
+            tvCancel?.onClick {
                 val interceptor = closeListener()
                 if (!interceptor) {
                     collapseSearchView()
@@ -549,7 +551,10 @@ class UIKitToolbar : Toolbar {
     fun setRightActionTextColor(color: Int, changeText: String? = null) {
         mRightActionTextColor = ColorStateList.valueOf(color)
 
-        rightActionTextViewMap.forEach { key, rightActionTextView ->
+        rightActionTextViewMap.forEach {
+            val key = it.key
+            val rightActionTextView = it.value
+
             changeText?.also {
                 if (key == changeText) {
                     rightActionTextView?.setTextColor(color)
@@ -568,7 +573,10 @@ class UIKitToolbar : Toolbar {
     fun setRightActionTextColor(color: ColorStateList, changeText: String? = null) {
         mRightActionTextColor = color
 
-        rightActionTextViewMap.forEach { key, rightActionTextView ->
+        rightActionTextViewMap.forEach {
+            val key = it.key
+            val rightActionTextView = it.value
+
             changeText?.also {
                 if (key == changeText) {
                     rightActionTextView?.setTextColor(color)
@@ -734,8 +742,11 @@ class UIKitToolbar : Toolbar {
 
             menuIcon?.setBounds(0, 0, menuIcon?.intrinsicWidth ?: 0, menuIcon?.intrinsicHeight ?: 0)
             textView.setCompoundDrawablesRelative(null, menuIcon, null, null)
-            textView.compoundDrawableTintList = mRightActionImageColor
+            TextViewCompat.setCompoundDrawableTintList(textView, mRightActionImageColor)
+
+            // textView.compoundDrawableTintList = mRightActionImageColor
             // textView.compoundDrawablePadding = 2.dpInt
+
         }
         return textView
     }

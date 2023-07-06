@@ -31,6 +31,8 @@ fun file2Uri(filePath: String): Uri {
     }
 }
 
+fun file2Uri(file: File) = file2Uri(file.absolutePath)
+
 fun uri2File(fileUri: Uri): File? {
     return UriUtils.uri2File(fileUri)
 }

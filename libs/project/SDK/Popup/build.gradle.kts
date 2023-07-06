@@ -39,7 +39,7 @@ android {
 dependencies {
 	implementation(Deps.AndroidX.appcompat)
 	implementation(Deps.AndroidX.recyclerview)
-	implementation(Deps.Material.material)
+	api(Deps.Material.material)
 
 	api(Deps.Popup.x_popup)
 }

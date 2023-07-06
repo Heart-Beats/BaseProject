@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="bottom"
+    android:background="@drawable/hl_res_shape_white_top_round58px"
+    android:orientation="vertical"
+    android:paddingTop="@dimen/px46">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|center_vertical"
+            android:text="文件下载"
+            android:textColor="#FF31415F"
+            android:textSize="@dimen/px46" />
+
+    </FrameLayout>
+
+    <include layout="@layout/hl_preview_file_item_file_download" />
+
+</LinearLayout>
