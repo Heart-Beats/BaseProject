@@ -15,18 +15,17 @@ import com.hl.baseproject.TestActivity
 import com.hl.baseproject.TestActivity2
 import com.hl.baseproject.base.BaseFragment
 import com.hl.baseproject.databinding.FragmentMainBinding
+import com.hl.baseproject.web.WebViewNavigationFragmentDirections
 import com.hl.permission.reqPermissions
+import com.hl.previewfile.PreviewFileActivity
 import com.hl.ui.utils.onClick
+import com.hl.ui.utils.setImmersiveSystemBar
 import com.hl.uikit.toast
 import com.hl.unimp.UniMPHelper
 import com.hl.utils.*
 import com.hl.utils.camera.CaptureFeature
 import com.hl.utils.camera.MyCaptureActivity
 import com.hl.utils.navigation.findNavController
-import com.hl.previewfile.PreviewFileActivity
-import com.hl.ui.utils.onClick
-import com.hl.ui.utils.setImmersiveSystemBar
-import com.hl.web.navigateToWeb
 import com.lxj.xpopup.XPopup
 import java.io.File
 
@@ -95,6 +94,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
 		}
 		uikitToolbar.addRightActionIcon(com.hl.uikit.R.drawable.uikit_ic_select_up) {
 			toast("点击了后续添加的图标")
+			it.context.sendBroadcast(Intent(TestActivity2.TEST_ACTION))
 		}
 
 		testScanQrcode.onClick {
@@ -143,16 +143,28 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
 		}
 
 		testFilePreview.onClick {
+			val videoUrl =
+				"https://vod-progressive.akamaized.net/exp=1688729013~acl=%2Fvimeo-prod-skyfire-std-us%2F01%2F4341%2F20%2F521707474%2F2437261020.mp4~hmac=a1795985ebf87c0b58379f865d9db8cf6b85b552a7a8ac08b9fc96fe4f711188/vimeo-prod-skyfire-std-us/01/4341/20/521707474/2437261020.mp4?filename=file.mp4"
+
 			PreviewFileActivity.start(
 				requireContext(),
-				"Enigma_Principles_of_Lust-part.flv",
-				"http://samples.mplayerhq.hu/FLV/Enigma_Principles_of_Lust-part.flv"
+				"2437261020.mp4",
+				videoUrl
 			)
 		}
 
 		testWebView.onClick {
-			this@MainFragment.navigateToWeb("http://dan520.vip/sdk/", "测试 SDK", false)
+			// this@MainFragment.navigateToWeb("http://dan520.vip/sdk/", "测试 SDK", false)
 			// this@MainFragment.navigateToWeb("http://www.baidu.com", "测试 SDK", false)
+
+			val globalWebViewFragment =
+				WebViewNavigationFragmentDirections.actionGlobalWebViewNavigationFragment("http://dan520.vip/sdk/")
+					.apply {
+						this.title = "测试 SDK"
+						this.isNeedTitle = true
+					}
+
+			findNavController().navigate(globalWebViewFragment)
 		}
 
 		gotoTest1.onClick {

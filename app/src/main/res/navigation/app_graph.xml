@@ -25,27 +25,27 @@
         tools:layout="@layout/fragment_shadow_plugin" />
 
     <fragment
-        android:id="@+id/webViewFragment"
-        android:name="com.hl.web.WebViewFragment"
-        android:label="WebViewFragment"
+        android:id="@+id/WebViewNavigationFragment"
+        android:name="com.hl.baseproject.web.WebViewNavigationFragment"
+        android:label="WebViewNavigationFragment"
         tools:layout="@layout/hl_web_fragment_web_view">
-        <!--<argument-->
-        <!--    android:name="title"-->
-        <!--    android:defaultValue="@null"-->
-        <!--    app:argType="string"-->
-        <!--    app:nullable="true" />-->
-        <!--<argument-->
-        <!--    android:name="url"-->
-        <!--    app:argType="string" />-->
-        <!--<argument-->
-        <!--    android:name="isNeedTitle"-->
-        <!--    android:defaultValue="false"-->
-        <!--    app:argType="boolean" />-->
+        <argument
+            android:name="title"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="url"
+            app:argType="string" />
+        <argument
+            android:name="isNeedTitle"
+            android:defaultValue="false"
+            app:argType="boolean" />
     </fragment>
 
     <action
-        android:id="@+id/action_global_webViewFragment"
-        app:destination="@id/webViewFragment" />
+        android:id="@+id/action_global_WebViewNavigationFragment"
+        app:destination="@id/WebViewNavigationFragment" />
 
     <include app:graph="@navigation/compose_graph" />
 
