@@ -18,7 +18,7 @@ import androidx.lifecycle.LifecycleOwner
  * @param onReceive             收到广播的回调
  */
 
-internal fun FragmentActivity.registerReceiver(
+fun FragmentActivity.registerReceiver(
 	vararg actions: String, broadcastPermission: String? = null, onReceive: (BroadcastReceiver, Intent) -> Unit
 ) {
 	val intentFilter = IntentFilter()

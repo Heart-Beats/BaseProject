@@ -3,12 +3,17 @@ package com.hl.baseproject
 import android.content.Intent
 import android.os.Bundle
 import com.hl.baseproject.databinding.ActivityTest2Binding
+import com.hl.bitmaputil.toBitmap
 import com.hl.ui.utils.onClick
 import com.hl.uikit.toast
 import com.hl.utils.PaletteUtil
-import com.hl.bitmaputil.toBitmap
+import com.hl.utils.registerReceiver
 
 class TestActivity2 : com.hl.ui.base.ViewBindingBaseActivity<ActivityTest2Binding>() {
+
+	companion object {
+		const val TEST_ACTION = "com.hl.action.test"
+	}
 
 	@Deprecated("Deprecated in Java")
 	override fun onBackPressed() {
@@ -19,8 +24,16 @@ class TestActivity2 : com.hl.ui.base.ViewBindingBaseActivity<ActivityTest2Bindin
 	}
 
 	override fun ActivityTest2Binding.onViewCreated(savedInstanceState: Bundle?) {
+		this@TestActivity2.registerReceiver(TEST_ACTION) { _, intent ->
+			if (intent.action == TEST_ACTION) {
+				toast("我收到测试广播啦")
+			}
+		}
+
 		uikitToolbar.title = "测试长度测试长度测试长度测试长度测试长度测试长度测试长度"
-		uikitToolbar.addRightActionText("按钮1")
+		uikitToolbar.addRightActionText("按钮1") {
+			sendBroadcast(Intent(TEST_ACTION))
+		}
 
 		radioGroup.setOnCheckedChangeListener { _, checkedId ->
 			if (checkedId == radioButtonDark.id) {

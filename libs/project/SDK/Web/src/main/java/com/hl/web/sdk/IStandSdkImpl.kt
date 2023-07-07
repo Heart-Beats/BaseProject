@@ -208,13 +208,17 @@ class IStandSdkImpl(private val webViewFragment: Fragment, val bridgeWebView: Br
 	 * 判断 WebView  是否在 Navigation  中打开的
 	 */
 	private fun Activity.isWebViewNavigationActivity(): Boolean {
+		val currentNavigationFragment = (this as? FragmentActivity)?.getCurrentNavigationFragment()
+
+		val isWebViewFragment = currentNavigationFragment is WebViewFragment
+
 		logJs(
 			"isWebViewNavigationActivity", "当前的 Activity ==${this}, " +
-					"当前 navigation 的  Fragment ==${(this as? FragmentActivity)?.getCurrentNavigationFragment()}"
+					"当前 navigation 的  Fragment ==$currentNavigationFragment" +
+					"是否为 H5 页面 == $isWebViewFragment"
 		)
 
-		// return this is MainActivity && this.getCurrentNavigationFragment() is WebViewFragment
-		return true
+		return isWebViewFragment
 	}
 
 
@@ -321,14 +325,10 @@ class IStandSdkImpl(private val webViewFragment: Fragment, val bridgeWebView: Br
 						it.isWebViewNavigationActivity() -> {
 							val fragmentActivity = it as FragmentActivity
 							val popSuccess =
-								fragmentActivity.getCurrentNavigationFragment()?.requireView()?.findNavController()
-									?.popBackStack()
+								fragmentActivity.getCurrentNavigationFragment()?.requireView()?.findNavController()?.popBackStack()
 
 
-							logJs(
-								handlerName,
-								"$it ----------> isWebViewNavigationActivity(回退页面--成功?: ${popSuccess})"
-							)
+							logJs(handlerName, "$it ----------> isWebViewNavigationActivity(回退页面--成功?: ${popSuccess})")
 						}
 					}
 				}
