@@ -26,7 +26,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.hl.ui.base.ComposeBaseFragment
+import com.hl.baseproject.base.BaseComposeFragment
 import com.hl.baseproject.compose.AppComposeTheme
 
 /**
@@ -105,7 +105,7 @@ import com.hl.baseproject.compose.AppComposeTheme
  *          · derivedStateOf()：当某个 State 需要衍生自另一个 State 时，请使用 derivedStateOf。每当内部状态发生变化时，会执行 derivedStateOf  计算块，
  *                              但是只有当计算结果与上一次不同时，可组合函数才会重组，非常适合状态频繁变化时转化为布尔状态。
  */
-class ComposeStateFragment : com.hl.ui.base.ComposeBaseFragment() {
+class ComposeStateFragment : BaseComposeFragment() {
 
 	@Composable
 	override fun Content(savedInstanceState: Bundle?) {

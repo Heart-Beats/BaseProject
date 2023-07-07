@@ -38,10 +38,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.hl.ui.base.ComposeBaseFragment
 import com.hl.arch.mvvm.vm.viewModels
 import com.hl.baseproject.R
+import com.hl.baseproject.base.BaseComposeFragment
 import com.hl.baseproject.base.FlowBaseViewModel
 import com.hl.baseproject.compose.AppComposeTheme
 import com.hl.baseproject.compose.widgets.SmartImage
@@ -75,7 +74,7 @@ import kotlinx.coroutines.launch
  *
  *
  */
-class ComposeSideEffectsFragment : com.hl.ui.base.ComposeBaseFragment() {
+class ComposeSideEffectsFragment : BaseComposeFragment() {
 
 	val viewModel: ComposeSideEffectsViewModel by viewModels()
 

@@ -35,8 +35,8 @@ abstract class BaseFragment : Fragment(), IPageInflate {
     @get:LayoutRes
     protected abstract val layoutResId: Int
 
-    @JvmField
-    protected var toolbar: Toolbar? = null
+    var toolbar: Toolbar? = null
+        private set
 
     protected var immersionBar: ImmersionBar? = null
 
@@ -214,7 +214,7 @@ abstract class BaseFragment : Fragment(), IPageInflate {
      *
      *         注意：fragment 为 页面子视图时，必须重写返回 false , 否则会导致无法返回页面
      */
-    protected open fun isActivityMainPage() = toolbar != null
+    open fun isActivityMainPage() = toolbar != null
 
 
     @Deprecated("Deprecated in Java")

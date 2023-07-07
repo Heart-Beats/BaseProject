@@ -58,6 +58,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.hl.baseproject.base.BaseComposeFragment
 import com.hl.baseproject.compose.AppComposeTheme
 import com.hl.baseproject.compose.utils.swipeToDismiss
 import com.hl.baseproject.compose.widgets.SmartImage
@@ -70,7 +71,7 @@ import kotlinx.coroutines.launch
  * @author  张磊  on  2023/04/18 at 11:55
  * Email: 913305160@qq.com
  */
-class ComposeListFragment : com.hl.ui.base.ComposeBaseFragment() {
+class ComposeListFragment : BaseComposeFragment() {
 
 	/**
 	 * 一：LazyList 相关学习总结：

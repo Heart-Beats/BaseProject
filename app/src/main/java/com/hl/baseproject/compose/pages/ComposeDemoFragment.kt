@@ -13,11 +13,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.hl.baseproject.base.BaseComposeFragment
 import com.hl.baseproject.compose.AppComposeTheme
-import com.hl.ui.base.ComposeBaseFragment
 import com.hl.utils.navigation.findNavController
 
-class ComposeDemoFragment : ComposeBaseFragment() {
+class ComposeDemoFragment : BaseComposeFragment() {
 
 	@Composable
 	override fun Content(savedInstanceState: Bundle?) {
