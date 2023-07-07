@@ -70,8 +70,8 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.activityViewModels
-import com.hl.ui.base.ComposeBaseFragment
 import com.hl.baseproject.R
+import com.hl.baseproject.base.BaseComposeFragment
 import com.hl.baseproject.compose.AppComposeTheme
 import com.hl.baseproject.compose.randomColor
 import com.hl.baseproject.compose.widgets.CircleImageText
@@ -83,8 +83,9 @@ import com.hl.baseproject.compose.widgets.TitleCompose
 import com.hl.baseproject.compose.widgets.VerticalDivider
 import com.hl.baseproject.viewmodels.DataViewModel
 import com.hl.uikit.toast
+import io.dcloud.common.util.PdrUtil.toast
 
-class ComposeLayoutsFragment : com.hl.ui.base.ComposeBaseFragment() {
+class ComposeLayoutsFragment : BaseComposeFragment() {
 
 	private val dataViewModel by activityViewModels<DataViewModel>()
 

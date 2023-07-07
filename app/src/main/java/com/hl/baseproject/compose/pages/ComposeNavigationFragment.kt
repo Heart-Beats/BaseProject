@@ -21,7 +21,7 @@ import androidx.core.net.toUri
 import androidx.navigation.NavDeepLinkRequest
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.hl.ui.base.ComposeBaseFragment
+import com.hl.baseproject.base.BaseComposeFragment
 import com.hl.baseproject.compose.pages.navigation.AppNavHost
 import com.hl.baseproject.compose.pages.navigation.DeepLinkScreen
 import com.hl.baseproject.compose.pages.navigation.Destination
@@ -36,7 +36,7 @@ import com.hl.utils.navigation.navigateSingleTopTo
  * @author  张磊  on  2023/05/31 at 16:43
  * Email: 913305160@qq.com
  */
-class ComposeNavigationFragment : com.hl.ui.base.ComposeBaseFragment() {
+class ComposeNavigationFragment : BaseComposeFragment() {
 
 	@Composable
 	override fun Content(savedInstanceState: Bundle?) {
