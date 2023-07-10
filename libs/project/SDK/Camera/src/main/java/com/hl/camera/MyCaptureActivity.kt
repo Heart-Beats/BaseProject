@@ -1,4 +1,4 @@
-package com.hl.utils.camera
+package com.hl.camera
 
 import android.Manifest
 import android.content.Intent
@@ -6,18 +6,16 @@ import android.graphics.Bitmap
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.FragmentActivity
-import com.blankj.utilcode.util.FileUtils
-import com.blankj.utilcode.util.ImageUtils
 import com.cjt2325.cameralibrary.JCameraView
 import com.cjt2325.cameralibrary.listener.ErrorListener
 import com.cjt2325.cameralibrary.listener.JCameraListener
-import com.gyf.immersionbar.BarHide
-import com.gyf.immersionbar.ktx.immersionBar
+import com.gyf.immersionbar.ktx.hideStatusBar
+import com.gyf.immersionbar.ktx.showStatusBar
+import com.hl.camera.utils.FileUtil
+import com.hl.camera.utils.ImageUtil
 import com.hl.permission.reqPermissions
-import com.hl.pictureselector.CompressEngine
 import com.hl.ui.utils.startActForResult
 import com.hl.uikit.toast
-import com.hl.utils.R
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -62,12 +60,10 @@ class MyCaptureActivity : FragmentActivity() {
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 
-		// 页面退出时隐藏系统栏
-		immersionBar {
-			this.hideBar(BarHide.FLAG_HIDE_BAR)
-		}
+		// 页面进入时隐藏系统栏
+		hideStatusBar()
 
-		setContentView(R.layout.hl_utils_activity_my_capture)
+		setContentView(R.layout.hl_camera_activity_my_capture)
 
 		initView()
 	}
@@ -84,9 +80,7 @@ class MyCaptureActivity : FragmentActivity() {
 
 	override fun onDestroy() {
 		// 页面退出时恢复系统栏
-		immersionBar {
-			this.hideBar(BarHide.FLAG_SHOW_BAR)
-		}
+		showStatusBar()
 
 		super.onDestroy()
 	}
@@ -97,7 +91,7 @@ class MyCaptureActivity : FragmentActivity() {
 			defaultCaptureDir = it + File.separator + "capture"
 
 			//进来默认删除上次保存的图片和视频
-			FileUtils.delete(defaultCaptureDir)
+			FileUtil.delete(defaultCaptureDir)
 
 			initJCameraView()
 
@@ -143,14 +137,11 @@ class MyCaptureActivity : FragmentActivity() {
 				//获取图片bitmap
 				val imageSaveFile = File(defaultCaptureDir, getCurrentTime() + ".png")
 
-				if (ImageUtils.save(bitmap, imageSaveFile, Bitmap.CompressFormat.PNG)) {
+				if (ImageUtil.save(bitmap, imageSaveFile, Bitmap.CompressFormat.PNG)) {
 					Log.d(TAG, "captureSuccess: 照片保存路径 == ${imageSaveFile.absolutePath}")
 
-					CompressEngine().startCompress(this@MyCaptureActivity, listOf(imageSaveFile.absolutePath)) {
-
-						captureFilePath = it.firstOrNull()
-						resultFinish()
-					}
+					captureFilePath = imageSaveFile.absolutePath
+					resultFinish()
 				} else {
 					toast("保存照片失败")
 				}

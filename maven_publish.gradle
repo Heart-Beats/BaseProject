@@ -39,6 +39,7 @@ task buildSdk() {
     dependsOn gradle.includedBuild('project').task(':SDK:PreviewFile:assembleRelease')
     dependsOn gradle.includedBuild('project').task(':SDK:Share:assembleRelease')
     dependsOn gradle.includedBuild('project').task(':SDK:VideoPlayer:assembleRelease')
+    dependsOn gradle.includedBuild('project').task(':SDK:Camera:assembleRelease')
 }
 
 //引入配置设置
@@ -228,6 +229,7 @@ setGeneratePomFileAndDepends('SmsUtil')
 setGeneratePomFileAndDepends('PreviewFile')
 setGeneratePomFileAndDepends('Share')
 setGeneratePomFileAndDepends('VideoPlayer')
+setGeneratePomFileAndDepends('Camera')
 
 // 设置 UniApp 相关的 POM 文件
 setUniAppGeneratePomFileAndDepends()
@@ -441,6 +443,7 @@ project.afterEvaluate {
                     setDependencyNode(root, 'compile', myGroupId, 'image-load', getPublicationVersion())
                     setDependencyNode(root, 'compile', myGroupId, 'date-util', getPublicationVersion())
                     setDependencyNode(root, Scope.COMPILE, myGroupId, 'mime-type', getPublicationVersion())
+                    setDependencyNode(root, Scope.COMPILE, myGroupId, 'popup', getPublicationVersion())
 
                     setDependencyNode(root, 'compile', 'androidx.appcompat', 'appcompat', libs.versions.appcompat.get())
                     setDependencyNode(root, 'compile', 'androidx.activity', 'activity', libs.versions.activity.get())
@@ -460,10 +463,7 @@ project.afterEvaluate {
                     setDependencyNode(root, 'compile', 'com.blankj', 'utilcodex', libs.versions.utilCodeX.get())
 
                     setDependencyNode(root, 'compile', 'com.squareup.okhttp3', 'okhttp', libs.versions.okhttp.get())
-                    setDependencyNode(root, 'compile', 'com.geyifeng.immersionbar', 'immersionbar', libs.versions.immersionBar.get())
-                    setDependencyNode(root, 'compile', 'com.geyifeng.immersionbar', 'immersionbar-ktx', libs.versions.immersionBar.get())
 
-                    setDependencyNode(root, 'compile', 'cjt.library.wheel', 'camera', libs.versions.cameraView.get())
                     setDependencyNode(root, 'compile', 'androidx.palette', 'palette-ktx', libs.versions.palette.get())
 
                     setScm(root)
@@ -1053,6 +1053,32 @@ project.afterEvaluate {
                     setDependencyNode(root, Scope.PROVIDED, 'androidx.fragment', 'fragment', libs.versions.fragment.get())
 
                     setDependencyNode(root, Scope.PROVIDED, myGroupId, 'ImageLoad', getPublicationVersion())
+
+                    setDependencyNode(root,Scope.COMPILE, 'com.github.CarGuo.GSYVideoPlayer', 'GSYVideoPlayer', libs.versions.gsyVideoPlayer.get())
+
+                    setScm(root)
+                }
+            }
+
+            Camera(MavenPublication) {
+                def moduleName = 'Camera'
+                def publishModuleName = 'camera'
+
+                def modulePath = "$libProjectPath/SDK/$moduleName"
+
+                groupId myGroupId
+                artifactId publishModuleName
+                version getPublicationVersion()
+
+                artifact("$modulePath/build/outputs/aar/${moduleName}-release.aar")
+                artifact sourceAar(publishModuleName, modulePath)
+
+                pom.withXml {
+                    def root = asNode()
+
+                    setDependencyNode(root, Scope.PROVIDED, myGroupId, 'uikit-toast', getPublicationVersion())
+                    setDependencyNode(root, Scope.PROVIDED, myGroupId, 'base-ui', getPublicationVersion())
+                    setDependencyNode(root,  Scope.PROVIDED, myGroupId, 'permission', getPublicationVersion())
 
                     setDependencyNode(root,Scope.COMPILE, 'com.github.CarGuo.GSYVideoPlayer', 'GSYVideoPlayer', libs.versions.gsyVideoPlayer.get())
 

@@ -8,6 +8,7 @@ import android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
 import android.content.res.Configuration
 import android.os.Bundle
 import android.os.Environment
+import com.blankj.utilcode.util.ImageUtils
 import com.elvishew.xlog.XLog
 import com.github.nisrulz.sensey.Sensey
 import com.github.nisrulz.sensey.ShakeDetector.ShakeListener
@@ -18,14 +19,14 @@ import com.hl.baseproject.TestActivity2
 import com.hl.baseproject.base.BaseFragment
 import com.hl.baseproject.databinding.FragmentMainBinding
 import com.hl.baseproject.web.WebViewNavigationFragmentDirections
+import com.hl.camera.CaptureFeature
+import com.hl.camera.MyCaptureActivity
 import com.hl.permission.reqPermissions
 import com.hl.previewfile.PreviewFileActivity
 import com.hl.ui.utils.onClick
 import com.hl.uikit.toast
 import com.hl.unimp.UniMPHelper
 import com.hl.utils.*
-import com.hl.utils.camera.CaptureFeature
-import com.hl.utils.camera.MyCaptureActivity
 import com.hl.utils.navigation.findNavController
 import com.lxj.xpopup.XPopup
 import java.io.File
