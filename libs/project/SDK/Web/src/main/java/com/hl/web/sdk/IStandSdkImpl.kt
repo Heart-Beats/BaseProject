@@ -209,13 +209,14 @@ class IStandSdkImpl(private val webViewFragment: Fragment, val bridgeWebView: Br
 	 */
 	private fun Activity.isWebViewNavigationActivity(): Boolean {
 		val currentNavigationFragment = (this as? FragmentActivity)?.getCurrentNavigationFragment()
+		// todo 获取到的不准
 
 		val isWebViewFragment = currentNavigationFragment is WebViewFragment
 
 		logJs(
-			"isWebViewNavigationActivity", "当前的 Activity ==${this}, " +
-					"当前 navigation 的  Fragment ==$currentNavigationFragment" +
-					"是否为 H5 页面 == $isWebViewFragment"
+			"isWebViewNavigationActivity", "当前的 Activity ==${this}" +
+					", 当前 navigation 的  Fragment ==$currentNavigationFragment" +
+					", 是否为 H5 页面 == $isWebViewFragment"
 		)
 
 		return isWebViewFragment
