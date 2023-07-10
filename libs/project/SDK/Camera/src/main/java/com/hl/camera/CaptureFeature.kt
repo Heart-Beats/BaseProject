@@ -1,4 +1,4 @@
-package com.hl.utils.camera
+package com.hl.camera
 
 /**
  * @author  张磊  on  2021/12/20 at 15:20

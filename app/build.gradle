@@ -139,20 +139,37 @@ dependencies {
 
     implementation libs.coil.compose
 
-    //    def hlVersion = '0.5.9'
 
-    implementation 'com.hl:base-api'
-    implementation('com.hl:base-arch') {
-        // base-arch 依赖传递了 smooth-navigation，重写了 navigation-fragment 中的相关类，会冲突需要排除
-        exclude group: 'androidx.navigation', module: 'navigation-fragment'
+    // 是否使用远程依赖库方式
+    def isUseRemoteDependencies = false
+
+    if (isUseRemoteDependencies) {
+        def hlVersion = '0.5.9'
+
+        implementation "com.hl:base-api:$hlVersion"
+        implementation("com.hl:base-arch:$hlVersion") {
+            // base-arch 依赖传递了 smooth-navigation，重写了 navigation-fragment 中的相关类，会冲突需要排除
+            exclude group: 'androidx.navigation', module: 'navigation-fragment'
+        }
+
+        implementation "com.hl:web:$hlVersion"
+        implementation "com.hl:tencent-cloud:$hlVersion"
+        implementation "com.hl:shadow-init:$hlVersion"
+        implementation "com.hl:uni-mp:$hlVersion"
+        implementation "com.hl:camera:$hlVersion"
+    } else {
+        implementation 'com.hl:base-api'
+        implementation('com.hl:base-arch') {
+            // base-arch 依赖传递了 smooth-navigation，重写了 navigation-fragment 中的相关类，会冲突需要排除
+            exclude group: 'androidx.navigation', module: 'navigation-fragment'
+        }
+
+        implementation 'com.hl:Web'
+        implementation 'com.hl:TencentCloud'
+        implementation "com.hl:shadow-init"
+        implementation "com.hl:UniMP"
+        implementation "com.hl:Camera"
     }
-
-    //    implementation "com.hl:tencent-cloud:${hlVersion}"
-
-     implementation 'com.hl:Web'
-    implementation 'com.hl:TencentCloud'
-    implementation "com.hl:shadow-init"
-    implementation "com.hl:UniMP"
 
     implementation libs.sensey
 

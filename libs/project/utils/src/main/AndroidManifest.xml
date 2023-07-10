@@ -18,11 +18,6 @@
     <application
         android:requestLegacyExternalStorage="true">
 
-        <activity
-            android:name=".camera.MyCaptureActivity"
-            android:exported="false" />
-
-
         <!-- 使用 startup 完成初始化并进行启动优化-->
         <provider
             android:name="androidx.startup.InitializationProvider"

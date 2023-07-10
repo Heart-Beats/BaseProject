@@ -81,11 +81,6 @@ dependencies {
     api project(':SDK:MimeType')
     api project(':SDK:Popup')
 
-    // camera 里使用到这两个依赖，也需抽出
-    api project(':base-ui')
-    api project(':SDK:PictureSelector')
-
-    implementation Deps.AndroidX.core_ktx
     implementation Deps.AndroidX.appcompat
     implementation Deps.AndroidX.activity
     implementation Deps.AndroidX.fragment
@@ -105,9 +100,6 @@ dependencies {
     api Deps.UtilCodeX.utilcodex
 
     implementation Deps.Okhttp.okhttp
-    api Deps.Status_Bar.immersionbar
-    api Deps.Status_Bar.immersionbar_ktx
-    api Deps.Camera.camera
 
     api Deps.AndroidX.palette_Ktx
 }
