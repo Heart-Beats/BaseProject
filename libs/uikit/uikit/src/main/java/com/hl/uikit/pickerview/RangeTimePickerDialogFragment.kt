@@ -6,7 +6,7 @@ import android.view.View
 import android.widget.CheckedTextView
 import android.widget.TextView
 import com.hl.uikit.R
-import com.hl.uikit.onClick
+import com.hl.uikit.utils.onClick
 import com.zyyoona7.wheel.WheelView
 import java.text.SimpleDateFormat
 import java.util.*

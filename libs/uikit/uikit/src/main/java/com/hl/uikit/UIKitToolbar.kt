@@ -25,6 +25,8 @@ import androidx.core.view.GravityCompat
 import androidx.core.view.updatePadding
 import androidx.core.widget.TextViewCompat
 import com.hl.uikit.search.UIKitSearchBar
+import com.hl.uikit.utils.dpInt
+import com.hl.uikit.utils.onClick
 import kotlinx.android.synthetic.main.uikit_toolbar_search.view.searchView
 import kotlinx.android.synthetic.main.uikit_toolbar_search.view.tvCancel
 import kotlin.reflect.KProperty1

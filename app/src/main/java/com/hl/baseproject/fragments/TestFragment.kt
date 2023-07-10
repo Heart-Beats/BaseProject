@@ -11,19 +11,19 @@ import com.hl.arch.mvvm.vm.LiveDataVM
 import com.hl.baseproject.BuildConfig
 import com.hl.baseproject.R
 import com.hl.baseproject.databinding.FragmentTestBinding
+import com.hl.dateutil.toFormatString
 import com.hl.tencentcloud.cos.TencentCosUtil
 import com.hl.tencentcloud.cos.TransferListener
 import com.hl.ui.utils.onClick
 import com.hl.uikit.toast
-import com.hl.bitmaputil.BitmapUtil
 import com.hl.utils.TimeUtil
-import com.hl.dateutil.toFormatString
 import com.hl.utils.launchHome
 import com.hl.utils.media.MediaPlayerHelper
 import com.hl.utils.media.OnPlayListener
+import com.hl.utils.registerReceiver
 import com.hl.utils.span.dsl.buildSpannableString
 import com.tencent.cos.xml.transfer.TransferState
-import java.util.*
+import java.util.Date
 
 
 class TestFragment : ViewBindingMvvmBaseFragment<FragmentTestBinding>() {
@@ -42,6 +42,16 @@ class TestFragment : ViewBindingMvvmBaseFragment<FragmentTestBinding>() {
 		launchHome()
 	}
 
+	override fun onCreate(savedInstanceState: Bundle?) {
+		super.onCreate(savedInstanceState)
+		requireActivity().registerReceiver(AppMainFragment.SHOW_FRAGMENT_ACTION) { _, intent ->
+			if (intent.getStringExtra(AppMainFragment.SHOW_FRAGMENT_NAME_KEY) == this.javaClass.name) {
+				// Navigation 回退，页面显示时恢复默认状态栏配置
+				updateSystemBar()
+			}
+		}
+	}
+
 	override fun onResume() {
 		super.onResume()
 		// 页面显示时恢复默认状态栏配置
@@ -50,7 +60,7 @@ class TestFragment : ViewBindingMvvmBaseFragment<FragmentTestBinding>() {
 
 	override fun FragmentTestBinding.onViewCreated(savedInstanceState: Bundle?) {
 		toolbar?.title = "测试标题"
-		toolbar?.subtitle="你好"
+		toolbar?.subtitle = "你好"
 
 		testSpan.buildSpannableString {
 

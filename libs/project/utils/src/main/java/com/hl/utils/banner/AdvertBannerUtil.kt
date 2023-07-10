@@ -111,11 +111,11 @@ class AdAdapter(adDetailList: List<AdsDetail>, @LayoutRes val adLayoutId: Int) :
         if (data.localImageRes != null) {
             holder.adImage?.also {
                 Glide.with(holder.itemView.context).load(data.localImageRes).into(it)
-            } ?: holder.itemView.context.showShortError("请确认轮播背景图已设置Tag（R.string.ad_banner_tag）")
+            } ?: error("请确认轮播背景图已设置Tag（R.string.ad_banner_tag）")
         } else {
             holder.adImage?.also {
                 Glide.with(holder.itemView.context).load(data.adsImgUrl).into(it)
-            } ?: holder.itemView.context.showShortError("请确认轮播背景图已设置Tag（R.string.ad_banner_tag）")
+            } ?: error("请确认轮播背景图已设置Tag（R.string.ad_banner_tag）")
         }
     }
 }

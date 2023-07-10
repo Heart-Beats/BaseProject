@@ -5,7 +5,7 @@ import android.util.AttributeSet
 import android.view.View
 import androidx.appcompat.widget.AppCompatToggleButton
 import com.hl.uikit.R
-import com.hl.uikit.dpInt
+import com.hl.uikit.utils.dpInt
 
 /**
  * @Author  张磊  on  2020/10/15 at 18:11

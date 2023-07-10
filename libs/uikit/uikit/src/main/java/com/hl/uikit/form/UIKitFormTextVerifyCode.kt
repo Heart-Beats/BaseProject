@@ -13,8 +13,8 @@ import android.widget.TextView
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
 import com.hl.uikit.R
-import com.hl.uikit.dpInt
-import com.hl.uikit.onClick
+import com.hl.uikit.utils.dpInt
+import com.hl.uikit.utils.onClick
 import kotlinx.android.synthetic.main.uikit_layout_form_textinput.view.*
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel

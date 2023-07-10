@@ -9,7 +9,7 @@ import androidx.fragment.app.DialogFragment
 import kotlinx.android.synthetic.main.uikit_dialog_progress_bar.*
 import com.hl.uikit.BasicDialogFragment
 import com.hl.uikit.R
-import com.hl.uikit.onClick
+import com.hl.uikit.utils.onClick
 
 
 /**

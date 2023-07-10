@@ -70,8 +70,6 @@ android {
 }
 
 dependencies {
-    api 'com.hl:uikit'
-    api 'com.hl:uikit-toast'
     api project(path: ':base-app-res')
     api project(':SDK:ActivityResult')
     api project(':SDK:XLogInit')

@@ -11,7 +11,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatTextView
 import com.hl.uikit.R
-import com.hl.uikit.onClick
+import com.hl.uikit.utils.onClick
 
 class UIKitFormHeaderActionText : UIKitFormItemLabel {
 

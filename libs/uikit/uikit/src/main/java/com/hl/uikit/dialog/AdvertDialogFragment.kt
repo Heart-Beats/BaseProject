@@ -5,7 +5,7 @@ import android.view.*
 import android.widget.ImageView
 import com.hl.uikit.BasicDialogFragment
 import com.hl.uikit.R
-import com.hl.uikit.onClick
+import com.hl.uikit.utils.onClick
 
 /**
  * @Author  张磊  on  2020/09/01 at 15:47

@@ -14,9 +14,9 @@ import android.widget.ImageView
 import androidx.core.view.updateLayoutParams
 import kotlinx.android.synthetic.main.uikit_layout_form_image.view.*
 import com.hl.uikit.R
-import com.hl.uikit.dp
-import com.hl.uikit.onClick
-import com.hl.uikit.sp
+import com.hl.uikit.utils.dp
+import com.hl.uikit.utils.onClick
+import com.hl.uikit.utils.sp
 
 class UIKitFormItemImage : UIKitFormItemView {
     var holderImageId: Int = -1

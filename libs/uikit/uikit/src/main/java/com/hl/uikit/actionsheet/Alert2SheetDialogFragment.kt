@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import kotlinx.android.synthetic.main.uikit_alert2_sheet_dialog_fragment.*
 import com.hl.uikit.R
-import com.hl.uikit.onClick
+import com.hl.uikit.utils.onClick
 
 /**
  * 带有取消以及确认按钮的底部弹出框

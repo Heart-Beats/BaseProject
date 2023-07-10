@@ -8,7 +8,7 @@ import androidx.annotation.ColorInt
 import androidx.annotation.Px
 import androidx.appcompat.widget.AppCompatImageView
 import com.hl.uikit.R
-import com.hl.uikit.dpInt
+import com.hl.uikit.utils.dpInt
 
 class UIKitRoundImageView @JvmOverloads constructor(
     context: Context,

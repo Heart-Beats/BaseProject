@@ -58,6 +58,8 @@ dependencies {
 	api(Deps.Status_Bar.immersionbar)
 	api(Deps.Status_Bar.immersionbar_ktx)
 
+	api("com.hl:uikit-toast")
+
 	api(platform(libs.jetpack.compose.bom))
 	api(libs.jetpack.compose.ui)
 }

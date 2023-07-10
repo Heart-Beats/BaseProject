@@ -1,12 +1,10 @@
-package com.hl.utils
+package com.hl.uikit
 
 import android.content.Context
 import android.view.Gravity
 import android.widget.Toast
 import androidx.annotation.GravityInt
 import androidx.fragment.app.Fragment
-import com.hl.uikit.toast
-import com.hl.uikit.toastFailure
 
 
 fun Context.showShortToast(message: String, @GravityInt gravity: Int = Gravity.CENTER) {

@@ -23,7 +23,7 @@ import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.view.children
 import androidx.core.view.updatePadding
 import com.hl.uikit.R
-import com.hl.uikit.dpInt
+import com.hl.uikit.utils.dpInt
 import java.lang.annotation.Retention
 import java.lang.annotation.RetentionPolicy
 import kotlin.reflect.KFunction0

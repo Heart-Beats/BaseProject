@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Build
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
@@ -31,6 +32,37 @@ fun FragmentActivity.registerReceiver(
 	}
 
 	val activity = this
+
+	this.lifecycle.addObserver(object : DefaultLifecycleObserver {
+		override fun onCreate(owner: LifecycleOwner) {
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+				// Android 8.0 以上
+				activity.registerReceiver(receiver, intentFilter, broadcastPermission, null)
+			} else {
+				activity.registerReceiver(receiver, intentFilter)
+			}
+		}
+
+		override fun onDestroy(owner: LifecycleOwner) {
+			activity.unregisterReceiver(receiver)
+		}
+	})
+}
+
+
+fun Fragment.registerReceiver(
+	vararg actions: String, broadcastPermission: String? = null, onReceive: (BroadcastReceiver, Intent) -> Unit
+) {
+	val intentFilter = IntentFilter()
+	actions.forEach { intentFilter.addAction(it) }
+
+	val receiver = object : BroadcastReceiver() {
+		override fun onReceive(context: Context, intent: Intent) {
+			onReceive(this, intent)
+		}
+	}
+
+	val activity = requireActivity()
 
 	this.lifecycle.addObserver(object : DefaultLifecycleObserver {
 		override fun onCreate(owner: LifecycleOwner) {

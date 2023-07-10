@@ -258,14 +258,14 @@ abstract class BaseFragment : Fragment(), IPageInflate {
     /**
      *  fragment Show 时， 该方法会回调
      */
-    protected fun onFragmentShow() {
+    protected open fun onFragmentShow() {
         Log.d(TAG, "onFragmentShow  =========> $this")
     }
 
     /**
      * fragment Hide 时， 该方法会回调
      */
-    protected fun onFragmentHide() {
+    protected open fun onFragmentHide() {
         Log.d(TAG, "onFragmentHide  =========> $this")
     }
 

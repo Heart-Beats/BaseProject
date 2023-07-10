@@ -13,7 +13,7 @@ import androidx.fragment.app.DialogFragment
 import kotlinx.android.synthetic.main.uikit_alert_dialog_fragment.*
 import com.hl.uikit.BasicDialogFragment
 import com.hl.uikit.R
-import com.hl.uikit.onClick
+import com.hl.uikit.utils.onClick
 
 open class AlertDialogFragment : BasicDialogFragment() {
 

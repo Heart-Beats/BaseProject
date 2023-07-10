@@ -12,7 +12,7 @@ import androidx.annotation.ColorInt
 import androidx.annotation.Px
 import androidx.core.widget.addTextChangedListener
 import com.hl.uikit.R
-import com.hl.uikit.setMaxLength
+import com.hl.uikit.utils.setMaxLength
 
 class UIKitTextArea : LinearLayout {
 

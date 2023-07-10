@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.hl.uikit.R
-import com.hl.uikit.onClick
+import com.hl.uikit.utils.onClick
 
 class ArrayListItemAdapter<T> :
     RecyclerView.Adapter<ArrayListItemAdapter.ViewHolder>() {
