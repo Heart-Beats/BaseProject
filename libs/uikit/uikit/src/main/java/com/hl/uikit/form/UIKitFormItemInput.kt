@@ -19,7 +19,7 @@ import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
 import androidx.core.view.updatePaddingRelative
 import com.hl.uikit.R
-import com.hl.uikit.onClick
+import com.hl.uikit.utils.onClick
 
 class UIKitFormItemInput : UIKitFormItemText {
     private var mOnFocusChangeListener: ((v: View, hasFocus: Boolean) -> Unit)? = null

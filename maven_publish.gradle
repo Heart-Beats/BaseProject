@@ -390,7 +390,7 @@ project.afterEvaluate {
                     setDependencyNode(root, 'compile', 'com.geyifeng.immersionbar', 'immersionbar', libs.versions.immersionBar.get())
                     setDependencyNode(root, 'compile', 'com.geyifeng.immersionbar', 'immersionbar-ktx', libs.versions.immersionBar.get())
 
-
+                    setDependencyNode(root, Scope.COMPILE, myGroupId, 'uikit-toast', getPublicationVersion())
                     // setDependencyNode(root, 'compile', 'androidx.compose', 'compose-bom', libs.versions.jetpackComposeBom.get())
                     // setDependencyNode(root, 'compile', 'androidx.compose.ui', 'ui', '')
                     setScm(root)
@@ -434,8 +434,6 @@ project.afterEvaluate {
 
                 pom.withXml {
                     def root = asNode()
-                    setDependencyNode(root, 'compile', myGroupId, 'uikit', getPublicationVersion())
-                    setDependencyNode(root, 'compile', myGroupId, 'uikit-toast', getPublicationVersion())
                     setDependencyNode(root, 'compile', myGroupId, 'base-app-res', getPublicationVersion())
                     setDependencyNode(root, 'compile', myGroupId, 'activity-result', getPublicationVersion())
                     setDependencyNode(root, 'compile', myGroupId, 'xlog-init', getPublicationVersion())

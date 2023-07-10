@@ -8,7 +8,6 @@ import android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
 import android.content.res.Configuration
 import android.os.Bundle
 import android.os.Environment
-import com.blankj.utilcode.util.ImageUtils
 import com.elvishew.xlog.XLog
 import com.github.nisrulz.sensey.Sensey
 import com.github.nisrulz.sensey.ShakeDetector.ShakeListener
@@ -56,6 +55,16 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
 
 	override fun onBackPressed() {
 		launchHome()
+	}
+
+	override fun onCreate(savedInstanceState: Bundle?) {
+		super.onCreate(savedInstanceState)
+		requireActivity().registerReceiver(AppMainFragment.SHOW_FRAGMENT_ACTION) { _, intent ->
+			if (intent.getStringExtra(AppMainFragment.SHOW_FRAGMENT_NAME_KEY) == this.javaClass.name) {
+				// Navigation 回退，页面显示时恢复默认状态栏配置
+				updateSystemBar()
+			}
+		}
 	}
 
 	override fun onResume() {
@@ -165,7 +174,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
 				WebViewNavigationFragmentDirections.actionGlobalWebViewNavigationFragment("http://dan520.vip/sdk/")
 					.apply {
 						this.title = "测试 SDK"
-						this.isNeedTitle = true
+						this.isNeedTitle = false
 					}
 
 			findNavController().navigate(globalWebViewFragment)

@@ -9,7 +9,7 @@ import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import com.hl.uikit.R
-import com.hl.uikit.onClick
+import com.hl.uikit.utils.onClick
 import java.util.*
 
 /**

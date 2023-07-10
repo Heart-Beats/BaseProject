@@ -6,7 +6,7 @@ import android.util.AttributeSet
 import androidx.appcompat.widget.AppCompatButton
 import androidx.core.content.ContextCompat
 import com.hl.uikit.R
-import com.hl.uikit.dpInt
+import com.hl.uikit.utils.dpInt
 
 /**
  * @Author  张磊  on  2020/10/09 at 17:03

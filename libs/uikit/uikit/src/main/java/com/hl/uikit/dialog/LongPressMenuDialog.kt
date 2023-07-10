@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.uikit_long_press_menu_dialog_fragment.*
 import com.hl.uikit.BasicDialogFragment
 import com.hl.uikit.R
-import com.hl.uikit.getStatusBarHeight
+import com.hl.uikit.utils.getStatusBarHeight
 
 /**
  * @Author  张磊  on  2020/10/10 at 11:33

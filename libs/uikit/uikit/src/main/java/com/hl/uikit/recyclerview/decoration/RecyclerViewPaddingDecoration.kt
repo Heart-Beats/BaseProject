@@ -3,7 +3,7 @@ package com.hl.uikit.recyclerview.decoration
 import android.graphics.Rect
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
-import com.hl.uikit.dp
+import com.hl.uikit.utils.dp
 
 /**
  * 设置左右 Padding 和第一个的上 padding 以及最后一个的下 padding

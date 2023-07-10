@@ -16,8 +16,8 @@ import androidx.annotation.ColorInt
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
 import com.hl.uikit.R
-import com.hl.uikit.onClick
-import com.hl.uikit.setMaxLength
+import com.hl.uikit.utils.onClick
+import com.hl.uikit.utils.setMaxLength
 
 open class UIKitFormItemText : UIKitFormItemLabel {
 

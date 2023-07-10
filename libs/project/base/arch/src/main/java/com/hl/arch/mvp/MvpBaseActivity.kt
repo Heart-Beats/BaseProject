@@ -51,7 +51,7 @@ abstract class MvpBaseActivity<Presenter : MvpBasePresenter<out MvpBaseView>> : 
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         if (!getData(intent)) {
-            toast("无数据")
+             toast("无数据")
             finish()
             return
         }

@@ -11,7 +11,7 @@ import kotlinx.android.synthetic.main.uikit_bottom_base_dialog_fragment.tvClose
 import kotlinx.android.synthetic.main.uikit_bottom_base_dialog_fragment.tvTitle
 import com.hl.uikit.BasicDialogFragment
 import com.hl.uikit.R
-import com.hl.uikit.onClick
+import com.hl.uikit.utils.onClick
 
 open class BottomDialogFragment : BasicDialogFragment() {
 

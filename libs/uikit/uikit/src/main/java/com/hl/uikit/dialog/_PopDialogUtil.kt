@@ -1,9 +1,8 @@
-package com.hl.utils
+package com.hl.uikit.dialog
 
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
-import com.hl.uikit.dialog.AlertDialogFragment
 
 /**
  * @author  张磊  on  2021/11/08 at 11:43

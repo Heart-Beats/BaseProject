@@ -1,4 +1,4 @@
-package com.hl.uikit
+package com.hl.uikit.utils
 
 import android.content.res.Resources
 import android.text.InputFilter
