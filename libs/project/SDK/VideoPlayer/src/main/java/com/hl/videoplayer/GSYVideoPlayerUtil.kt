@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.LifecycleOwner
 import com.hl.imageload.loadFirstFrameCover
+import com.hl.videoplayer.utils.initInsetPaddingSmart
 import com.hl.videoplayer.utils.onClick
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder
 import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack
@@ -40,6 +41,7 @@ import tv.danmaku.ijk.media.player.IjkMediaPlayer
  *
  * @param  videoName：  视频标题名
  * @param  needTitle：  是否需要视频标题
+ * @param  isPrintLog：  是否打印日志
  * @param  optionBuilder：  GSYVideo 播放器相关的构造选项
  */
 fun UIKitMyStandardGSYVideoPlayer.initPlayer(
@@ -47,6 +49,7 @@ fun UIKitMyStandardGSYVideoPlayer.initPlayer(
     url: String,
     videoName: String = "测试视频",
     needTitle: Boolean = true,
+    isPrintLog: Boolean = true,
     optionBuilder: GSYVideoOptionBuilder.() -> Unit = {}
 ) {
     lifecycleOwner.lifecycle.addObserver(this)
@@ -54,8 +57,12 @@ fun UIKitMyStandardGSYVideoPlayer.initPlayer(
     //初始化不打开外部的旋转
     this.orientationUtils?.isEnable = false
 
-    Debuger.disable()
-    IjkPlayerManager.setLogLevel(IjkMediaPlayer.IJK_LOG_SILENT)
+    if (isPrintLog) {
+        Debuger.enable()
+        IjkPlayerManager.setLogLevel(IjkMediaPlayer.IJK_LOG_DEBUG)
+    } else {
+        Debuger.disable()
+    }
 
     val imageView = ImageView(this.context)
     imageView.loadFirstFrameCover(url)
@@ -76,6 +83,19 @@ fun UIKitMyStandardGSYVideoPlayer.initPlayer(
                 //开始播放了才能旋转和全屏
                 this@initPlayer.orientationUtils?.isEnable = true
                 // startAfterPrepared()
+            }
+
+            override fun onEnterFullscreen(url: String?, vararg objects: Any?) {
+                // 进入全屏时去除顶部的 padding
+                lifecycleOwner.initInsetPaddingSmart(top = false)
+            }
+
+            override fun onQuitFullscreen(url: String?, vararg objects: Any?) {
+                // 退出全屏时恢复顶部的 padding
+                lifecycleOwner.initInsetPaddingSmart(top = true)
+
+                // 退出全屏时，由于 GSYBaseVideoPlayer 内部有自己的 orientationUtils，  与使用到的不统一，因此这里需要手动更改退出全屏状态
+                this@initPlayer.orientationUtils?.isLand = 0
             }
         })
         .setLockClickListener { _, lock ->

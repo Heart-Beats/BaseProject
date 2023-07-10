@@ -11,6 +11,8 @@ import android.os.Environment
 import com.elvishew.xlog.XLog
 import com.github.nisrulz.sensey.Sensey
 import com.github.nisrulz.sensey.ShakeDetector.ShakeListener
+import com.gyf.immersionbar.ktx.hideStatusBar
+import com.gyf.immersionbar.ktx.showStatusBar
 import com.hl.baseproject.TestActivity
 import com.hl.baseproject.TestActivity2
 import com.hl.baseproject.base.BaseFragment
@@ -19,7 +21,6 @@ import com.hl.baseproject.web.WebViewNavigationFragmentDirections
 import com.hl.permission.reqPermissions
 import com.hl.previewfile.PreviewFileActivity
 import com.hl.ui.utils.onClick
-import com.hl.ui.utils.setImmersiveSystemBar
 import com.hl.uikit.toast
 import com.hl.unimp.UniMPHelper
 import com.hl.utils.*
@@ -144,11 +145,13 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
 
 		testFilePreview.onClick {
 			val videoUrl =
-				"https://vod-progressive.akamaized.net/exp=1688729013~acl=%2Fvimeo-prod-skyfire-std-us%2F01%2F4341%2F20%2F521707474%2F2437261020.mp4~hmac=a1795985ebf87c0b58379f865d9db8cf6b85b552a7a8ac08b9fc96fe4f711188/vimeo-prod-skyfire-std-us/01/4341/20/521707474/2437261020.mp4?filename=file.mp4"
+				// "https://assets.mixkit.co/videos/preview/mixkit-stunning-sunset-seen-from-the-sea-4119-large.mp4"  // 横版视频
+				"https://assets.mixkit.co/videos/preview/mixkit-blue-plasticine-in-the-shape-of-ice-cream-and-silver-48180-large.mp4"  // 竖版视频
+
 
 			PreviewFileActivity.start(
 				requireContext(),
-				"2437261020.mp4",
+				videoUrl.getDownloadFileNameFromUrl(),
 				videoUrl
 			)
 		}
@@ -215,9 +218,11 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
 	override fun onConfigurationChanged(newConfig: Configuration) {
 		super.onConfigurationChanged(newConfig)
 		if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-			setImmersiveSystemBar(true)
-	 	} else {
-			setImmersiveSystemBar(false)
+			// setImmersiveSystemBar(true)
+			hideStatusBar()
+		} else {
+			// setImmersiveSystemBar(false)
+			showStatusBar()
 		}
 	}
 
