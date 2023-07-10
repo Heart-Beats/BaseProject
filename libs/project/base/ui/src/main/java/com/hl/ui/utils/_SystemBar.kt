@@ -7,10 +7,16 @@ import android.view.WindowManager
 import androidx.core.view.ViewCompat
 import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.LifecycleOwner
 
 /**
  * @author  张磊  on  2022/01/13 at 16:15
  * Email: 913305160@qq.com
+ */
+
+/**
+ * 根试图是否设置状态栏或者导航栏高度的 padding
  */
 fun Activity.initInsetPadding(top: Boolean = true, bottom: Boolean = true) {
     val view = findViewById<View>(android.R.id.content)
@@ -29,8 +35,21 @@ fun Activity.initInsetPadding(top: Boolean = true, bottom: Boolean = true) {
     ViewCompat.requestApplyInsets(view)
 }
 
+/**
+ * 根试图是否设置状态栏或者导航栏高度的 padding
+ */
 fun Fragment.initInsetPadding(top: Boolean = true, bottom: Boolean = true) {
     requireActivity().initInsetPadding(top, bottom)
+}
+
+/**
+ * 根试图是否设置状态栏或者导航栏高度的 padding
+ */
+fun LifecycleOwner.initInsetPaddingSmart(top: Boolean = true, bottom: Boolean = true) {
+    when (this) {
+        is FragmentActivity -> this.initInsetPadding(top, bottom)
+        is Fragment -> this.initInsetPadding(top, bottom)
+    }
 }
 
 
