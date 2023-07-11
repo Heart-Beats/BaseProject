@@ -32,14 +32,11 @@
         android:textColor="@color/_FF31415F"
         android:textSize="@dimen/sp_14" />
 
-    <com.hl.uikit.UIKitDividerView
+    <View
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/dp_0_5"
         android:layout_marginTop="@dimen/dp_20"
-        app:uikit_dividerColor="@color/_FFD8D8D8"
-        app:uikit_dividerLineType="solid_path"
-        app:uikit_dividerOrientation="horizontal"
-        app:uikit_dividerThickness="@dimen/dp_0_5" />
+        android:background="@color/_FFD8D8D8" />
 
     <TextView
         android:id="@+id/action_sure"

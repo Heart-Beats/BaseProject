@@ -141,16 +141,13 @@ dependencies {
 
 
     // 是否使用远程依赖库方式
-    def isUseRemoteDependencies = false
+    def isUseRemoteDependencies = true
 
     if (isUseRemoteDependencies) {
-        def hlVersion = '0.5.9'
+        def hlVersion = '0.0.1-SNAPSHOT'
 
         implementation "com.hl:base-api:$hlVersion"
-        implementation("com.hl:base-arch:$hlVersion") {
-            // base-arch 依赖传递了 smooth-navigation，重写了 navigation-fragment 中的相关类，会冲突需要排除
-            exclude group: 'androidx.navigation', module: 'navigation-fragment'
-        }
+        implementation "com.hl:base-arch:$hlVersion"
         implementation "com.hl:uikit:$hlVersion"
 
         implementation "com.hl:web:$hlVersion"
@@ -160,10 +157,7 @@ dependencies {
         implementation "com.hl:camera:$hlVersion"
     } else {
         implementation 'com.hl:base-api'
-        implementation('com.hl:base-arch') {
-            // base-arch 依赖传递了 smooth-navigation，重写了 navigation-fragment 中的相关类，会冲突需要排除
-            exclude group: 'androidx.navigation', module: 'navigation-fragment'
-        }
+        implementation 'com.hl:base-arch'
         implementation 'com.hl:uikit'
 
         implementation 'com.hl:Web'
