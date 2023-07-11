@@ -51,6 +51,5 @@ dependencies {
     api Deps.AndroidX.collection_ktx
     api Deps.AndroidX.recyclerview
 
-    api platform(libs.jetpack.compose.bom)
     api libs.bundles.compose
 }

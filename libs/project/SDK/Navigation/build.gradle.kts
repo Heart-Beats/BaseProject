@@ -38,7 +38,10 @@ dependencies {
 	implementation(Deps.Material.material)
 
 	api(Deps.Jetpack.Navigation.smooth_navigation)
-	api(Deps.Jetpack.Navigation.navigation_fragment_ktx)
+	api(Deps.Jetpack.Navigation.navigation_fragment_ktx) {
+		//smooth-navigation 重写了 navigation-fragment 中的相关类，会冲突需要排除
+		exclude(group = "androidx.navigation", module = "navigation-fragment")
+	}
 	api(Deps.Jetpack.Navigation.navigation_ui)
 	api(Deps.Jetpack.Navigation.navigation_ui_ktx)
 }
