@@ -3,7 +3,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'com.kanyun.kace'
 
 android {
-    compileSdkVersion 33
+    compileSdk 33
 
     signingConfigs {
         test_jks {

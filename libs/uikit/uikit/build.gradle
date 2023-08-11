@@ -7,7 +7,7 @@ apply plugin: 'com.kanyun.kace'
 android {
     namespace 'com.hl.uikit'
 
-    compileSdkVersion 31
+    compileSdk 31
     resourcePrefix "uikit_"
     defaultConfig {
         minSdkVersion 21
