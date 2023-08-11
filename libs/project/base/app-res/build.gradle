@@ -9,7 +9,7 @@ android {
     namespace 'com.hl.res'
     resourcePrefix 'hl_res_'
 
-    compileSdkVersion AndroidVersions.COMPILE_SDK
+    compileSdk AndroidVersions.COMPILE_SDK
     defaultConfig {
         minSdkVersion AndroidVersions.MIN_SDK
         targetSdkVersion AndroidVersions.TARGET_SDK

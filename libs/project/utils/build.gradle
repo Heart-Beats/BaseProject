@@ -14,7 +14,7 @@ android {
     namespace = "com.hl.utils"
     resourcePrefix "hl_utils_"
 
-    compileSdkVersion AndroidVersions.COMPILE_SDK
+    compileSdk AndroidVersions.COMPILE_SDK
     defaultConfig {
         minSdkVersion AndroidVersions.MIN_SDK
         targetSdkVersion AndroidVersions.TARGET_SDK
@@ -96,8 +96,6 @@ dependencies {
     api Deps.Banner.banner
     api Deps.Update.update_app_utilsx
     api Deps.UtilCodeX.utilcodex
-
-    implementation Deps.Okhttp.okhttp
 
     api Deps.AndroidX.palette_Ktx
 }

@@ -9,7 +9,7 @@ plugins {
 android {
     namespace 'com.hl.api'
 
-    compileSdkVersion AndroidVersions.COMPILE_SDK
+    compileSdk AndroidVersions.COMPILE_SDK
     defaultConfig {
         minSdkVersion AndroidVersions.MIN_SDK
         targetSdkVersion AndroidVersions.TARGET_SDK
@@ -42,4 +42,6 @@ dependencies {
     implementation Deps.Retrofit.converter_gson
     implementation Deps.Retrofit.adapter_rxjava3
     implementation Deps.Okhttp.logging_interceptor
+
+    implementation libs.kotlinx.coroutines.android
 }
