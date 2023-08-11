@@ -40,6 +40,7 @@ task buildSdk() {
     dependsOn gradle.includedBuild('project').task(':SDK:Share:assembleRelease')
     dependsOn gradle.includedBuild('project').task(':SDK:VideoPlayer:assembleRelease')
     dependsOn gradle.includedBuild('project').task(':SDK:Camera:assembleRelease')
+    dependsOn gradle.includedBuild('project').task(':SDK:Update:assembleRelease')
 }
 
 //引入配置设置
@@ -330,6 +331,7 @@ setGeneratePomFileAndDepends('PreviewFile')
 setGeneratePomFileAndDepends('Share')
 setGeneratePomFileAndDepends('VideoPlayer')
 setGeneratePomFileAndDepends('Camera')
+setGeneratePomFileAndDepends('Update')
 
 // 设置 UniApp 相关的 POM 文件
 setUniAppGeneratePomFileAndDepends()
@@ -585,7 +587,6 @@ project.afterEvaluate {
                     setDependencyNode(root, Scope.COMPILE, 'androidx.lifecycle', 'lifecycle-runtime-ktx', libs.versions.lifecycle.get())
 
                     setDependencyNode(root, Scope.COMPILE, 'io.github.youth5201314', 'banner', libs.versions.banner.get())
-                    setDependencyNode(root, Scope.COMPILE, 'com.teprinciple', 'updateapputilsx', libs.versions.updateAppUtilsx.get())
                     setDependencyNode(root, Scope.COMPILE, 'com.blankj', 'utilcodex', libs.versions.utilCodeX.get())
 
                     setDependencyNode(root, Scope.COMPILE, 'androidx.palette', 'palette-ktx', libs.versions.palette.get())
@@ -1215,6 +1216,28 @@ project.afterEvaluate {
                     setDependencyNode(root, Scope.RUNTIME, myGroupId, 'permission', getPublicationVersion())
 
                     setDependencyNode(root, Scope.COMPILE, 'cjt.library.wheel', 'camera', libs.versions.cameraView.get())
+
+                    setScm(root)
+                }
+            }
+
+            Update(MavenPublication) {
+                def moduleName = 'Update'
+                def publishModuleName = 'update'
+
+                def modulePath = "$libProjectPath/SDK/$moduleName"
+
+                groupId myGroupId
+                artifactId publishModuleName
+                version getPublicationVersion()
+
+                artifact("$modulePath/build/outputs/aar/${moduleName}-release.aar")
+                artifact sourceAar(publishModuleName, modulePath)
+
+                pom.withXml {
+                    def root = asNode()
+
+                    setDependencyNode(root, Scope.COMPILE, 'com.teprinciple', 'updateapputilsx', libs.versions.updateAppUtilsx.get())
 
                     setScm(root)
                 }

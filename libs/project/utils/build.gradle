@@ -94,7 +94,6 @@ dependencies {
     api Deps.Lifecycle.lifecycle_viewmodel_ktx
 
     api Deps.Banner.banner
-    api Deps.Update.update_app_utilsx
     api Deps.UtilCodeX.utilcodex
 
     api Deps.AndroidX.palette_Ktx

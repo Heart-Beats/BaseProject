@@ -1,4 +1,4 @@
-package com.hl.utils.update
+package com.hl.update
 
 interface DownloadApkObserver {
     fun onMd5CheckResult(result: Boolean)
