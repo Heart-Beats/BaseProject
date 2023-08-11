@@ -11,14 +11,13 @@
         tools:replace="networkSecurityConfig,requestLegacyExternalStorage">
 
         <provider
-            android:name="androidx.core.content.FileProvider"
+            android:name="com.hl.umeng.providers.UmengFileProvider"
             android:authorities="${applicationId}.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/hl_web_public_file_paths"
-                tools:replace="android:resource" />
+                android:resource="@xml/hl_web_public_file_paths" />
         </provider>
 
     </application>
