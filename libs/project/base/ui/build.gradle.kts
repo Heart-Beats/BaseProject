@@ -1,18 +1,16 @@
-import  com.buildsrc.AndroidVersions
-import  com.buildsrc.Deps
-
 plugins {
-	id("com.android.library")
-	id("org.jetbrains.kotlin.android")
+	alias(libs.plugins.android.library)
+	alias(libs.plugins.kotlin.android)
 }
 
 android {
 	namespace = "com.hl.ui"
-	compileSdk = AndroidVersions.COMPILE_SDK
+	compileSdk = libs.versions.compileSdk.get().toInt()
+
 
 	defaultConfig {
-		minSdk = AndroidVersions.MIN_SDK
-		targetSdk = AndroidVersions.TARGET_SDK
+		minSdk = libs.versions.minSdk.get().toInt()
+		targetSdk = libs.versions.targetSdk.get().toInt()
 
 		testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 		consumerProguardFiles("consumer-rules.pro")
@@ -47,16 +45,16 @@ android {
 }
 
 dependencies {
-	api(Deps.AndroidX.appcompat)
-	api(Deps.AndroidX.activity)
-	api(Deps.AndroidX.fragment)
-	api(Deps.AndroidX.activity_ktx)
-	api(Deps.AndroidX.fragment_ktx)
+	api(libs.androidx.appcompat)
+	api(libs.androidx.activity)
+	api(libs.androidx.fragment)
+	api(libs.androidx.activity.ktx)
+	api(libs.androidx.fragment.ktx)
 
-	api(Deps.AndroidX.view_binding)
+	api(libs.androidx.view.binding)
 
-	api(Deps.Status_Bar.immersionbar)
-	api(Deps.Status_Bar.immersionbar_ktx)
+	api(libs.statusbar.immersionbar)
+	api(libs.statusbar.immersionbar.ktx)
 
 	api("com.hl:uikit-toast")
 

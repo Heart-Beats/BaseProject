@@ -450,7 +450,6 @@ project.afterEvaluate {
                 pom.withXml {
                     def root = asNode()
 
-                    setDependencyNode(root, Scope.RUNTIME, 'org.jetbrains.kotlin', 'kotlin-stdlib', libs.versions.kotlin.get())
                     setDependencyNode(root, Scope.COMPILE, 'com.squareup.retrofit2', 'retrofit', libs.versions.retrofit.get())
                     setDependencyNode(root, Scope.RUNTIME, 'com.squareup.retrofit2', 'converter-gson', libs.versions.retrofit.get())
                     setDependencyNode(root, Scope.RUNTIME, 'com.squareup.retrofit2', 'adapter-rxjava3', libs.versions.retrofit.get())
@@ -695,8 +694,6 @@ project.afterEvaluate {
                 pom.withXml {
                     def root = asNode()
 
-                    setDependencyNode(root, Scope.COMPILE, 'org.jetbrains.kotlin', 'kotlin-stdlib', libs.versions.kotlin.get())
-
                     setScm(root)
                 }
             }
@@ -716,15 +713,21 @@ project.afterEvaluate {
                 pom.withXml {
                     def root = asNode()
 
-                    setDependencyNode(root, Scope.COMPILE, 'org.jetbrains.kotlin', 'kotlin-stdlib', libs.versions.kotlin.get())
                     setDependencyNode(root, Scope.COMPILE, myGroupId, 'shadow-lib', getPublicationVersion())
 
+                    setDependencyNode(root, Scope.RUNTIME, 'com.google.code.gson', 'gson', libs.versions.gson.get())
+
                     setDependencyNode(root, Scope.COMPILE, 'com.tencent.shadow.dynamic', 'host', libs.versions.shadow.get())
-                    setDependencyNode(root, Scope.COMPILE, 'com.tencent.shadow.core', 'activity-container', libs.versions.shadow.get())
                     setDependencyNode(root, Scope.COMPILE, 'com.tencent.shadow.dynamic', 'manager', libs.versions.shadow.get())
+
+                    setDependencyNode(root, Scope.COMPILE, 'com.tencent.shadow.core', 'activity-container', libs.versions.shadow.get())
 
                     setDependencyNode(root, Scope.COMPILE, 'com.tencent.shadow.dynamic', 'host-multi-loader-ext', libs.versions.shadow.get())
                     setDependencyNode(root, Scope.COMPILE, 'com.tencent.shadow.dynamic', 'manager-multi-loader-ext', libs.versions.shadow.get())
+
+                    setDependencyNode(root, Scope.PROVIDED, 'com.tencent.shadow.core', 'common', libs.versions.shadow.get())
+                    setDependencyNode(root, Scope.PROVIDED, 'com.tencent.shadow.core', 'loader', libs.versions.shadow.get())
+                    setDependencyNode(root, Scope.PROVIDED, 'com.tencent.shadow.dynamic', 'loader-impl', libs.versions.shadow.get())
 
                     setScm(root)
                 }

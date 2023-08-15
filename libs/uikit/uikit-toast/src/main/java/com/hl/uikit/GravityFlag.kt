@@ -2,8 +2,6 @@ package com.hl.uikit
 
 import android.view.Gravity
 import androidx.annotation.IntDef
-import java.lang.annotation.Retention
-import java.lang.annotation.RetentionPolicy
 
 /**
  * @author  张磊  on  2023/06/07 at 17:20
@@ -11,7 +9,7 @@ import java.lang.annotation.RetentionPolicy
  */
 
 
-@Retention(RetentionPolicy.SOURCE)
+@Retention(AnnotationRetention.SOURCE)
 @IntDef(
 	Gravity.TOP,
 	Gravity.BOTTOM,

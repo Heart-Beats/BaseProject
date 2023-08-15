@@ -1,6 +1,3 @@
-import com.buildsrc.AndroidVersions
-import com.buildsrc.Deps
-
 plugins {
     id 'com.android.library'
     id 'kotlin-android'
@@ -14,10 +11,10 @@ android {
     namespace = "com.hl.utils"
     resourcePrefix "hl_utils_"
 
-    compileSdk AndroidVersions.COMPILE_SDK
+    compileSdk libs.versions.compileSdk.get().toInteger()
     defaultConfig {
-        minSdkVersion AndroidVersions.MIN_SDK
-        targetSdkVersion AndroidVersions.TARGET_SDK
+        minSdkVersion libs.versions.minSdk.get().toInteger()
+        targetSdkVersion libs.versions.targetSdk.get().toInteger()
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -79,22 +76,21 @@ dependencies {
     api project(':SDK:MimeType')
     api project(':SDK:Popup')
 
-    implementation Deps.AndroidX.appcompat
-    implementation Deps.AndroidX.activity
-    implementation Deps.AndroidX.fragment
-    implementation Deps.AndroidX.activity_ktx
-    implementation Deps.AndroidX.fragment_ktx
-    implementation Deps.Material.material
+    implementation libs.androidx.appcompat
+    implementation libs.androidx.activity
+    implementation libs.androidx.fragment
+    implementation libs.androidx.activity.ktx
+    implementation libs.androidx.fragment.ktx
+    implementation libs.material
 
-    implementation Deps.AndroidX.databinding_runtime
+    implementation libs.androidx.databinding.runtime
 
-    api Deps.Lifecycle.lifecycle_extensions
-    api Deps.Lifecycle.lifecycle_extensions
-    api Deps.Lifecycle.lifecycle_livedata_ktx
-    api Deps.Lifecycle.lifecycle_viewmodel_ktx
+    api libs.androidx.lifecycle.extensions
+    api libs.androidx.lifecycle.livedata.ktx
+    api libs.androidx.lifecycle.viewmodel.ktx
 
-    api Deps.Banner.banner
-    api Deps.UtilCodeX.utilcodex
+    api libs.banner
+    api libs.utilCodeX
 
-    api Deps.AndroidX.palette_Ktx
+    api libs.androidx.palette.ktx
 }

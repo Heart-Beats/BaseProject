@@ -1,6 +1,3 @@
-import com.buildsrc.AndroidVersions
-import com.buildsrc.Deps
-
 plugins {
 	alias(libs.plugins.android.library)
 	alias(libs.plugins.kotlin.android)
@@ -8,13 +5,13 @@ plugins {
 
 android {
 	namespace = "com.hl.smsutil"
-	compileSdk = AndroidVersions.COMPILE_SDK
+	compileSdk = libs.versions.compileSdk.get().toInt()
 
 	this.resourcePrefix = "hl_sms_util_"
 
 	defaultConfig {
-		minSdk = AndroidVersions.MIN_SDK
-		targetSdk = AndroidVersions.TARGET_SDK
+		minSdk = libs.versions.minSdk.get().toInt()
+		targetSdk = libs.versions.targetSdk.get().toInt()
 
 		testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 		consumerProguardFiles("consumer-rules.pro")
@@ -38,6 +35,7 @@ android {
 
 
 dependencies {
-	implementation(Deps.AndroidX.activity_ktx)
-	implementation(Deps.AndroidX.fragment_ktx)
+
+	implementation(libs.androidx.activity.ktx)
+	implementation(libs.androidx.fragment.ktx)
 }

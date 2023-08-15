@@ -1,6 +1,3 @@
-import com.buildsrc.AndroidVersions
-import com.buildsrc.Deps
-
 plugins {
     id 'com.android.library'
     id 'kotlin-android'
@@ -10,10 +7,10 @@ plugins {
 android {
     namespace 'com.hl.arch'
 
-    compileSdk AndroidVersions.COMPILE_SDK
+    compileSdk libs.versions.compileSdk.get().toInteger()
     defaultConfig {
-        minSdkVersion AndroidVersions.MIN_SDK
-        targetSdkVersion AndroidVersions.TARGET_SDK
+        minSdkVersion libs.versions.minSdk.get().toInteger()
+        targetSdkVersion libs.versions.targetSdk.get().toInteger()
         versionCode 1
         versionName "1.0"
 
@@ -48,8 +45,8 @@ dependencies {
     api project(path: ':SDK:Navigation')
     api project(path: ':SDK:Umeng')
 
-    api Deps.AndroidX.collection_ktx
-    api Deps.AndroidX.recyclerview
+    api libs.androidx.collection.ktx
+    api libs.androidx.recyclerview
 
     api libs.bundles.compose
 }
