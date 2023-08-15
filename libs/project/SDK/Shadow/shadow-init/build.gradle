@@ -1,18 +1,15 @@
-import com.buildsrc.AndroidVersions
-import com.buildsrc.Deps
-
 plugins {
-    id 'com.android.library'
-    id 'kotlin-android'
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.kotlin.android)
 }
 
 android {
     namespace = "com.hl.shadow"
 
-    compileSdk = AndroidVersions.COMPILE_SDK
+    compileSdk = libs.versions.compileSdk.get().toInteger()
     defaultConfig {
-        minSdk = AndroidVersions.MIN_SDK
-        targetSdk = AndroidVersions.TARGET_SDK
+        minSdk = libs.versions.minSdk.get().toInteger()
+        targetSdk = libs.versions.targetSdk.get().toInteger()
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'consumer-rules.pro'
@@ -57,20 +54,19 @@ dependencies {
 
     api project(path: ':SDK:shadow-lib')
 
-    implementation Deps.Kotlin.kotlin_stdlib
-    implementation Deps.Json.gson
+    implementation libs.gson
 
-    api Deps.Shadow.host
-    api Deps.Shadow.host_multi_loader_ext
-    api Deps.Shadow.activity_container
+    api libs.shadow.host
+    api libs.shadow.manager
 
-    api Deps.Shadow.manager
-    api Deps.Shadow.manager_multi_loader_ext
+    api libs.shadow.activity.container
 
+    api libs.shadow.host.multi.loader.ext
+    api libs.shadow.manager.multi.loader.ext
 
-    compileOnly Deps.Shadow.common
     // 下面这些依赖主要用于方便调试，compileOnly 编译时可见，不会打包到 apk
-    compileOnly Deps.Shadow.loader
-    compileOnly Deps.Shadow.loader_impl
+    compileOnly libs.shadow.common
+    compileOnly libs.shadow.loader
+    compileOnly libs.shadow.loader.impl
 }
 

@@ -1,6 +1,3 @@
-import com.buildsrc.AndroidVersions
-import com.buildsrc.Deps
-
 plugins {
 	alias(libs.plugins.android.library)
 	alias(libs.plugins.kotlin.android)
@@ -9,13 +6,13 @@ plugins {
 
 android {
 	namespace = "com.hl.web"
-	compileSdk = AndroidVersions.COMPILE_SDK
+	compileSdk = libs.versions.compileSdk.get().toInt()
 
 	this.resourcePrefix = "hl_web_"
 
 	defaultConfig {
-		minSdk = AndroidVersions.MIN_SDK
-		targetSdk = AndroidVersions.TARGET_SDK
+		minSdk = libs.versions.minSdk.get().toInt()
+		targetSdk = libs.versions.targetSdk.get().toInt()
 
 		testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 		consumerProguardFiles("consumer-rules.pro")
@@ -43,7 +40,7 @@ android {
 }
 
 dependencies {
-	api(Deps.JsBridge.jsbridge)
+	api(libs.jsBridge)
 
 	api(project(":base-ui"))
 	api(project(":SDK:ActivityResult"))
@@ -60,6 +57,6 @@ dependencies {
 	api(project(":SDK:SmsUtil"))
 	api(project(":SDK:PreviewFile"))
 
-	api(Deps.UtilCodeX.utilcodex)
-	api(Deps.Jetpack.Navigation.navigation_runtime_ktx)
+	api(libs.utilCodeX)
+	api(libs.jetpack.navigation.runtime.ktx)
 }

@@ -1,5 +1,3 @@
-import com.buildsrc.AndroidVersions
-
 plugins {
     id 'com.android.library'
     id 'kotlin-android'
@@ -9,10 +7,10 @@ android {
     namespace 'com.hl.res'
     resourcePrefix 'hl_res_'
 
-    compileSdk AndroidVersions.COMPILE_SDK
+    compileSdk libs.versions.compileSdk.get().toInteger()
     defaultConfig {
-        minSdkVersion AndroidVersions.MIN_SDK
-        targetSdkVersion AndroidVersions.TARGET_SDK
+        minSdkVersion libs.versions.minSdk.get().toInteger()
+        targetSdkVersion libs.versions.targetSdk.get().toInteger()
         versionCode 1
         versionName "1.0"
 

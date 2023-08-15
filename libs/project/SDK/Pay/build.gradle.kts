@@ -1,7 +1,3 @@
-import com.buildsrc.AndroidVersions
-import com.buildsrc.Deps
-
-
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
@@ -10,10 +6,10 @@ plugins {
 android {
     namespace = "com.hl.pay"
 
-    compileSdk = AndroidVersions.COMPILE_SDK
+    compileSdk = libs.versions.compileSdk.get().toInt()
     defaultConfig {
-        minSdk = AndroidVersions.MIN_SDK
-        targetSdk = AndroidVersions.TARGET_SDK
+        minSdk = libs.versions.minSdk.get().toInt()
+        targetSdk = libs.versions.targetSdk.get().toInt()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -37,10 +33,10 @@ android {
 dependencies {
     implementation(fileTree("libs", { include("*.jar", "*.aar") }))
 
-    implementation(Deps.AndroidX.core_ktx)
-    implementation(Deps.AndroidX.appcompat)
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.appcompat)
 
-    implementation(Deps.Ali.pay)
-    implementation(Deps.Tencent.wechat_sdk_android_without_mta)
-    implementation(Deps.Json.gson)
+    implementation(libs.aliPaySdk)
+    implementation(libs.weiXinOpenSdk)
+    implementation(libs.gson)
 }

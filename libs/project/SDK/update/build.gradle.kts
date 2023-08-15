@@ -1,18 +1,15 @@
-import com.buildsrc.AndroidVersions
-import com.buildsrc.Deps
-
 plugins {
-	id("com.android.library")
-	id("org.jetbrains.kotlin.android")
+	alias(libs.plugins.android.library)
+	alias(libs.plugins.kotlin.android)
 }
 
 android {
 	namespace = "com.hl.update"
 
-	compileSdk = AndroidVersions.COMPILE_SDK
+	compileSdk = libs.versions.compileSdk.get().toInt()
 	defaultConfig {
-		minSdk = AndroidVersions.MIN_SDK
-		targetSdk = AndroidVersions.TARGET_SDK
+		minSdk = libs.versions.minSdk.get().toInt()
+		targetSdk = libs.versions.targetSdk.get().toInt()
 
 		testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 		consumerProguardFiles("consumer-rules.pro")

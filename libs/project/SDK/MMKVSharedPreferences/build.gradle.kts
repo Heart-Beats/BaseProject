@@ -1,20 +1,17 @@
-import com.buildsrc.AndroidVersions
-import com.buildsrc.Deps
-
 plugins {
-	id("com.android.library")
-	id("org.jetbrains.kotlin.android")
+	alias(libs.plugins.android.library)
+	alias(libs.plugins.kotlin.android)
 }
 
 android {
 	namespace = "com.hl.mmkvsharedpreferences"
-	compileSdk = AndroidVersions.COMPILE_SDK
+	compileSdk = libs.versions.compileSdk.get().toInt()
 
 	this.resourcePrefix = "hl_mmkv_sharedpreferences_"
 
 	defaultConfig {
-		minSdk = AndroidVersions.MIN_SDK
-		targetSdk = AndroidVersions.TARGET_SDK
+		minSdk = libs.versions.minSdk.get().toInt()
+		targetSdk = libs.versions.targetSdk.get().toInt()
 
 		testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 		consumerProguardFiles("consumer-rules.pro")
@@ -37,9 +34,9 @@ android {
 }
 
 dependencies {
-	api(Deps.AndroidX.startup)
-	implementation(Deps.AndroidX.security_crypto)
-	api(Deps.AndroidX.core_ktx)
+	api(libs.androidx.startup)
+	implementation(libs.androidx.security.crypto)
+	api(libs.androidx.core.ktx)
 	api(project(":SDK:JsonUtil"))
-	api(Deps.Tencent.mmkv)
+	api(libs.mmkv)
 }

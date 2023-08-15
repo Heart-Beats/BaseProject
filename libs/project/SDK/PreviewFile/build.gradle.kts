@@ -1,6 +1,3 @@
-import com.buildsrc.AndroidVersions
-import com.buildsrc.Deps
-
 plugins {
 	alias(libs.plugins.android.library)
 	alias(libs.plugins.kotlin.android)
@@ -8,13 +5,13 @@ plugins {
 
 android {
 	namespace = "com.hl.previewfile"
-	compileSdk = AndroidVersions.COMPILE_SDK
+	compileSdk = libs.versions.compileSdk.get().toInt()
 
 	this.resourcePrefix = "hl_preview_file_"
 
 	defaultConfig {
-		minSdk = AndroidVersions.MIN_SDK
-		targetSdk = AndroidVersions.TARGET_SDK
+		minSdk = libs.versions.minSdk.get().toInt()
+		targetSdk = libs.versions.targetSdk.get().toInt()
 
 		testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 		consumerProguardFiles("consumer-rules.pro")
@@ -54,6 +51,6 @@ dependencies {
 	implementation(project(":SDK:Share"))
 	implementation(project(":SDK:VideoPlayer"))
 
-	implementation(Deps.Okhttp.okhttp)
-	api(Deps.Tencent.tbs_sdk)
+	implementation(libs.okHttp.okhttp)
+	api(libs.tbsSdk)
 }

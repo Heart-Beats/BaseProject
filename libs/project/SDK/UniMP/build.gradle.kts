@@ -1,18 +1,15 @@
-import com.buildsrc.AndroidVersions
-import com.buildsrc.Deps
-
 plugins {
-	id("com.android.library")
-	id("org.jetbrains.kotlin.android")
+	alias(libs.plugins.android.library)
+	alias(libs.plugins.kotlin.android)
 }
 
 android {
 	namespace = "com.hl.unimp"
 
-	compileSdk = AndroidVersions.COMPILE_SDK
+	compileSdk = libs.versions.compileSdk.get().toInt()
 	defaultConfig {
-		minSdk = AndroidVersions.MIN_SDK
-		targetSdk = AndroidVersions.TARGET_SDK
+		minSdk = libs.versions.minSdk.get().toInt()
+		targetSdk = libs.versions.targetSdk.get().toInt()
 
 		testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 		consumerProguardFiles("consumer-rules.pro")
@@ -49,16 +46,16 @@ dependencies {
 	api(project(":SDK:uniapp-v8-release"))
 	api(project(":SDK:uniMPSDK-V2-release"))
 
-	implementation(Deps.AndroidX.recyclerview)
+	implementation(libs.androidx.recyclerview)
 	implementation("androidx.legacy:legacy-support-v4:1.0.0")
-	implementation(Deps.AndroidX.appcompat)
-	implementation(Deps.Json.fast_json)
+	implementation(libs.androidx.appcompat)
+	implementation(libs.fastJson)
 
 	val fresco_version = "2.5.0"
 	implementation("com.facebook.fresco:fresco:${fresco_version}")
 	implementation("com.facebook.fresco:animated-gif:${fresco_version}")
 
-	implementation(Deps.ImageLoader.Glide.glide)
-	api(Deps.Gif.android_gif_drawable)
+	implementation(libs.glide)
+	api(libs.android.gif.drawable)
 	implementation("androidx.webkit:webkit:1.3.0")
 }

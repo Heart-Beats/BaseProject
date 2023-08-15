@@ -1,6 +1,3 @@
-import com.buildsrc.AndroidVersions
-import com.buildsrc.Deps
-
 plugins {
 	alias(libs.plugins.android.library)
 	alias(libs.plugins.kotlin.android)
@@ -8,13 +5,13 @@ plugins {
 
 android {
 	namespace = "com.hl.share"
-	compileSdk = AndroidVersions.COMPILE_SDK
+	compileSdk = libs.versions.compileSdk.get().toInt()
 
 	this.resourcePrefix = "hl_share_"
 
 	defaultConfig {
-		minSdk = AndroidVersions.MIN_SDK
-		targetSdk = AndroidVersions.TARGET_SDK
+		minSdk = libs.versions.minSdk.get().toInt()
+		targetSdk = libs.versions.targetSdk.get().toInt()
 
 		testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 		consumerProguardFiles("consumer-rules.pro")
@@ -36,7 +33,7 @@ android {
 	}
 }
 dependencies {
-	implementation(Deps.AndroidX.core_ktx)
+	implementation(libs.androidx.core.ktx)
 	implementation("com.hl:uikit-toast")
 	implementation(project(":SDK:MimeType"))
 }

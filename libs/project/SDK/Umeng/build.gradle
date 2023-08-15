@@ -1,6 +1,3 @@
-import com.buildsrc.AndroidVersions
-import com.buildsrc.Deps
-
 plugins {
     id 'com.android.library'
     id 'kotlin-android'
@@ -9,10 +6,10 @@ plugins {
 android {
     namespace = "com.hl.umeng"
 
-    compileSdk AndroidVersions.COMPILE_SDK
+    compileSdk libs.versions.compileSdk.get().toInteger()
     defaultConfig {
-        minSdkVersion AndroidVersions.MIN_SDK
-        targetSdkVersion AndroidVersions.TARGET_SDK
+        minSdkVersion libs.versions.minSdk.get().toInteger()
+        targetSdkVersion libs.versions.targetSdk.get().toInteger()
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -40,18 +37,18 @@ android {
 }
 
 dependencies {
-
-    implementation Deps.AndroidX.core_ktx
-    implementation Deps.AndroidX.appcompat
+    implementation libs.androidx.core.ktx
+    implementation libs.androidx.appcompat
 
     // 集成友盟统计、性能分析、推送、分享（微信分享）
-    api Deps.Umeng.common
-    api Deps.Umeng.asms
+    api libs.umeng.common
+    api libs.umeng.asms
 
     // 仅正式版本进行异常分析
-    releaseApi Deps.Umeng.apm
-    api Deps.Umeng.push
-    api Deps.Umeng.share_core
-    api Deps.Umeng.share_wx
-    api Deps.Umeng.wechat_sdk_android_without_mta
+    releaseApi libs.umeng.apm
+    api libs.umeng.push
+    api libs.umeng.share.core
+    api libs.umeng.share.wx
+    api libs.weiXinOpenSdk
+
 }
