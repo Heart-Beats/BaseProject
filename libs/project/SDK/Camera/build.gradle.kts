@@ -40,5 +40,5 @@ dependencies {
 	implementation(project(":base-ui"))
 	implementation(project(":SDK:Permission"))
 
-	api(libs.camera)
+	api(libs.camera.likeWX)
 }

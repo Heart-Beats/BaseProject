@@ -56,8 +56,8 @@ dependencies {
 
     implementation libs.gson
 
-    api libs.shadow.host
-    api libs.shadow.manager
+    api libs.shadow.host.asProvider()
+    api libs.shadow.manager.asProvider()
 
     api libs.shadow.activity.container
 
@@ -66,7 +66,7 @@ dependencies {
 
     // 下面这些依赖主要用于方便调试，compileOnly 编译时可见，不会打包到 apk
     compileOnly libs.shadow.common
-    compileOnly libs.shadow.loader
+    compileOnly libs.shadow.loader.asProvider()
     compileOnly libs.shadow.loader.impl
 }
 

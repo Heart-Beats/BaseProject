@@ -36,7 +36,6 @@ android {
 dependencies {
 	implementation(libs.androidx.appcompat)
 	implementation(libs.androidx.recyclerview)
-	api(libs.material)
 
 	api(libs.xPopup)
 }

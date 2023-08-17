@@ -51,6 +51,6 @@ dependencies {
 	implementation(project(":SDK:Share"))
 	implementation(project(":SDK:VideoPlayer"))
 
-	implementation(libs.okHttp.okhttp)
+	api(libs.material)
 	api(libs.tbsSdk)
 }

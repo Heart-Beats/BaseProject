@@ -34,5 +34,5 @@ android {
 }
 
 dependencies {
-	api(libs.glide)
+	api(libs.glide.asProvider())
 }

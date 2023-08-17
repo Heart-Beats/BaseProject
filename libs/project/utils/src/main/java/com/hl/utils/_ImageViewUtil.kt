@@ -7,8 +7,6 @@ import androidx.annotation.ColorInt
 import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 
 /**
  * @author  张磊  on  2021/12/17 at 16:27

@@ -141,7 +141,7 @@ dependencies {
 
 
     // 是否使用远程依赖库方式
-    def isUseRemoteDependencies = true
+    def isUseRemoteDependencies = false
 
     if (isUseRemoteDependencies) {
         def hlVersion = '0.0.1-SNAPSHOT'
