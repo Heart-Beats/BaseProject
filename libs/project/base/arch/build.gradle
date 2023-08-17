@@ -40,10 +40,10 @@ android {
 }
 
 dependencies {
+    api project(path: ':base-api')
     api project(path: ':base-ui')
     api project(path: ':utils')
     api project(path: ':SDK:Navigation')
-    api project(path: ':SDK:Umeng')
 
     api libs.androidx.collection.ktx
     api libs.androidx.recyclerview

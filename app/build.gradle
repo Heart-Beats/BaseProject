@@ -146,7 +146,6 @@ dependencies {
     if (isUseRemoteDependencies) {
         def hlVersion = '0.0.1-SNAPSHOT'
 
-        implementation "com.hl:base-api:$hlVersion"
         implementation "com.hl:base-arch:$hlVersion"
         implementation "com.hl:uikit:$hlVersion"
 
@@ -156,7 +155,6 @@ dependencies {
         implementation "com.hl:uni-mp:$hlVersion"
         implementation "com.hl:camera:$hlVersion"
     } else {
-        implementation 'com.hl:base-api'
         implementation 'com.hl:base-arch'
         implementation 'com.hl:uikit'
 

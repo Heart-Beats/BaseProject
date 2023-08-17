@@ -18,35 +18,13 @@ def initBuildConfigValueFun(defaultConfig) {
     def closure = {
         // 配置 manifest 中的占位符,这里都是
         manifestPlaceholders = [
-                qqappid          : "",
-                BAIDU_MAP_API_KEY: "",
-                UMENG_APP_KEY    : "",
-                UMENG_SECRET_KEY : "",
-                NIM_APP_KEY      : "",
-                XUNFEI_APPID     : "",
-                WX_APPID         : "",
-                WX_SECRET_KEY    : "",
-                GAODE_MAP_API_KEY: "",
-
-                HEFENG_API_KEY   : "",
+                 WX_APPID         : "",
+                 WX_SECRET_KEY    : "",
         ]
 
-        buildConfigField('String', 'umengAppKey', "\"${manifestPlaceholders.UMENG_APP_KEY}\"")
-        buildConfigField('String', 'umengSecretKey', "\"${manifestPlaceholders.UMENG_SECRET_KEY}\"")
-        buildConfigField('String', 'xunfeiAppid', "\"${manifestPlaceholders.XUNFEI_APPID}\"")
-
-        buildConfigField('String', 'wxAppKey', "\"${manifestPlaceholders.WX_APPID}\"")
-        buildConfigField('String', 'wxSecretKey', "\"${manifestPlaceholders.WX_SECRET_KEY}\"")
-
-        buildConfigField('String', 'qqAppKey', "\"1\"")
-        buildConfigField('String', 'qqSecretKey', "\"1\"")
-
-        buildConfigField('String', 'wxWorkAppKey', "\"1\"")
-        buildConfigField('String', 'wxWorkSecretKey', "\"1\"")
-
-        buildConfigField('String', 'aliPayAppKey', "\"1\"")
-
-        buildConfigField('String', 'hefengApiKey', "\"${manifestPlaceholders.HEFENG_API_KEY}\"")
+        // 配置构建时变量
+        // buildConfigField('String', 'wxAppKey', "\"${manifestPlaceholders.WX_APPID}\"")
+        //buildConfigField('String', 'wxSecretKey', "\"${manifestPlaceholders.WX_SECRET_KEY}\"")
 
 
         def api = [
@@ -54,8 +32,6 @@ def initBuildConfigValueFun(defaultConfig) {
                 Env_D  : 'https://dev-yky.youmatech.com/',
                 // 测试
                 Env_T  : 'https://test-yky.youmatech.com/',
-                // UAT
-                Env_Uat: 'https://uat-jsyjy.yuanzhiyijiantong.com/',
                 // 预发布
                 Env_P  : 'https://dev-jsyjy.yuanzhiyijiantong.com/',
                 // 正式
@@ -68,7 +44,6 @@ def initBuildConfigValueFun(defaultConfig) {
         //配置不同环境的域名
         buildConfigField 'String', 'BASE_URL_ENV_D', "\"${api.Env_D}\""
         buildConfigField 'String', 'BASE_URL_ENV_T', "\"${api.Env_T}\""
-        buildConfigField 'String', 'BASE_URL_ENV_UAT', "\"${api.Env_Uat}\""
         buildConfigField 'String', 'BASE_URL_ENV_P', "\"${api.Env_P}\""
         buildConfigField 'String', 'BASE_URL_ENV_R', "\"${api.Env_R}\""
         buildConfigField 'String', 'BASE_URL_ENV_DEFAULT', "\"$Env_Default\""

@@ -568,10 +568,10 @@ project.afterEvaluate {
 
                 pom.withXml {
                     def root = asNode()
+                    setDependencyNode(root, Scope.COMPILE, myGroupId, 'base-api', getPublicationVersion())
                     setDependencyNode(root, Scope.COMPILE, myGroupId, 'base-ui', getPublicationVersion())
                     setDependencyNode(root, Scope.COMPILE, myGroupId, 'utils', getPublicationVersion())
                     setDependencyNode(root, Scope.COMPILE, myGroupId, 'navigation', getPublicationVersion())
-                    setDependencyNode(root, Scope.COMPILE, myGroupId, 'umeng', getPublicationVersion())
 
                     setDependencyNode(root, Scope.COMPILE, libs.androidx.collection.ktx.get())
                     setDependencyNode(root, Scope.COMPILE, libs.androidx.recyclerview.get())

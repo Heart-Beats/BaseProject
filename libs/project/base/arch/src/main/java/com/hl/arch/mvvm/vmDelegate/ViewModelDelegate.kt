@@ -3,7 +3,7 @@ package com.hl.arch.mvvm.vmDelegate
 import android.util.Log
 import androidx.lifecycle.LifecycleOwner
 import com.elvishew.xlog.XLog
-import com.hl.arch.api.PublicResp
+import com.hl.api.PublicResp
 import com.hl.arch.loading.getLoadingPopup
 import com.hl.arch.mvvm.api.event.RequestStateEvent
 import com.hl.arch.mvvm.api.event.UiEvent

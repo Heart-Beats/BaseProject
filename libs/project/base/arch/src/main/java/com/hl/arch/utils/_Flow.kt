@@ -4,7 +4,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.hl.arch.api.PublicResp
+import com.hl.api.PublicResp
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
@@ -42,9 +42,9 @@ inline fun <T> Flow<T>.repeatSafeCollect(
  *
  */
 inline fun <T> Flow<PublicResp<T>?>.apiRespRepeatSafeCollect(
-	viewLifecycleOwner: LifecycleOwner, crossinline isSuccess: PublicResp<T>.() -> Boolean,
-	crossinline onFail: (failCode: String, failReason: String) -> Unit = { _, _ -> },
-	crossinline onSuccess: (value: T) -> Unit
+    viewLifecycleOwner: LifecycleOwner, crossinline isSuccess: PublicResp<T>.() -> Boolean,
+    crossinline onFail: (failCode: String, failReason: String) -> Unit = { _, _ -> },
+    crossinline onSuccess: (value: T) -> Unit
 ) {
     viewLifecycleOwner.lifecycleScope.launch {
 
