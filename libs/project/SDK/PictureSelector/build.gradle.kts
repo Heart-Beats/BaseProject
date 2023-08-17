@@ -36,7 +36,7 @@ android {
 dependencies {
 	api(project(":SDK:ImageLoad"))
 
-	api(libs.pickSelector.picture.selector)
+	api(libs.pickSelector.picture.selector.asProvider())
 	api(libs.pickSelector.picture.selector.compress)
 	api(libs.pickSelector.picture.selector.ucrop)
 }

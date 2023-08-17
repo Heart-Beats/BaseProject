@@ -46,18 +46,18 @@ android {
 
 dependencies {
 	api(libs.androidx.appcompat)
-	api(libs.androidx.activity)
-	api(libs.androidx.fragment)
+	api(libs.androidx.activity.asProvider())
+	api(libs.androidx.fragment.asProvider())
 	api(libs.androidx.activity.ktx)
 	api(libs.androidx.fragment.ktx)
 
 	api(libs.androidx.view.binding)
 
-	api(libs.statusbar.immersionbar)
+	api(libs.statusbar.immersionbar.asProvider())
 	api(libs.statusbar.immersionbar.ktx)
 
 	api("com.hl:uikit-toast")
 
 	api(platform(libs.jetpack.compose.bom))
-	api(libs.jetpack.compose.ui)
+	api(libs.jetpack.compose.ui.asProvider())
 }

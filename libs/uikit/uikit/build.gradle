@@ -7,11 +7,11 @@ apply plugin: 'com.kanyun.kace'
 android {
     namespace 'com.hl.uikit'
 
-    compileSdk 31
+    compileSdk libs.versions.compileSdk.get().toInteger()
     resourcePrefix "uikit_"
     defaultConfig {
-        minSdkVersion 21
-        targetSdkVersion 30
+        minSdkVersion libs.versions.minSdk.get().toInteger()
+        targetSdkVersion libs.versions.targetSdk.get().toInteger()
         versionCode 1
         versionName "1.0"
 
@@ -60,37 +60,34 @@ dependencies {
     api project(path: ':uikit-res')
     api project(path: ':uikit-toast')
 
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    //    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
-    implementation "androidx.appcompat:appcompat:1.6.0"
-    implementation "androidx.core:core-ktx:1.7.0"
-    implementation "androidx.recyclerview:recyclerview:1.2.1"
-    implementation "androidx.fragment:fragment-ktx:1.4.1"
-    implementation "androidx.constraintlayout:constraintlayout:2.1.3"
-
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2"
-    implementation "com.google.android.material:material:1.5.0"
+    implementation libs.androidx.appcompat
+    implementation libs.androidx.core.ktx
+    implementation libs.androidx.fragment.ktx
+    implementation libs.kotlinx.coroutines.android
+    api libs.androidx.recyclerview
+    api libs.androidx.constraintlayout
+    api libs.material
 
     //github 地址 ：https://github.com/zyyoona7/WheelPicker
-//    def wheel_picker_version = '2.0.7'
-//    api "com.github.zyyoona7.WheelPicker:wheelview:${wheel_picker_version}"
-//    api "com.github.zyyoona7.WheelPicker:pickerview:${wheel_picker_version}"
+    //    def wheel_picker_version = '2.0.7'
+    //    api "com.github.zyyoona7.WheelPicker:wheelview:${wheel_picker_version}"
+    //    api "com.github.zyyoona7.WheelPicker:pickerview:${wheel_picker_version}"
 
     def wheel_picker_version = '1.0.9'
     api "com.github.zyyoona7:wheelview:${wheel_picker_version}"
     api "com.github.zyyoona7:pickerview:${wheel_picker_version}"
 
     //github 地址 ：https://github.com/airbnb/lottie-android
-    api('com.airbnb.android:lottie:5.0.3')
-    api 'io.github.scwang90:refresh-layout-kernel:2.0.5'
-    implementation 'com.github.bumptech.glide:glide:4.12.0'
+    api libs.lottie
+    api libs.smartRefreshLayout.kernel
 
-    def picture_selector_version = 'v3.0.6'
-    api "io.github.lucksiege:pictureselector:$picture_selector_version"
-    api "io.github.lucksiege:compress:$picture_selector_version"
+    api libs.pickSelector.picture.selector.asProvider()
+    api libs.pickSelector.picture.selector.compress
 
-    implementation 'com.guolindev.permissionx:permissionx:1.7.1'
+    implementation libs.glide.asProvider()
+    implementation libs.permissionX
 
-    api('com.github.getActivity:ShapeView:8.5')
+    api libs.shapeView
 }

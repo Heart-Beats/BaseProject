@@ -40,6 +40,6 @@ dependencies {
 		//smooth-navigation 重写了 navigation-fragment 中的相关类，会冲突需要排除
 		exclude(group = "androidx.navigation", module = "navigation-fragment")
 	}
-	api(libs.jetpack.navigation.ui)
+	api(libs.jetpack.navigation.ui.asProvider())
 	api(libs.jetpack.navigation.ui.ktx)
 }

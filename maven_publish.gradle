@@ -101,6 +101,27 @@ enum Scope {
     }
 }
 
+/**
+ * 添加 BOM 依赖节点
+ *
+ * @param root 根节点
+ * @param mavenDependence 依赖的坐标
+ * */
+def setBomDependencyNode(root, MinimalExternalModuleDependency mavenDependence) {
+    println "添加 BOM 依赖项： $mavenDependence"
+    Node dependencyManagement
+    NodeList dependencyManagementList = root.get('dependencyManagement')
+    if (dependencyManagementList.size() == 0) {
+        dependencyManagement = root.appendNode('dependencyManagement')
+    } else {
+        dependencyManagement = (Node) dependencyManagementList[0]
+    }
+
+    // dependencyManagement 节点里的依赖 scope  需要使用 import, 相关介绍见： https://www.cnblogs.com/niceshot/p/13747547.html
+    setDependencyNode(dependencyManagement, Scope.IMPORT, mavenDependence)
+}
+
+
 def setBomDependencyNode(root, groupId, artifactId, version) {
     println "添加 BOM 依赖项： $groupId:$artifactId:$version"
     Node dependencyManagement
@@ -113,6 +134,22 @@ def setBomDependencyNode(root, groupId, artifactId, version) {
 
     // dependencyManagement 节点里的依赖 scope  需要使用 import, 相关介绍见： https://www.cnblogs.com/niceshot/p/13747547.html
     setDependencyNode(dependencyManagement, Scope.IMPORT, groupId, artifactId, version)
+}
+
+
+/**
+ * 添加依赖节点
+ *
+ * @param root 根节点
+ * @param scope 依赖的 scope
+ * @param mavenDependence 依赖的坐标
+ * @param closure 依赖的配置
+ * */
+def setDependencyNode(root, Scope scope, MinimalExternalModuleDependency mavenDependence, Closure closure = null) {
+    String groupId = mavenDependence.group
+    String artifactId = mavenDependence.name
+    String version = mavenDependence.version
+    setDependencyNode(root, scope, groupId, artifactId, version, closure)
 }
 
 def setDependencyNode(root, Scope scope, groupId, artifactId, version, Closure closure = null) {
@@ -376,24 +413,27 @@ project.afterEvaluate {
                     setDependencyNode(root, Scope.COMPILE, myGroupId, 'uikit-toast', getPublicationVersion())
 
                     // 添加相关依赖库，缺失会导致运行时无法找到对应类
-                    setDependencyNode(root, Scope.COMPILE, 'org.jetbrains.kotlin', 'kotlin-stdlib', libs.versions.kotlin.get())
-                    setDependencyNode(root, Scope.COMPILE, 'androidx.appcompat', 'appcompat', libs.versions.appcompat.get())
-                    setDependencyNode(root, Scope.COMPILE, 'androidx.core', 'core-ktx', libs.versions.coreKtx.get())
-                    setDependencyNode(root, Scope.COMPILE, 'androidx.recyclerview', 'recyclerview', libs.versions.recyclerview.get())
-                    setDependencyNode(root, Scope.COMPILE, 'androidx.fragment', 'fragment-ktx', libs.versions.fragment.get())
-                    setDependencyNode(root, Scope.COMPILE, 'androidx.constraintlayout', 'constraintlayout', libs.versions.constraintLayout.get())
-                    setDependencyNode(root, Scope.COMPILE, 'org.jetbrains.kotlinx', 'kotlinx-coroutines-core', libs.versions.kotlinCoroutines.get())
-                    setDependencyNode(root, Scope.COMPILE, 'org.jetbrains.kotlinx', 'kotlinx-coroutines-android', libs.versions.kotlinCoroutines.get())
-                    setDependencyNode(root, Scope.COMPILE, 'com.google.android.material', 'material', libs.versions.material.get())
+                    setDependencyNode(root, Scope.RUNTIME, libs.androidx.appcompat.get())
+                    setDependencyNode(root, Scope.RUNTIME, libs.androidx.core.ktx.get())
+                    setDependencyNode(root, Scope.RUNTIME, libs.androidx.fragment.ktx.get())
+                    setDependencyNode(root, Scope.RUNTIME, libs.kotlinx.coroutines.android.get())
+                    setDependencyNode(root, Scope.COMPILE, libs.androidx.recyclerview.get())
+                    setDependencyNode(root, Scope.COMPILE, libs.androidx.constraintlayout.get())
+                    setDependencyNode(root, Scope.COMPILE, libs.material.get())
 
-                    setDependencyNode(root, Scope.COMPILE, 'com.github.zyyoona7', 'wheelview', '1.0.7')
+                    setDependencyNode(root, Scope.COMPILE, 'com.github.zyyoona7', 'wheelview', '1.0.9')
                     setDependencyNode(root, Scope.COMPILE, 'com.github.zyyoona7', 'pickerview', '1.0.9')
-                    setDependencyNode(root, Scope.COMPILE, 'com.airbnb.android', 'lottie', libs.versions.lottie.get())
-                    setDependencyNode(root, Scope.COMPILE, 'io.github.scwang90', 'refresh-layout-kernel', libs.versions.smartRefreshLayout.get())
-                    setDependencyNode(root, Scope.COMPILE, 'io.github.lucksiege', 'pictureselector', libs.versions.pictureSelector.get())
-                    setDependencyNode(root, Scope.COMPILE, 'io.github.lucksiege', 'compress', libs.versions.pictureSelector.get())
-                    setDependencyNode(root, Scope.COMPILE, 'com.github.bumptech.glide', 'glide', libs.versions.glide.get())
-                    setDependencyNode(root, Scope.COMPILE, 'com.github.getActivity', 'ShapeView', libs.versions.shapeView.get())
+
+                    setDependencyNode(root, Scope.COMPILE, libs.lottie.get())
+                    setDependencyNode(root, Scope.COMPILE, libs.smartRefreshLayout.kernel.get())
+                    setDependencyNode(root, Scope.COMPILE, libs.pickSelector.picture.selector.asProvider().get())
+                    setDependencyNode(root, Scope.COMPILE, libs.pickSelector.picture.selector.compress.get())
+
+                    setDependencyNode(root, Scope.RUNTIME, libs.glide.asProvider().get())
+                    setDependencyNode(root, Scope.RUNTIME, libs.permissionX.get())
+
+                    setDependencyNode(root, Scope.COMPILE, libs.shapeView.get())
+
                     setScm(root)
                 }
             }
@@ -430,7 +470,7 @@ project.afterEvaluate {
 
                 pom.withXml {
                     def root = asNode()
-                    setDependencyNode(root, 'provided ', 'androidx.appcompat', 'appcompat', libs.versions.appcompat.get())
+                    setDependencyNode(root, Scope.RUNTIME, libs.androidx.appcompat.get())
                     setScm(root)
                 }
             }
@@ -450,12 +490,12 @@ project.afterEvaluate {
                 pom.withXml {
                     def root = asNode()
 
-                    setDependencyNode(root, Scope.COMPILE, 'com.squareup.retrofit2', 'retrofit', libs.versions.retrofit.get())
-                    setDependencyNode(root, Scope.RUNTIME, 'com.squareup.retrofit2', 'converter-gson', libs.versions.retrofit.get())
-                    setDependencyNode(root, Scope.RUNTIME, 'com.squareup.retrofit2', 'adapter-rxjava3', libs.versions.retrofit.get())
-                    setDependencyNode(root, Scope.RUNTIME, 'com.squareup.okhttp3', 'logging-interceptor', libs.versions.okhttp.get())
+                    setDependencyNode(root, Scope.COMPILE, libs.retrofit.retrofit.get())
+                    setDependencyNode(root, Scope.RUNTIME, libs.retrofit.converter.gson.get())
+                    setDependencyNode(root, Scope.RUNTIME, libs.retrofit.adapter.rxjava3.get())
+                    setDependencyNode(root, Scope.RUNTIME, libs.okHttp.logging.interceptor.get())
 
-                    setDependencyNode(root, Scope.RUNTIME, 'org.jetbrains.kotlinx', 'kotlinx-coroutines-android', libs.versions.kotlinCoroutines.get())
+                    setDependencyNode(root, Scope.RUNTIME, libs.kotlinx.coroutines.android.get())
                     setScm(root)
                 }
             }
@@ -494,22 +534,22 @@ project.afterEvaluate {
                 pom.withXml {
                     def root = asNode()
 
-                    setDependencyNode(root, Scope.COMPILE, 'androidx.appcompat', 'appcompat', libs.versions.appcompat.get())
-                    setDependencyNode(root, Scope.COMPILE, 'androidx.activity', 'activity', libs.versions.activity.get())
-                    setDependencyNode(root, Scope.COMPILE, 'androidx.fragment', 'fragment', libs.versions.fragment.get())
-                    setDependencyNode(root, Scope.COMPILE, 'androidx.activity', 'activity-ktx', libs.versions.activity.get())
-                    setDependencyNode(root, Scope.COMPILE, 'androidx.fragment', 'fragment-ktx', libs.versions.fragment.get())
+                    setDependencyNode(root, Scope.COMPILE, libs.androidx.appcompat.get())
+                    setDependencyNode(root, Scope.COMPILE, libs.androidx.activity.asProvider().get())
+                    setDependencyNode(root, Scope.COMPILE, libs.androidx.fragment.asProvider().get())
+                    setDependencyNode(root, Scope.COMPILE, libs.androidx.activity.ktx.get())
+                    setDependencyNode(root, Scope.COMPILE, libs.androidx.fragment.ktx.get())
 
-                    setDependencyNode(root, Scope.COMPILE, 'androidx.databinding', 'viewbinding', libs.versions.dataBinding.get())
+                    setDependencyNode(root, Scope.COMPILE, libs.androidx.view.binding.get())
 
-                    setDependencyNode(root, Scope.COMPILE, 'com.geyifeng.immersionbar', 'immersionbar', libs.versions.immersionBar.get())
-                    setDependencyNode(root, Scope.COMPILE, 'com.geyifeng.immersionbar', 'immersionbar-ktx', libs.versions.immersionBar.get())
+                    setDependencyNode(root, Scope.COMPILE, libs.statusbar.immersionbar.asProvider().get())
+                    setDependencyNode(root, Scope.COMPILE, libs.statusbar.immersionbar.ktx.get())
 
                     setDependencyNode(root, Scope.COMPILE, myGroupId, 'uikit-toast', getPublicationVersion())
 
-                    setBomDependencyNode(root, 'androidx.compose', 'compose-bom', libs.versions.jetpackComposeBom.get())
+                    setBomDependencyNode(root, libs.jetpack.compose.bom.get())
 
-                    setDependencyNode(root, Scope.COMPILE, 'androidx.compose.ui', 'ui', null)
+                    setDependencyNode(root, Scope.COMPILE, libs.jetpack.compose.ui.asProvider().get())
                     setScm(root)
                 }
             }
@@ -533,17 +573,16 @@ project.afterEvaluate {
                     setDependencyNode(root, Scope.COMPILE, myGroupId, 'navigation', getPublicationVersion())
                     setDependencyNode(root, Scope.COMPILE, myGroupId, 'umeng', getPublicationVersion())
 
-                    setDependencyNode(root, Scope.COMPILE, 'androidx.collection', 'collection-ktx', libs.versions.collectionKtx.get())
-                    setDependencyNode(root, Scope.COMPILE, 'androidx.recyclerview', 'recyclerview', libs.versions.recyclerview.get())
+                    setDependencyNode(root, Scope.COMPILE, libs.androidx.collection.ktx.get())
+                    setDependencyNode(root, Scope.COMPILE, libs.androidx.recyclerview.get())
 
-
-                    setDependencyNode(root, Scope.COMPILE, 'androidx.compose.material3', 'material3', null)
-                    setDependencyNode(root, Scope.COMPILE, 'androidx.compose.ui', 'ui-tooling-preview', null)
-                    setDependencyNode(root, Scope.COMPILE, 'androidx.compose.ui', 'ui-tooling', null)
-                    setDependencyNode(root, Scope.COMPILE, 'androidx.activity', 'activity-compose', libs.versions.activity.get())
-                    setDependencyNode(root, Scope.COMPILE, 'androidx.lifecycle', 'lifecycle-viewmodel-compose', libs.versions.lifecycle.get())
-                    setDependencyNode(root, Scope.COMPILE, 'androidx.lifecycle', 'lifecycle-runtime-compose', libs.versions.lifecycle.get())
-                    setDependencyNode(root, Scope.COMPILE, 'androidx.navigation', 'navigation-compose', libs.versions.navigation.get())
+                    setDependencyNode(root, Scope.COMPILE, libs.jetpack.compose.material3.asProvider().get())
+                    setDependencyNode(root, Scope.COMPILE, libs.jetpack.compose.ui.tooling.preview.get())
+                    setDependencyNode(root, Scope.COMPILE, libs.jetpack.compose.ui.tooling.asProvider().get())
+                    setDependencyNode(root, Scope.COMPILE, libs.jetpack.activity.compose.get())
+                    setDependencyNode(root, Scope.COMPILE, libs.jetpack.lifecycle.viewmodel.compose.get())
+                    setDependencyNode(root, Scope.COMPILE, libs.jetpack.lifecycle.runtime.compose.get())
+                    setDependencyNode(root, Scope.COMPILE, libs.jetpack.navigation.compose.get())
 
                     setScm(root)
                 }
@@ -567,28 +606,23 @@ project.afterEvaluate {
                     setDependencyNode(root, Scope.COMPILE, myGroupId, 'activity-result', getPublicationVersion())
                     setDependencyNode(root, Scope.COMPILE, myGroupId, 'xlog-init', getPublicationVersion())
                     setDependencyNode(root, Scope.COMPILE, myGroupId, 'permission', getPublicationVersion())
-                    setDependencyNode(root, Scope.COMPILE, myGroupId, 'image-load', getPublicationVersion())
-                    setDependencyNode(root, Scope.COMPILE, myGroupId, 'date-util', getPublicationVersion())
-                    setDependencyNode(root, Scope.COMPILE, myGroupId, 'mime-type', getPublicationVersion())
                     setDependencyNode(root, Scope.COMPILE, myGroupId, 'popup', getPublicationVersion())
 
-                    setDependencyNode(root, Scope.COMPILE, 'androidx.appcompat', 'appcompat', libs.versions.appcompat.get())
-                    setDependencyNode(root, Scope.COMPILE, 'androidx.activity', 'activity', libs.versions.activity.get())
-                    setDependencyNode(root, Scope.COMPILE, 'androidx.fragment', 'fragment', libs.versions.fragment.get())
-                    setDependencyNode(root, Scope.COMPILE, 'androidx.activity', 'activity-ktx', libs.versions.activity.get())
-                    setDependencyNode(root, Scope.COMPILE, 'androidx.fragment', 'fragment-ktx', libs.versions.fragment.get())
-                    setDependencyNode(root, Scope.COMPILE, 'com.google.android.material', 'material', libs.versions.material.get())
-                    setDependencyNode(root, Scope.COMPILE, 'androidx.databinding', 'databinding-runtime', libs.versions.dataBinding.get())
+                    setDependencyNode(root, Scope.RUNTIME, libs.androidx.activity.ktx.get())
+                    setDependencyNode(root, Scope.RUNTIME, libs.androidx.fragment.ktx.get())
+                    setDependencyNode(root, Scope.RUNTIME, libs.material.get())
+                    setDependencyNode(root, Scope.RUNTIME, libs.androidx.databinding.runtime.get())
 
-                    setDependencyNode(root, Scope.COMPILE, 'androidx.lifecycle', 'lifecycle-extensions', '2.2.0')
-                    setDependencyNode(root, Scope.COMPILE, 'androidx.lifecycle', 'lifecycle-viewmodel-ktx', libs.versions.lifecycle.get())
-                    setDependencyNode(root, Scope.COMPILE, 'androidx.lifecycle', 'lifecycle-livedata-ktx', libs.versions.lifecycle.get())
-                    setDependencyNode(root, Scope.COMPILE, 'androidx.lifecycle', 'lifecycle-runtime-ktx', libs.versions.lifecycle.get())
+                    setDependencyNode(root, Scope.COMPILE, libs.androidx.lifecycle.extensions.get())
+                    setDependencyNode(root, Scope.COMPILE, libs.androidx.lifecycle.livedata.ktx.get())
+                    setDependencyNode(root, Scope.COMPILE, libs.androidx.lifecycle.viewmodel.ktx.get())
+                    setDependencyNode(root, Scope.COMPILE, libs.androidx.palette.ktx.get())
 
-                    setDependencyNode(root, Scope.COMPILE, 'io.github.youth5201314', 'banner', libs.versions.banner.get())
-                    setDependencyNode(root, Scope.COMPILE, 'com.blankj', 'utilcodex', libs.versions.utilCodeX.get())
+                    setDependencyNode(root, Scope.COMPILE, libs.utilCodeX.get())
 
-                    setDependencyNode(root, Scope.COMPILE, 'androidx.palette', 'palette-ktx', libs.versions.palette.get())
+                    setDependencyNode(root, Scope.COMPILE, myGroupId, 'image-load', getPublicationVersion())
+                    setDependencyNode(root, Scope.COMPILE, libs.banner.get())
+
 
                     setScm(root)
                 }
@@ -609,13 +643,13 @@ project.afterEvaluate {
                 pom.withXml {
                     def root = asNode()
 
-                    setDependencyNode(root, Scope.COMPILE, 'androidx.core', 'core-ktx', libs.versions.coreKtx.get())
-                    setDependencyNode(root, Scope.COMPILE, 'androidx.appcompat', 'appcompat', libs.versions.appcompat.get())
+                    setDependencyNode(root, Scope.RUNTIME, libs.androidx.core.ktx.get())
+                    setDependencyNode(root, Scope.RUNTIME, libs.androidx.appcompat.get())
 
-                    setDependencyNode(root, Scope.COMPILE, 'com.alipay.sdk', 'alipaysdk-android', libs.versions.aliPay.get())
+                    setDependencyNode(root, Scope.RUNTIME, libs.aliPaySdk.get())
 
-                    setDependencyNode(root, Scope.COMPILE, 'com.tencent.mm.opensdk', 'wechat-sdk-android-without-mta', libs.versions.weiXinOpenSdk.get())
-                    setDependencyNode(root, Scope.COMPILE, 'com.google.code.gson', 'gson', libs.versions.gson.get())
+                    setDependencyNode(root, Scope.RUNTIME, libs.weiXinOpenSdk.get())
+                    setDependencyNode(root, Scope.RUNTIME, libs.gson.get())
 
                     setScm(root)
                 }
@@ -636,18 +670,17 @@ project.afterEvaluate {
                 pom.withXml {
                     def root = asNode()
 
-                    setDependencyNode(root, Scope.RUNTIME, 'androidx.core', 'core-ktx', libs.versions.coreKtx.get())
-                    setDependencyNode(root, Scope.RUNTIME, 'androidx.appcompat', 'appcompat', libs.versions.appcompat.get())
+                    setDependencyNode(root, Scope.RUNTIME, libs.androidx.core.ktx.get())
+                    setDependencyNode(root, Scope.RUNTIME, libs.androidx.appcompat.get())
 
-                    setDependencyNode(root, Scope.COMPILE, 'com.umeng.umsdk', 'common', '9.6.1')
-                    setDependencyNode(root, Scope.COMPILE, 'com.umeng.umsdk', 'asms', '1.8.0')
-                    setDependencyNode(root, Scope.COMPILE, 'com.umeng.umsdk', 'apm', '1.7.0')
-                    setDependencyNode(root, Scope.COMPILE, 'com.umeng.umsdk', 'push', '6.5.9')
+                    setDependencyNode(root, Scope.COMPILE, libs.umeng.common.get())
+                    setDependencyNode(root, Scope.COMPILE, libs.umeng.asms.get())
+                    setDependencyNode(root, Scope.COMPILE, libs.umeng.apm.get())
+                    setDependencyNode(root, Scope.COMPILE, libs.umeng.push.get())
 
-                    def umengShareVersion = '7.3.2'
-                    setDependencyNode(root, Scope.COMPILE, 'com.umeng.umsdk', 'share-core', umengShareVersion)
-                    setDependencyNode(root, Scope.COMPILE, 'com.umeng.umsdk', 'share-wx', umengShareVersion)
-                    setDependencyNode(root, Scope.COMPILE, 'com.tencent.mm.opensdk', 'wechat-sdk-android-without-mta', libs.versions.weiXinOpenSdk.get())
+                    setDependencyNode(root, Scope.COMPILE, libs.umeng.share.core.get())
+                    setDependencyNode(root, Scope.COMPILE, libs.umeng.share.wx.get())
+                    setDependencyNode(root, Scope.COMPILE, libs.weiXinOpenSdk.get())
 
                     setScm(root)
                 }
@@ -668,10 +701,10 @@ project.afterEvaluate {
                 pom.withXml {
                     def root = asNode()
 
-                    setDependencyNode(root, Scope.COMPILE, 'androidx.core', 'core-ktx', libs.versions.coreKtx.get())
-                    setDependencyNode(root, Scope.COMPILE, 'androidx.appcompat', 'appcompat', libs.versions.appcompat.get())
+                    setDependencyNode(root, Scope.RUNTIME, libs.androidx.core.ktx.get())
+                    setDependencyNode(root, Scope.RUNTIME, libs.androidx.appcompat.get())
 
-                    setDependencyNode(root, Scope.COMPILE, 'com.qcloud.cos', 'cos-android-lite', libs.versions.tencentCos.get())
+                    setDependencyNode(root, Scope.COMPILE, libs.tencentCos.get())
 
                     setScm(root)
                 }
@@ -693,7 +726,6 @@ project.afterEvaluate {
 
                 pom.withXml {
                     def root = asNode()
-
                     setScm(root)
                 }
             }
@@ -715,19 +747,19 @@ project.afterEvaluate {
 
                     setDependencyNode(root, Scope.COMPILE, myGroupId, 'shadow-lib', getPublicationVersion())
 
-                    setDependencyNode(root, Scope.RUNTIME, 'com.google.code.gson', 'gson', libs.versions.gson.get())
+                    setDependencyNode(root, Scope.RUNTIME, libs.gson.get())
 
-                    setDependencyNode(root, Scope.COMPILE, 'com.tencent.shadow.dynamic', 'host', libs.versions.shadow.get())
-                    setDependencyNode(root, Scope.COMPILE, 'com.tencent.shadow.dynamic', 'manager', libs.versions.shadow.get())
+                    setDependencyNode(root, Scope.COMPILE, libs.shadow.host.asProvider().get())
+                    setDependencyNode(root, Scope.COMPILE, libs.shadow.manager.asProvider().get())
 
-                    setDependencyNode(root, Scope.COMPILE, 'com.tencent.shadow.core', 'activity-container', libs.versions.shadow.get())
+                    setDependencyNode(root, Scope.COMPILE, libs.shadow.activity.container.get())
 
-                    setDependencyNode(root, Scope.COMPILE, 'com.tencent.shadow.dynamic', 'host-multi-loader-ext', libs.versions.shadow.get())
-                    setDependencyNode(root, Scope.COMPILE, 'com.tencent.shadow.dynamic', 'manager-multi-loader-ext', libs.versions.shadow.get())
+                    setDependencyNode(root, Scope.COMPILE, libs.shadow.host.multi.loader.ext.get())
+                    setDependencyNode(root, Scope.COMPILE, libs.shadow.manager.multi.loader.ext.get())
 
-                    setDependencyNode(root, Scope.PROVIDED, 'com.tencent.shadow.core', 'common', libs.versions.shadow.get())
-                    setDependencyNode(root, Scope.PROVIDED, 'com.tencent.shadow.core', 'loader', libs.versions.shadow.get())
-                    setDependencyNode(root, Scope.PROVIDED, 'com.tencent.shadow.dynamic', 'loader-impl', libs.versions.shadow.get())
+                    setDependencyNode(root, Scope.PROVIDED, libs.shadow.common.get())
+                    setDependencyNode(root, Scope.PROVIDED, libs.shadow.loader.asProvider().get())
+                    setDependencyNode(root, Scope.PROVIDED, libs.shadow.loader.impl.get())
 
                     setScm(root)
                 }
@@ -747,15 +779,15 @@ project.afterEvaluate {
 
                 pom.withXml {
                     def root = asNode()
-                    setDependencyNode(root, Scope.RUNTIME, 'androidx.activity', 'activity-ktx', libs.versions.activity.get())
-                    setDependencyNode(root, Scope.RUNTIME, 'com.google.android.material', 'material', libs.versions.material.get())
+                    setDependencyNode(root, Scope.RUNTIME, libs.androidx.activity.ktx.get())
+                    setDependencyNode(root, Scope.RUNTIME, libs.material.get())
 
-                    setDependencyNode(root, Scope.COMPILE, 'com.kunminx.arch', 'smooth-navigation', libs.versions.smoothNavigation.get())
-                    setDependencyNode(root, Scope.COMPILE, 'androidx.navigation', 'navigation-fragment-ktx', libs.versions.navigation.get()) {
+                    setDependencyNode(root, Scope.COMPILE, libs.smooth.navigation.get())
+                    setDependencyNode(root, Scope.COMPILE, libs.jetpack.navigation.fragment.ktx.get()) {
                         exclude('androidx.navigation', 'navigation-fragment')
                     }
-                    setDependencyNode(root, Scope.COMPILE, 'androidx.navigation', 'navigation-ui', libs.versions.navigation.get())
-                    setDependencyNode(root, Scope.COMPILE, 'androidx.navigation', 'navigation-ui-ktx', libs.versions.navigation.get())
+                    setDependencyNode(root, Scope.COMPILE, libs.jetpack.navigation.ui.asProvider().get())
+                    setDependencyNode(root, Scope.COMPILE, libs.jetpack.navigation.ui.ktx.get())
 
                     setScm(root)
                 }
@@ -775,6 +807,8 @@ project.afterEvaluate {
 
                 pom.withXml {
                     def root = asNode()
+                    setDependencyNode(root, Scope.COMPILE, libs.jsBridge.get())
+
                     setDependencyNode(root, Scope.COMPILE, myGroupId, 'base-ui', getPublicationVersion())
                     setDependencyNode(root, Scope.COMPILE, myGroupId, 'activity-result', getPublicationVersion())
                     setDependencyNode(root, Scope.COMPILE, myGroupId, 'xlog-init', getPublicationVersion())
@@ -789,7 +823,8 @@ project.afterEvaluate {
                     setDependencyNode(root, Scope.COMPILE, myGroupId, 'sms-util', getPublicationVersion())
                     setDependencyNode(root, Scope.COMPILE, myGroupId, 'preview-file', getPublicationVersion())
 
-                    setDependencyNode(root, Scope.COMPILE, 'com.github.lzyzsd', 'jsbridge', libs.versions.jsBridge.get())
+                    setDependencyNode(root, Scope.COMPILE, libs.utilCodeX.get())
+                    setDependencyNode(root, Scope.COMPILE, libs.jetpack.navigation.runtime.ktx.get())
 
                     setScm(root)
                 }
@@ -811,8 +846,8 @@ project.afterEvaluate {
 
                 pom.withXml {
                     def root = asNode()
-                    setDependencyNode(root, Scope.COMPILE, 'androidx.activity', 'activity-ktx', libs.versions.activity.get())
-                    setDependencyNode(root, Scope.COMPILE, 'androidx.fragment', 'fragment-ktx', libs.versions.fragment.get())
+                    setDependencyNode(root, Scope.COMPILE, libs.androidx.activity.ktx.get())
+                    setDependencyNode(root, Scope.COMPILE, libs.androidx.fragment.ktx.get())
                     setScm(root)
                 }
             }
@@ -832,7 +867,7 @@ project.afterEvaluate {
 
                 pom.withXml {
                     def root = asNode()
-                    setDependencyNode(root, Scope.COMPILE, 'com.elvishew', 'xlog', libs.versions.xlog.get())
+                    setDependencyNode(root, Scope.COMPILE, libs.xlog.get())
                     setDependencyNode(root, Scope.COMPILE, myGroupId, 'mmkv-sp', getPublicationVersion())
                     setScm(root)
                 }
@@ -853,10 +888,10 @@ project.afterEvaluate {
 
                 pom.withXml {
                     def root = asNode()
-                    setDependencyNode(root, Scope.COMPILE, 'androidx.startup', 'startup-runtime', libs.versions.startup.get())
-                    setDependencyNode(root, Scope.COMPILE, 'androidx.security', 'security-crypto', libs.versions.securityCrypto.get())
-                    setDependencyNode(root, Scope.COMPILE, 'androidx.core', 'core-ktx', libs.versions.coreKtx.get())
-                    setDependencyNode(root, Scope.COMPILE, 'com.tencent', 'mmkv', libs.versions.mmkv.get())
+                    setDependencyNode(root, Scope.COMPILE, libs.androidx.startup.get())
+                    setDependencyNode(root, Scope.RUNTIME, libs.androidx.security.crypto.get())
+                    setDependencyNode(root, Scope.COMPILE, libs.androidx.core.ktx.get())
+                    setDependencyNode(root, Scope.COMPILE, libs.mmkv.get())
                     setDependencyNode(root, Scope.COMPILE, myGroupId, 'json-util', getPublicationVersion())
                     setScm(root)
                 }
@@ -877,7 +912,7 @@ project.afterEvaluate {
 
                 pom.withXml {
                     def root = asNode()
-                    setDependencyNode(root, Scope.COMPILE, 'com.google.code.gson', 'gson', libs.versions.gson.get())
+                    setDependencyNode(root, Scope.COMPILE, libs.gson.get())
                     setScm(root)
                 }
             }
@@ -897,9 +932,9 @@ project.afterEvaluate {
 
                 pom.withXml {
                     def root = asNode()
-                    setDependencyNode(root, Scope.RUNTIME, 'androidx.activity', 'activity', libs.versions.activity.get())
-                    setDependencyNode(root, Scope.RUNTIME, 'androidx.fragment', 'fragment', libs.versions.fragment.get())
-                    setDependencyNode(root, Scope.RUNTIME, 'com.guolindev.permissionx', 'permissionx', libs.versions.permissionX.get())
+                    setDependencyNode(root, Scope.COMPILE, libs.androidx.activity.asProvider().get())
+                    setDependencyNode(root, Scope.COMPILE, libs.androidx.fragment.asProvider().get())
+                    setDependencyNode(root, Scope.RUNTIME, libs.permissionX.get())
                     setScm(root)
                 }
             }
@@ -921,9 +956,9 @@ project.afterEvaluate {
                     def root = asNode()
                     setDependencyNode(root, Scope.COMPILE, myGroupId, 'image-load', getPublicationVersion())
 
-                    setDependencyNode(root, Scope.COMPILE, 'io.github.lucksiege', 'pictureselector', libs.versions.pictureSelector.get())
-                    setDependencyNode(root, Scope.COMPILE, 'io.github.lucksiege', 'compress', libs.versions.pictureSelector.get())
-                    setDependencyNode(root, Scope.COMPILE, 'io.github.lucksiege', 'ucrop', libs.versions.pictureSelector.get())
+                    setDependencyNode(root, Scope.COMPILE, libs.pickSelector.picture.selector.asProvider().get())
+                    setDependencyNode(root, Scope.COMPILE, libs.pickSelector.picture.selector.compress.get())
+                    setDependencyNode(root, Scope.COMPILE, libs.pickSelector.picture.selector.ucrop.get())
                     setScm(root)
                 }
             }
@@ -943,7 +978,7 @@ project.afterEvaluate {
 
                 pom.withXml {
                     def root = asNode()
-                    setDependencyNode(root, Scope.COMPILE, 'com.github.bumptech.glide', 'glide', libs.versions.glide.get())
+                    setDependencyNode(root, Scope.COMPILE, libs.glide.asProvider().get())
                     setScm(root)
                 }
             }
@@ -963,7 +998,7 @@ project.afterEvaluate {
 
                 pom.withXml {
                     def root = asNode()
-                    setDependencyNode(root, Scope.RUNTIME, 'androidx.annotation', 'annotation', libs.versions.annotation.get())
+                    setDependencyNode(root, Scope.RUNTIME, libs.androidx.annotation.get())
                     setScm(root)
                 }
             }
@@ -985,7 +1020,7 @@ project.afterEvaluate {
                     def root = asNode()
                     setDependencyNode(root, Scope.RUNTIME, myGroupId, 'permission', getPublicationVersion())
                     setDependencyNode(root, Scope.RUNTIME, myGroupId, 'mime-type', getPublicationVersion())
-                    setDependencyNode(root, Scope.RUNTIME, 'com.blankj', 'utilcodex', libs.versions.utilCodeX.get())
+                    setDependencyNode(root, Scope.RUNTIME, libs.utilCodeX.get())
                     setScm(root)
                 }
             }
@@ -1005,7 +1040,8 @@ project.afterEvaluate {
                 artifact sourceAar(publishModuleName, modulePath)
 
                 pom.withXml {
-
+                    def root = asNode()
+                    setScm(root)
                 }
             }
 
@@ -1024,15 +1060,15 @@ project.afterEvaluate {
 
                 pom.withXml {
                     def root = asNode()
-                    setDependencyNode(root, Scope.RUNTIME, 'androidx.activity', 'activity', libs.versions.activity.get())
-                    setDependencyNode(root, Scope.RUNTIME, 'androidx.fragment', 'fragment', libs.versions.fragment.get())
+                    setDependencyNode(root, Scope.RUNTIME, libs.androidx.activity.asProvider().get())
+                    setDependencyNode(root, Scope.RUNTIME, libs.androidx.fragment.asProvider().get())
 
                     setDependencyNode(root, Scope.RUNTIME, myGroupId, 'uikit-toast', getPublicationVersion())
                     setDependencyNode(root, Scope.RUNTIME, myGroupId, 'permission', getPublicationVersion())
                     setDependencyNode(root, Scope.RUNTIME, myGroupId, 'xlog-init', getPublicationVersion())
 
-                    setDependencyNode(root, Scope.RUNTIME, 'com.squareup.okhttp3', 'okhttp', libs.versions.okhttp.get())
-                    setDependencyNode(root, Scope.COMPILE, 'com.github.getActivity', 'EasyHttp', libs.versions.easyHttp.get())
+                    setDependencyNode(root, Scope.COMPILE, libs.okHttp.okhttp.get())
+                    setDependencyNode(root, Scope.COMPILE, libs.okHttp.easy.http.get())
                     setScm(root)
                 }
             }
@@ -1054,9 +1090,8 @@ project.afterEvaluate {
                     def root = asNode()
 
                     setDependencyNode(root, Scope.RUNTIME, myGroupId, 'activity-result', getPublicationVersion())
-                    setDependencyNode(root, Scope.RUNTIME, 'androidx.appcompat', 'appcompat', libs.versions.appcompat.get())
-                    setDependencyNode(root, Scope.COMPILE, 'com.github.jenly1314', 'zxing-lite', libs.versions.zxingLite.
-                            get())
+                    setDependencyNode(root, Scope.RUNTIME, libs.androidx.appcompat.get())
+                    setDependencyNode(root, Scope.COMPILE, libs.zxing.lite.get())
 
                     setScm(root)
                 }
@@ -1078,11 +1113,9 @@ project.afterEvaluate {
                 pom.withXml {
                     def root = asNode()
 
-                    setDependencyNode(root, Scope.RUNTIME, 'androidx.appcompat', 'appcompat', libs.versions.appcompat.get())
-                    setDependencyNode(root, Scope.RUNTIME, 'androidx.recyclerview', 'recyclerview', libs.versions.recyclerview.get())
-                    setDependencyNode(root, Scope.COMPILE, 'com.google.android.material', 'material', libs.versions.material.get())
-
-                    setDependencyNode(root, Scope.COMPILE, 'com.github.li-xiaojun', 'XPopup', libs.versions.xpopup.get())
+                    setDependencyNode(root, Scope.RUNTIME, libs.androidx.appcompat.get())
+                    setDependencyNode(root, Scope.RUNTIME, libs.androidx.recyclerview.get())
+                    setDependencyNode(root, Scope.COMPILE, libs.XPopup.get())
 
                     setScm(root)
                 }
@@ -1104,8 +1137,8 @@ project.afterEvaluate {
                 pom.withXml {
                     def root = asNode()
 
-                    setDependencyNode(root, Scope.RUNTIME, 'androidx.activity', 'activity', libs.versions.activity.get())
-                    setDependencyNode(root, Scope.RUNTIME, 'androidx.fragment', 'fragment', libs.versions.fragment.get())
+                    setDependencyNode(root, Scope.RUNTIME, libs.androidx.activity.ktx.get())
+                    setDependencyNode(root, Scope.RUNTIME, libs.androidx.fragment.ktx.get())
 
                     setScm(root)
                 }
@@ -1139,8 +1172,8 @@ project.afterEvaluate {
                     setDependencyNode(root, Scope.RUNTIME, myGroupId, 'share', getPublicationVersion())
                     setDependencyNode(root, Scope.RUNTIME, myGroupId, 'video-player', getPublicationVersion())
 
-                    setDependencyNode(root, Scope.RUNTIME, 'com.squareup.okhttp3', 'okhttp', libs.versions.okhttp.get())
-                    setDependencyNode(root, Scope.COMPILE, 'com.tencent.tbs', 'tbssdk', libs.versions.tbsSdk.get())
+                    setDependencyNode(root, Scope.COMPILE, libs.material.get())
+                    setDependencyNode(root, Scope.COMPILE, libs.tbsSdk.get())
 
                     setScm(root)
                 }
@@ -1162,7 +1195,7 @@ project.afterEvaluate {
                 pom.withXml {
                     def root = asNode()
 
-                    setDependencyNode(root, Scope.RUNTIME, 'androidx.core', 'core-ktx', libs.versions.coreKtx.get())
+                    setDependencyNode(root, Scope.RUNTIME, libs.androidx.core.ktx.get())
 
                     setDependencyNode(root, Scope.RUNTIME, myGroupId, 'uikit-toast', getPublicationVersion())
                     setDependencyNode(root, Scope.RUNTIME, myGroupId, 'mime-type', getPublicationVersion())
@@ -1187,12 +1220,12 @@ project.afterEvaluate {
                 pom.withXml {
                     def root = asNode()
 
-                    setDependencyNode(root, Scope.RUNTIME, 'androidx.activity', 'activity', libs.versions.activity.get())
-                    setDependencyNode(root, Scope.RUNTIME, 'androidx.fragment', 'fragment', libs.versions.fragment.get())
+                    setDependencyNode(root, Scope.RUNTIME, libs.androidx.activity.ktx.get())
+                    setDependencyNode(root, Scope.RUNTIME, libs.androidx.fragment.ktx.get())
 
                     setDependencyNode(root, Scope.RUNTIME, myGroupId, 'ImageLoad', getPublicationVersion())
 
-                    setDependencyNode(root, Scope.COMPILE, 'com.github.CarGuo.GSYVideoPlayer', 'GSYVideoPlayer', libs.versions.gsyVideoPlayer.get())
+                    setDependencyNode(root, Scope.COMPILE, libs.gsyVideoPlayer.get())
 
                     setScm(root)
                 }
@@ -1218,7 +1251,7 @@ project.afterEvaluate {
                     setDependencyNode(root, Scope.RUNTIME, myGroupId, 'base-ui', getPublicationVersion())
                     setDependencyNode(root, Scope.RUNTIME, myGroupId, 'permission', getPublicationVersion())
 
-                    setDependencyNode(root, Scope.COMPILE, 'cjt.library.wheel', 'camera', libs.versions.cameraView.get())
+                    setDependencyNode(root, Scope.COMPILE, libs.camera.likeWX.get())
 
                     setScm(root)
                 }
@@ -1240,7 +1273,7 @@ project.afterEvaluate {
                 pom.withXml {
                     def root = asNode()
 
-                    setDependencyNode(root, Scope.COMPILE, 'com.teprinciple', 'updateapputilsx', libs.versions.updateAppUtilsx.get())
+                    setDependencyNode(root, Scope.COMPILE, libs.updateAppUtilsx.get())
 
                     setScm(root)
                 }
@@ -1353,18 +1386,18 @@ project.afterEvaluate {
                     setDependencyNode(root, Scope.COMPILE, myGroupId, 'uniapp-v8-release', getPublicationVersion())
                     setDependencyNode(root, Scope.COMPILE, myGroupId, 'uniMPSDK-V2-release', getPublicationVersion())
 
-                    setDependencyNode(root, Scope.COMPILE, 'androidx.recyclerview', 'recyclerview', libs.versions.recyclerview.get())
-                    setDependencyNode(root, Scope.COMPILE, 'androidx.legacy', 'legacy-support-v4', '1.0.0')
-                    setDependencyNode(root, Scope.COMPILE, 'androidx.appcompat', 'appcompat', libs.versions.appcompat.get())
-                    setDependencyNode(root, Scope.COMPILE, 'com.alibaba', 'fastjson', libs.versions.fastJson.get())
+                    setDependencyNode(root, Scope.RUNTIME, libs.androidx.recyclerview.get())
+                    setDependencyNode(root, Scope.RUNTIME, 'androidx.legacy', 'legacy-support-v4', '1.0.0')
+                    setDependencyNode(root, Scope.RUNTIME, libs.androidx.appcompat.get())
+                    setDependencyNode(root, Scope.RUNTIME, libs.fastJson.get())
 
                     def fresco_version = '2.5.0'
-                    setDependencyNode(root, Scope.COMPILE, 'com.facebook.fresco', 'fresco', fresco_version)
-                    setDependencyNode(root, Scope.COMPILE, 'com.facebook.fresco', 'animated-gif', fresco_version)
+                    setDependencyNode(root, Scope.RUNTIME, 'com.facebook.fresco', 'fresco', fresco_version)
+                    setDependencyNode(root, Scope.RUNTIME, 'com.facebook.fresco', 'animated-gif', fresco_version)
 
-                    setDependencyNode(root, Scope.COMPILE, 'com.github.bumptech.glide', 'glide', libs.versions.glide.get())
-                    setDependencyNode(root, Scope.COMPILE, 'pl.droidsonroids.gif', 'android-gif-drawable', libs.versions.androidGifDrawable.get())
-                    setDependencyNode(root, Scope.COMPILE, 'androidx.webkit', 'webkit', '1.3.0')
+                    setDependencyNode(root, Scope.RUNTIME, libs.glide.asProvider().get())
+                    setDependencyNode(root, Scope.COMPILE, libs.android.gif.drawable.get())
+                    setDependencyNode(root, Scope.RUNTIME, libs.androidx.webkit.get())
 
                     setScm(root)
                 }

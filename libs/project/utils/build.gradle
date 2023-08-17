@@ -71,14 +71,8 @@ dependencies {
     api project(':SDK:ActivityResult')
     api project(':SDK:XLogInit')
     api project(':SDK:Permission')
-    api project(':SDK:ImageLoad')
-    api project(':SDK:DateUtil')
-    api project(':SDK:MimeType')
     api project(':SDK:Popup')
 
-    implementation libs.androidx.appcompat
-    implementation libs.androidx.activity
-    implementation libs.androidx.fragment
     implementation libs.androidx.activity.ktx
     implementation libs.androidx.fragment.ktx
     implementation libs.material
@@ -88,9 +82,10 @@ dependencies {
     api libs.androidx.lifecycle.extensions
     api libs.androidx.lifecycle.livedata.ktx
     api libs.androidx.lifecycle.viewmodel.ktx
+    api libs.androidx.palette.ktx
 
-    api libs.banner
     api libs.utilCodeX
 
-    api libs.androidx.palette.ktx
+    api project(':SDK:ImageLoad')
+    api libs.banner
 }

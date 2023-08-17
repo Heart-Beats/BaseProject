@@ -74,7 +74,7 @@ internal object PickImageUtil {
         PictureSelector.create(context)
             .openCamera(SelectMimeType.ofImage())
             .setOutputCameraDir(context.getExternalFilesDir(Environment.DIRECTORY_DCIM)?.absolutePath)
-            .setCompressEngine(MyCompressEngine(true))
+            .setCompressEngine(CompressEngine(true))
             .apply(option)
             .forResultActivity(object : OnResultCallbackListener<LocalMedia> {
                 override fun onResult(result: ArrayList<LocalMedia>) {
@@ -103,8 +103,8 @@ internal object PickImageUtil {
     ) {
         PictureSelector.create(context)
             .openGallery(SelectMimeType.ofImage())
-            .setImageEngine(GlideEngine.createGlideEngine())
-            .setCompressEngine(MyCompressEngine())
+            .setImageEngine(GlideEngine())
+            .setCompressEngine(CompressEngine())
             .apply(option)
             .forResult(object : OnResultCallbackListener<LocalMedia> {
 

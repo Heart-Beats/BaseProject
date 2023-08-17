@@ -9,5 +9,4 @@ java {
 }
 
 dependencies {
-//    implementation Deps.Kotlin.kotlin_stdlib
 }

@@ -34,7 +34,7 @@ android {
 }
 
 dependencies {
-	api(libs.androidx.activity)
-    api(libs.androidx.fragment)
+	api(libs.androidx.activity.asProvider())
+    api(libs.androidx.fragment.asProvider())
 	implementation(libs.permissionX)
 }

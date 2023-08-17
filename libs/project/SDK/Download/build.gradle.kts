@@ -33,13 +33,13 @@ android {
 }
 
 dependencies {
-	implementation(libs.androidx.activity)
-	implementation(libs.androidx.fragment)
+	implementation(libs.androidx.activity.asProvider())
+	implementation(libs.androidx.fragment.asProvider())
 
 	implementation("com.hl:uikit-toast")
 	implementation(project(":SDK:Permission"))
 	implementation(project(":SDK:XLogInit"))
 
-	implementation(libs.okHttp.okhttp)
+	api(libs.okHttp.okhttp)
 	api(libs.okHttp.easy.http)
 }
