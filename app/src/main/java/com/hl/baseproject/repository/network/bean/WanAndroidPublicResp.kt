@@ -1,7 +1,7 @@
 package com.hl.baseproject.repository.network.bean
 
 import com.google.gson.annotations.SerializedName
-import com.hl.arch.api.PublicResp
+import com.hl.api.PublicResp
 
 /**
  * @author  张磊  on  2023/02/17 at 17:45

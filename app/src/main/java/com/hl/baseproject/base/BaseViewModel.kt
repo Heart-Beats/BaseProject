@@ -1,7 +1,7 @@
 package com.hl.baseproject.base
 
+import com.hl.api.PublicResp
 import com.hl.arch.api.IApiEventProvider
-import com.hl.arch.api.PublicResp
 import com.hl.arch.mvvm.vm.BaseLiveDataVM
 import com.hl.baseproject.repository.network.RequestApiInterface
 import com.hl.baseproject.repository.Repository

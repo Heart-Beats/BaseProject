@@ -1,7 +1,7 @@
 package com.hl.arch.mvvm.vm
 
 import androidx.lifecycle.viewModelScope
-import com.hl.arch.api.PublicResp
+import com.hl.api.PublicResp
 import kotlinx.coroutines.CoroutineScope
 
 /**

@@ -1,6 +1,5 @@
-package com.hl.arch.api
+package com.hl.api
 
-import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
 
 /**
@@ -10,7 +9,6 @@ import com.google.gson.annotations.SerializedName
  * 接口返回数据公共类，因为字段名称需保持一致，因此不可混淆
  */
 
-@Keep
 open class PublicResp<T> {
 
 	open var code: String? = null
