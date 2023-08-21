@@ -1,4 +1,4 @@
-package com.hl.utils.banner
+package com.hl.banner
 
 import android.content.Context
 import android.graphics.Canvas

@@ -12,7 +12,7 @@ import com.hl.baseproject.viewmodels.HomeViewModel
 import com.hl.imageload.GlideUtil
 import com.hl.ui.utils.dpInt
 import com.hl.uikit.UIKitCollapsingToolbarLayout
-import com.hl.utils.banner.AdsIndicator
+import com.hl.banner.AdsIndicator
 import com.hl.utils.getAppIconId
 import com.hl.utils.getAppName
 import com.hl.utils.getColorByRes

@@ -1,4 +1,4 @@
-package com.hl.utils
+package com.hl.banner
 
 import android.graphics.Color
 import android.util.Log
@@ -12,8 +12,6 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
-import com.hl.utils.banner.AdsDetail
-import com.hl.utils.banner.AdsIndicator
 import com.youth.banner.Banner
 import com.youth.banner.adapter.BannerAdapter
 import com.youth.banner.config.IndicatorConfig
@@ -98,7 +96,7 @@ class AdAdapter(adDetailList: List<AdsDetail>, @LayoutRes val adLayoutId: Int) :
         AdAdapter.ViewHolder>(adDetailList) {
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val adImage: ImageView? = itemView.findViewWithTag(itemView.context.getString(R.string.hl_utils_ad_banner_tag))
+        val adImage: ImageView? = itemView.findViewWithTag(itemView.context.getString(R.string.hl_banner_ad_banner_tag))
 
     }
 

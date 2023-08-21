@@ -41,6 +41,7 @@ task buildSdk() {
     dependsOn gradle.includedBuild('project').task(':SDK:VideoPlayer:assembleRelease')
     dependsOn gradle.includedBuild('project').task(':SDK:Camera:assembleRelease')
     dependsOn gradle.includedBuild('project').task(':SDK:Update:assembleRelease')
+    dependsOn gradle.includedBuild('project').task(':SDK:Banner:assembleRelease')
 }
 
 //引入配置设置
@@ -369,6 +370,7 @@ setGeneratePomFileAndDepends('Share')
 setGeneratePomFileAndDepends('VideoPlayer')
 setGeneratePomFileAndDepends('Camera')
 setGeneratePomFileAndDepends('Update')
+setGeneratePomFileAndDepends('Banner')
 
 // 设置 UniApp 相关的 POM 文件
 setUniAppGeneratePomFileAndDepends()
@@ -607,6 +609,7 @@ project.afterEvaluate {
                     setDependencyNode(root, Scope.COMPILE, myGroupId, 'xlog-init', getPublicationVersion())
                     setDependencyNode(root, Scope.COMPILE, myGroupId, 'permission', getPublicationVersion())
                     setDependencyNode(root, Scope.COMPILE, myGroupId, 'popup', getPublicationVersion())
+                    setDependencyNode(root, Scope.COMPILE, myGroupId, 'image-load', getPublicationVersion())
 
                     setDependencyNode(root, Scope.RUNTIME, libs.androidx.activity.ktx.get())
                     setDependencyNode(root, Scope.RUNTIME, libs.androidx.fragment.ktx.get())
@@ -619,10 +622,6 @@ project.afterEvaluate {
                     setDependencyNode(root, Scope.COMPILE, libs.androidx.palette.ktx.get())
 
                     setDependencyNode(root, Scope.COMPILE, libs.utilCodeX.get())
-
-                    setDependencyNode(root, Scope.COMPILE, myGroupId, 'image-load', getPublicationVersion())
-                    setDependencyNode(root, Scope.COMPILE, libs.banner.get())
-
 
                     setScm(root)
                 }
@@ -1274,6 +1273,31 @@ project.afterEvaluate {
                     def root = asNode()
 
                     setDependencyNode(root, Scope.COMPILE, libs.updateAppUtilsx.get())
+
+                    setScm(root)
+                }
+            }
+
+            Banner(MavenPublication) {
+                def moduleName = 'Banner'
+                def publishModuleName = 'banner'
+
+                def modulePath = "$libProjectPath/SDK/$moduleName"
+
+                groupId myGroupId
+                artifactId publishModuleName
+                version getPublicationVersion()
+
+                artifact("$modulePath/build/outputs/aar/${moduleName}-release.aar")
+                artifact sourceAar(publishModuleName, modulePath)
+
+                pom.withXml {
+                    def root = asNode()
+
+                    setDependencyNode(root, Scope.RUNTIME, libs.androidx.viewpager2.get())
+                    setDependencyNode(root, Scope.RUNTIME, libs.androidx.recyclerview.get())
+                    setDependencyNode(root, Scope.RUNTIME, myGroupId, 'image-load', getPublicationVersion())
+                    setDependencyNode(root, Scope.COMPILE, libs.banner.get())
 
                     setScm(root)
                 }

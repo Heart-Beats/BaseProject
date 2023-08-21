@@ -41,7 +41,7 @@ dependencyResolutionManagement {
     versionCatalogs {
         // 默认创建的 libs 进行配置
         libs {
-            from("com.hl:catalog:1.0.0")
+            from("com.hl:catalog:1.0.1")
 
             version("androidGradlePlugin", "8.0.1")
             version("kotlin", "1.8.20")
@@ -72,7 +72,7 @@ def includeSDK() {
             ':SDK:XLogInit', ':SDK:MMKVSharedPreferences', ':SDK:JsonUtil', ':SDK:Permission', ':SDK:PictureSelector',
             ':SDK:ImageLoad', ':SDK:DateUtil', ':SDK:BitmapUtil', ':SDK:MimeType', ':SDK:Download', ':SDK:QRCode',
             ':SDK:Popup', ':SDK:SmsUtil', ':SDK:PreviewFile', ':SDK:Share', ':SDK:VideoPlayer', ':SDK:Camera',
-            ':SDK:Update'
+            ':SDK:Update', ':SDK:Banner'
 
     includeShadow()
 
