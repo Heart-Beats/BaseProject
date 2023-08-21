@@ -1,6 +1,5 @@
-package com.hl.utils.banner
+package com.hl.banner
 
-import com.google.gson.annotations.SerializedName
 
 /**
  * @author  张磊  on  2022/09/02 at 18:01
@@ -10,7 +9,6 @@ data class AdsDetail(
 	/**
 	 * 广告类型名称
 	 */
-	@SerializedName("adsTypeAlias")
 	var adsTypeAlias: String? = null,
 
 	/**
@@ -22,25 +20,21 @@ data class AdsDetail(
 	 * 广告内容
 	 */
 	var adsContent: String? = null,
-	@SerializedName("adsFlowId")
 
 	/**
 	 * 广告id
 	 */
 	var adsId: String? = null,
-	@SerializedName("adsPicUrl")
 
 	/**
 	 * 广告图片url
 	 */
 	var adsImgUrl: String? = null,
-	@SerializedName("creTime")
 
 	/**
 	 * 创建时间：格式为：yyyy-MM-dd HH:mm:ss
 	 */
 	var createTime: String? = null,
-	@SerializedName("webUrl")
 
 	/**
 	 * 广告HTML的url

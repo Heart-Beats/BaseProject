@@ -72,6 +72,7 @@ dependencies {
     api project(':SDK:XLogInit')
     api project(':SDK:Permission')
     api project(':SDK:Popup')
+    api project(':SDK:ImageLoad')
 
     implementation libs.androidx.activity.ktx
     implementation libs.androidx.fragment.ktx
@@ -85,7 +86,4 @@ dependencies {
     api libs.androidx.palette.ktx
 
     api libs.utilCodeX
-
-    api project(':SDK:ImageLoad')
-    api libs.banner
 }

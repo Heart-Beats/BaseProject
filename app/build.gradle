@@ -154,15 +154,17 @@ dependencies {
         implementation "com.hl:shadow-init:$hlVersion"
         implementation "com.hl:uni-mp:$hlVersion"
         implementation "com.hl:camera:$hlVersion"
+        implementation "com.hl:banner:$hlVersion"
     } else {
         implementation 'com.hl:base-arch'
         implementation 'com.hl:uikit'
 
         implementation 'com.hl:Web'
         implementation 'com.hl:TencentCloud'
-        implementation "com.hl:shadow-init"
-        implementation "com.hl:UniMP"
-        implementation "com.hl:Camera"
+        implementation 'com.hl:shadow-init'
+        implementation 'com.hl:UniMP'
+        implementation 'com.hl:Camera'
+        implementation 'com.hl:Banner'
     }
 
     implementation libs.sensey
