@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="CustomBottomNavigationView" parent="Widget.MaterialComponents.BottomNavigationView">
+        <item name="android:background">#FFFFFF</item>
+        <item name="itemBackground">@null</item>
+        <item name="labelVisibilityMode">labeled</item>
+        <item name="itemRippleColor">@null</item>
+        <item name="itemIconTint">@color/bottom_nav_color</item>
+        <item name="itemTextColor">@color/bottom_nav_color</item>
+        <item name="itemTextAppearanceInactive">@style/BottomNavTextAppearanceInactive</item>
+        <item name="itemTextAppearanceActive">@style/BottomNavTextAppearanceActive</item>
+    </style>
+
+    <style name="BottomNavTextAppearanceInactive">
+        <item name="android:textSize">12sp</item> <!-- 设置未选中状态下的文字大小 -->
+    </style>
+
+    <style name="BottomNavTextAppearanceActive">
+        <item name="android:textSize">12sp</item> <!-- 设置选中状态下的文字大小 -->
+    </style>
+</resources>

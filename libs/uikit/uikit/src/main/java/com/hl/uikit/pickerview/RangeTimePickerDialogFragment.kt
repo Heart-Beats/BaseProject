@@ -220,17 +220,17 @@ class RangeTimePickerDialogFragment : TimePickerDialogFragment() {
     }
 
     private fun initOptionsSelectedListener() {
-        mPickerView?.setOnPickerScrollStateChangedListener {
+        pickerView?.setOnPickerScrollStateChangedListener {
             if (it == WheelView.SCROLL_STATE_DRAGGING) {
                 isFromPickerEvent = true
             }
         }
-        mPickerView?.setOnOptionsExtSelectedListener { _, _,
-                                                       _, _,
-                                                       _, _,
-                                                       _, _,
-                                                       _, _,
-                                                       _, _ ->
+        pickerView?.setOnOptionsExtSelectedListener { _, _,
+                                                      _, _,
+                                                      _, _,
+                                                      _, _,
+                                                      _, _,
+                                                      _, _ ->
             if (!isFromPickerEvent) {
                 return@setOnOptionsExtSelectedListener
             }

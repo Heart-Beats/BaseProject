@@ -1,0 +1,7 @@
+<!-- res/color/bottom_nav_color.xml -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 未选中状态下的颜色 -->
+    <item android:color="@color/_C7CBD4" android:state_checked="false" />
+    <!-- 选中状态下的颜色 -->
+    <item android:color="@color/uikit_color_1" android:state_checked="true" />
+</selector>

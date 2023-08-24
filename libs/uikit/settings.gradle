@@ -1,11 +1,12 @@
 pluginManagement {
     repositories {
-        mavenCentral()
+        // com.kanyun.kace SNAPSHOT 版本仓库地址
+        maven { url "https://s01.oss.sonatype.org/content/repositories/snapshots" }
         maven { url 'https://maven.aliyun.com/repository/public' }
         maven { url 'https://maven.aliyun.com/repository/google' }
         maven { url 'https://maven.aliyun.com/repository/gradle-plugin' }
         maven { url 'https://jitpack.io' }
-        google()  // 阿里云对于有些库会有丢失，加入进行兜底
+        google() // 阿里云对于有些库会有丢失，加入进行兜底
         mavenCentral()
         gradlePluginPortal()
     }
@@ -15,6 +16,7 @@ dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
         mavenLocal()
+        maven { url "https://s01.oss.sonatype.org/content/repositories/snapshots" }
         maven { url 'https://maven.aliyun.com/repository/public' }
         maven { url 'https://maven.aliyun.com/repository/google' }
         maven { url 'https://jitpack.io' }

@@ -143,6 +143,9 @@
     </style>
 
     <style name="UiKit.FormItemStyle">
+        <!-- 设置默认点击背景为 涟漪扩散型 -->
+        <item name="android:background">?attr/selectableItemBackground</item>
+
         <!-- padding 和 paddingVertical 属性优先级比 paddingTop 与 paddingBottom 优先级高，会导致后者无效  -->
         <!--<item name="android:padding">15dp</item>-->
         <item name="android:paddingStart">15dp</item>
@@ -184,6 +187,7 @@
     </style>
 
     <style name="UiKit.FormItemInputStyle" parent="UiKit.FormItemTextStyle">
+        <item name="android:background">@null</item>
         <item name="uikit_formTextColor">@color/uikit_color_3</item>
         <item name="uikit_formTextHintColor">@color/uikit_form_input_hint</item>
         <item name="uikit_formTextDeletable">true</item>
@@ -205,6 +209,7 @@
     </style>
 
     <style name="UiKit.FormItemToggleButtonStyle" parent="UiKit.FormItemLabelStyle">
+        <item name="android:background">@null</item>
         <item name="uikit_formToggleButtonRes">@drawable/uikit_selector_toggle_button_bg</item>
         <item name="uikit_formChildWeight">left_weight</item>
     </style>

@@ -17,11 +17,6 @@
         android:id="@+id/bottomNavigationView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#FFFFFF"
-        app:itemBackground="@null"
-        app:itemHorizontalTranslationEnabled="false"
-        app:itemIconTint="@color/uikit_color_1"
-        app:itemTextColor="@color/uikit_color_1"
-        app:labelVisibilityMode="labeled"
+        style="@style/CustomBottomNavigationView"
         app:menu="@menu/main_bottom_menu" />
 </LinearLayout>
