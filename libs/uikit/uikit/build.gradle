@@ -45,11 +45,7 @@ kace {
     whiteList = []
 
     // 当 blackList 不为空时，blackList 中的 layout 不会被解析
-    blackList = [
-            "uikit_options_picker_dialog_fragment.xml",
-            "uikit_range_time_picker_dialog_fragment.xml",
-            "uikit_timeinterval_dialog_fragment.xml",
-    ]
+    blackList = []
 }
 
 dependencies {

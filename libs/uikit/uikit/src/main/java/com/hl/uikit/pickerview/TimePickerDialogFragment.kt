@@ -102,7 +102,7 @@ open class TimePickerDialogFragment :
     }
 
     protected fun initPickerData() {
-        mPickerView?.isResetSelectedPosition = true
+        pickerView?.isResetSelectedPosition = true
         when {
             showYear && !showMonth && !showDay -> {
                 setData(

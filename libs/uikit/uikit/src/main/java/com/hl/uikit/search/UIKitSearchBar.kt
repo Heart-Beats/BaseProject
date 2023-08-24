@@ -2,7 +2,6 @@ package com.hl.uikit.search
 
 import android.content.Context
 import android.util.AttributeSet
-import android.util.Log
 import android.view.View
 import androidx.appcompat.widget.SearchView
 import com.hl.uikit.R

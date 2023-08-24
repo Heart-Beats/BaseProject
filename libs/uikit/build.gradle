@@ -15,7 +15,9 @@ plugins {
     alias libs.plugins.kotlin.android apply false
 
     // 帮助从 kotlin-android-extensions 无缝迁移的插件框架
-    id 'com.kanyun.kace' version "1.8.20-1.0.4" apply false
+//    id 'com.kanyun.kace' version "1.8.20-1.0.4" apply false
+
+    id 'com.kanyun.kace' version "1.8.20-1.2.0-SNAPSHOT" apply false
 }
 
 
