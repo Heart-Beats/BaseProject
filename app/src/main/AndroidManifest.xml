@@ -40,7 +40,6 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".MainActivity"
-          rag
             android:exported="true"
             android:screenOrientation="portrait">
             <intent-filter>

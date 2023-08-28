@@ -1,4 +1,4 @@
-package com.hl.arch.adapters
+package com.hl.rvadapter
 
 import android.util.SparseArray
 import android.view.LayoutInflater
@@ -7,10 +7,10 @@ import android.view.ViewGroup
 import androidx.core.util.containsKey
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.hl.arch.adapters.diffcallback.MyDiffCallback
-import com.hl.arch.adapters.itemprovider.BaseItemProvider
-import com.hl.arch.adapters.viewholder.BaseViewHolder
-import com.hl.arch.adapters.viewholder.MultiViewHolder
+import com.hl.rvadapter.diffcallback.MyDiffCallback
+import com.hl.rvadapter.itemprovider.BaseItemProvider
+import com.hl.rvadapter.viewholder.BaseViewHolder
+import com.hl.rvadapter.viewholder.MultiViewHolder
 import java.lang.reflect.ParameterizedType
 
 /**

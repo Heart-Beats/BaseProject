@@ -6,10 +6,10 @@ import android.widget.TextView
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.hl.arch.adapters.BaseMultiAdapter
-import com.hl.arch.adapters.BaseSingleAdapter
-import com.hl.arch.adapters.itemprovider.BaseItemProvider
-import com.hl.arch.adapters.viewholder.BaseViewHolder
+import com.hl.rvadapter.BaseMultiAdapter
+import com.hl.rvadapter.BaseSingleAdapter
+import com.hl.rvadapter.itemprovider.BaseItemProvider
+import com.hl.rvadapter.viewholder.BaseViewHolder
 import com.hl.baseproject.databinding.ActivityTestBinding
 import com.hl.ui.base.ViewBindingBaseActivity
 import com.hl.ui.utils.dpInt
@@ -32,7 +32,7 @@ class TestActivity : ViewBindingBaseActivity<ActivityTestBinding>() {
 
 		this.testRecyclerView2.init2(data)
 
-		val adapter = testRecyclerView2.adapter as BaseSingleAdapter<String>
+		val adapter = testRecyclerView2.adapter as com.hl.rvadapter.BaseSingleAdapter<String>
 
 
 		var count = 0
@@ -52,15 +52,15 @@ class TestActivity : ViewBindingBaseActivity<ActivityTestBinding>() {
 	}
 
 	private fun RecyclerView.init(data: MutableList<String>) {
-		val baseMultiAdapter = object : BaseMultiAdapter<String>(mutableListOf()) {
+		val baseMultiAdapter = object : com.hl.rvadapter.BaseMultiAdapter<String>(mutableListOf()) {
 
-			override fun registerItemProvider(position: Int, itemData: String): BaseItemProvider<out String> {
-				return object : BaseItemProvider<String>() {
+			override fun registerItemProvider(position: Int, itemData: String): com.hl.rvadapter.itemprovider.BaseItemProvider<out String> {
+				return object : com.hl.rvadapter.itemprovider.BaseItemProvider<String>() {
 
 					override val layoutId: Int = R.layout.item_text
 					override val itemViewType: Int = 9
 
-					override fun onItemBind(viewHolder: BaseViewHolder<String>, itemData: String) {
+					override fun onItemBind(viewHolder: com.hl.rvadapter.viewholder.BaseViewHolder<String>, itemData: String) {
 						viewHolder.getView<TextView>(R.id.item_text)?.text = itemData
 					}
 
@@ -83,11 +83,11 @@ class TestActivity : ViewBindingBaseActivity<ActivityTestBinding>() {
 	}
 
 	private fun RecyclerView.init2(data: MutableList<String>) {
-		val adapter = object : BaseSingleAdapter<String>(mutableListOf()) {
+		val adapter = object : com.hl.rvadapter.BaseSingleAdapter<String>(mutableListOf()) {
 
 			override val itemLayout: Int = R.layout.item_text_2
 
-			override fun onItemBind(viewHolder: BaseViewHolder<String>, itemData: String) {
+			override fun onItemBind(viewHolder: com.hl.rvadapter.viewholder.BaseViewHolder<String>, itemData: String) {
 				viewHolder.getView<TextView>(R.id.item_text)?.text = itemData
 			}
 		}

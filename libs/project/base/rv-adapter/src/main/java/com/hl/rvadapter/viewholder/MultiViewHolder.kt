@@ -1,8 +1,8 @@
-package com.hl.arch.adapters.viewholder
+package com.hl.rvadapter.viewholder
 
 import android.view.View
-import com.hl.arch.adapters.BaseMultiAdapter
-import com.hl.arch.adapters.itemprovider.BaseItemProvider
+import com.hl.rvadapter.BaseMultiAdapter
+import com.hl.rvadapter.itemprovider.BaseItemProvider
 
 /**
  * @author  张磊  on  2022/09/22 at 16:03

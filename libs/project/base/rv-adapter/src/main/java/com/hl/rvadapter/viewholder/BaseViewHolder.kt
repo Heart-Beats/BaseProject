@@ -1,10 +1,10 @@
-package com.hl.arch.adapters.viewholder
+package com.hl.rvadapter.viewholder
 
 import android.view.View
 import androidx.annotation.IdRes
 import androidx.recyclerview.widget.RecyclerView
-import com.hl.arch.adapters.IDataOperate
-import com.hl.ui.utils.onClick
+import com.hl.rvadapter.IDataOperate
+import com.hl.rvadapter.utils.onClick
 
 /**
  * @author  张磊  on  2022/09/22 at 14:10
