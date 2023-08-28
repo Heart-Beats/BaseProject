@@ -282,6 +282,8 @@
 
     <declare-styleable name="UIKitFormItemToggleButton">
         <attr name="uikit_formToggleButtonRes" format="reference" />
+        <attr name="uikit_formToggleButtonWidth" format="reference|dimension" />
+        <attr name="uikit_formToggleButtonHeight" format="reference|dimension" />
         <attr name="uikit_formToggleCheck" format="boolean" />
     </declare-styleable>
 

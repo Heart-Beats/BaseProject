@@ -24,7 +24,7 @@ open class UIKitFormItemText : UIKitFormItemLabel {
     private var tvText: TextView? = null
     private var mTextBold: Boolean = false
     var mTextMaxLines: Int = 0
-    private var mTextMaxLength: Int = 20
+    private var mTextMaxLength: Int = 0
     private var mTextCustom: Boolean = false
     internal var mText: CharSequence? = null
     private var mTextSize: Int = 0
@@ -68,9 +68,9 @@ open class UIKitFormItemText : UIKitFormItemLabel {
                 it.getDimensionPixelSize(R.styleable.UIKitFormItemText_uikit_formTextSize, 14)
             mTextColor = it.getColorStateList(R.styleable.UIKitFormItemText_uikit_formTextColor)
             mTextMaxLines =
-                it.getInt(R.styleable.UIKitFormItemText_uikit_formTextMaxLines, mTextMaxLines)
+                it.getInt(R.styleable.UIKitFormItemText_uikit_formTextMaxLines, 0)
             mTextMaxLength =
-                it.getInt(R.styleable.UIKitFormItemText_uikit_formTextMaxLength, mTextMaxLength)
+                it.getInt(R.styleable.UIKitFormItemText_uikit_formTextMaxLength, 20)
             mTextBold = it.getBoolean(R.styleable.UIKitFormItemText_uikit_formTextBold, false)
             mTextCustom = it.getBoolean(R.styleable.UIKitFormItemText_uikit_formTextCustom, false)
             mTextGravity = it.getInt(R.styleable.UIKitFormItemText_uikit_formTextGravity, -1)
