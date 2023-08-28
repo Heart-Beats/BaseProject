@@ -42,11 +42,11 @@ android {
 dependencies {
     api project(path: ':base-api')
     api project(path: ':base-ui')
+    api project(path: ':base-rv-adapter')
     api project(path: ':utils')
     api project(path: ':SDK:Navigation')
 
     api libs.androidx.collection.ktx
-    api libs.androidx.recyclerview
 
     api libs.bundles.compose
 }

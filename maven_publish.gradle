@@ -10,6 +10,7 @@ task buildSdk() {
     dependsOn gradle.includedBuild('project').task(':base-app-res:assembleRelease')
     dependsOn gradle.includedBuild('project').task(':base-ui:assembleRelease')
     dependsOn gradle.includedBuild('project').task(':base-arch:assembleRelease')
+    dependsOn gradle.includedBuild('project').task(':base-rv-adapter:assembleRelease')
     dependsOn gradle.includedBuild('project').task(':utils:assembleRelease')
 
     dependsOn gradle.includedBuild('project').task(':SDK:Pay:assembleRelease')
@@ -343,6 +344,7 @@ setGeneratePomFileAndDepends('baseApi')
 setGeneratePomFileAndDepends('baseAppRes')
 setGeneratePomFileAndDepends('baseUi')
 setGeneratePomFileAndDepends('baseArch')
+setGeneratePomFileAndDepends('baseRvAdapter')
 setGeneratePomFileAndDepends('utils')
 setGeneratePomFileAndDepends('Pay')
 setGeneratePomFileAndDepends('Umeng')
@@ -573,6 +575,7 @@ project.afterEvaluate {
                     def root = asNode()
                     setDependencyNode(root, Scope.COMPILE, myGroupId, 'base-api', getPublicationVersion())
                     setDependencyNode(root, Scope.COMPILE, myGroupId, 'base-ui', getPublicationVersion())
+                    setDependencyNode(root, Scope.COMPILE, myGroupId, 'base-rv-adapter', getPublicationVersion())
                     setDependencyNode(root, Scope.COMPILE, myGroupId, 'utils', getPublicationVersion())
                     setDependencyNode(root, Scope.COMPILE, myGroupId, 'navigation', getPublicationVersion())
 
@@ -586,6 +589,28 @@ project.afterEvaluate {
                     setDependencyNode(root, Scope.COMPILE, libs.jetpack.lifecycle.viewmodel.compose.get())
                     setDependencyNode(root, Scope.COMPILE, libs.jetpack.lifecycle.runtime.compose.get())
                     setDependencyNode(root, Scope.COMPILE, libs.jetpack.navigation.compose.get())
+
+                    setScm(root)
+                }
+            }
+
+            baseRvAdapter(MavenPublication) {
+                def moduleName = 'base-rv-adapter'
+                def publishModuleName = 'base-rv-adapter'
+
+                def modulePath = "$libProjectPath/base/rv-adapter"
+
+                groupId myGroupId
+                artifactId publishModuleName
+                version getPublicationVersion()
+                artifact("$modulePath/build/outputs/aar/${moduleName}-release.aar")
+                artifact sourceAar(moduleName, modulePath)
+
+                pom.withXml {
+                    def root = asNode()
+
+                    setDependencyNode(root, Scope.COMPILE, libs.androidx.core.ktx.get())
+                    setDependencyNode(root, Scope.COMPILE, libs.androidx.recyclerview.get())
 
                     setScm(root)
                 }

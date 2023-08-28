@@ -59,12 +59,14 @@ includeSDK()
 include ':utils'
 
 def includeBase() {
-    include ':base-api', ':base-app-res', ':base-ui', ':base-arch'
+    include ':base-api', ':base-app-res', ':base-ui', ':base-arch',':base-rv-adapter'
 
     project(':base-api').projectDir = file('./base/api')
     project(':base-app-res').projectDir = file('./base/app-res')
     project(':base-ui').projectDir = file('./base/ui')
     project(':base-arch').projectDir = file('./base/arch')
+    project(':base-arch').projectDir = file('./base/arch')
+    project(':base-rv-adapter').projectDir = file('./base/rv-adapter')
 }
 
 def includeSDK() {

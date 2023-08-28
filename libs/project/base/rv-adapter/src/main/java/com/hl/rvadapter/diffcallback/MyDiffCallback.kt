@@ -1,4 +1,4 @@
-package com.hl.arch.adapters.diffcallback
+package com.hl.rvadapter.diffcallback
 
 import androidx.recyclerview.widget.DiffUtil
 

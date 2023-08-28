@@ -1,4 +1,4 @@
-package com.hl.arch.adapters
+package com.hl.rvadapter
 
 /**
  * @author  张磊  on  2023/06/08 at 14:03

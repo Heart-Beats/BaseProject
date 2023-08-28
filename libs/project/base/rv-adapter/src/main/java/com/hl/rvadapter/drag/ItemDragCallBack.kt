@@ -1,19 +1,20 @@
-package com.hl.arch.adapters.drag
+package com.hl.rvadapter.drag
 
 import android.content.res.ColorStateList
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.ColorStateListDrawable
 import android.graphics.drawable.Drawable
+import android.os.Build
 import android.util.Log
 import androidx.annotation.ColorInt
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.hl.utils.BuildVersionUtil
-import com.hl.utils.alpha
-import com.hl.utils.getColorByRes
+import com.hl.rvadapter.R
+import com.hl.rvadapter.utils.alpha
 import java.util.Collections
 
 /**
@@ -35,9 +36,15 @@ class ItemDragCallBack<T>(private val adapterData: MutableList<T>, private val i
 	 * 长按时的背景选中色
 	 */
 	@ColorInt
-	var longPressColor: Int = getColorByRes(com.hl.arch.R.color.main_color).alpha(0.3F)
+	var longPressColor: Int? = null
 
-	private lateinit var recyclerView: RecyclerView
+	private var recyclerView: RecyclerView? = null
+		set(value) {
+			field = value
+			if (longPressColor == null && value != null) {
+				longPressColor = ContextCompat.getColor(value.context, R.color.main_color).alpha(0.3F)
+			}
+		}
 
 	private var lastItemViewBackground: Drawable? = null
 
@@ -124,7 +131,7 @@ class ItemDragCallBack<T>(private val adapterData: MutableList<T>, private val i
 		}
 		val position = viewHolder.bindingAdapterPosition
 		adapterData.removeAt(position)
-		recyclerView.adapter?.notifyItemRemoved(position)
+		recyclerView!!.adapter?.notifyItemRemoved(position)
 	}
 
 	/**
@@ -147,7 +154,7 @@ class ItemDragCallBack<T>(private val adapterData: MutableList<T>, private val i
 			viewHolder?.let {
 				val itemView = it.itemView
 
-				when (recyclerView.layoutManager) {
+				when (recyclerView!!.layoutManager) {
 					is GridLayoutManager -> {
 						// 网格布局 设置选中放大
 						ViewCompat.animate(itemView).setDuration(200).scaleX(1.3F).scaleY(1.3F).start()
@@ -156,12 +163,13 @@ class ItemDragCallBack<T>(private val adapterData: MutableList<T>, private val i
 					is LinearLayoutManager -> {
 
 						// 长按时修改背景色
-						longPressColor.run {
+						longPressColor?.run {
 
 							// 保存原有背景效果
 							lastItemViewBackground = itemView.background
 
-							val drawable = if (BuildVersionUtil.isOver10()) {
+							val drawable = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+								// Android 10 以上
 								val states = arrayOf(intArrayOf(android.R.attr.state_pressed))
 								val colors = intArrayOf(this)
 								ColorStateListDrawable(ColorStateList(states, colors))

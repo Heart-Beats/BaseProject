@@ -5,9 +5,9 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import com.elvishew.xlog.XLog
-import com.hl.arch.adapters.BaseSingleAdapter
-import com.hl.arch.adapters.drag.ItemDragCallBack
-import com.hl.arch.adapters.viewholder.BaseViewHolder
+import com.hl.rvadapter.BaseSingleAdapter
+import com.hl.rvadapter.drag.ItemDragCallBack
+import com.hl.rvadapter.viewholder.BaseViewHolder
 import com.hl.arch.mvvm.vm.activityViewModels
 import com.hl.baseproject.R
 import com.hl.baseproject.base.BaseFragment
@@ -33,7 +33,7 @@ class HomeMiddleFragment : BaseFragment<FragmentHomeMiddleBinding>() {
 	private val homeViewModel by activityViewModels<HomeViewModel>()
 	private val dataViewModel by activityViewModels<DataViewModel>()
 
-	private lateinit var homeArticledAdapter: BaseSingleAdapter<Article>
+	private lateinit var homeArticledAdapter: com.hl.rvadapter.BaseSingleAdapter<Article>
 
 	private var curPage = 0
 
@@ -76,7 +76,7 @@ class HomeMiddleFragment : BaseFragment<FragmentHomeMiddleBinding>() {
 	}
 
 	private fun initHomeArticleAdapter(images: List<String>) {
-		homeArticledAdapter = object : BaseSingleAdapter<Article>(mutableListOf()) {
+		homeArticledAdapter = object : com.hl.rvadapter.BaseSingleAdapter<Article>(mutableListOf()) {
 
 			override val itemLayout: Int = R.layout.item_home_article
 
@@ -84,14 +84,14 @@ class HomeMiddleFragment : BaseFragment<FragmentHomeMiddleBinding>() {
 				itemView.navigateToWeb(itemData.link ?: return, isNeedTitle = true)
 			}
 
-			override fun onItemInit(viewHolder: BaseViewHolder<Article>) {
+			override fun onItemInit(viewHolder: com.hl.rvadapter.viewholder.BaseViewHolder<Article>) {
 				viewHolder.setChildClick(R.id.item_article_image) { childView, _, _ ->
 					val imageUrl = childView.getTag()
 					childView.context.showImage(childView as ImageView, imageUrl)
 				}
 			}
 
-			override fun onItemBind(viewHolder: BaseViewHolder<Article>, itemData: Article) {
+			override fun onItemBind(viewHolder: com.hl.rvadapter.viewholder.BaseViewHolder<Article>, itemData: Article) {
 				// SecureRandom 可产生真随机数
 				val randomImageUrl = images[SecureRandom().nextInt(images.size)]
 				viewHolder.getView<ImageView>(R.id.item_article_image)?.run {
@@ -111,7 +111,7 @@ class HomeMiddleFragment : BaseFragment<FragmentHomeMiddleBinding>() {
 		viewBinding.homeArticleList.run {
 			this.adapter = homeArticledAdapter
 
-			val itemDragCallBack = ItemDragCallBack(homeArticledAdapter.getData(), true)
+			val itemDragCallBack = com.hl.rvadapter.drag.ItemDragCallBack(homeArticledAdapter.getData(), true)
 			this.setItemTouchHelper(itemDragCallBack)
 		}
 	}
