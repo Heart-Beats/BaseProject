@@ -14,6 +14,8 @@ import com.hl.uikit.utils.dpInt
 class UIKitFormItemToggleButton : UIKitFormItemLabel {
 
     private var mToggleButtonRes: Int? = null
+    private var mToggleButtonWidth: Int = 0
+    private var mToggleButtonHeight: Int = 0
     private var mToggleButtonCheck = false
 
     private var mToggleButton: AppCompatToggleButton? = null
@@ -38,6 +40,14 @@ class UIKitFormItemToggleButton : UIKitFormItemLabel {
                 R.styleable.UIKitFormItemToggleButton_uikit_formToggleButtonRes,
                 R.drawable.uikit_selector_toggle_button_bg
             )
+            mToggleButtonWidth = it.getDimensionPixelSize(
+                R.styleable.UIKitFormItemToggleButton_uikit_formToggleButtonWidth,
+                42.dpInt
+            )
+            mToggleButtonHeight = it.getDimensionPixelSize(
+                R.styleable.UIKitFormItemToggleButton_uikit_formToggleButtonHeight,
+                26.dpInt
+            )
             mToggleButtonCheck = it.getBoolean(R.styleable.UIKitFormItemToggleButton_uikit_formToggleCheck, false)
         }.recycle()
     }
@@ -54,8 +64,8 @@ class UIKitFormItemToggleButton : UIKitFormItemLabel {
                 this.textOn = ""
                 this.textOff = ""
                 this.layoutParams = generateDefaultLayoutParams().apply {
-                    this.width = 42.dpInt
-                    this.height = 26.dpInt
+                    this.width = mToggleButtonWidth
+                    this.height = mToggleButtonHeight
                 }
                 this.setBackgroundResource(mToggleButtonRes ?: R.drawable.uikit_selector_toggle_button_bg)
                 this.isChecked = mToggleButtonCheck
@@ -70,11 +80,9 @@ class UIKitFormItemToggleButton : UIKitFormItemLabel {
         } else {
             mToggleButtonRes = toggleButtonRes
 
-            commonHandelChangeView(
-                ::mToggleButtonRes, ::mToggleButton, ::createToggleButton,
-                setViewMethod = {
-                    mToggleButton?.setBackgroundResource(it)
-                }) {
+            commonHandelChangeView(::mToggleButtonRes, ::mToggleButton, ::createToggleButton, setViewMethod = {
+                mToggleButton?.setBackgroundResource(it)
+            }) {
                 setToggleButtonOnClickListener(onClickListener)
             }
         }
