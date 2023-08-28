@@ -3,6 +3,7 @@ package com.hl.baseproject.fragments
 import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Bundle
+import androidx.navigation.fragment.FragmentNavigator
 import com.blankj.utilcode.util.ImageUtils
 import com.elvishew.xlog.XLog
 import com.hl.arch.mvvm.fragment.ViewBindingMvvmBaseFragment
@@ -12,6 +13,7 @@ import com.hl.baseproject.BuildConfig
 import com.hl.baseproject.R
 import com.hl.baseproject.databinding.FragmentTestBinding
 import com.hl.dateutil.toFormatString
+import com.hl.navigatioin.getCurrentDestination
 import com.hl.tencentcloud.cos.TencentCosUtil
 import com.hl.tencentcloud.cos.TransferListener
 import com.hl.ui.utils.onClick
@@ -46,16 +48,31 @@ class TestFragment : ViewBindingMvvmBaseFragment<FragmentTestBinding>() {
 		super.onCreate(savedInstanceState)
 		requireActivity().registerReceiver(AppMainFragment.SHOW_FRAGMENT_ACTION) { _, intent ->
 			if (intent.getStringExtra(AppMainFragment.SHOW_FRAGMENT_NAME_KEY) == this.javaClass.name) {
-				// Navigation 回退，页面显示时恢复默认状态栏配置
-				updateSystemBar()
+				// Navigation 回退，页面显示时更新状态栏配置
+				updateStatusBar()
 			}
 		}
 	}
 
+	private fun updateStatusBar() {
+		if (isNavigationDisplayAppMain()) {
+			// 判断是否为导航当前显示的页面时更新状态栏
+			updateSystemBar()
+		}
+	}
+
+	/**
+	 * 导航当前显示的页面是否为 APP 主页
+	 */
+	private fun isNavigationDisplayAppMain(): Boolean {
+		val currentDestination = getCurrentDestination()
+		// 判断目的地为 fragment  且当前 fragment 为导航当前所在页面
+		return currentDestination is FragmentNavigator.Destination && currentDestination.className == AppMainFragment::class.java.name
+	}
+
 	override fun onResume() {
 		super.onResume()
-		// 页面显示时恢复默认状态栏配置
-		updateSystemBar()
+		updateStatusBar()
 	}
 
 	override fun FragmentTestBinding.onViewCreated(savedInstanceState: Bundle?) {
@@ -78,6 +95,13 @@ class TestFragment : ViewBindingMvvmBaseFragment<FragmentTestBinding>() {
 			this.addText("\n")
 
 			this.addImage(com.cjt2325.cameralibrary.R.drawable.ic_camera, marginLeft = 10)
+
+			this.addText("测试点击") {
+				this.setColor(Color.CYAN)
+				this.setClick {
+					toast("已被点击")
+				}
+			}
 		}
 
 		testSaveImage.onClick {

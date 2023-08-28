@@ -15,7 +15,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.hl.baseproject.base.BaseComposeFragment
 import com.hl.baseproject.compose.AppComposeTheme
-import com.hl.utils.navigation.findNavController
+import com.hl.navigatioin.findNavController
 
 class ComposeDemoFragment : BaseComposeFragment() {
 

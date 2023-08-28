@@ -159,7 +159,11 @@ dependencies {
         implementation "com.hl:camera:$hlVersion"
         implementation "com.hl:banner:$hlVersion"
     } else {
-        implementation 'com.hl:base-arch'
+        implementation('com.hl:base-arch') {
+            //            exclude group: 'com.kunminx.arch', module: 'smooth-navigation'
+        }
+        //        implementation "androidx.navigation:navigation-fragment-ktx:2.5.3"
+
         implementation 'com.hl:uikit'
 
         implementation 'com.hl:Web'

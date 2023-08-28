@@ -8,6 +8,12 @@
         <item name="colorPrimary">@color/uikit_colorPrimary</item>
         <item name="colorPrimaryDark">@color/uikit_colorPrimaryDark</item>
         <item name="android:textColorPrimary">@color/uikit_textColorPrimary</item>
+
+        <!-- 修改输入框的游标色和文字选中时水滴色 -->
+        <item name="android:colorControlActivated">?attr/colorPrimary</item>
+        <!-- 修改文字选中时的高亮色 -->
+        <item name="android:textColorHighlight">?attr/colorPrimary</item>
+
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:windowBackground">@color/uikit_backgroundColor</item>

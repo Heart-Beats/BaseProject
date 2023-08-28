@@ -435,6 +435,7 @@ project.afterEvaluate {
                     setDependencyNode(root, Scope.RUNTIME, libs.permissionX.get())
 
                     setDependencyNode(root, Scope.COMPILE, libs.shapeView.get())
+                    setDependencyNode(root, Scope.COMPILE, libs.shapeDrawable.get())
 
                     setScm(root)
                 }
