@@ -2,7 +2,9 @@ package com.hl.baseproject.fragments.home
 
 import android.graphics.Color
 import android.os.Bundle
+import androidx.navigation.fragment.FragmentNavigator
 import com.hl.arch.mvvm.vm.activityViewModels
+import com.hl.banner.AdsIndicator
 import com.hl.baseproject.base.BaseFragment
 import com.hl.baseproject.databinding.FragmentHomeBinding
 import com.hl.baseproject.fragments.AppMainFragment
@@ -12,11 +14,11 @@ import com.hl.baseproject.viewmodels.HomeViewModel
 import com.hl.imageload.GlideUtil
 import com.hl.ui.utils.dpInt
 import com.hl.uikit.UIKitCollapsingToolbarLayout
-import com.hl.banner.AdsIndicator
 import com.hl.utils.getAppIconId
 import com.hl.utils.getAppName
 import com.hl.utils.getColorByRes
 import com.hl.utils.launchHome
+import com.hl.navigatioin.getCurrentDestination
 import com.hl.utils.onceLastObserve
 import com.hl.utils.registerReceiver
 import com.hl.utils.setColor
@@ -60,16 +62,31 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
 
 		requireActivity().registerReceiver(AppMainFragment.SHOW_FRAGMENT_ACTION) { _, intent ->
 			if (intent.getStringExtra(AppMainFragment.SHOW_FRAGMENT_NAME_KEY) == this.javaClass.name) {
-
-				// Navigation 回退，页面显示时恢复默认状态栏配置
-				setStatusBarImmerseFromView(viewBinding.statusView)
+				// Navigation 回退，页面显示时更新状态栏配置
+				updateStatusBar()
 			}
 		}
 	}
 
+	private fun updateStatusBar() {
+		if (isNavigationDisplayAppMain()) {
+			// 判断是否为导航当前显示的页面时更新状态栏
+			setStatusBarImmerseFromView(viewBinding.statusBarView)
+		}
+	}
+
+	/**
+	 * 导航当前显示的页面是否为 APP 主页
+	 */
+	private fun isNavigationDisplayAppMain(): Boolean {
+		val currentDestination = getCurrentDestination()
+		// 判断目的地为 fragment  且当前 fragment 为导航当前所在页面
+		return currentDestination is FragmentNavigator.Destination && currentDestination.className == AppMainFragment::class.java.name
+	}
+
 	override fun onResume() {
 		super.onResume()
-		setStatusBarImmerseFromView(viewBinding.statusView)
+		updateStatusBar()
 	}
 
 	override fun FragmentHomeBinding.onViewCreated(savedInstanceState: Bundle?) {

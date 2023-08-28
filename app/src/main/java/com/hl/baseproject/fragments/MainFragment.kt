@@ -8,6 +8,7 @@ import android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
 import android.content.res.Configuration
 import android.os.Bundle
 import android.os.Environment
+import androidx.navigation.fragment.FragmentNavigator
 import com.elvishew.xlog.XLog
 import com.github.nisrulz.sensey.Sensey
 import com.github.nisrulz.sensey.ShakeDetector.ShakeListener
@@ -27,7 +28,8 @@ import com.hl.ui.utils.onClick
 import com.hl.uikit.toast
 import com.hl.unimp.UniMPHelper
 import com.hl.utils.*
-import com.hl.utils.navigation.findNavController
+import com.hl.navigatioin.findNavController
+import com.hl.navigatioin.getCurrentDestination
 import com.lxj.xpopup.XPopup
 import java.io.File
 
@@ -62,18 +64,33 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
 		super.onCreate(savedInstanceState)
 		requireActivity().registerReceiver(AppMainFragment.SHOW_FRAGMENT_ACTION) { _, intent ->
 			if (intent.getStringExtra(AppMainFragment.SHOW_FRAGMENT_NAME_KEY) == this.javaClass.name) {
-				// Navigation 回退，页面显示时恢复默认状态栏配置
-				updateSystemBar()
+				// Navigation 回退，页面显示时更新状态栏配置
+				updateStatusBar()
 			}
 		}
 	}
 
+	private fun updateStatusBar() {
+		if (isNavigationDisplayAppMain()) {
+			// 判断是否为导航当前显示的页面时更新状态栏
+			updateSystemBar()
+
+			Sensey.getInstance().startShakeDetection(10.0F, 1000L, shakeListener)
+		}
+	}
+
+	/**
+	 * 导航当前显示的页面是否为 APP 主页
+	 */
+	private fun isNavigationDisplayAppMain():Boolean{
+		val currentDestination = getCurrentDestination()
+		// 判断目的地为 fragment  且当前 fragment 为导航当前所在页面
+		return currentDestination is FragmentNavigator.Destination && currentDestination.className == AppMainFragment::class.java.name
+	}
+
 	override fun onResume() {
 		super.onResume()
-		// 页面显示时恢复默认状态栏配置
-		updateSystemBar()
-
-		Sensey.getInstance().startShakeDetection(10.0F, 1000L, shakeListener)
+		updateStatusBar()
 	}
 
 	override fun FragmentMainBinding.onViewCreated(savedInstanceState: Bundle?) {

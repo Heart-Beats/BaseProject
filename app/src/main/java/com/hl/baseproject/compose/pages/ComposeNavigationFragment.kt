@@ -30,7 +30,7 @@ import com.hl.baseproject.compose.pages.navigation.Screen2
 import com.hl.baseproject.compose.pages.navigation.Screen3
 import com.hl.baseproject.compose.pages.navigation.getAllDestinations
 import com.hl.baseproject.compose.utils.toFlowCollect
-import com.hl.utils.navigation.navigateSingleTopTo
+import com.hl.navigatioin.navigateSingleTopTo
 
 /**
  * @author  张磊  on  2023/05/31 at 16:43

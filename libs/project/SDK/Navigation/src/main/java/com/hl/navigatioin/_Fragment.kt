@@ -1,4 +1,4 @@
-package com.hl.utils.navigation
+package com.hl.navigatioin
 
 import android.util.Log
 import androidx.fragment.app.Fragment

@@ -1,14 +1,24 @@
 package com.hl.utils.span.dsl
 
+import android.graphics.Color
 import android.text.SpannableStringBuilder
-import com.hl.utils.span.*
+import android.text.method.LinkMovementMethod
+import android.widget.TextView
+import com.hl.utils.span.toBackgroundColorSpan
+import com.hl.utils.span.toClickSpan
+import com.hl.utils.span.toColorSpan
+import com.hl.utils.span.toCustomTypeFaceSpan
+import com.hl.utils.span.toImageSpan
+import com.hl.utils.span.toScaleSpan
+import com.hl.utils.span.toSizeSpan
+import com.hl.utils.span.toStrikeThroughSpan
 
 /**
  * @author  张磊  on  2022/06/16 at 17:35
  * Email: 913305160@qq.com
  */
 
-class DslSpannableStringBuilderImpl : DslSpannableStringBuilder {
+class DslSpannableStringBuilderImpl(private val textView: TextView) : DslSpannableStringBuilder {
 
 	private val builder = SpannableStringBuilder()
 
@@ -34,6 +44,9 @@ class DslSpannableStringBuilderImpl : DslSpannableStringBuilder {
 				charSeq = charSeq.toSizeSpan(0..text.length, textSize, isSp)
 			}
 			if (isOnClick) {
+				textView.movementMethod = LinkMovementMethod.getInstance()
+				// 点击时移除点击背景高亮色
+				textView.highlightColor = Color.TRANSPARENT
 				charSeq = charSeq.toClickSpan(0..text.length, textColor, isUseUnderLine, onClick)
 			}
 			if (isSetTypeface) {

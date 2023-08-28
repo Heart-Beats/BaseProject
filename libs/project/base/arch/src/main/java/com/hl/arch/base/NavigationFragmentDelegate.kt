@@ -4,9 +4,9 @@ import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.FragmentNavigator
 import com.hl.ui.base.BaseFragment
-import com.hl.utils.navigation.findNavController
-import com.hl.utils.navigation.getCurrentDestination
-import com.hl.utils.navigation.getNavController
+import com.hl.navigatioin.findNavController
+import com.hl.navigatioin.getCurrentDestination
+import com.hl.navigatioin.getNavController
 
 /**
  * @author  张磊  on  2023/07/07 at 9:26
@@ -80,7 +80,7 @@ class BaseNavigationFragmentDelegate : NavigationFragmentDelegate {
 	}
 
 	override fun isMainPage(): Boolean {
-		return if (fragment.isNavigationPage()) {
+		return if (fragment.isNavigationDisplayPage()) {
 			Log.d(TAG, "isMainPage =====> ${fragment.javaClass.simpleName} 为 Navigation 页面")
 			// 使用 Navigation 时
 			true
@@ -102,7 +102,7 @@ class BaseNavigationFragmentDelegate : NavigationFragmentDelegate {
 
 	override fun onBackPressed() {
 		try {
-			if (fragment.isNavigationPage()) {
+			if (fragment.isNavigationDisplayPage()) {
 				fragment.findNavController().popBackStack()
 			} else {
 				// 此时为未使用 Navigation 的 Activity 的主页面， 调用父类中的方法， 但这里无法使用 super 以及反射调用父类中 onBackPressed 方法
@@ -117,13 +117,11 @@ class BaseNavigationFragmentDelegate : NavigationFragmentDelegate {
 }
 
 /**
- * 判断当前 Fragment 是否为 Navigation 导航中的页面
+ * 判断当前 Fragment 是否为 Navigation 导航当前显示的页面
  */
-fun Fragment.isNavigationPage(): Boolean {
+fun Fragment.isNavigationDisplayPage(): Boolean {
 	val currentDestination = getCurrentDestination()
 	// 判断目的地为 fragment  且当前 fragment 为导航当前所在页面
-	return currentDestination is FragmentNavigator.Destination && this.javaClass.name == currentDestination.className
+	return currentDestination is FragmentNavigator.Destination && currentDestination.className == this.javaClass.name
 }
-
-
 

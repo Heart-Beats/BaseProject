@@ -8,7 +8,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStore
 import androidx.lifecycle.ViewModelStoreOwner
 import com.hl.arch.mvvm.fragment.MvvmBaseFragment
-import com.hl.utils.navigation.findNavController
+import com.hl.navigatioin.findNavController
 import kotlin.reflect.KClass
 
 @MainThread

@@ -86,4 +86,5 @@ dependencies {
     implementation libs.permissionX
 
     api libs.shapeView
+    api libs.shapeDrawable
 }

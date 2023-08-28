@@ -1,6 +1,5 @@
 package com.hl.utils.span.dsl
 
-import android.text.method.LinkMovementMethod
 import android.widget.TextView
 
 /**
@@ -13,9 +12,8 @@ import android.widget.TextView
  */
 fun TextView.buildSpannableString(init: DslSpannableStringBuilder.() -> Unit) {
 	//具体实现类
-	val spanStringBuilderImpl = DslSpannableStringBuilderImpl()
+	val spanStringBuilderImpl = DslSpannableStringBuilderImpl(this)
 	spanStringBuilderImpl.init()
-	movementMethod = LinkMovementMethod.getInstance()
 	//通过实现类返回SpannableStringBuilder
 	text = spanStringBuilderImpl.build()
 }
