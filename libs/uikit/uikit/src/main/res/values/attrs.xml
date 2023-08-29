@@ -243,7 +243,7 @@
 
 
     <!--设置控件的最大高度为屏幕的百分比-->
-    <attr name="uikit_maxScreenHeightPercent" format="dimension|fraction" />
+    <attr name="uikit_maxScreenHeightPercent" format="reference|dimension|fraction" />
     <declare-styleable name="UIKitMaxHeightFrameLayout">
         <attr name="uikit_maxScreenHeightPercent" />
     </declare-styleable>
@@ -269,21 +269,21 @@
     <declare-styleable name="UIKitNumberStepView">
         <attr name="android:text" format="reference|string" />
         <attr name="android:textColor" format="reference|color" />
-        <attr name="android:textSize" format="reference|dimension" />
+        <attr name="android:textSize" format="reference|reference|dimension" />
         <attr name="uikit_operatorVisibility">
             <enum name="visible" value="0x00000000" />
             <enum name="invisible" value="0x00000004" />
             <enum name="gone" value="0x00000008" />
         </attr>
-        <attr name="uikit_operatorPadding" format="reference|dimension" />
+        <attr name="uikit_operatorPadding" format="reference|reference|dimension" />
         <attr name="uikit_hasUnit" format="boolean" />
         <attr name="uikit_unitValue" format="reference|string" />
     </declare-styleable>
 
     <declare-styleable name="UIKitFormItemToggleButton">
         <attr name="uikit_formToggleButtonRes" format="reference" />
-        <attr name="uikit_formToggleButtonWidth" format="reference|dimension" />
-        <attr name="uikit_formToggleButtonHeight" format="reference|dimension" />
+        <attr name="uikit_formToggleButtonWidth" format="reference|reference|dimension" />
+        <attr name="uikit_formToggleButtonHeight" format="reference|reference|dimension" />
         <attr name="uikit_formToggleCheck" format="boolean" />
     </declare-styleable>
 
@@ -359,7 +359,7 @@
 
 
     <declare-styleable name="UIKitTextArea">
-        <attr name="uikit_textAreaHint" format="string" />
+        <attr name="uikit_textAreaHint" format="string|reference" />
         <attr name="uikit_textAreaHintColor" format="color|reference" />
         <attr name="uikit_textAreaTextColor" format="color|reference" />
         <attr name="uikit_textAreaTextSize" format="dimension|reference" />
@@ -397,16 +397,16 @@
     <declare-styleable name="UIKitRoundImageView">
         <attr name="uikit_is_circle" format="boolean" />
         <attr name="uikit_is_cover_src" format="boolean" />
-        <attr name="uikit_corner_radius" format="dimension" />
-        <attr name="uikit_corner_top_left_radius" format="dimension" />
-        <attr name="uikit_corner_top_right_radius" format="dimension" />
-        <attr name="uikit_corner_bottom_left_radius" format="dimension" />
-        <attr name="uikit_corner_bottom_right_radius" format="dimension" />
-        <attr name="uikit_border_width" format="dimension" />
-        <attr name="uikit_border_color" format="color" />
-        <attr name="uikit_inner_border_width" format="dimension" />
-        <attr name="uikit_inner_border_color" format="color" />
-        <attr name="uikit_mask_color" format="color" />
+        <attr name="uikit_corner_radius" format="reference|dimension" />
+        <attr name="uikit_corner_top_left_radius" format="reference|dimension" />
+        <attr name="uikit_corner_top_right_radius" format="reference|dimension" />
+        <attr name="uikit_corner_bottom_left_radius" format="reference|dimension" />
+        <attr name="uikit_corner_bottom_right_radius" format="reference|dimension" />
+        <attr name="uikit_border_width" format="reference|dimension" />
+        <attr name="uikit_border_color" format="reference|color" />
+        <attr name="uikit_inner_border_width" format="reference|dimension" />
+        <attr name="uikit_inner_border_color" format="reference|color" />
+        <attr name="uikit_mask_color" format="reference|color" />
     </declare-styleable>
 
     <declare-styleable name="UIKitCircleProgressBar">
@@ -446,9 +446,60 @@
         <attr name="uikit_sideTextColor" format="reference|color" />
         <attr name="uikit_sidePressedTextColor" format="reference|color" />
         <attr name="uikit_sidePressedTextBgColor" format="reference|color" />
-        <attr name="uikit_sideItemHeight" format="reference|dimension" />
-        <attr name="uikit_sideItemSpacing" format="reference|dimension" />
-        <attr name="uikit_sideTextSize" format="reference|dimension" />
+        <attr name="uikit_sideItemHeight" format="reference|reference|dimension" />
+        <attr name="uikit_sideItemSpacing" format="reference|reference|dimension" />
+        <attr name="uikit_sideTextSize" format="reference|reference|dimension" />
         <attr name="uikit_sideLetters" format="reference|string" />
+    </declare-styleable>
+
+    <declare-styleable name="UIKitWaveLoadingView">
+
+        <!-- 边框形状，有4种取值：circle、square、rect、none，默认是circle，即圆形，none是没有形状约束 -->
+        <attr name="uikit_wl_shape" format="enum">
+            <enum name="circle" value="0" />
+            <enum name="square" value="1" />
+            <enum name="rect" value="2" />
+            <enum name="none" value="3" />
+        </attr>
+
+        <!-- 文字在控件中的位置，有3种取值：flow、center、top、bottom，默认是flow，即漂浮在波浪上面 -->
+        <attr name="uikit_wl_textLocation" format="enum">
+            <enum name="flow" value="0" />
+            <enum name="center" value="1" />
+            <enum name="top" value="2" />
+            <enum name="bottom" value="3" />
+        </attr>
+
+        <!-- 边框圆角，当 wl_shape = square或rect 才生效，默认是0dp -->
+        <attr name="uikit_wl_shapeCorner" format="reference|reference|dimension" />
+        <!-- 波浪颜色 -->
+        <attr name="uikit_wl_waveColor" format="reference|color" />
+        <!-- 波浪的背景颜色 -->
+        <attr name="uikit_wl_waveBackgroundColor" format="reference|color" />
+        <!-- 波峰，取值范围是0~0.9f，默认是0.2f -->
+        <attr name="uikit_wl_waveAmplitude" format="float" />
+        <!--  波浪水平移动的速度，取值范围是0~1f，默认是0.5f -->
+        <attr name="uikit_wl_waveVelocity" format="float" />
+        <!--  边框颜色 -->
+        <attr name="uikit_wl_borderColor" format="reference|color" />
+        <!-- 边框宽度，默认是0dp，即没有边框 -->
+        <attr name="uikit_wl_borderWidth" format="reference|reference|dimension" />
+        <!-- 波浪占整个控件的比例，取值范围是0~100，默认是50，即波浪占整个控件的一半 -->
+        <attr name="uikit_wl_process" format="integer" />
+        <!-- 加载控件中的文字，默认为空 -->
+        <attr name="uikit_wl_text" format="reference|string" />
+        <!-- 文字颜色 -->
+        <attr name="uikit_wl_textColor" format="reference|color" />
+        <!-- 文字大小 -->
+        <attr name="uikit_wl_textSize" format="reference|reference|dimension" />
+        <!--  文字边框大小，默认为0dp，即没有文字边框-->
+        <attr name="uikit_wl_textStrokeWidth" format="reference|reference|dimension" />
+        <!-- 文字边框颜色 -->
+        <attr name="uikit_wl_textStrokeColor" format="reference|color" />
+        <!-- 文字是否使用粗体 -->
+        <attr name="uikit_wl_textBold" format="boolean" />
+        <!-- 文字是否跟随波浪上下浮动 -->
+        <attr name="uikit_wl_textWave" format="boolean" />
+
     </declare-styleable>
 </resources>

@@ -57,16 +57,14 @@ class UIKitDividerView : View {
     }
 
     private fun init(attrs: AttributeSet?, defStyle: Int) {
-        val ta = context.obtainStyledAttributes(
-            attrs, R.styleable.UIKitDividerView, defStyle, 0
-        )
+        val ta = context.obtainStyledAttributes(attrs, R.styleable.UIKitDividerView, defStyle, 0)
 
         dividerColor = ta.getColor(R.styleable.UIKitDividerView_uikit_dividerColor, dividerColor)
         dividerThickness = ta.getDimension(R.styleable.UIKitDividerView_uikit_dividerThickness, dividerThickness)
         dividerLineType =
             DividerLineType.createByCode(ta.getInteger(R.styleable.UIKitDividerView_uikit_dividerLineType, 0))
-        dashWidth = ta.getDimension(R.styleable.UIKitDividerView_uikit_dashWidth, dividerThickness)
-        dashSpaceWidth = ta.getDimension(R.styleable.UIKitDividerView_uikit_dashSpaceWidth, dividerThickness)
+        dashWidth = ta.getDimension(R.styleable.UIKitDividerView_uikit_dashWidth, dashWidth)
+        dashSpaceWidth = ta.getDimension(R.styleable.UIKitDividerView_uikit_dashSpaceWidth, dashSpaceWidth)
         dividerOrientation = ta.getInt(R.styleable.UIKitDividerView_uikit_dividerOrientation, dividerOrientation)
 
         ta.recycle()
