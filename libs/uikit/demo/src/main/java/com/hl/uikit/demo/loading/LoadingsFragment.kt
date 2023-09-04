@@ -7,8 +7,12 @@ import com.hl.uikit.demo.R
 import com.hl.uikit.demo.fragments.BaseFragment
 import com.hl.uikit.demo.startFragment
 import com.hl.uikit.dialog.LoadingDialogFragment
-import com.hl.uikit.onClick
+import com.hl.ui.utils.onClick
+import com.hl.uikit.refresh.UIKitCommonRefreshFooter
+import com.hl.uikit.refresh.UIKitCommonRefreshHeader
 import com.hl.uikit.toast
+import com.scwang.smart.refresh.footer.ClassicsFooter
+import com.scwang.smart.refresh.header.ClassicsHeader
 
 class LoadingsFragment : BaseFragment() {
     override val layout: Int
@@ -43,21 +47,20 @@ class LoadingsFragment : BaseFragment() {
             startFragment(WebViewFragment::class.java)
         }
 
-        // val header = SimpleLottieRefreshHeader(requireContext())
-        // header.setBackgroundResource(R.color.uikit_color_1)
-        // smartRefresh?.setRefreshHeader(header)
-        // val footer = SimpleLottieRefreshFooter(requireContext())
-        // smartRefresh?.setRefreshFooter(footer)
-        // smartRefresh?.setEnableFooterFollowWhenNoMoreData(true)
-        // smartRefresh?.setOnRefreshListener {
-        //     smartRefresh?.postDelayed({
-        //         smartRefresh?.finishRefresh()
-        //     }, 3000)
-        // }
-        // smartRefresh?.setOnLoadMoreListener {
-        //     smartRefresh?.postDelayed({
-        //         smartRefresh?.finishLoadMoreWithNoMoreData()
-        //     }, 3000)
-        // }
+        val header = ClassicsHeader(requireContext())
+        smartRefresh?.setRefreshHeader(header)
+        val footer = ClassicsFooter(requireContext())
+        smartRefresh?.setRefreshFooter(footer)
+        smartRefresh?.setEnableFooterFollowWhenNoMoreData(true)
+        smartRefresh?.setOnRefreshListener {
+            smartRefresh?.postDelayed({
+                smartRefresh?.finishRefresh()
+            }, 3000)
+        }
+        smartRefresh?.setOnLoadMoreListener {
+            smartRefresh?.postDelayed({
+                smartRefresh?.finishLoadMoreWithNoMoreData()
+            }, 3000)
+        }
     }
 }

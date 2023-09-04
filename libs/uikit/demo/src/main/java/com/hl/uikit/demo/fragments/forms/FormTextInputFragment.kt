@@ -8,7 +8,7 @@ import androidx.core.widget.addTextChangedListener
 import kotlinx.android.synthetic.main.activity_form_text_input.*
 import com.hl.uikit.demo.R
 import com.hl.uikit.demo.fragments.BaseFragment
-import com.hl.uikit.onClick
+import com.hl.ui.utils.onClick
 
 class FormTextInputFragment : BaseFragment() {
     override val layout: Int

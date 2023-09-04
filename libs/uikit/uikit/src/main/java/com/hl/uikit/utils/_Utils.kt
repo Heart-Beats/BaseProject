@@ -2,7 +2,6 @@ package com.hl.uikit
 
 import android.text.Editable
 import android.text.TextWatcher
-import kotlinx.android.synthetic.main.uikit_view_number_step.view.*
 
 
 /**

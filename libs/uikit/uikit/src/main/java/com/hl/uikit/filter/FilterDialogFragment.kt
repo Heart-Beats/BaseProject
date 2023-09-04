@@ -11,7 +11,6 @@ import com.hl.uikit.flowlayout.FilterTagAdapter
 import com.hl.uikit.flowlayout.FlowLayout
 import com.hl.uikit.flowlayout.TagAdapter
 import com.hl.uikit.flowlayout.TagFlowLayout
-import kotlinx.android.synthetic.main.uikit_bottom_base_dialog_fragment.*
 
 
 /**

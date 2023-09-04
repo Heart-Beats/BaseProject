@@ -5,7 +5,7 @@ import android.view.View
 import kotlinx.android.synthetic.main.activity_pickers.*
 import com.hl.uikit.demo.R
 import com.hl.uikit.demo.fragments.BaseFragment
-import com.hl.uikit.onClick
+import com.hl.ui.utils.onClick
 import com.hl.uikit.pickerview.OptionsPickerDialogFragment
 import com.hl.uikit.pickerview.RangeTimePickerDialogFragment
 import com.hl.uikit.pickerview.TimePickerDialogFragment

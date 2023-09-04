@@ -8,49 +8,67 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.DialogFragment
-import kotlinx.android.synthetic.main.uikit_input_dialog_fragment.*
-import com.hl.uikit.R
+import com.hl.uikit.databinding.UikitInputDialogFragmentBinding
+import com.hl.viewbinding.inflate
 
 class InputDialogFragment : AlertDialogFragment() {
+
+    private val viewBind by inflate<UikitInputDialogFragmentBinding>()
+
     private var mInputHint: CharSequence? = null
+
     var inputHint: CharSequence? = null
         set(value) {
             field = value
             mInputHint = value
-            etInput?.hint = value ?: ""
+
+            if (!isRootViewCreated()) return
+
+            viewBind.etInput.hint = value ?: ""
         }
         get() {
-            return etInput?.hint
+            return viewBind.etInput?.hint
         }
+
     private var mInputText: CharSequence? = null
+
     var inputText: CharSequence? = null
         set(value) {
             field = value
             mInputText = field
-            etInput?.setText(value ?: "")
+
+            if (!isRootViewCreated()) return
+
+            viewBind.etInput.setText(value ?: "")
         }
         get() {
-            return etInput?.text
+            return viewBind.etInput.text
         }
+
     var inputChangedListener: ((DialogFragment, Editable?) -> Unit)? = null
+
     private var mHintText: CharSequence? = null
+
     var hintText: CharSequence? = null
         set(value) {
             field = value
             mHintText = value
-            tvHint?.text = value ?: ""
+
+            if (!isRootViewCreated()) return
+
+            viewBind.tvHint.text = value ?: ""
         }
         get() {
-            return tvHint?.text
+            return viewBind.tvHint.text
         }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setCustomView(R.layout.uikit_input_dialog_fragment)
-        etInput?.hint = mInputHint ?: ""
-        etInput?.setText(mInputText ?: "")
-        tvHint?.text = mHintText ?: ""
-        etInput?.addTextChangedListener { editable ->
+        setCustomView(viewBind.root)
+        viewBind.etInput.hint = mInputHint ?: ""
+        viewBind.etInput.setText(mInputText ?: "")
+        viewBind.tvHint.text = mHintText ?: ""
+        viewBind.etInput.addTextChangedListener { editable ->
             inputChangedListener?.invoke(this, editable)
         }
     }

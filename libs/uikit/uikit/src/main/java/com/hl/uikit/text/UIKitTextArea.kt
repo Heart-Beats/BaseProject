@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.res.ColorStateList
 import android.util.AttributeSet
 import android.util.TypedValue
-import android.view.View
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -12,12 +11,19 @@ import androidx.annotation.ColorInt
 import androidx.annotation.Px
 import androidx.core.widget.addTextChangedListener
 import com.hl.uikit.R
+import com.hl.uikit.databinding.UikitTextAreaBinding
 import com.hl.uikit.utils.setMaxLength
+import com.hl.viewbinding.bindingMerge
 
 class UIKitTextArea : LinearLayout {
 
-    private lateinit var etInput: EditText
-    private lateinit var tvCount: TextView
+    private lateinit var viewBinding: UikitTextAreaBinding
+
+    private val etInput: EditText
+        get() = viewBinding.etInput
+
+    private val tvCount: TextView
+        get() = viewBinding.tvCount
 
     private var textAreaHint: CharSequence? = null
     private var textAreaHintColor: ColorStateList? = null
@@ -56,15 +62,12 @@ class UIKitTextArea : LinearLayout {
         )
         ta.recycle()
 
-        View.inflate(context, R.layout.uikit_text_area, this)
+        viewBinding = bindingMerge()
 
         initView()
     }
 
     private fun initView() {
-        etInput = findViewById(R.id.etInput)
-        tvCount = findViewById(R.id.tvCount)
-
         etInput.addTextChangedListener {
             tvCount.text = "${it?.toString()?.length ?: 0}/$textAreaMaxCount"
         }

@@ -3,21 +3,29 @@ package com.hl.uikit.dialog
 import android.app.Dialog
 import android.graphics.Point
 import android.os.Bundle
-import android.view.*
+import android.view.Gravity
+import android.view.LayoutInflater
+import android.view.MotionEvent
+import android.view.View
+import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.TextView
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.uikit_long_press_menu_dialog_fragment.*
 import com.hl.uikit.BasicDialogFragment
 import com.hl.uikit.R
+import com.hl.uikit.databinding.UikitLongPressMenuDialogFragmentBinding
 import com.hl.uikit.utils.getStatusBarHeight
+import com.hl.viewbinding.inflate
 
 /**
  * @Author  张磊  on  2020/10/10 at 11:33
  * Email: 913305160@qq.com
  */
 class LongPressMenuDialog : BasicDialogFragment() {
+
+    private val viewBind by inflate<UikitLongPressMenuDialogFragmentBinding>()
 
     var data: List<String> = listOf()
         set(value) {
@@ -42,14 +50,14 @@ class LongPressMenuDialog : BasicDialogFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.uikit_long_press_menu_dialog_fragment, container, false)
+        return viewBind.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        menu_rv.layoutManager = LinearLayoutManager(requireContext())
-        menu_rv.adapter = adapter
+        viewBind.menuRv.layoutManager = LinearLayoutManager(requireContext())
+        viewBind.menuRv.adapter = adapter
 
         //view未进行绘制之前手动测量大小
         val width = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)

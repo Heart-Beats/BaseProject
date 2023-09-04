@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.View
 import kotlinx.android.synthetic.main.fragment_commit_msg.*
 import com.hl.uikit.demo.R
-import com.hl.uikit.onClick
+import com.hl.ui.utils.onClick
 
 /**
  * @Author  张磊  on  2020/10/22 at 17:14

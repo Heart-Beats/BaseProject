@@ -75,13 +75,14 @@ class SearchBarFragment : BaseFragment() {
             toolbar?.expandSearchView(citySearchConfigBuilder)
             toolbar?.expandSearchView()
         }
+        toolbar.setBackgroundResource(com.hl.uikitres.R.color.uikit_color_1)
 
         val activity = requireActivity()
         StatusBarUtil.transparencyBar(activity.window)
         StatusBarUtil.statusBarDarkMode(activity.window)
         StatusBarUtil.setStatusBarColor(
             activity,
-            ContextCompat.getColor(activity, R.color.uikit_color_1)
+            ContextCompat.getColor(activity, com.hl.uikitres.R.color.uikit_color_1)
         )
     }
 }

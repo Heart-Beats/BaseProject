@@ -10,7 +10,7 @@ import com.alibaba.android.vlayout.layout.GridLayoutHelper
 import com.alibaba.android.vlayout.layout.LinearLayoutHelper
 import com.hl.uikit.demo.R
 import com.hl.uikit.demo.util.dpInt
-import com.hl.uikit.onClick
+import com.hl.ui.utils.onClick
 
 
 @Suppress("DEPRECATION")

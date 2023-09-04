@@ -4,13 +4,18 @@ import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.hl.uikit.R
-import kotlinx.android.synthetic.main.uikit_list_sheet_dialog_fragment.*
+import com.hl.uikit.databinding.UikitListSheetDialogFragmentBinding
+import com.hl.viewbinding.inflate
 
 /**
  * 内容为 list 可设置取消按钮的底部弹出框
  */
 class ArrayListSheetDialogFragment<T> : Alert1SheetDialogFragment() {
+
+    private val viewBinding by inflate<UikitListSheetDialogFragmentBinding>()
+
     private val mAdapter: ArrayListItemAdapter<T> = ArrayListItemAdapter()
+
     var data: List<T>? = null
         set(value) {
             field = value
@@ -39,9 +44,11 @@ class ArrayListSheetDialogFragment<T> : Alert1SheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setCustomView(R.layout.uikit_list_sheet_dialog_fragment)
-        recyclerView?.layoutManager = LinearLayoutManager(requireContext())
-        recyclerView?.adapter = mAdapter
-        recyclerView?.scrollToPosition(itemSelectedPosition ?: 0)
+        setCustomView(viewBinding.root)
+
+        val recyclerView = viewBinding.recyclerView
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        recyclerView.adapter = mAdapter
+        recyclerView.scrollToPosition(itemSelectedPosition ?: 0)
     }
 }

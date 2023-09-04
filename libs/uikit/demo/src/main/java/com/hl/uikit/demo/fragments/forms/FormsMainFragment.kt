@@ -6,7 +6,7 @@ import kotlinx.android.synthetic.main.fragment_forms.*
 import com.hl.uikit.demo.R
 import com.hl.uikit.demo.fragments.BaseFragment
 import com.hl.uikit.demo.startFragment
-import com.hl.uikit.onClick
+import com.hl.ui.utils.onClick
 
 class FormsMainFragment:BaseFragment() {
     override val layout: Int

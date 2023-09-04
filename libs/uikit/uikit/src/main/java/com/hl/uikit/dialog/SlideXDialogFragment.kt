@@ -2,15 +2,23 @@ package com.hl.uikit.dialog
 
 import android.content.DialogInterface
 import android.os.Bundle
-import android.view.*
+import android.view.Gravity
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.FrameLayout
 import androidx.fragment.app.DialogFragment
-import kotlinx.android.synthetic.main.uikit_slide_x_dialog_fragment.*
 import com.hl.uikit.BasicDialogFragment
 import com.hl.uikit.R
+import com.hl.uikit.databinding.UikitSlideXDialogFragmentBinding
 import com.hl.uikit.utils.onClick
+import com.hl.viewbinding.inflate
 
 open class SlideXDialogFragment : BasicDialogFragment() {
+
+    private val viewBind by inflate<UikitSlideXDialogFragmentBinding>()
+
     private var mTitle: CharSequence = ""
     protected var mGravity: Int = Gravity.END
     private var mCustomViewId: Int? = null
@@ -27,7 +35,7 @@ open class SlideXDialogFragment : BasicDialogFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         dialog?.window?.attributes?.windowAnimations = theme
-        return inflater.inflate(R.layout.uikit_slide_x_dialog_fragment, container, false)
+        return viewBind.root
     }
 
     override fun getTheme(): Int {
@@ -53,7 +61,7 @@ open class SlideXDialogFragment : BasicDialogFragment() {
         mNegativeButtonText?.let { negativeButtonText ->
             setNegativeButton(negativeButtonText, mNegativeButtonListener ?: { _, _ -> })
         }
-        btnCancel?.onClick {
+        viewBind.btnCancel.onClick {
             dismiss()
         }
     }
@@ -74,33 +82,45 @@ open class SlideXDialogFragment : BasicDialogFragment() {
     fun setCustomView(view: View) {
         mCustomView = view
         mCustomViewId = null
+
+        if (!isRootViewCreated()) return
+
         val lp = FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-        customLayout?.addView(view, 0, lp)
+        viewBind.customLayout.addView(view, 0, lp)
     }
 
     fun setCustomView(resId: Int) {
         mCustomViewId = resId
         mCustomView = null
-        customLayout?.let {
+
+        if (!isRootViewCreated()) return
+
+        viewBind.customLayout.let {
             val view = LayoutInflater.from(it.context).inflate(resId, it, false)
             it.addView(view, 0)
         }
     }
     fun setTitle(title: CharSequence) {
         mTitle = title
+
+        if (!isRootViewCreated()) return
+
         if (title.isEmpty()) {
-            tvTitle?.visibility = View.INVISIBLE
+            viewBind.tvTitle.visibility = View.INVISIBLE
         } else {
-            tvTitle?.visibility = View.VISIBLE
-            tvTitle?.text = title
+            viewBind.tvTitle.visibility = View.VISIBLE
+            viewBind.tvTitle.text = title
         }
     }
 
     fun setPositiveButton(text: CharSequence, listener: (dialog: DialogFragment, which: Int) -> Unit) {
         mPositiveButtonText = text
         mPositiveButtonListener = listener
-        btnConfirm?.text = text
-        btnConfirm?.onClick {
+
+        if (!isRootViewCreated()) return
+
+        viewBind.btnConfirm.text = text
+        viewBind.btnConfirm.onClick {
             listener(this, DialogInterface.BUTTON_POSITIVE)
         }
         updateButtons()
@@ -109,8 +129,11 @@ open class SlideXDialogFragment : BasicDialogFragment() {
     fun setNegativeButton(text: CharSequence, listener: (dialog: DialogFragment, which: Int) -> Unit) {
         mNegativeButtonText = text
         mNegativeButtonListener = listener
-        btnClose?.text = text
-        btnClose?.onClick {
+
+        if (!isRootViewCreated()) return
+
+        viewBind.btnClose.text = text
+        viewBind.btnClose.onClick {
             listener.invoke(this, DialogInterface.BUTTON_POSITIVE)
         }
         updateButtons()
@@ -118,23 +141,23 @@ open class SlideXDialogFragment : BasicDialogFragment() {
 
     private fun updateButtons() {
         val positiveShown = if (mPositiveButtonText.isNullOrEmpty()) {
-            btnConfirm?.visibility = View.GONE
+            viewBind.btnConfirm.visibility = View.GONE
             false
         } else {
-            btnConfirm?.visibility = View.VISIBLE
+            viewBind.btnConfirm.visibility = View.VISIBLE
             true
         }
         val negativeShown = if (mNegativeButtonText.isNullOrEmpty()) {
-            btnClose?.visibility = View.GONE
+            viewBind.btnClose.visibility = View.GONE
             false
         } else {
-            btnClose?.visibility = View.VISIBLE
+            viewBind.btnClose.visibility = View.VISIBLE
             true
         }
         if (positiveShown || negativeShown) {
-            lineButtons?.visibility = View.VISIBLE
+            viewBind.lineButtons.visibility = View.VISIBLE
         } else {
-            lineButtons?.visibility = View.GONE
+            viewBind.lineButtons.visibility = View.GONE
         }
     }
 }

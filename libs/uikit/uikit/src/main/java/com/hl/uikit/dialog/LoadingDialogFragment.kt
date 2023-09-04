@@ -7,12 +7,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
-import kotlinx.android.synthetic.main.uikit_loading_dialog_fragment.lottieView
-import kotlinx.android.synthetic.main.uikit_loading_dialog_intercept_fragment.*
+import android.widget.TextView
+import com.airbnb.lottie.LottieAnimationView
 import com.hl.uikit.BasicDialogFragment
 import com.hl.uikit.R
 
 class LoadingDialogFragment : BasicDialogFragment() {
+
+    private var lottieView: LottieAnimationView? = null
+    private var tvMessage: TextView? = null
+
     var lottieAssetName: String? = null
         set(value) {
             field = value
@@ -27,7 +31,9 @@ class LoadingDialogFragment : BasicDialogFragment() {
                 lottieView?.setAnimationFromUrl(value)
             }
         }
+
     var allowIntercept: Boolean = false
+
     var message: CharSequence? = null
         set(value) {
             field = value
@@ -41,17 +47,12 @@ class LoadingDialogFragment : BasicDialogFragment() {
         const val DEFAULT_LOTTIE_INTERCEPT_FILE_NAME = "lottie/uikit_dialog_intercept_loading.json"
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(
-            when (allowIntercept) {
-                true -> R.layout.uikit_loading_dialog_intercept_fragment
-                false -> R.layout.uikit_loading_dialog_fragment
-            }, container, false
-        )
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        val layoutId = when (allowIntercept) {
+            true -> R.layout.uikit_loading_dialog_intercept_fragment
+            false -> R.layout.uikit_loading_dialog_fragment
+        }
+        return inflater.inflate(layoutId, container, false)
     }
 
     override fun getTheme(): Int {
@@ -60,6 +61,10 @@ class LoadingDialogFragment : BasicDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        lottieView = view.findViewById(R.id.lottieView)
+        tvMessage = view.findViewById(R.id.tvMessage)
+
         if (lottieAssetName.isNullOrEmpty() && lottieUrl.isNullOrEmpty()) {
             lottieView?.setAnimation(
                 when (allowIntercept) {

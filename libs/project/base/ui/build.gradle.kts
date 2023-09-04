@@ -51,12 +51,11 @@ dependencies {
 	api(libs.androidx.activity.ktx)
 	api(libs.androidx.fragment.ktx)
 
-	api(libs.androidx.view.binding)
+	api(project(":SDK:ViewBinding"))
+	api("com.hl:uikit-toast")
 
 	api(libs.statusbar.immersionbar.asProvider())
 	api(libs.statusbar.immersionbar.ktx)
-
-	api("com.hl:uikit-toast")
 
 	api(platform(libs.jetpack.compose.bom))
 	api(libs.jetpack.compose.ui.asProvider())

@@ -2,18 +2,25 @@ package com.hl.uikit.dialog
 
 import android.content.DialogInterface
 import android.os.Bundle
-import android.view.*
+import android.view.Gravity
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.FrameLayout
 import androidx.fragment.app.DialogFragment
-import kotlinx.android.synthetic.main.uikit_bottom_base_dialog_fragment.*
-import kotlinx.android.synthetic.main.uikit_bottom_base_dialog_fragment.frameLayout_title
-import kotlinx.android.synthetic.main.uikit_bottom_base_dialog_fragment.tvClose
-import kotlinx.android.synthetic.main.uikit_bottom_base_dialog_fragment.tvTitle
 import com.hl.uikit.BasicDialogFragment
 import com.hl.uikit.R
+import com.hl.uikit.databinding.UikitBottomBaseDialogFragmentBinding
 import com.hl.uikit.utils.onClick
+import com.hl.viewbinding.inflate
 
 open class BottomDialogFragment : BasicDialogFragment() {
+
+    private val viewBind by inflate<UikitBottomBaseDialogFragmentBinding>()
+
+    protected val customLayout: FrameLayout
+        get() = viewBind.customLayout
 
     private var mCustomViewId: Int? = null
     private var mCustomView: View? = null
@@ -23,7 +30,7 @@ open class BottomDialogFragment : BasicDialogFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         dialog?.window?.attributes?.windowAnimations = theme
-        return inflater.inflate(R.layout.uikit_bottom_base_dialog_fragment, container, false)
+        return viewBind.root
     }
 
     override fun getTheme(): Int {
@@ -43,7 +50,7 @@ open class BottomDialogFragment : BasicDialogFragment() {
         mCustomView?.let {
             setCustomView(it)
         }
-        tvClose?.onClick {
+        viewBind.tvClose.onClick {
             dismiss()
         }
         initLayout()
@@ -59,11 +66,14 @@ open class BottomDialogFragment : BasicDialogFragment() {
 
     fun setTitle(title: CharSequence) {
         mTitle = title
+
+        if (!isRootViewCreated()) return
+
         if (title.isEmpty()) {
-            frameLayout_title?.visibility = View.GONE
+            viewBind.frameLayoutTitle.visibility = View.GONE
         } else {
-            frameLayout_title?.visibility = View.VISIBLE
-            tvTitle?.text = title
+            viewBind.frameLayoutTitle.visibility = View.VISIBLE
+            viewBind.tvTitle.text = title
         }
     }
 
@@ -71,13 +81,13 @@ open class BottomDialogFragment : BasicDialogFragment() {
         mCustomView = view
         mCustomViewId = null
         val lp = FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-        customLayout?.addView(view, lp)
+        customLayout.addView(view, lp)
     }
 
     fun setCustomView(resId: Int) {
         mCustomViewId = resId
         mCustomView = null
-        customLayout?.let {
+        customLayout.let {
             LayoutInflater.from(it.context).inflate(resId, it, true)
         }
     }
@@ -86,8 +96,11 @@ open class BottomDialogFragment : BasicDialogFragment() {
     fun setNegativeButton(text: CharSequence, listener: (dialog: DialogFragment, which: Int) -> Unit) {
         mNegativeButtonText = text
         mNegativeButtonListener = listener
-        tvClose?.text = text
-        tvClose?.onClick {
+
+        if (!isRootViewCreated()) return
+
+        viewBind.tvClose.text = text
+        viewBind.tvClose.onClick {
             listener.invoke(this, DialogInterface.BUTTON_POSITIVE)
         }
     }
@@ -100,6 +113,4 @@ open class BottomDialogFragment : BasicDialogFragment() {
         onDisMissListener?.invoke()
         super.onDismiss(dialog)
     }
-
-
 }

@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.View
 import kotlinx.android.synthetic.main.fragment_forms.*
 import com.hl.uikit.demo.R
-import com.hl.uikit.onClick
+import com.hl.ui.utils.onClick
 import com.hl.uikit.toast
 import com.hl.uikit.toastFailure
 import com.hl.uikit.toastSuccess

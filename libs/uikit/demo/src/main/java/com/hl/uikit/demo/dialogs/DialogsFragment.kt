@@ -7,7 +7,7 @@ import com.hl.uikit.demo.R
 import com.hl.uikit.demo.fragments.BaseFragment
 import com.hl.uikit.dialog.AlertDialogFragment
 import com.hl.uikit.dialog.InputDialogFragment
-import com.hl.uikit.onClick
+import com.hl.ui.utils.onClick
 import com.hl.uikit.toast
 
 class DialogsFragment : BaseFragment() {

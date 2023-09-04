@@ -6,31 +6,38 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import kotlinx.android.synthetic.main.uikit_alert1_sheet_dialog_fragment.*
-import com.hl.uikit.R
+import com.hl.uikit.databinding.UikitAlert1SheetDialogFragmentBinding
 import com.hl.uikit.utils.onClick
+import com.hl.viewbinding.inflate
 
 /**
  * 带有取消按钮以及标题的底部弹出框
  */
 open class Alert1SheetDialogFragment : ActionSheetDialogFragment() {
+
+    private val viewBinding by inflate<UikitAlert1SheetDialogFragmentBinding>()
+
     private var mCustomViewId: Int? = null
     private var mCustomView: View? = null
     private var mTitle: CharSequence? = null
+
     var title: CharSequence? = null
         set(value) {
             field = value
             mTitle = value
-            tvTitle?.text = value ?: ""
+
+            if (!isRootViewCreated()) return
+
+            viewBinding.tvTitle.text = value ?: ""
             val visibility = when {
                 value.isNullOrEmpty() -> View.GONE
                 else -> View.VISIBLE
             }
-            tvTitle?.visibility = visibility
-            dividerView?.visibility = visibility
+            viewBinding.tvTitle.visibility = visibility
+            viewBinding.dividerView?.visibility = visibility
         }
         get() {
-            return tvTitle?.text
+            return viewBinding.tvTitle.text
         }
 
     private var mNegativeButtonText: CharSequence? = null
@@ -39,22 +46,24 @@ open class Alert1SheetDialogFragment : ActionSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setContentView(R.layout.uikit_alert1_sheet_dialog_fragment)
+        setContentView(viewBinding.root)
         title = mTitle
         initBtnNegative(mNegativeButtonText)
 
     }
 
     private fun initBtnNegative(text: CharSequence?) {
-        btnNegative?.text = text ?: ""
+        val btnNegative = viewBinding.btnNegative
+
+        btnNegative.text = text ?: ""
         val visibility = when {
             text.isNullOrEmpty() -> View.GONE
             else -> View.VISIBLE
         }
-        btnNegative?.visibility = visibility
-        viewBgSpace?.visibility = visibility
+        btnNegative.visibility = visibility
+        viewBinding.viewBgSpace.visibility = visibility
 
-        btnNegative?.onClick {
+        btnNegative.onClick {
             dismiss()
             negativeClickListener()
         }
@@ -64,22 +73,28 @@ open class Alert1SheetDialogFragment : ActionSheetDialogFragment() {
     protected fun setCustomView(layoutView: View) {
         mCustomViewId = null
         mCustomView = layoutView
-        customLayout?.let {
+
+        if (!isRootViewCreated()) return
+
+        viewBinding.customLayout.let {
             val lp = FrameLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT
             )
             lp.gravity = Gravity.TOP
-            customLayout.addView(layoutView, 0, lp)
+            it.addView(layoutView, 0, lp)
         }
     }
 
     protected fun setCustomView(layoutRes: Int) {
         mCustomViewId = layoutRes
         mCustomView = null
+
+        if (!isRootViewCreated()) return
+
+        val customLayout = viewBinding.customLayout
         if (customLayout != null) {
-            val view =
-                LayoutInflater.from(customLayout.context).inflate(layoutRes, customLayout, false)
+            val view = LayoutInflater.from(customLayout.context).inflate(layoutRes, customLayout, false)
             setCustomView(view)
         }
     }

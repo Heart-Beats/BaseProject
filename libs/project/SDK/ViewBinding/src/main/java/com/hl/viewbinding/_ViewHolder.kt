@@ -1,9 +1,10 @@
-package com.hl.utils.viewbinding
+package com.hl.viewbinding
 
 /**
  * @author  张磊  on  2023/02/10 at 16:48
  * Email: 913305160@qq.com
  */
+import android.view.Gravity.apply
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView

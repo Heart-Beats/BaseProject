@@ -8,7 +8,7 @@ import kotlinx.android.synthetic.main.fragment_navigation_bar.*
 import com.hl.uikit.UIKitToolbar
 import com.hl.uikit.demo.R
 import com.hl.uikit.demo.util.StatusBarUtil
-import com.hl.uikit.onClick
+import com.hl.ui.utils.onClick
 
 /**
  * @Author  张磊  on  2020/10/23 at 10:24
@@ -66,11 +66,11 @@ class NavigationBarFragment : BaseFragment() {
         navigationIcon: Int? = null,
         showNavigation: Boolean = true
     ) {
-        val defNavigationIcon = R.drawable.uikit_icon_arrow_left
-        val defNavigationIconWhite = R.drawable.uikit_icon_arrow_left_white
+        val defNavigationIcon = com.hl.uikit.R.drawable.uikit_icon_arrow_left
+        val defNavigationIconWhite = com.hl.uikit.R.drawable.uikit_icon_arrow_left_white
         val defBackgroundColorWhite = Color.WHITE
-        val defBackgroundColor = ContextCompat.getColor(context, R.color.uikit_color_1)
-        val defRightTextColor = ContextCompat.getColor(context, R.color.uikit_color_1)
+        val defBackgroundColor = ContextCompat.getColor(context, com.hl.uikitres.R.color.uikit_color_1)
+        val defRightTextColor = ContextCompat.getColor(context, com.hl.uikitres.R.color.uikit_color_1)
         val defRightTextColorWhite = Color.WHITE
         if (rightIcon != null) {
             setRightActionIcon(rightIcon)
@@ -88,7 +88,7 @@ class NavigationBarFragment : BaseFragment() {
                 setNavigationIcon(null)
             }
             setBackgroundColor(backgroundColor ?: defBackgroundColorWhite)
-            setTitleTextColor(ContextCompat.getColor(context, R.color.uikit_color_3))
+            setTitleTextColor(ContextCompat.getColor(context, com.hl.uikitres.R.color.uikit_color_3))
             setRightActionTextColor(rightTextColor ?: defRightTextColor)
 
             StatusBarUtil.transparencyBar(activity.window)
