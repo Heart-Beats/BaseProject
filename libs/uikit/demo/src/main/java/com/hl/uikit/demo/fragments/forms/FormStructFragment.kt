@@ -9,7 +9,7 @@ import com.hl.uikit.actionsheet.ArrayListSheetDialogFragment
 import com.hl.uikit.demo.R
 import com.hl.uikit.demo.fragments.BaseFragment
 import com.hl.uikit.form.UIKitFormItemView
-import com.hl.uikit.onClick
+import com.hl.ui.utils.onClick
 
 class FormStructFragment : BaseFragment() {
     override val layout: Int

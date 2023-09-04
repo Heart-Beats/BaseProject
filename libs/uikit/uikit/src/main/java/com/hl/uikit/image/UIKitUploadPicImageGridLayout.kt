@@ -16,12 +16,16 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.hl.uikit.*
+import com.hl.uikit.R
 import com.hl.uikit.actionsheet.ArrayListSheetDialogFragment
+import com.hl.uikit.databinding.UikitUploadPicImageGridLayoutBinding
 import com.hl.uikit.image.pictureselector.PickImageUtil
 import com.hl.uikit.recyclerview.decoration.GridSpacingItemDecoration
+import com.hl.uikit.reqPermissions
+import com.hl.uikit.toast
 import com.hl.uikit.utils.dpInt
 import com.hl.uikit.utils.onClick
+import com.hl.viewbinding.bindingMerge
 import java.io.File
 
 
@@ -31,6 +35,8 @@ import java.io.File
  */
 
 class UIKitUploadPicImageGridLayout : FrameLayout {
+
+    private lateinit var viewBinding: UikitUploadPicImageGridLayoutBinding
 
     /**
      * 最大列数
@@ -116,7 +122,8 @@ class UIKitUploadPicImageGridLayout : FrameLayout {
                 )
         }.recycle()
 
-        View.inflate(context, R.layout.uikit_upload_pic_image_grid_layout, this)
+        viewBinding = bindingMerge()
+
         initView()
     }
 
@@ -135,7 +142,7 @@ class UIKitUploadPicImageGridLayout : FrameLayout {
     }
 
     private fun initView() {
-        val pickImageRecyclerView = findViewById<RecyclerView>(R.id.pick_image_recycler_view)
+        val pickImageRecyclerView = viewBinding.pickImageRecyclerView
         pickImageRecyclerView.layoutManager = GridLayoutManager(context, maxColumn)
 
         val data = mutableListOf<Picture>().apply {

@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.View
 import kotlinx.android.synthetic.main.activity_red_badge.*
 import com.hl.uikit.demo.R
-import com.hl.uikit.onClick
+import com.hl.ui.utils.onClick
 
 class RedBadgeFragment : BaseFragment() {
     override val layout: Int

@@ -1,6 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
-apply plugin: 'com.kanyun.kace'
+//apply plugin: 'com.kanyun.kace'
 
 //apply plugin: 'com.kezong.fat-aar'
 
@@ -27,6 +27,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    buildFeatures{
+        viewBinding = true
+    }
 }
 
 //fataar {
@@ -40,13 +44,6 @@ android {
 //    transitive = true //如果你想将所有远程依赖在pom中声明的依赖项同时打入在最终产物里的话, transitive 需要为 true
 //}
 
-kace {
-    // 当 whiteList 不为空时，只有 whiteList 中的 layout 才会被解析
-    whiteList = []
-
-    // 当 blackList 不为空时，blackList 中的 layout 不会被解析
-    blackList = []
-}
 
 dependencies {
     testImplementation 'junit:junit:4.13.2'
@@ -55,8 +52,7 @@ dependencies {
     // embed 可使打包的产物中包含 java  依赖， aar 依赖或者 远程依赖
     api project(path: ':uikit-res')
     api project(path: ':uikit-toast')
-
-    //    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    api 'com.hl:ViewBinding'
 
     implementation libs.androidx.appcompat
     implementation libs.androidx.core.ktx

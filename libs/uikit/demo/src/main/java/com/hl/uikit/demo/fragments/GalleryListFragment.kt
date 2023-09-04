@@ -13,7 +13,7 @@ import com.hl.uikit.demo.R
 import com.hl.uikit.demo.gallery.GalleryImageInfo
 import com.hl.uikit.demo.gallery.toGalleryImage
 import com.hl.uikit.demo.util.dpInt
-import com.hl.uikit.onClick
+import com.hl.ui.utils.onClick
 
 class GalleryListFragment : BaseFragment() {
     override val layout: Int

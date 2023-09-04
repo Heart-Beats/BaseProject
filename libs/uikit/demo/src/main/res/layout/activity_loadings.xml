@@ -15,15 +15,18 @@
         android:id="@+id/dividerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
-    <com.scwang.smartrefresh.layout.SmartRefreshLayout
+    <com.scwang.smart.refresh.layout.SmartRefreshLayout
         android:id="@+id/smartRefresh"
         app:srlEnableAutoLoadMore="false"
+        app:srlEnablePreviewInEditMode="true"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:paddingTop="30dp">
+
             <TextView
                 android:id="@+id/textView1"
                 android:layout_width="wrap_content"
@@ -84,6 +87,7 @@
                     app:uikit_formLabel="进度条加载"
                     app:uikit_formRightIcon="@drawable/icon_arrow_right" />
             </com.hl.uikit.form.UIKitFormGroup>
+
         </androidx.constraintlayout.widget.ConstraintLayout>
-    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+    </com.scwang.smart.refresh.layout.SmartRefreshLayout>
 </LinearLayout>

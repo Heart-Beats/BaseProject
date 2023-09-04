@@ -27,8 +27,6 @@ import androidx.core.widget.TextViewCompat
 import com.hl.uikit.search.UIKitSearchBar
 import com.hl.uikit.utils.dpInt
 import com.hl.uikit.utils.onClick
-import kotlinx.android.synthetic.main.uikit_toolbar_search.view.searchView
-import kotlinx.android.synthetic.main.uikit_toolbar_search.view.tvCancel
 import kotlin.reflect.KProperty1
 
 class UIKitToolbar : Toolbar {
@@ -114,10 +112,10 @@ class UIKitToolbar : Toolbar {
         searchItem.setActionView(R.layout.uikit_toolbar_search)
         searchItem.icon = mRightActionIconRes
         val searchGroup = searchItem.actionView
-        searchView = searchGroup?.searchView
+        searchView = searchGroup?.findViewById(R.id.searchView)
         val searchAutoComplete =
             searchView?.findViewById<SearchView.SearchAutoComplete>(R.id.search_src_text)
-        val tvCancel = searchGroup?.tvCancel
+        val tvCancel = searchGroup?.findViewById<TextView>(R.id.tvCancel)
         inputBuilder?.let { builder ->
             val imeOptions = builder.imeOptions
             if (imeOptions != null) {

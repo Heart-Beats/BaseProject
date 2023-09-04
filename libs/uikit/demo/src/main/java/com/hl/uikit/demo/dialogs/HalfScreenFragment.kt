@@ -6,7 +6,7 @@ import kotlinx.android.synthetic.main.activity_half_screen.*
 import com.hl.uikit.actionsheet.ArrayListSheetDialogFragment
 import com.hl.uikit.demo.R
 import com.hl.uikit.demo.fragments.BaseFragment
-import com.hl.uikit.onClick
+import com.hl.ui.utils.onClick
 
 class HalfScreenFragment : BaseFragment() {
     override val layout: Int

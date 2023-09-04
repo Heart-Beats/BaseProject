@@ -1,7 +1,7 @@
 pluginManagement {
     repositories {
         // com.kanyun.kace SNAPSHOT 版本仓库地址
-        maven { url "https://s01.oss.sonatype.org/content/repositories/snapshots" }
+        //        maven { url "https://s01.oss.sonatype.org/content/repositories/snapshots" }
         maven { url 'https://maven.aliyun.com/repository/public' }
         maven { url 'https://maven.aliyun.com/repository/google' }
         maven { url 'https://maven.aliyun.com/repository/gradle-plugin' }
@@ -16,7 +16,7 @@ dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
         mavenLocal()
-        maven { url "https://s01.oss.sonatype.org/content/repositories/snapshots" }
+        //        maven { url "https://s01.oss.sonatype.org/content/repositories/snapshots" }
         maven { url 'https://maven.aliyun.com/repository/public' }
         maven { url 'https://maven.aliyun.com/repository/google' }
         maven { url 'https://jitpack.io' }
@@ -44,8 +44,10 @@ dependencyResolutionManagement {
     }
 }
 
+rootProject.name = 'UIKit'
 
-rootProject.name='UIKit'
+includeBuild('../project')
+
 //include ':demo'
 include ':uikit'
 include ':uikit-res'

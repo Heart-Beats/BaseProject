@@ -13,15 +13,18 @@ import android.widget.TextView
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
 import com.hl.uikit.R
+import com.hl.uikit.databinding.UikitLayoutFormTextinputBinding
 import com.hl.uikit.utils.dpInt
 import com.hl.uikit.utils.onClick
-import kotlinx.android.synthetic.main.uikit_layout_form_textinput.view.*
+import com.hl.viewbinding.bindingMerge
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class UIKitFormTextVerifyCode : UIKitFormItemView {
+
+    private var viewBinding: UikitLayoutFormTextinputBinding
 
     private var tvSmsCode: TextView? = null
     private var inputView: UIKitFormItemInput? = null
@@ -97,13 +100,13 @@ class UIKitFormTextVerifyCode : UIKitFormItemView {
             needSmsCode = it.getBoolean(R.styleable.UIKitFormTextVerifyCode_uikit_formNeedSmsCode, false)
         }.recycle()
 
-        View.inflate(context, R.layout.uikit_layout_form_textinput, this)
+        viewBinding = bindingMerge()
 
         init()
     }
 
     private fun init() {
-        inputView = itemInput
+        inputView = viewBinding.itemInput
         inputView?.apply {
             setLabel(label, mLabelSize, mLabelColor)
             setLeftLinearLayout(Gravity.CENTER_VERTICAL, mLabelMarginEnd)
@@ -179,18 +182,18 @@ class UIKitFormTextVerifyCode : UIKitFormItemView {
     }
 
     fun setRightWarnText(rightText: CharSequence?) {
-        tvRight?.text = rightText ?: ""
+        viewBinding.tvRight.text = rightText ?: ""
         if (!rightText.isNullOrEmpty()) {
-            tvLeft?.text = ""
+            viewBinding.tvLeft.text = ""
         }
         updateInfoLayout()
     }
 
     fun setLeftWarnText(leftText: CharSequence?) {
         if (!leftText.isNullOrEmpty()) {
-            tvRight?.text = ""
+            viewBinding.tvRight.text = ""
         }
-        tvLeft?.text = leftText ?: ""
+        viewBinding.tvLeft.text = leftText ?: ""
         updateInfoLayout()
     }
 
@@ -234,15 +237,18 @@ class UIKitFormTextVerifyCode : UIKitFormItemView {
     }
 
     private fun updateInfoLayout() {
-        val leftText = tvLeft?.text
-        val rightText = tvRight?.text
+        val tvLeft = viewBinding.tvLeft
+        val leftText = tvLeft.text
+        val tvRight = viewBinding.tvRight
+        val rightText = tvRight.text
+
         if (leftText.isNullOrEmpty() && rightText.isNullOrEmpty()) {
-            tvLeft?.visibility = View.GONE
-            tvRight?.visibility = View.GONE
+            tvLeft.visibility = View.GONE
+            tvRight.visibility = View.GONE
             // dividerView?.visibility = View.GONE
         } else {
-            tvLeft?.visibility = View.VISIBLE
-            tvRight?.visibility = View.VISIBLE
+            tvLeft.visibility = View.VISIBLE
+            tvRight.visibility = View.VISIBLE
             // dividerView?.visibility = View.VISIBLE
         }
     }

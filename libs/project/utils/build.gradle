@@ -1,7 +1,6 @@
 plugins {
-    id 'com.android.library'
-    id 'kotlin-android'
-    id 'com.kanyun.kace'
+    alias libs.plugins.android.library
+    alias libs.plugins.kotlin.android
 
     // aspectj 面向切面插件引入
     //    id 'io.github.wurensen.android-aspectjx' version '3.3.2'
@@ -77,8 +76,6 @@ dependencies {
     implementation libs.androidx.activity.ktx
     implementation libs.androidx.fragment.ktx
     implementation libs.material
-
-    implementation libs.androidx.databinding.runtime
 
     api libs.androidx.lifecycle.extensions
     api libs.androidx.lifecycle.livedata.ktx

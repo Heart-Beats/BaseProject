@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <item name="hl_utils_tag_view_binding" type="id" />
+    <item name="hl_view_binding_tag" type="id" />
 </resources>

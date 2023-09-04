@@ -8,20 +8,22 @@ import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.Gravity
-import android.view.LayoutInflater
 import android.view.View
-import android.widget.ImageView
 import androidx.core.view.updateLayoutParams
-import kotlinx.android.synthetic.main.uikit_layout_form_image.view.*
 import com.hl.uikit.R
+import com.hl.uikit.databinding.UikitLayoutFormImageBinding
 import com.hl.uikit.utils.dp
 import com.hl.uikit.utils.onClick
 import com.hl.uikit.utils.sp
+import com.hl.viewbinding.bindingMerge
 
 class UIKitFormItemImage : UIKitFormItemView {
+
+    private lateinit var viewBinding: UikitLayoutFormImageBinding
+
     var holderImageId: Int = -1
         private set
-    lateinit var imageView: ImageView
+
     private var mImageClickListener: (view: View) -> Unit = {}
 
     constructor(context: Context) : super(context) {
@@ -40,14 +42,15 @@ class UIKitFormItemImage : UIKitFormItemView {
     private fun init(context: Context, attrs: AttributeSet? = null) {
         orientation = VERTICAL
         gravity = Gravity.CENTER_HORIZONTAL
-        LayoutInflater.from(context).inflate(R.layout.uikit_layout_form_image, this, true)
+
+        viewBinding = bindingMerge()
+
         val ta = context.obtainStyledAttributes(attrs, R.styleable.UIKitFormItemImage)
         holderImageId = ta.getResourceId(R.styleable.UIKitFormItemImage_uikit_formImage, -1)
         val drawable = ta.getDrawable(R.styleable.UIKitFormItemImage_uikit_formImage)
-        imageView = image
         setImageDrawable(drawable)
-        image.onClick {
-            if (image.isShown) {
+        viewBinding.image.onClick {
+            if (it.isShown) {
                 mImageClickListener(it)
             }
         }
@@ -61,12 +64,12 @@ class UIKitFormItemImage : UIKitFormItemView {
             10f.dp
         ).toInt()
         setImageText(imageText)
-        text?.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize)
-        text?.updateLayoutParams<MarginLayoutParams> {
+        viewBinding.text.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize)
+        viewBinding.text.updateLayoutParams<MarginLayoutParams> {
             topMargin = marginVertical
         }
         val imageTextColor = ta.getColorStateList(R.styleable.UIKitFormItemImage_uikit_formImageTextColor)
-                ?: ColorStateList.valueOf(Color.BLACK)
+            ?: ColorStateList.valueOf(Color.BLACK)
         setImageTextColor(imageTextColor)
         ta.recycle()
     }
@@ -76,32 +79,34 @@ class UIKitFormItemImage : UIKitFormItemView {
     }
 
     fun setImageDrawable(drawable: Drawable?) {
+        val imageView = viewBinding.image
         if (drawable != null) {
-            image.visibility = View.VISIBLE
-            image.setImageDrawable(drawable)
+            imageView.visibility = View.VISIBLE
+            imageView.setImageDrawable(drawable)
         } else {
-            image.visibility = View.INVISIBLE
+            imageView.visibility = View.INVISIBLE
         }
     }
 
     fun setImageText(txt: CharSequence?) {
+        val textView = viewBinding.text
         if (txt.isNullOrEmpty()) {
-            text.visibility = View.GONE
+            textView.visibility = View.GONE
         } else {
-            text.visibility = View.VISIBLE
-            text.text = txt
+            textView.visibility = View.VISIBLE
+            textView.text = txt
         }
     }
 
     fun setImageTextColor(colors: ColorStateList) {
-        text?.setTextColor(colors)
+        viewBinding.text.setTextColor(colors)
     }
 
     fun setImageTextColor(color: Int) {
-        text?.setTextColor(color)
+        viewBinding.text.setTextColor(color)
     }
 
     fun getImageText(): String {
-        return text?.text?.toString() ?: ""
+        return viewBinding.text.text?.toString() ?: ""
     }
 }

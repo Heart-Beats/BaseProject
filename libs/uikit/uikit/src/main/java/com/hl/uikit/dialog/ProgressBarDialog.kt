@@ -6,10 +6,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
-import kotlinx.android.synthetic.main.uikit_dialog_progress_bar.*
 import com.hl.uikit.BasicDialogFragment
 import com.hl.uikit.R
+import com.hl.uikit.databinding.UikitDialogProgressBarBinding
 import com.hl.uikit.utils.onClick
+import com.hl.viewbinding.inflate
 
 
 /**
@@ -18,13 +19,15 @@ import com.hl.uikit.utils.onClick
  * @date :2020/5/30 11:24
  */
 class ProgressBarDialog : BasicDialogFragment() {
+    private val viewBind by inflate<UikitDialogProgressBarBinding>()
+
     var mProgress: Int = 0
     var mNeedForceUpgrade: Boolean = false
     private var mPositiveButtonListener: ((dialog: DialogFragment, which: Int) -> Unit)? = null
     private var mNegativeButtonListener: ((dialog: DialogFragment, which: Int) -> Unit)? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.uikit_dialog_progress_bar, container, false)
+        return viewBind.root
     }
 
     private var count: Int = 0
@@ -35,11 +38,11 @@ class ProgressBarDialog : BasicDialogFragment() {
         dialog?.setCanceledOnTouchOutside(false)
         dialog?.setCancelable(false)
         //连续点击7次退出 避免 网络异常 卡死在当界面
-        tv.setOnClickListener {
+        viewBind.tv.setOnClickListener {
             val clickTime = System.currentTimeMillis()
             if (clickTime - currTime < 1000) {
 
-                count ++
+                count++
                 if (count > 6) {
                     dismiss()
                 }
@@ -60,26 +63,32 @@ class ProgressBarDialog : BasicDialogFragment() {
 
     fun setProgress(progress: Int) {
         mProgress = progress
-        progressBar?.progress = mProgress
+
+        if (!isRootViewCreated()) return
+
+        viewBind.progressBar.progress = mProgress
     }
 
     fun setNeedForce(needForceUpgrade: Boolean) {
         mNeedForceUpgrade = needForceUpgrade
+
+        if (!isRootViewCreated()) return
+
         if (mNeedForceUpgrade) {
-            lineBg?.setBackgroundResource(R.drawable.uikit_bg_dialog_progress_bar)
-            lineButtons?.visibility = View.GONE
+            viewBind.lineBg.setBackgroundResource(R.drawable.uikit_bg_dialog_progress_bar)
+            viewBind.lineButtons.visibility = View.GONE
         } else {
-            lineButtons?.visibility = View.VISIBLE
-            lineBg?.setBackgroundResource(R.drawable.uikit_bg_dialog_progress_normal)
+            viewBind.lineButtons.visibility = View.VISIBLE
+            viewBind.lineBg.setBackgroundResource(R.drawable.uikit_bg_dialog_progress_normal)
         }
-
-
     }
 
     fun setPositiveButton(listener: (dialog: DialogFragment, which: Int) -> Unit) {
-
         mPositiveButtonListener = listener
-        btnConfirm?.onClick {
+
+        if (!isRootViewCreated()) return
+
+        viewBind.btnConfirm.onClick {
             listener(this, DialogInterface.BUTTON_POSITIVE)
         }
 
@@ -87,7 +96,10 @@ class ProgressBarDialog : BasicDialogFragment() {
 
     fun setNegativeButton(listener: (dialog: DialogFragment, which: Int) -> Unit) {
         mNegativeButtonListener = listener
-        btnClose?.onClick {
+
+        if (!isRootViewCreated()) return
+
+        viewBind.btnClose.onClick {
             listener.invoke(this, DialogInterface.BUTTON_POSITIVE)
         }
     }

@@ -7,7 +7,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.hl.uikit.onClick
+import com.hl.ui.utils.onClick
 
 class MainMenuAdapter(private var menus: List<FirstMenu>) :
     RecyclerView.Adapter<MenuGroupHolder>() {

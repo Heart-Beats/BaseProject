@@ -43,6 +43,7 @@ task buildSdk() {
     dependsOn gradle.includedBuild('project').task(':SDK:Camera:assembleRelease')
     dependsOn gradle.includedBuild('project').task(':SDK:Update:assembleRelease')
     dependsOn gradle.includedBuild('project').task(':SDK:Banner:assembleRelease')
+    dependsOn gradle.includedBuild('project').task(':SDK:ViewBinding:assembleRelease')
 }
 
 //引入配置设置
@@ -373,6 +374,7 @@ setGeneratePomFileAndDepends('VideoPlayer')
 setGeneratePomFileAndDepends('Camera')
 setGeneratePomFileAndDepends('Update')
 setGeneratePomFileAndDepends('Banner')
+setGeneratePomFileAndDepends('ViewBinding')
 
 // 设置 UniApp 相关的 POM 文件
 setUniAppGeneratePomFileAndDepends()
@@ -415,6 +417,7 @@ project.afterEvaluate {
 
                     setDependencyNode(root, Scope.COMPILE, myGroupId, 'uikit-res', getPublicationVersion())
                     setDependencyNode(root, Scope.COMPILE, myGroupId, 'uikit-toast', getPublicationVersion())
+                    setDependencyNode(root, Scope.COMPILE, myGroupId, 'view-binding', getPublicationVersion())
 
                     // 添加相关依赖库，缺失会导致运行时无法找到对应类
                     setDependencyNode(root, Scope.RUNTIME, libs.androidx.appcompat.get())
@@ -547,10 +550,11 @@ project.afterEvaluate {
 
                     setDependencyNode(root, Scope.COMPILE, libs.androidx.view.binding.get())
 
+                    setDependencyNode(root, Scope.COMPILE, myGroupId, 'view-binding', getPublicationVersion())
+                    setDependencyNode(root, Scope.COMPILE, myGroupId, 'uikit-toast', getPublicationVersion())
+
                     setDependencyNode(root, Scope.COMPILE, libs.statusbar.immersionbar.asProvider().get())
                     setDependencyNode(root, Scope.COMPILE, libs.statusbar.immersionbar.ktx.get())
-
-                    setDependencyNode(root, Scope.COMPILE, myGroupId, 'uikit-toast', getPublicationVersion())
 
                     setBomDependencyNode(root, libs.jetpack.compose.bom.get())
 
@@ -640,7 +644,6 @@ project.afterEvaluate {
                     setDependencyNode(root, Scope.RUNTIME, libs.androidx.activity.ktx.get())
                     setDependencyNode(root, Scope.RUNTIME, libs.androidx.fragment.ktx.get())
                     setDependencyNode(root, Scope.RUNTIME, libs.material.get())
-                    setDependencyNode(root, Scope.RUNTIME, libs.androidx.databinding.runtime.get())
 
                     setDependencyNode(root, Scope.COMPILE, libs.androidx.lifecycle.extensions.get())
                     setDependencyNode(root, Scope.COMPILE, libs.androidx.lifecycle.livedata.ktx.get())
@@ -1324,6 +1327,31 @@ project.afterEvaluate {
                     setDependencyNode(root, Scope.RUNTIME, libs.androidx.recyclerview.get())
                     setDependencyNode(root, Scope.RUNTIME, myGroupId, 'image-load', getPublicationVersion())
                     setDependencyNode(root, Scope.COMPILE, libs.banner.get())
+
+                    setScm(root)
+                }
+            }
+
+            ViewBinding(MavenPublication) {
+                def moduleName = 'ViewBinding'
+                def publishModuleName = 'view-binding'
+
+                def modulePath = "$libProjectPath/SDK/$moduleName"
+
+                groupId myGroupId
+                artifactId publishModuleName
+                version getPublicationVersion()
+
+                artifact("$modulePath/build/outputs/aar/${moduleName}-release.aar")
+                artifact sourceAar(publishModuleName, modulePath)
+
+                pom.withXml {
+                    def root = asNode()
+
+                    setDependencyNode(root, Scope.RUNTIME, libs.androidx.databinding.runtime.get())
+                    setDependencyNode(root, Scope.RUNTIME, libs.androidx.activity.ktx.get())
+                    setDependencyNode(root, Scope.RUNTIME, libs.androidx.fragment.ktx.get())
+                    setDependencyNode(root, Scope.RUNTIME, libs.androidx.recyclerview.get())
 
                     setScm(root)
                 }

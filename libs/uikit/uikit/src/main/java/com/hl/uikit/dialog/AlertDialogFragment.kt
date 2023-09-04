@@ -10,12 +10,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.fragment.app.DialogFragment
-import kotlinx.android.synthetic.main.uikit_alert_dialog_fragment.*
 import com.hl.uikit.BasicDialogFragment
 import com.hl.uikit.R
+import com.hl.uikit.databinding.UikitAlertDialogFragmentBinding
 import com.hl.uikit.utils.onClick
+import com.hl.viewbinding.inflate
 
 open class AlertDialogFragment : BasicDialogFragment() {
+
+    private val viewBind by inflate<UikitAlertDialogFragmentBinding>()
 
     private var mMessageColor: Int? = null
     private var mCloseButtonVisibility: Int = View.GONE
@@ -30,8 +33,8 @@ open class AlertDialogFragment : BasicDialogFragment() {
 
     var customViewInitListener: (View?) -> Unit = {}
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.uikit_alert_dialog_fragment, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        return viewBind.root
     }
 
     override fun getTheme(): Int {
@@ -48,7 +51,7 @@ open class AlertDialogFragment : BasicDialogFragment() {
         }
         isCancelable = false
         setCloseButtonVisibility(mCloseButtonVisibility)
-        btnTopRightClose?.onClick {
+        viewBind.btnTopRightClose.onClick {
             dismiss()
         }
         mPositiveButtonText?.let { positiveButtonText ->
@@ -83,57 +86,74 @@ open class AlertDialogFragment : BasicDialogFragment() {
 
     fun setMessage(message: CharSequence) {
         mMessage = message
+
+        if (!isRootViewCreated()) return
+
         if (message.isEmpty()) {
-            tvMessage?.visibility = View.GONE
+            viewBind.tvMessage.visibility = View.GONE
         } else {
-            tvMessage?.visibility = View.VISIBLE
-            tvMessage?.text = message
+            viewBind.tvMessage.visibility = View.VISIBLE
+            viewBind.tvMessage.text = message
         }
     }
 
     fun setMessageColor(color: Int) {
         mMessageColor = color
-        tvMessage?.setTextColor(color)
+
+        if (!isRootViewCreated()) return
+        viewBind.tvMessage.setTextColor(color)
     }
 
     fun setTitle(title: CharSequence) {
         mTitle = title
+
+        if (!isRootViewCreated()) return
+
         if (title.isEmpty()) {
-            tvTitle?.visibility = View.GONE
+            viewBind.tvTitle.visibility = View.GONE
         } else {
-            tvTitle?.visibility = View.VISIBLE
-            tvTitle?.text = title
+            viewBind.tvTitle.visibility = View.VISIBLE
+            viewBind.tvTitle.text = title
         }
     }
 
     fun setCustomView(view: View) {
         mCustomView = view
         mCustomViewId = null
+
+        if (!isRootViewCreated()) return
+
         val lp = FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         lp.gravity = Gravity.CENTER_HORIZONTAL
-        customLayout?.addView(view, 0, lp)
+        viewBind.customLayout.addView(view, 0, lp)
     }
 
     fun setCustomView(resId: Int) {
         mCustomViewId = resId
         mCustomView = null
-        customLayout?.let {
+
+        if (!isRootViewCreated()) return
+
+        viewBind.customLayout.let {
             val view = LayoutInflater.from(it.context).inflate(resId, it, false)
             val lp = FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
             lp.gravity = Gravity.CENTER_HORIZONTAL
-            customLayout?.addView(view, 0, lp)
+            viewBind.customLayout.addView(view, 0, lp)
         }
     }
 
     private fun getCustomView(): View? {
-        return customLayout?.getChildAt(0)
+        return viewBind.customLayout.getChildAt(0)
     }
 
     fun setPositiveButton(text: CharSequence, listener: (dialog: DialogFragment, which: Int) -> Unit) {
         mPositiveButtonText = text
         mPositiveButtonListener = listener
-        btnConfirm?.text = text
-        btnConfirm?.onClick {
+
+        if (!isRootViewCreated()) return
+
+        viewBind.btnConfirm.text = text
+        viewBind.btnConfirm.onClick {
             listener(this, DialogInterface.BUTTON_POSITIVE)
         }
         updateButtons()
@@ -142,8 +162,11 @@ open class AlertDialogFragment : BasicDialogFragment() {
     fun setNegativeButton(text: CharSequence, listener: (dialog: DialogFragment, which: Int) -> Unit) {
         mNegativeButtonText = text
         mNegativeButtonListener = listener
-        btnClose?.text = text
-        btnClose?.onClick {
+
+        if (!isRootViewCreated()) return
+
+        viewBind.btnClose.text = text
+        viewBind.btnClose.onClick {
             listener.invoke(this, DialogInterface.BUTTON_POSITIVE)
         }
         updateButtons()
@@ -151,54 +174,62 @@ open class AlertDialogFragment : BasicDialogFragment() {
 
     protected fun setPositiveButtonText(text: CharSequence) {
         mPositiveButtonText = text
-        btnConfirm?.text = text
+
+        if (!isRootViewCreated()) return
+
+        viewBind.btnConfirm.text = text
     }
 
     protected fun setPositiveButtonTextColor(colors: ColorStateList) {
-        btnConfirm?.setTextColor(colors)
+        if (!isRootViewCreated()) return
+        viewBind.btnConfirm.setTextColor(colors)
     }
 
     protected fun setPositiveButtonTextColor(color: Int) {
-        btnConfirm?.setTextColor(color)
+        if (!isRootViewCreated()) return
+        viewBind.btnConfirm.setTextColor(color)
     }
 
     protected fun setPositiveButtonEnabled(isEnabled: Boolean) {
-        btnConfirm?.isEnabled = isEnabled
+        if (!isRootViewCreated()) return
+        viewBind.btnConfirm.isEnabled = isEnabled
     }
 
     protected fun setPositiveButtonTextSize(textSize: Int) {
-        btnConfirm?.textSize = textSize.toFloat()
+        if (!isRootViewCreated()) return
+        viewBind.btnConfirm.textSize = textSize.toFloat()
     }
 
     fun setCloseButtonVisibility(visibility: Int) {
         mCloseButtonVisibility = visibility
-        btnTopRightClose?.visibility = visibility
+        if (!isRootViewCreated()) return
+        viewBind.btnTopRightClose.visibility = visibility
     }
 
     private fun updateButtons() {
         val positiveShown = if (mPositiveButtonText.isNullOrEmpty()) {
-            btnConfirm?.visibility = View.GONE
+            viewBind.btnConfirm.visibility = View.GONE
             false
         } else {
-            btnConfirm?.visibility = View.VISIBLE
+            viewBind.btnConfirm.visibility = View.VISIBLE
             true
         }
         val negativeShown = if (mNegativeButtonText.isNullOrEmpty()) {
-            btnClose?.visibility = View.GONE
+            viewBind.btnClose.visibility = View.GONE
             false
         } else {
-            btnClose?.visibility = View.VISIBLE
+            viewBind.btnClose.visibility = View.VISIBLE
             true
         }
         if (positiveShown || negativeShown) {
-            lineButtons?.visibility = View.VISIBLE
+            viewBind.lineButtons.visibility = View.VISIBLE
         } else {
-            lineButtons?.visibility = View.GONE
+            viewBind.lineButtons.visibility = View.GONE
         }
         if (!positiveShown || !negativeShown) {
-            btnDivider?.visibility = View.GONE
+            viewBind.btnDivider.visibility = View.GONE
         } else {
-            btnDivider?.visibility = View.VISIBLE
+            viewBind.btnDivider.visibility = View.VISIBLE
         }
 
     }
