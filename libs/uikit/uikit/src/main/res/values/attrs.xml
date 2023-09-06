@@ -26,6 +26,7 @@
     <attr name="uikit_textAreaStyle" format="reference" />
     <attr name="uikit_progressImageViewStyle" format="reference" />
     <attr name="uikit_uploadPicImageGridLayout" format="reference" />
+    <attr name="uikit_shapeEditTextWithDeleteStyle" format="reference" />
 
     <declare-styleable name="UIKitToolbar">
         <attr name="uikit_backgroundColor" format="color|reference" />
@@ -501,5 +502,10 @@
         <!-- 文字是否跟随波浪上下浮动 -->
         <attr name="uikit_wl_textWave" format="boolean" />
 
+    </declare-styleable>
+
+    <declare-styleable name="UIKitShapeEditTextWithDelete">
+        <attr name="uikit_deleteIcon" format="reference"/>
+        <attr name="uikit_deleteIcon_marginEnd" format="reference|dimension"/>
     </declare-styleable>
 </resources>

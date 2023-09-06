@@ -406,4 +406,9 @@
         <item name="android:textColor">#ffff6010</item>
         <item name="android:textSize">@dimen/uikit_font_size_8</item>
     </style>
+
+    <style name="UiKit.ShapeEditTextWithDeleteStyle" parent="@style/Widget.AppCompat.EditText">
+        <item name="uikit_deleteIcon">@drawable/uikit_icon_input_delete</item>
+        <item name="uikit_deleteIcon_marginEnd">13.33dp</item>
+    </style>
 </resources>
