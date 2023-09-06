@@ -1,9 +1,6 @@
 package com.hl.utils.keyboard
 
 import android.content.Context
-import android.os.Bundle
-import android.os.Handler
-import android.os.ResultReceiver
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 
@@ -35,15 +32,6 @@ object SoftKeyboardUtil {
         view.isFocusable = true
         view.isFocusableInTouchMode = true
         view.requestFocus()
-        imm.showSoftInput(view, flags, object : ResultReceiver(Handler()) {
-            override fun onReceiveResult(resultCode: Int, resultData: Bundle) {
-                if (resultCode == InputMethodManager.RESULT_UNCHANGED_HIDDEN
-                    || resultCode == InputMethodManager.RESULT_HIDDEN
-                ) {
-                    toggleSoftInput(view.context)
-                }
-            }
-        })
-        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
+        imm.showSoftInput(view, flags)
     }
 }
