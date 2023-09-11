@@ -1,11 +1,8 @@
 package com.hl.uikit.utils
 
 import android.content.res.Resources
-import android.text.InputFilter
-import android.text.TextUtils
 import android.util.TypedValue
 import android.view.View
-import android.widget.TextView
 
 /**
  * 点击事件去除重复点击
@@ -40,13 +37,6 @@ internal fun View.getStatusBarHeight(): Int {
         e.printStackTrace()
     }
     return 0
-}
-
-internal fun TextView.setMaxLength(length: Int) {
-    val filters = this.filters.toMutableList()
-    filters.add(InputFilter.LengthFilter(length))
-    this.filters = filters.toTypedArray()
-    this.ellipsize = TextUtils.TruncateAt.END
 }
 
 private fun View.setVisible(visibility: Int) {
