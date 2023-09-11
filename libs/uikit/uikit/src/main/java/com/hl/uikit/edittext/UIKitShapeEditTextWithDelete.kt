@@ -78,7 +78,9 @@ class UIKitShapeEditTextWithDelete : ShapeEditText {
 
 		//保存当前画布内容
 		canvas.save()
-		if (isHasText) {
+
+		// 当有输入内容且获得焦点时，绘制删除图标
+		if (isHasText && hasFocus()) {
 			drawDeleteIcon(canvas)
 		} else {
 			// 无任何输入内容时，恢复之前保存的画布内容， 即清空删除图标
@@ -103,8 +105,8 @@ class UIKitShapeEditTextWithDelete : ShapeEditText {
 				val y = event.y
 				if (deleteIconDrawable?.bounds?.contains(x.toInt(), y.toInt()) == true) {
 					text?.clear()
-					requestFocus()
-					showSoftInput(this, 0)
+					// requestFocus()
+					// showSoftInput(this, 0)
 					return true
 				}
 			}
