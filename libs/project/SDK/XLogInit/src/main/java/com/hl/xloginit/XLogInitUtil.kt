@@ -44,6 +44,7 @@ object XLogInitUtil {
 				// 添加日志拦截器
 				it
 			}
+			.apply(initConfig.logConfiguration)
 			.build()
 
 		val printers = arrayOf(DefaultsFactory.createPrinter(), initConfig.filePrinter).filterNotNull()
@@ -147,4 +148,9 @@ data class XLogInitConfig(
 	 * 日志文件打印
 	 */
 	var filePrinter: FilePrinter? = null,
+
+	/**
+	 * XLog 更多配置
+	 */
+	var logConfiguration: LogConfiguration.Builder.() -> Unit = {},
 )

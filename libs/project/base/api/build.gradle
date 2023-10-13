@@ -37,7 +37,11 @@ dependencies {
     api libs.retrofit.retrofit
     implementation libs.retrofit.converter.gson
     implementation libs.retrofit.adapter.rxjava3
-    implementation libs.okHttp.logging.interceptor
+    //    implementation libs.okHttp.logging.interceptor
 
     implementation libs.kotlinx.coroutines.android
+
+    // okhttp 日志拦截打印
+    implementation 'com.github.fengzhizi715.okhttp-logging-interceptor:core:v1.1.4'
+
 }

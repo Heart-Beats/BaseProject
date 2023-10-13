@@ -110,7 +110,7 @@ enum Scope {
  * @param root 根节点
  * @param mavenDependence 依赖的坐标
  * */
-def setBomDependencyNode(root, MinimalExternalModuleDependency mavenDependence) {
+def setBomDependencyNode(root, Dependency mavenDependence) {
     println "添加 BOM 依赖项： $mavenDependence"
     Node dependencyManagement
     NodeList dependencyManagementList = root.get('dependencyManagement')
@@ -148,7 +148,37 @@ def setBomDependencyNode(root, groupId, artifactId, version) {
  * @param mavenDependence 依赖的坐标
  * @param closure 依赖的配置
  * */
-def setDependencyNode(root, Scope scope, MinimalExternalModuleDependency mavenDependence, Closure closure = null) {
+def setDependencyNode(root, Scope scope, String mavenDependence, Closure closure = null) {
+    def array = mavenDependence.split(':')
+
+    String groupId = null
+    String artifactId = null
+    String version = null
+
+    array.eachWithIndex { value, index ->
+        if (index == 0) {
+            groupId = value
+        }
+        if (index == 1) {
+            artifactId = value
+        }
+        if (index == 2) {
+            version = value
+        }
+    }
+
+    setDependencyNode(root, scope, groupId, artifactId, version, closure)
+}
+
+/**
+ * 添加依赖节点
+ *
+ * @param root 根节点
+ * @param scope 依赖的 scope
+ * @param mavenDependence 依赖的坐标
+ * @param closure 依赖的配置
+ * */
+def setDependencyNode(root, Scope scope, Dependency mavenDependence, Closure closure = null) {
     String groupId = mavenDependence.group
     String artifactId = mavenDependence.name
     String version = mavenDependence.version
@@ -501,9 +531,10 @@ project.afterEvaluate {
                     setDependencyNode(root, Scope.COMPILE, libs.retrofit.retrofit.get())
                     setDependencyNode(root, Scope.RUNTIME, libs.retrofit.converter.gson.get())
                     setDependencyNode(root, Scope.RUNTIME, libs.retrofit.adapter.rxjava3.get())
-                    setDependencyNode(root, Scope.RUNTIME, libs.okHttp.logging.interceptor.get())
 
                     setDependencyNode(root, Scope.RUNTIME, libs.kotlinx.coroutines.android.get())
+
+                    setDependencyNode(root, Scope.RUNTIME, 'com.github.fengzhizi715.okhttp-logging-interceptor:core:v1.1.4')
                     setScm(root)
                 }
             }
