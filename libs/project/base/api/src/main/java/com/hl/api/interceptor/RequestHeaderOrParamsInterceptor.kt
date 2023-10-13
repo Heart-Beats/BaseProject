@@ -1,8 +1,6 @@
 package com.hl.api.interceptor
 
 import okhttp3.*
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.RequestBody.Companion.toRequestBody
 import okio.Buffer
 import java.io.IOException
 import java.util.*
@@ -34,7 +32,7 @@ class RequestHeaderOrParamsInterceptor private constructor() : Interceptor {
         val requestBuilder = request.newBuilder()
 
         // process header params inject
-        val headerBuilder = request.headers.newBuilder()
+        val headerBuilder = request.headers().newBuilder()
         if (headerParamsMap.isNotEmpty()) {
             for ((key, value) in headerParamsMap) {
                 headerBuilder.add(key, value)
@@ -57,7 +55,7 @@ class RequestHeaderOrParamsInterceptor private constructor() : Interceptor {
 
 
         // process post body inject
-        if (POST == request.method && canInjectIntoBody(request)) {
+        if (POST == request.method() && canInjectIntoBody(request)) {
             val formBodyBuilder = FormBody.Builder()
             if (paramsMap.isNotEmpty()) {
                 for ((key, value) in paramsMap) {
@@ -65,12 +63,10 @@ class RequestHeaderOrParamsInterceptor private constructor() : Interceptor {
                 }
             }
             val formBody: RequestBody = formBodyBuilder.build()
-            var postBodyString = bodyToString(request.body)
+            var postBodyString = bodyToString(request.body())
             postBodyString += (if (postBodyString.isNotEmpty()) "&" else "") + bodyToString(formBody)
-            requestBuilder.post(
-                postBodyString
-                    .toRequestBody("application/x-www-form-urlencoded;charset=UTF-8".toMediaTypeOrNull())
-            )
+            val mediaType = MediaType.parse("application/x-www-form-urlencoded;charset=UTF-8")
+            requestBuilder.post(RequestBody.create(mediaType, postBodyString))
         } else {
             // can't inject into body, then inject into url
             injectParamsIntoUrl(request, requestBuilder, paramsMap)
@@ -91,10 +87,10 @@ class RequestHeaderOrParamsInterceptor private constructor() : Interceptor {
         if (request == null) {
             return false
         }
-        if (POST != request.method) {
+        if (POST != request.method()) {
             return false
         }
-        val body = request.body
+        val body = request.body()
         return if (body == null) {
             false
         } else {
@@ -102,7 +98,7 @@ class RequestHeaderOrParamsInterceptor private constructor() : Interceptor {
             if (mediaType == null) {
                 false
             } else {
-                "x-www-form-urlencoded" == mediaType.subtype
+                "x-www-form-urlencoded" == mediaType.subtype()
             }
         }
     }
@@ -111,7 +107,7 @@ class RequestHeaderOrParamsInterceptor private constructor() : Interceptor {
      * 将参数注入 url
      */
     private fun injectParamsIntoUrl(request: Request, requestBuilder: Request.Builder, paramsMap: Map<String, String>) {
-        val httpUrlBuilder = request.url.newBuilder()
+        val httpUrlBuilder = request.url().newBuilder()
         if (paramsMap.isNotEmpty()) {
             for ((key, value) in paramsMap) {
                 httpUrlBuilder.addQueryParameter(key, value)

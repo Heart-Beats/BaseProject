@@ -13,6 +13,7 @@ import com.hl.unimp.UniMPHelper
 import com.hl.web.helpers.JsBridgeHelper
 import com.hl.web.sdk.ISdk
 import com.hl.web.sdk.ISdkImplProvider
+import com.hl.xloginit.XLogInitUtil
 import com.scwang.smart.refresh.layout.SmartRefreshLayout
 import com.umeng.message.api.UPushRegisterCallback
 import io.dcloud.feature.sdk.MenuActionSheetItem
@@ -28,7 +29,7 @@ object SDKInitHelper {
 
 		val debug = BuildConfig.DEBUG
 
-		com.hl.xloginit.XLogInitUtil.init {
+		XLogInitUtil.init {
 			this.isPrintLog = debug
 		}
 

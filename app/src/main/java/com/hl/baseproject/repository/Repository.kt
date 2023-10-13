@@ -1,8 +1,9 @@
 package com.hl.baseproject.repository
 
 import com.blankj.utilcode.util.DeviceUtils
+import com.elvishew.xlog.XLog
 import com.hl.api.RetrofitManager
-import com.hl.api.interceptor.MultiBaseUrlInterceptor
+import com.hl.api.interceptor.LogProxy
 import com.hl.baseproject.configs.AppConfig
 import com.hl.baseproject.user.UserManager
 import com.hl.utils.toJsonString
@@ -13,14 +14,31 @@ import com.hl.utils.toJsonString
  */
 object Repository {
 	var baseUrl = AppConfig.BASE_URL
-	var isPrintHttpLog = AppConfig.isDebug
 	var mockUrl = ""
 
 	inline fun <reified T> buildApi(): T {
 		if (mockUrl.isNotBlank()) baseUrl = mockUrl
 
+		val logProxy = object : LogProxy {
+			override fun d(tag: String, msg: String) {
+				XLog.tag(tag).disableStackTrace().d(msg)
+			}
+
+			override fun e(tag: String, msg: String) {
+				XLog.tag(tag).disableStackTrace().d(msg)
+			}
+
+			override fun i(tag: String, msg: String) {
+				XLog.tag(tag).disableStackTrace().i(msg)
+			}
+
+			override fun w(tag: String, msg: String) {
+				XLog.tag(tag).disableStackTrace().w(msg)
+			}
+		}
+
 		return RetrofitManager.buildRetrofit(
-			baseUrl, isPrintHttpLog,
+			baseUrl, logProxy,
 			publicHeaderOrParamsBlock = {
 				val map: MutableMap<String, Any> = HashMap()
 				map["deviceId"] = DeviceUtils.getUniqueDeviceId()
