@@ -6,17 +6,13 @@ import android.widget.TextView
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.hl.rvadapter.BaseMultiAdapter
-import com.hl.rvadapter.BaseSingleAdapter
-import com.hl.rvadapter.itemprovider.BaseItemProvider
-import com.hl.rvadapter.viewholder.BaseViewHolder
 import com.hl.baseproject.databinding.ActivityTestBinding
 import com.hl.ui.base.ViewBindingBaseActivity
 import com.hl.ui.utils.dpInt
 import com.hl.ui.utils.onClick
 import com.hl.uikit.recyclerview.decoration.GridSpaceItemDecoration
 import com.hl.uikit.recyclerview.decoration.RecyclerViewDividerDecoration
-import com.hl.utils.setItemDecoration
+import com.hl.utils.views.setItemDecoration
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 

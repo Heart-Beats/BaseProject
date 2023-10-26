@@ -1282,7 +1282,7 @@ project.afterEvaluate {
                     setDependencyNode(root, Scope.RUNTIME, libs.androidx.activity.ktx.get())
                     setDependencyNode(root, Scope.RUNTIME, libs.androidx.fragment.ktx.get())
 
-                    setDependencyNode(root, Scope.RUNTIME, myGroupId, 'ImageLoad', getPublicationVersion())
+                    setDependencyNode(root, Scope.RUNTIME, myGroupId, 'image-load', getPublicationVersion())
 
                     setDependencyNode(root, Scope.COMPILE, libs.gsyVideoPlayer.get())
 

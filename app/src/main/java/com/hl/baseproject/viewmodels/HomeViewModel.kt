@@ -1,6 +1,7 @@
 package com.hl.baseproject.viewmodels
 
 import androidx.lifecycle.MutableLiveData
+import com.elvishew.xlog.XLog
 import com.hl.baseproject.base.BaseViewModel
 import com.hl.baseproject.repository.network.bean.BannerData
 import com.hl.baseproject.repository.network.bean.HomeArticleList
@@ -14,6 +15,12 @@ class HomeViewModel : BaseViewModel() {
 
 	val topBannerListLiveData by lazy { MutableLiveData<List<BannerData>?>() }
 	val homeArticleListLiveData by lazy { MutableLiveData<HomeArticleList?>() }
+
+	fun getShareLocalToken() {
+		serviceLaunch(reqBlock = { this.getToken() }) {
+			XLog.d("获取到的共享 token 结果 == $it")
+		}
+	}
 
 	fun getTopBannerList() {
 		serviceLaunch(reqBlock = { this.getTopBannerList() }) {

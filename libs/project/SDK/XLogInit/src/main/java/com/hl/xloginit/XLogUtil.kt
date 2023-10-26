@@ -74,7 +74,7 @@ object XLogUtil {
 	/**
 	 * 日志保存文件
 	 */
-	var logFile: File? = null
+	val logFile: File
 		get() {
 			val logfileName = currentFileNameGenerator?.generateFileName(LogLevel.ALL, System.currentTimeMillis()) ?: ""
 			return File(logFolderFile, logfileName)

@@ -1,9 +1,6 @@
 package com.hl.utils
 
 import android.net.Uri
-import org.json.JSONArray
-import org.json.JSONException
-import org.json.JSONObject
 import kotlin.random.Random
 
 /**
@@ -118,6 +115,52 @@ fun Int.left0(length: Int = 4): String {
 fun String.isMatchPasswordRule(minLength: Int = 6, maxLength: Int = 20): Boolean {
     val regex = """^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).{$minLength,$maxLength}$"""
     return this.matches(regex.toRegex())
+}
+
+/**
+ *  密码校验规则（复杂）
+ * @param  minLength : 最小长度
+ * @param  maxLength : 最大长度
+ * @return 是否至少包含数字、大小写字母、特殊字符其中三者，同时符合长度限制
+ */
+fun String.isMatchPasswordRuleComplex(minLength: Int = 8, maxLength: Int = 20): Boolean {
+    val isDigit = """\d"""
+    val isLowercaseChar = """a-z"""
+    val isUppercaseChar = """A-Z"""
+    val isSpecialChar = """\!@#\${'$'}%\^&\*\(\)_+\-=\[\]{};':"\|,\.<>\\/\?"""
+
+    val regexSuffix = """{$minLength,$maxLength}${'$'}"""
+
+    // 数字、小写字母、大写字母
+    val regexPrefix1 = """^(?=.*$isDigit)(?=.*[$isLowercaseChar])(?=.*[$isUppercaseChar])"""
+    // 数字、小写字母、特殊字符
+    val regexPrefix2 = """^(?=.*$isDigit)(?=.*[$isLowercaseChar])(?=.*[$isSpecialChar])"""
+    // 数字、大写字母、特殊字符
+    val regexPrefix3 = """^(?=.*$isDigit)(?=.*[$isUppercaseChar])(?=.*[$isSpecialChar])"""
+    // 小写字母、大写字母、特殊字符
+    val regexPrefix4 = """^(?=.*[$isLowercaseChar])(?=.*[$isUppercaseChar])(?=.*[$isSpecialChar])"""
+    // 数字、小写字母、大写字母、特殊字符
+    val regexPrefix5 = """^(?=.*$isDigit)(?=.*[$isLowercaseChar])(?=.*[$isUppercaseChar])(?=.*[$isSpecialChar])"""
+
+    // 数字、小写字母、大写字母
+    val combination1 = """[$isDigit$isLowercaseChar$isUppercaseChar]"""
+    // 数字、小写字母、特殊字符
+    val combination2 = """[$isDigit$isLowercaseChar$isSpecialChar]"""
+    // 数字、大写字母、特殊字符
+    val combination3 = """[$isDigit$isUppercaseChar$isSpecialChar]"""
+    // 小写字母、大写字母、特殊字符
+    val combination4 = """[$isLowercaseChar$isUppercaseChar$isSpecialChar]"""
+    // 数字、小写字母、大写字母、特殊字符
+    val combination5 = """[$isDigit$isLowercaseChar$isUppercaseChar$isSpecialChar]"""
+
+    val regex1 = "$regexPrefix1$combination1$regexSuffix"
+    val regex2 = "$regexPrefix2$combination2$regexSuffix"
+    val regex3 = "$regexPrefix3$combination3$regexSuffix"
+    val regex4 = "$regexPrefix4$combination4$regexSuffix"
+    val regex5 = "$regexPrefix5$combination5$regexSuffix"
+
+    return this.matches(regex1.toRegex()) || this.matches(regex2.toRegex())
+            || this.matches(regex3.toRegex()) || this.matches(regex4.toRegex()) || this.matches(regex5.toRegex())
 }
 
 

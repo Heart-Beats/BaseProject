@@ -1,5 +1,6 @@
 package com.hl.baseproject.repository.network
 
+import com.hl.api.PublicResp
 import com.hl.baseproject.repository.network.bean.BannerData
 import com.hl.baseproject.repository.network.bean.HomeArticleList
 import com.hl.baseproject.repository.network.bean.WanAndroidPublicResp
@@ -11,6 +12,12 @@ import retrofit2.http.Path
  * Email: 913305160@qq.com
  */
 interface RequestApiInterface {
+
+	/**
+	 * 获取本地共享 token
+	 */
+	@GET("http://127.0.0.1:8042/api/gettoken")
+	suspend fun getToken(): PublicResp<String>
 
 	/**
 	 * 获取顶部 banner 数据

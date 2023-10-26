@@ -21,7 +21,7 @@ import com.hl.utils.launchHome
 import com.hl.navigatioin.getCurrentDestination
 import com.hl.utils.onceLastObserve
 import com.hl.utils.registerReceiver
-import com.hl.utils.setColor
+import com.hl.utils.views.setColor
 import com.hl.web.navigateToWeb
 import com.youth.banner.Banner
 import com.youth.banner.config.IndicatorConfig

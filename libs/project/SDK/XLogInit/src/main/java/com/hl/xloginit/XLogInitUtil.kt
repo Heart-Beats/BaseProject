@@ -56,7 +56,7 @@ object XLogInitUtil {
 	 * 初始化 XLog, 默认日志写入文件中
 	 *
 	 * @param tagName    日志文件最小上传大小, 单位: MB
-	 * @param isPrintLog    日志文件最小上传大小, 单位: MB
+	 * @param isPrintLog    是否打印日志
 	 * @param logFileMinUploadMB    日志文件最小上传大小, 单位: MB
 	 * @param onUploadFiles        需要上传的日志文件集合
 	 */
