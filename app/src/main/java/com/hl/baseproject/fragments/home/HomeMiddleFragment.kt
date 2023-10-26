@@ -5,9 +5,6 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import com.elvishew.xlog.XLog
-import com.hl.rvadapter.BaseSingleAdapter
-import com.hl.rvadapter.drag.ItemDragCallBack
-import com.hl.rvadapter.viewholder.BaseViewHolder
 import com.hl.arch.mvvm.vm.activityViewModels
 import com.hl.baseproject.R
 import com.hl.baseproject.base.BaseFragment
@@ -18,7 +15,7 @@ import com.hl.baseproject.viewmodels.HomeViewModel
 import com.hl.imageload.GlideUtil
 import com.hl.dateutil.toFormatString
 import com.hl.utils.onceLastObserve
-import com.hl.utils.setItemTouchHelper
+import com.hl.utils.views.setItemTouchHelper
 import com.hl.popup.showImage
 import com.hl.web.navigateToWeb
 import java.security.SecureRandom

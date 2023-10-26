@@ -1,4 +1,4 @@
-package com.hl.utils
+package com.hl.utils.views
 
 import android.os.Build
 import android.text.Layout
@@ -7,6 +7,7 @@ import android.text.TextDirectionHeuristics
 import android.widget.TextView
 import androidx.annotation.Px
 import androidx.annotation.RequiresApi
+import com.hl.utils.BuildVersionUtil
 
 /**
  * @author 张磊  on  2023/01/10 at 13:00

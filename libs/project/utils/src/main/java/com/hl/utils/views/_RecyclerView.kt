@@ -1,4 +1,4 @@
-package com.hl.utils
+package com.hl.utils.views
 
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView

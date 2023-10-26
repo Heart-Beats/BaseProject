@@ -1,4 +1,4 @@
-package com.hl.utils
+package com.hl.utils.views
 
 import android.graphics.Paint
 import android.widget.TextView
