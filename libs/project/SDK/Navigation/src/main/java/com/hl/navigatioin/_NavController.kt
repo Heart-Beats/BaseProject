@@ -16,7 +16,7 @@ import java.util.regex.Pattern
  * Email: 913305160@qq.com
  */
 
-const val TAG = "NavController"
+internal val TAG = "NavController"
 
 /**
  * 确保返回堆栈顶部最多只有给定目的地的一个副本, 即多次导航同一目的地，栈顶只会存在一个目的地

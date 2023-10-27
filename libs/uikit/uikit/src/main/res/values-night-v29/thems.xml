@@ -49,5 +49,6 @@
         <item name="uikit_textAreaStyle">@style/UiKit.TextAreaStyle</item>
         <item name="uikit_progressImageViewStyle">@style/UiKit.ProgressImageViewStyle</item>
         <item name="uikit_uploadPicImageGridLayout">@style/UiKit.UploadPicImageGridLayout</item>
+        <item name="uikit_shapeEditTextWithDeleteStyle">@style/UiKit.ShapeEditTextWithDeleteStyle</item>
     </style>
 </resources>
