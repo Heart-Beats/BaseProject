@@ -1,5 +1,5 @@
 def isPublishRelease = false
-def ARTIFACT_VERSION = '0.0.2'
+def ARTIFACT_VERSION = '0.0.3'
 
 ext {
     myGroupId = 'com.hl'

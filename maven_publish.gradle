@@ -205,6 +205,11 @@ def setDependencyNode(root, Scope scope, groupId, artifactId, version, Closure c
 def getDependencyNode(scope, groupId, artifactId, version, Closure closure) {
     Node node = new Node(null, 'dependency')
     node.appendNode('scope', scope)
+    if (scope == Scope.IMPORT.pomScope) {
+        // 引入另外的 dependencyManagement 时指定类型
+        node.appendNode('type', 'pom')
+    }
+
     node.appendNode('groupId', groupId)
     node.appendNode('artifactId', artifactId)
     if (version != null) {

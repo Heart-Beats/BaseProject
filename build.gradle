@@ -12,8 +12,10 @@ plugins {
     alias libs.plugins.kotlin.android apply false
 }
 
-
-apply from: 'maven_publish.gradle'
+if (!isUseRemoteDependencies.toBoolean()) {
+    // 使用远程依赖时无多构建，找不到相关构建库，因此不用引入
+    apply from: 'maven_publish.gradle'
+}
 
 task clean(type: Delete) {
     if (rootProject.buildDir.exists()) {

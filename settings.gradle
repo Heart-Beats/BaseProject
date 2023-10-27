@@ -55,9 +55,13 @@ include ':app', ':benchmark'
 
 def includeBuildProjects = ['libs/project', 'libs/uikit']
 
-includeBuildProjects.forEach {
-    println "开始添加构建 -------------> $it"
-    includeBuild(it)
+
+// 是否使用远程依赖库方式
+if (!isUseRemoteDependencies.toBoolean()) {
+    includeBuildProjects.forEach {
+        println "开始添加构建 -------------> $it"
+        includeBuild(it)
+    }
 }
 
 //setting.gradle 加载和评估配置阶段完成
