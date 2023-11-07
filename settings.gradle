@@ -41,7 +41,7 @@ dependencyResolutionManagement {
     versionCatalogs {
         // 默认创建的 libs 进行配置
         libs {
-            from("com.hl:catalog:1.0.1")
+            from("com.hl:catalog:1.0.2")
 
             version("androidGradlePlugin", "8.0.1")
             version("kotlin", "1.8.20")
