@@ -46,7 +46,7 @@ android {
         }
         debug {
             // 是否需要混淆，默认使用 R8 优化
-            def needMinify = true
+            def needMinify = false
 
             if (needMinify) {
                 // 生成 baseline 文件时使用，避免切换 variant
