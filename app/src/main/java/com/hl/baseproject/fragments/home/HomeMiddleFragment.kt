@@ -5,7 +5,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import com.elvishew.xlog.XLog
-import com.hl.arch.mvvm.vm.activityViewModels
+import androidx.fragment.app.activityViewModels
 import com.hl.baseproject.R
 import com.hl.baseproject.base.BaseFragment
 import com.hl.baseproject.databinding.FragmentHomeMiddleBinding

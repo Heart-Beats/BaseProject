@@ -10,6 +10,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import com.hl.mmkvsharedpreferences.getApp
 
 /**
  * @author  张磊  on  2023/07/05 at 17:47
@@ -134,26 +135,7 @@ fun Fragment.sendLocalBroadcast(intent: Intent, isSync: Boolean = false) {
  * @param onReceive             收到广播的回调
  */
 fun FragmentActivity.registerLocalReceiver(vararg actions: String, onReceive: (BroadcastReceiver, Intent) -> Unit) {
-	val intentFilter = IntentFilter()
-	actions.forEach { intentFilter.addAction(it) }
-
-	val receiver = object : BroadcastReceiver() {
-		override fun onReceive(context: Context, intent: Intent) {
-			onReceive(this, intent)
-		}
-	}
-
-	val localBroadcastManager = LocalBroadcastManager.getInstance(this)
-
-	this.lifecycle.addObserver(object : DefaultLifecycleObserver {
-		override fun onCreate(owner: LifecycleOwner) {
-			localBroadcastManager.registerReceiver(receiver, intentFilter)
-		}
-
-		override fun onDestroy(owner: LifecycleOwner) {
-			localBroadcastManager.unregisterReceiver(receiver)
-		}
-	})
+	(this as LifecycleOwner).registerLocalReceiver(actions = actions, onReceive = onReceive)
 }
 
 /**
@@ -163,6 +145,16 @@ fun FragmentActivity.registerLocalReceiver(vararg actions: String, onReceive: (B
  * @param onReceive             收到广播的回调
  */
 fun Fragment.registerLocalReceiver(vararg actions: String, onReceive: (BroadcastReceiver, Intent) -> Unit) {
+	this.viewLifecycleOwner.registerLocalReceiver(actions = actions, onReceive = onReceive)
+}
+
+/**
+ * Activity 或 Fragment 注册本地广播
+ *
+ * @param actions               注册广播的 action
+ * @param onReceive             收到广播的回调
+ */
+fun LifecycleOwner.registerLocalReceiver(vararg actions: String, onReceive: (BroadcastReceiver, Intent) -> Unit) {
 	val intentFilter = IntentFilter()
 	actions.forEach { intentFilter.addAction(it) }
 
@@ -172,7 +164,7 @@ fun Fragment.registerLocalReceiver(vararg actions: String, onReceive: (Broadcast
 		}
 	}
 
-	val localBroadcastManager = LocalBroadcastManager.getInstance(requireContext())
+	val localBroadcastManager = LocalBroadcastManager.getInstance(getApp())
 
 	this.lifecycle.addObserver(object : DefaultLifecycleObserver {
 		override fun onCreate(owner: LifecycleOwner) {

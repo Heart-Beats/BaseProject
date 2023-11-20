@@ -1,5 +1,6 @@
 package com.hl.arch.mvvm.vm
 
+import android.content.Intent
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asFlow
@@ -8,6 +9,8 @@ import com.hl.arch.api.ApiEvent
 import com.hl.arch.api.IApiEventProvider
 import com.hl.arch.mvvm.api.event.setSafeValue
 import com.hl.arch.mvvm.liveData.EventLiveData
+import com.hl.mmkvsharedpreferences.getApp
+import com.hl.utils.sendLocalBroadcast
 
 /**
  * @author  张磊  on  2023/05/30 at 11:32
@@ -15,6 +18,14 @@ import com.hl.arch.mvvm.liveData.EventLiveData
  */
 abstract class DispatcherVM : ViewModel(), IApiEventProvider {
 	private val tag = "DispatcherVM"
+
+	internal companion object {
+		/**
+		 * viewModel 正在创建标识
+		 */
+		const val VIEW_MODEL_ON_CREATE = "view_model_on_create"
+		const val VIEW_MODEL_NAME = "view_model_name"
+	}
 
 	/**
 	 * 接口请求事件 ------ LiveData
@@ -25,6 +36,16 @@ abstract class DispatcherVM : ViewModel(), IApiEventProvider {
 	 * 接口请求事件 ------ Flow
 	 */
 	val apiEventFailedFlow = apiEventFailedLiveData.asFlow()
+
+
+	init {
+		val intent = Intent(VIEW_MODEL_ON_CREATE).also {
+			it.putExtra(VIEW_MODEL_NAME, this.javaClass.name)
+		}
+		// viewModel 创建时发送已创建的广播
+		getApp().sendLocalBroadcast(intent)
+	}
+
 
 	/**
 	 * 该方法用来分发请求完成后对应的事件
