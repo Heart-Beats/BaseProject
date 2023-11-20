@@ -3,7 +3,7 @@ package com.hl.baseproject.fragments.home
 import android.graphics.Color
 import android.os.Bundle
 import androidx.navigation.fragment.FragmentNavigator
-import com.hl.arch.mvvm.vm.activityViewModels
+import androidx.fragment.app.activityViewModels
 import com.hl.banner.AdsIndicator
 import com.hl.baseproject.base.BaseFragment
 import com.hl.baseproject.databinding.FragmentHomeBinding

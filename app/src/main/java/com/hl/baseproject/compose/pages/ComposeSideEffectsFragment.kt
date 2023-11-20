@@ -3,12 +3,15 @@ package com.hl.baseproject.compose.pages
 import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MenuOpen
@@ -26,6 +29,7 @@ import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -38,12 +42,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.hl.arch.mvvm.vm.viewModels
+import androidx.fragment.app.viewModels
 import com.hl.baseproject.R
 import com.hl.baseproject.base.BaseComposeFragment
 import com.hl.baseproject.base.FlowBaseViewModel
 import com.hl.baseproject.compose.AppComposeTheme
+import com.hl.baseproject.compose.widgets.RoundImageText
 import com.hl.baseproject.compose.widgets.SmartImage
+import com.hl.baseproject.compose.widgets.Spacer
 import com.hl.baseproject.repository.network.bean.Article
 import com.hl.uikit.toast
 import com.hl.utils.getAppName
@@ -94,7 +100,8 @@ class ComposeSideEffectsFragment : BaseComposeFragment() {
 				showSplashScreen = false
 			}
 		} else {
-			HomeScreen()
+			val articleList = viewModel.suggestedDestinations.collectAsState()
+			HomeScreen(articleList.value)
 		}
 	}
 
@@ -128,7 +135,7 @@ class ComposeSideEffectsFragment : BaseComposeFragment() {
 	@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 	@OptIn(ExperimentalMaterial3Api::class)
 	@Composable
-	fun HomeScreen() {
+	fun HomeScreen(articleList: List<Article>) {
 		val rememberDrawerState = rememberDrawerState(DrawerValue.Closed)
 		val rememberCoroutineScope = rememberCoroutineScope()
 
@@ -168,7 +175,21 @@ class ComposeSideEffectsFragment : BaseComposeFragment() {
 				}
 			}, contentWindowInsets = WindowInsets(top = 0)) {
 
-				Text(text = "我是主页", modifier = Modifier.padding(it))
+				Column {
+					Text(text = "我是主页", modifier = Modifier.padding(it))
+
+					Spacer(height = 10.dp)
+
+					LazyVerticalGrid(columns = GridCells.Fixed(3)) {
+						this.items(articleList.size, contentType = { "文章列表" }) {
+							val article = articleList[it]
+							RoundImageText(
+								imageModel = article.envelopePic ?: "",
+								imageDescription = article.title ?: ""
+							)
+						}
+					}
+				}
 			}
 		}
 	}
