@@ -1,3 +1,5 @@
+<!DOCTYPE resources [<!ENTITY appname "BaseProject">]>
+
 <resources>
-    <string name="app_name">BaseProject</string>
+    <string name="app_name">&appname;</string>
 </resources>
