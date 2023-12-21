@@ -1,6 +1,7 @@
 package com.hl.api.interceptor
 
 import okhttp3.HttpUrl
+import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import okhttp3.Interceptor
 import okhttp3.Request
 import okhttp3.Response
@@ -29,7 +30,7 @@ class MultiBaseUrlInterceptor(val onDomainGetBaseUrl: (domainName: String) -> St
 		val originalRequest: Request = chain.request()
 
 		//获取老的url
-		val oldUrl: HttpUrl = originalRequest.url()
+		val oldUrl: HttpUrl = originalRequest.url
 
 		//获取originalRequest的创建者builder
 		val builder: Request.Builder = originalRequest.newBuilder()
@@ -46,12 +47,12 @@ class MultiBaseUrlInterceptor(val onDomainGetBaseUrl: (domainName: String) -> St
 			}
 
 
-			val newHttpUrl = HttpUrl.parse(domainCacheMap[this])?.run {
+			val newHttpUrl = domainCacheMap[this]?.toHttpUrlOrNull()?.run {
 				// 根据新的 baseUrl 替换全局的 baseUrl 部分
 				oldUrl.newBuilder()
-					.scheme(this.scheme()) //http协议如：http或者https
-					.host(this.host()) //主机地址
-					.port(this.port()) //端口
+					.scheme(this.scheme) //http协议如：http或者https
+					.host(this.host) //主机地址
+					.port(this.port) //端口
 					.build()
 
 			} ?: oldUrl
