@@ -1,0 +1,45 @@
+// 是否修改构建 apk 输出目录
+def isModifyBuildOutputDirectory = true
+
+android.applicationVariants.all { variant ->
+    variant.outputs.all { output ->
+        output.outputFileName = outputFileName.replace(".apk", "_" + new Date().format("yyyyMMddHHmm") + "_" + variant.versionName + ".apk")
+
+        if (!isModifyBuildOutputDirectory) {
+            // 原有的构建输出路径
+            def outputDirectory = output.outputFile.parentFile
+            variant.packageApplicationProvider.get().outputDirectory = outputDirectory
+        } else {
+            // 修改生成 apk 的位置
+            def outputDirectory = new File(rootProject.projectDir, "apk/")
+            variant.packageApplicationProvider.get().outputDirectory = outputDirectory
+        }
+    }
+}
+
+tasks.whenTaskAdded { Task task ->
+    if (!isModifyBuildOutputDirectory) return
+
+    // 注意：如果是有多个 flavor，则为 merge“Flavor”DebugNativeLibs 的形式
+    String taskName = task.name
+
+    if (taskName.matches('^assemble.*[(Debug)|(Release)]$')) {
+        task.doLast {
+            println "------------------- ${taskName} end -------------------"
+
+            // 将打包生成的 apk 复制到 原有的构建目录下
+            String variantName = taskName.split('assemble').last()
+            def flavorName = variantName.split("(Debug)|(Release)")[0]
+            def buildType = variantName.minus(flavorName)
+
+            // 修改生成 apk 的位置
+            def outputDirectory = new File(rootProject.projectDir, "apk/")
+            def buildApkOutputDirectory = new File(project.buildDir, "outputs/apk/${flavorName}/$buildType")
+            println "------------ 开始拷贝 ${outputDirectory} 到 ${buildApkOutputDirectory} 下  ----------"
+            copy {
+                from outputDirectory
+                into buildApkOutputDirectory
+            }
+        }
+    }
+}
