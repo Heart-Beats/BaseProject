@@ -22,18 +22,33 @@ tasks.configureEach { Task task ->
     String taskName = task.name
 
     if (taskName.matches('^assemble.*[(Debug)|(Release)]$')) {
-        String variantName = taskName.split('assemble').last()
+
+        def taskNameSplit = taskName.split('assemble')
+        String variantName = taskNameSplit.size() > 0 ? taskNameSplit.last() : ''
+
+        def variantNameSplit = variantName.split("(Debug)|(Release)")
+        String flavorName = variantNameSplit.size() > 0 ? variantNameSplit.first() : ''
+
+        String buildType = variantName - flavorName
+
+        def apkListingFileRedirectTask = tasks.findByName("create${variantName}ApkListingFileRedirect")
+
+        if (buildType.isBlank() || apkListingFileRedirectTask == null) {
+            println "$task 非编译任务，无需修改打包输出目录"
+            return
+        }
+
+        if (apkListingFileRedirectTask != null) {
+            // 修改 apkListingFileRedirect 任务与 assembleVariantTask 任务的顺序
+            apkListingFileRedirectTask.mustRunAfter(task)
+        }
 
         task.doLast {
             println "------------------- ${taskName} end -------------------"
 
-            def flavorName = variantName.split("(Debug)|(Release)")[0]
-            def buildType = variantName - flavorName
-
             // 修改生成 apk 的位置
             def outputDirectory = new File(rootProject.projectDir, "apk/")
 
-            def apkListingFileRedirectTask = tasks.named("create${variantName}ApkListingFileRedirect").get()
             File listingFile = apkListingFileRedirectTask.property("listingFile").asFile.get()
             // apk 原始输出位置
             def buildApkOutputDirectory = listingFile.parentFile
@@ -45,12 +60,6 @@ tasks.configureEach { Task task ->
                 from outputDirectory
                 into buildApkOutputDirectory
             }
-        }
-
-        // 修改 apkListingFileRedirect 任务与 assembleVariantTask 任务的顺序
-        def apkListingFileRedirectTask = tasks.named("create${variantName}ApkListingFileRedirect").get()
-        if (apkListingFileRedirectTask != null) {
-            apkListingFileRedirectTask.mustRunAfter(task)
         }
     }
 }
