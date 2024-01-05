@@ -13,7 +13,9 @@ import com.hl.utils.getColorByRes
  * @author  张磊  on  2023/06/15 at 17:38
  * Email: 913305160@qq.com
  */
-abstract class BaseNavigationFragment : BaseFragment(), NavigationFragmentDelegate by BaseNavigationFragmentDelegate() {
+abstract class BaseNavigationFragment(
+	private val navigationFragmentDelegate: NavigationFragmentDelegate = BaseNavigationFragmentDelegate()
+) : BaseFragment(), NavigationFragmentDelegate by navigationFragmentDelegate {
 
 	protected val TAG = this.javaClass.simpleName
 

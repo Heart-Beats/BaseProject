@@ -23,12 +23,6 @@ android {
     }
 
     signingConfigs {
-        debug {
-            storeFile file('./license/BaseProject.jks')
-            storePassword 'android123456'
-            keyPassword 'android123456'
-            keyAlias 'BaseProject'
-        }
         realse {
             storeFile file('./license/BaseProject.jks')
             storePassword 'android123456'
@@ -61,7 +55,7 @@ android {
                 proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             }
 
-            signingConfig signingConfigs.debug
+            signingConfig signingConfigs.realse
         }
         release {
             // 1、是否进行混淆，默认使用 R8 优化

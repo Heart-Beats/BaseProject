@@ -87,10 +87,7 @@ class BaseViewModelDelegate : ViewModelDelegate {
 		val onReceive: (BroadcastReceiver, Intent) -> Unit = { _, intent ->
 			if (intent.action == DispatcherVM.VIEW_MODEL_ON_CREATE) {
 				val viewModelMap =
-					ReflectHelper(ViewModelStore::class.java).getFiledValue<Map<String, ViewModel>>(
-						viewModelStore,
-						"map"
-					)
+					ReflectHelper(ViewModelStore::class.java).getFiledValue<Map<String, ViewModel>>(viewModelStore, "map")
 
 				viewModelMap?.values
 					?.filter {
