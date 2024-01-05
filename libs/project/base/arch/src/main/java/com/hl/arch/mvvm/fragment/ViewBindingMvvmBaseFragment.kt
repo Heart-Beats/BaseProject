@@ -11,8 +11,9 @@ import com.hl.ui.bindingDelegate.ViewBindingDelegate
  * @Author  张磊  on  2021/03/02 at 12:44
  * Email: 913305160@qq.com
  */
-abstract class ViewBindingMvvmBaseFragment<Binding : ViewBinding> : MvvmBaseFragment(),
-    ViewBindingDelegate<Binding> by FragmentBindingDelegate() {
+abstract class ViewBindingMvvmBaseFragment<Binding : ViewBinding>(
+    private val fragmentBindingDelegate: ViewBindingDelegate<Binding> = FragmentBindingDelegate()
+) : MvvmBaseFragment(), ViewBindingDelegate<Binding> by fragmentBindingDelegate {
 
     override val layoutResId: Int = 0
 

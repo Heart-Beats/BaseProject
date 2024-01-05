@@ -78,8 +78,10 @@ import java.io.File
  * Email: 913305160@qq.com
  */
 
-class IStandSdkImpl(private val webViewFragment: Fragment, val bridgeWebView: BridgeWebView) :
-	IStandSdk, ISdkRegister by ISdkHandlerProxy(bridgeWebView) {
+class IStandSdkImpl(
+	private val webViewFragment: Fragment, private val bridgeWebView: BridgeWebView,
+	private val sdkRegister: ISdkRegister = ISdkHandlerProxy(bridgeWebView)
+) : IStandSdk, ISdkRegister by sdkRegister {
 
 	/**
 	 * 当前 WebViewFragment 依附的 Activity

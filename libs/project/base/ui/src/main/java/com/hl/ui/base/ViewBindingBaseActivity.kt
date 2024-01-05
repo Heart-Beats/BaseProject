@@ -11,8 +11,9 @@ import com.hl.ui.bindingDelegate.ViewBindingDelegate
  * @Author  张磊  on  2021/03/02 at 15:36
  * Email: 913305160@qq.com
  */
-abstract class ViewBindingBaseActivity<Binding : ViewBinding> : BaseActivity(),
-    ViewBindingDelegate<Binding> by ActivityBindingDelegate() {
+abstract class ViewBindingBaseActivity<Binding : ViewBinding>(
+    private val activityBindingDelegate: ViewBindingDelegate<Binding> = ActivityBindingDelegate()
+) : BaseActivity(), ViewBindingDelegate<Binding> by activityBindingDelegate {
 
     override val layoutResId: Int = 0
 

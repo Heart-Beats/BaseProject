@@ -1,17 +1,17 @@
-package com.hl.arch.mvvm.fragment
+package com.hl.arch.mvvm.activity
 
 import android.os.Bundle
-import com.hl.arch.base.BaseNavigationFragment
+import com.hl.arch.base.BaseActivity
 import com.hl.arch.mvvm.vmDelegate.BaseViewModelDelegate
 import com.hl.arch.mvvm.vmDelegate.ViewModelDelegate
 
 /**
- * @Author  张磊  on  2020/08/28 at 18:35
+ * @author  张磊  on  2024/01/05 at 10:49
  * Email: 913305160@qq.com
  */
-abstract class MvvmBaseFragment(
+abstract class MvvmBaseActivity(
 	private val viewModelDelegate: ViewModelDelegate = BaseViewModelDelegate()
-) : BaseNavigationFragment(), ViewModelDelegate by viewModelDelegate {
+) : BaseActivity(), ViewModelDelegate by viewModelDelegate {
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		registerOnViewModelCreated(this)
