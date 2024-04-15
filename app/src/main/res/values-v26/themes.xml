@@ -1,14 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Base application theme. -->
-    <style name="Theme.BaseProject" parent="UiKit.AppTheme"></style>
 
-    <!-- 应用启动时的主题设置 -->
     <style name="Theme.SplashScreen" parent="Theme.BaseProject">
         <item name="android:windowDisablePreview">false</item>
+
         <!-- 全屏显示 -->
         <item name="android:windowFullscreen">true</item>
 
         <!-- 此形式设置的背景，会在启动时显示，进入 LauncherActivity 不会消失而是作为整个 window 的背景 -->
-        <item name="android:windowBackground">@raw/bg_folwer</item>
+        <!--<item name="android:windowBackground">@raw/bg_folwer</item>-->
+
+        <!-- 此形式设置的背景，会在启动时显示，进入 LauncherActivity 后会消失 -->
+        <item name="android:windowSplashscreenContent">@raw/bg_folwer</item>
     </style>
 </resources>
