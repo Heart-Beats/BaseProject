@@ -20,13 +20,13 @@
 
         <meta-data
             android:name="design_width_in_dp"
-            android:value="360"/>
+            android:value="360" />
         <meta-data
             android:name="design_height_in_dp"
-            android:value="640"/>
-
-        <!--可配置以启用 Macrobenchmark 分析-->
-        <profileable android:shell="true" tools:targetApi="29" />
+            android:value="640" /> <!-- 可配置以启用 Macrobenchmark 分析 -->
+        <profileable
+            android:shell="true"
+            tools:targetApi="29" />
 
         <activity
             android:name=".TestActivity2"
@@ -38,16 +38,26 @@
             android:configChanges="keyboard|orientation|screenSize"
             android:exported="false"
             android:screenOrientation="portrait" />
+
         <activity
-            android:name=".MainActivity"
+            android:name=".SplashActivity"
             android:exported="true"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.SplashScreen">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity> <!-- 微信的 SDK 限制了回调类包名必须是${applicationId}.wxapi, 因此这里使用 activity-alias 标签 -->
+        </activity>
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:screenOrientation="portrait" />
+
+        <!-- 微信的 SDK 限制了回调类包名必须是${applicationId}.wxapi, 因此这里使用 activity-alias 标签 -->
         <!-- 微信分享 -->
         <activity-alias
             android:name=".wxapi.WXEntryActivity"
@@ -63,7 +73,9 @@
             android:process=":pluginTest" />
         <service
             android:name=".shadow.pps.ZKYPluginProcessService"
-            android:process=":pluginZKY" /> <!-- dynamic activity 注册： 注意 configChanges 需要全注册，theme 需要注册成透明 -->
+            android:process=":pluginZKY" />
+
+        <!-- dynamic activity 注册： 注意 configChanges 需要全注册，theme 需要注册成透明 -->
         <activity
             android:name="com.hl.my_runtime.PluginDefaultProxyActivity"
             android:configChanges="mcc|mnc|locale|touchscreen|keyboard|keyboardHidden|navigation|screenLayout|fontScale|uiMode|orientation|screenSize|smallestScreenSize|layoutDirection"
@@ -103,7 +115,9 @@
             android:process=":pluginMulti"
             android:screenOrientation="portrait"
             android:theme="@style/PluginContainerActivity"
-            tools:replace="process" /> <!-- dynamic activity注册 end -->
+            tools:replace="process" />
+        <!-- dynamic activity注册 end -->
+
         <provider
             android:name="com.tencent.shadow.core.runtime.container.PluginContainerContentProvider"
             android:authorities="${applicationId}.contentprovider.authority.dynamic"
