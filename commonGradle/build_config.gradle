@@ -5,6 +5,7 @@ ext {
 
 apply {
     from new File(commonGradleFile, "task_config.gradle")
+    from new File(commonGradleFile, "apk_build.gradle")
 }
 
 android {

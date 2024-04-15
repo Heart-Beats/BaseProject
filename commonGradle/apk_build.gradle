@@ -15,50 +15,53 @@ android.applicationVariants.all { variant ->
     }
 }
 
-tasks.configureEach { Task task ->
-    if (!isModifyBuildOutputDirectory) return
+project.afterEvaluate {
+    tasks.configureEach { Task task ->
+        if (!isModifyBuildOutputDirectory) return
 
-    // 注意：如果是有多个 flavor，则为 merge“Flavor”DebugNativeLibs 的形式
-    String taskName = task.name
+        // 注意：如果是有多个 flavor，则为 merge“Flavor”DebugNativeLibs 的形式
+        String taskName = task.name
 
-    if (taskName.matches('^assemble.*[(Debug)|(Release)]$')) {
+        if (taskName.matches('^assemble.*[(Debug)|(Release)]$')) {
 
-        def taskNameSplit = taskName.split('assemble')
-        String variantName = taskNameSplit.size() > 0 ? taskNameSplit.last() : ''
+            def taskNameSplit = taskName.split('assemble')
+            String variantName = taskNameSplit.size() > 0 ? taskNameSplit.last() : ''
 
-        def variantNameSplit = variantName.split("(Debug)|(Release)")
-        String flavorName = variantNameSplit.size() > 0 ? variantNameSplit.first() : ''
+            def variantNameSplit = variantName.split("(Debug)|(Release)")
+            String flavorName = variantNameSplit.size() > 0 ? variantNameSplit.first() : ''
 
-        String buildType = variantName - flavorName
+            String buildType = variantName - flavorName
 
-        def apkListingFileRedirectTask = tasks.findByName("create${variantName}ApkListingFileRedirect")
+            def apkListingFileRedirectTask = tasks.findByName("create${variantName}ApkListingFileRedirect")
 
-        if (buildType.isBlank() || apkListingFileRedirectTask == null) {
-            println "$task 非编译任务，无需修改打包输出目录"
-            return
-        }
+            if (buildType.isBlank() || apkListingFileRedirectTask == null) {
+                println "$task 非编译任务，无需修改打包输出目录"
+                return
+            }
 
-        if (apkListingFileRedirectTask != null) {
-            // 修改 apkListingFileRedirect 任务与 assembleVariantTask 任务的顺序
-            apkListingFileRedirectTask.mustRunAfter(task)
-        }
+            if (apkListingFileRedirectTask != null) {
+                // 修改 apkListingFileRedirect 任务与 assembleVariantTask 任务的顺序
+                println "$apkListingFileRedirectTask 修改为在 $task 之后执行"
+                apkListingFileRedirectTask.mustRunAfter(task)
+            }
 
-        task.doLast {
-            println "------------------- ${taskName} end -------------------"
+            task.doLast {
+                println "------------------- ${taskName} end -------------------"
 
-            // 修改生成 apk 的位置
-            def outputDirectory = new File(rootProject.projectDir, "apk/")
+                // 修改生成 apk 的位置
+                def outputDirectory = new File(rootProject.projectDir, "apk/")
 
-            File listingFile = apkListingFileRedirectTask.property("listingFile").asFile.get()
-            // apk 原始输出位置
-            def buildApkOutputDirectory = listingFile.parentFile
+                File listingFile = apkListingFileRedirectTask.property("listingFile").asFile.get()
+                // apk 原始输出位置
+                def buildApkOutputDirectory = listingFile.parentFile
 
-            println "------------ 开始拷贝 ${outputDirectory} 到 ${buildApkOutputDirectory} 下  ----------"
+                println "------------ 开始拷贝 ${outputDirectory} 到 ${buildApkOutputDirectory} 下  ----------"
 
-            // 将打包生成的 apk 复制到 原有的构建目录
-            copy {
-                from outputDirectory
-                into buildApkOutputDirectory
+                // 将打包生成的 apk 复制到 原有的构建目录
+                copy {
+                    from outputDirectory
+                    into buildApkOutputDirectory
+                }
             }
         }
     }
