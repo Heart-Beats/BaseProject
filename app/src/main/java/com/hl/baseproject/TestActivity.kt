@@ -7,6 +7,9 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.hl.baseproject.databinding.ActivityTestBinding
+import com.hl.rvadapter.BaseMultiAdapter
+import com.hl.rvadapter.BaseSingleAdapter
+import com.hl.rvadapter.itemprovider.BaseItemProvider
 import com.hl.ui.base.ViewBindingBaseActivity
 import com.hl.ui.utils.dpInt
 import com.hl.ui.utils.onClick
@@ -28,7 +31,7 @@ class TestActivity : ViewBindingBaseActivity<ActivityTestBinding>() {
 
 		this.testRecyclerView2.init2(data)
 
-		val adapter = testRecyclerView2.adapter as com.hl.rvadapter.BaseSingleAdapter<String>
+		val adapter = testRecyclerView2.adapter as BaseSingleAdapter<String>
 
 
 		var count = 0
@@ -48,10 +51,10 @@ class TestActivity : ViewBindingBaseActivity<ActivityTestBinding>() {
 	}
 
 	private fun RecyclerView.init(data: MutableList<String>) {
-		val baseMultiAdapter = object : com.hl.rvadapter.BaseMultiAdapter<String>(mutableListOf()) {
+		val baseMultiAdapter = object : BaseMultiAdapter<String>(mutableListOf()) {
 
-			override fun registerItemProvider(position: Int, itemData: String): com.hl.rvadapter.itemprovider.BaseItemProvider<out String> {
-				return object : com.hl.rvadapter.itemprovider.BaseItemProvider<String>() {
+			override fun registerItemProvider(position: Int, itemData: String): BaseItemProvider<out String> {
+				return object : BaseItemProvider<String>() {
 
 					override val layoutId: Int = R.layout.item_text
 					override val itemViewType: Int = 9
@@ -79,7 +82,7 @@ class TestActivity : ViewBindingBaseActivity<ActivityTestBinding>() {
 	}
 
 	private fun RecyclerView.init2(data: MutableList<String>) {
-		val adapter = object : com.hl.rvadapter.BaseSingleAdapter<String>(mutableListOf()) {
+		val adapter = object : BaseSingleAdapter<String>(mutableListOf()) {
 
 			override val itemLayout: Int = R.layout.item_text_2
 

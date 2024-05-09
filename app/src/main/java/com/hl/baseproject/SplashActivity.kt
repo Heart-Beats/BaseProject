@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.core.view.updateLayoutParams
 import com.hl.baseproject.databinding.ActivitySplashBinding
 import com.hl.ui.base.ViewBindingBaseActivity
+import com.hl.ui.utils.onClick
 import com.hl.ui.utils.startAct
 import com.hl.uikit.utils.getScreenHeight
 import com.hl.uikit.utils.getScreenWidth
@@ -26,6 +27,10 @@ class SplashActivity : ViewBindingBaseActivity<ActivitySplashBinding>() {
 		}
 
 		splashVideoView.setOnCompletionListener {
+			startAct<MainActivity>()
+		}
+
+		this.btnSkip.onClick {
 			startAct<MainActivity>()
 		}
 	}

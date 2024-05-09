@@ -1,9 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.hl.baseproject.FullVideoView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/video_view"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/video_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".SplashActivity">
 
-</com.hl.baseproject.FullVideoView>
+    <com.hl.baseproject.FullVideoView
+        android:id="@+id/video_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </com.hl.baseproject.FullVideoView>
+
+    <com.hjq.shape.view.ShapeButton
+        android:id="@+id/btn_skip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center|bottom"
+        android:layout_marginBottom="50dp"
+        android:gravity="center"
+        android:paddingHorizontal="50dp"
+        android:paddingVertical="10dp"
+        android:text="跳过"
+        android:textSize="18sp"
+        app:shape_radius="5dp"
+        app:shape_solidGradientCenterColor="@color/cyan"
+        app:shape_solidGradientEndColor="@color/corn_flower_blue"
+        app:shape_solidGradientStartColor="@color/turquoise"
+        app:shape_textCenterColor="@color/image_color_red"
+        app:shape_textEndColor="@color/orange_red"
+        app:shape_textStartColor="@color/_FF5E60C7"
+        app:shape_type="rectangle" />
+</FrameLayout>
