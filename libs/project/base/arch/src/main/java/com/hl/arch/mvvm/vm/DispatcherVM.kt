@@ -42,7 +42,7 @@ abstract class DispatcherVM : ViewModel(), IApiEventProvider {
 		val intent = Intent(VIEW_MODEL_ON_CREATE).also {
 			it.putExtra(VIEW_MODEL_NAME, this.javaClass.name)
 		}
-		// viewModel 创建时发送已创建的广播
+		// viewModel 初始化时发送已创建的广播
 		getApp().sendLocalBroadcast(intent)
 	}
 
@@ -74,6 +74,7 @@ abstract class DispatcherVM : ViewModel(), IApiEventProvider {
 					onFail?.invoke(code(), message())
 				}
 			}
+			else -> {}
 		}
 	}
 }

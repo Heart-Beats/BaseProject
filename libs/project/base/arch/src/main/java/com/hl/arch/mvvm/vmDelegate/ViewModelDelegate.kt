@@ -28,6 +28,8 @@ import kotlinx.coroutines.flow.Flow
  */
 interface ViewModelDelegate {
 
+	var lifecycleOwnerName: String
+
 	/**
 	 * 注册 ViewModel 创建的广播
 	 *
@@ -38,36 +40,38 @@ interface ViewModelDelegate {
 	/**
 	 * ViewModel 创建完成
 	 */
-	fun <VM> onViewModelCreated(vm: VM, lifecycleOwner: LifecycleOwner)
+	fun <VM> onViewModelCreated(vm: VM, lifecycleOwner: LifecycleOwner) {
+		XLog.d("$lifecycleOwnerName onViewModelCreated: $vm")
+	}
 
 	/**
-	 * 重写处理  api 请求相关事件, 比如： UiShowLoading， UiShowException， UiDismissLoading
+	 * 重写处理  api 请求相关事件, 可见 [com.hl.arch.api.ApiEvent.Failed]
 	 */
 	fun onLiveDataVMCreated(liveDataVM: LiveDataVM) {
-		XLog.d("onLiveDataVMCreated --------->$liveDataVM")
+		XLog.d("$lifecycleOwnerName onLiveDataVMCreated --------->$liveDataVM")
 	}
 
 
 	/**
-	 * 重写处理  api 请求相关事件, 比如： UiShowLoading， UiShowException， UiDismissLoading
+	 * 重写处理  api 请求相关事件, 可见 [com.hl.arch.api.ApiEvent.Failed]
 	 */
 	fun onFlowVMCreated(flowVM: FlowVM) {
-		XLog.d("onFlowVMCreated --------->$flowVM")
+		XLog.d("$lifecycleOwnerName onFlowVMCreated --------->$flowVM")
 	}
 
 	/********************请求时产生的相关 UI 事件处理*****************************************/
 
 	fun onShowLoading(msg: CharSequence) {
-		XLog.d("onShowLoading: $msg")
+		XLog.d("$lifecycleOwnerName onShowLoading: $msg")
 		getLoadingPopup()?.show()
 	}
 
 	fun onShowError(throwable: Throwable) {
-		XLog.e("onShowError: ", throwable)
+		XLog.e("$lifecycleOwnerName onShowError: ", throwable)
 	}
 
 	fun onDismissLoading() {
-		XLog.d("onDismissLoading: ")
+		XLog.d("$lifecycleOwnerName onDismissLoading: ")
 
 		// 这里需要使用 smartDismiss， 因为若在 show 后很短的时间内收到 dismiss 请求， 会导致弹窗无法正常关闭
 		getLoadingPopup()?.smartDismiss()
@@ -78,9 +82,11 @@ interface ViewModelDelegate {
 class BaseViewModelDelegate : ViewModelDelegate {
 	private val TAG = "BaseViewModelDelegate"
 
+	override var lifecycleOwnerName: String = ""
 
 	override fun LifecycleOwner.registerOnViewModelCreated(viewModelStoreOwner: ViewModelStoreOwner) {
-		Log.d(TAG, "${this.javaClass.simpleName} registerOnViewModelCreated: ")
+		lifecycleOwnerName = this.javaClass.simpleName
+		Log.d(TAG, "$lifecycleOwnerName registerOnViewModelCreated: ")
 
 		val viewModelStore = viewModelStoreOwner.viewModelStore
 
@@ -95,18 +101,19 @@ class BaseViewModelDelegate : ViewModelDelegate {
 						it.javaClass.name == intent.getStringExtra(DispatcherVM.VIEW_MODEL_NAME)
 					}
 					?.forEach { viewModel ->
+						// 页面收到 viewModel 创建的通知， 需要注意 viewModel 创建需要在广播注册之后，目前广播是在页面 onCreate 时注册的
 						onViewModelCreated(viewModel, this)
 					}
 			}
 		}
 
 		// 注册 ViewModel 创建的广播
-		this.registerLocalReceiver(DispatcherVM.VIEW_MODEL_ON_CREATE, onReceive = onReceive)
+		this.lifecycle.registerLocalReceiver(DispatcherVM.VIEW_MODEL_ON_CREATE, onReceive = onReceive)
 	}
 
 
 	override fun <VM> onViewModelCreated(vm: VM, lifecycleOwner: LifecycleOwner) {
-		Log.d(TAG, "${lifecycleOwner.javaClass.simpleName} onViewModelCreated: $vm")
+		super.onViewModelCreated(vm, lifecycleOwner)
 
 		if (vm is LiveDataVM) {
 			vm.eventObserve(lifecycleOwner)
@@ -120,15 +127,12 @@ class BaseViewModelDelegate : ViewModelDelegate {
 		this.uiEvent.onceLastObserve(viewLifecycleOwner) {
 			when (it) {
 				is UiEvent.UiShowLoading -> {
-					Log.d(TAG, "UiShowLoading ---->$it")
 					onShowLoading(it.showMsg)
 				}
 				is UiEvent.UiShowException -> {
-					Log.d(TAG, "UiShowException  ---->$it")
 					onShowError(it.throwable)
 				}
 				is UiEvent.UiDismissLoading -> {
-					Log.d(TAG, "UiDismissLoading  ---->$it")
 					onDismissLoading()
 				}
 			}
