@@ -1,33 +1,7 @@
-pluginManagement {
-    repositories {
-        mavenCentral()
-        maven { url 'https://maven.aliyun.com/repository/public' }
-        maven { url 'https://maven.aliyun.com/repository/google' }
-        maven { url 'https://maven.aliyun.com/repository/gradle-plugin' }
-        maven { url 'https://jitpack.io' }
-        google()  // 阿里云对于有些库会有丢失，加入进行兜底
-        mavenCentral()
-        gradlePluginPortal()
-    }
-}
-
+apply from: '../../commonGradle/gradle_config_optimize.gradle'
 
 dependencyResolutionManagement {
-    /**
-     * FAIL_ON_PROJECT_REPOS:  如果设置此模式，则在项目中直接或通过插件直接声明的任何存储库都将触发构建错误
-     * PREFER_PROJECT:         如果设置此模式，则在项目上声明的任何存储库会覆盖设置中声明的存储库
-     * PREFER_SETTINGS：       如果设置此模式，则项目中使用的存储库只会以设置中声明的为准
-     */
-    repositoriesMode.set(RepositoriesMode.PREFER_PROJECT)
-
     repositories {
-        mavenLocal()
-        maven { url 'https://maven.aliyun.com/repository/public' } // central 和 jcenter 的聚合仓
-        maven { url 'https://maven.aliyun.com/repository/google' }
-        maven { url 'https://jitpack.io' }
-        google()  // 阿里云对于有些库会有丢失，加入进行兜底
-        mavenCentral()
-
         maven {
             name = "GitHubPackages"
             url 'https://maven.pkg.github.com/Heart-Beats/BaseProject'
@@ -41,7 +15,7 @@ dependencyResolutionManagement {
     versionCatalogs {
         // 默认创建的 libs 进行配置
         libs {
-            from("com.hl:catalog:1.0.1")
+            from("com.hl:catalog:1.0.2")
 
             version("androidGradlePlugin", "8.0.1")
             version("kotlin", "1.8.20")
