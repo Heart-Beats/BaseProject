@@ -12,8 +12,13 @@ import com.hl.uikit.utils.getScreenWidth
 
 class SplashActivity : ViewBindingBaseActivity<ActivitySplashBinding>() {
 
-	override fun ActivitySplashBinding.onViewCreated(savedInstanceState: Bundle?) {
+	override fun onCreate(savedInstanceState: Bundle?) {
+		super.onCreate(savedInstanceState)
 
+		this.setStatusBarImmerseFromView(this.viewBinding.videoView)
+	}
+
+	override fun ActivitySplashBinding.onViewCreated(savedInstanceState: Bundle?) {
 		var splashVideoView = this.videoView
 		splashVideoView.setVideoURI(Uri.parse("android.resource://" + packageName + "/" + R.raw.playground_sea))
 		// splashVideoView.setMediaController(MediaController(this@SplashActivity))
