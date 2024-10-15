@@ -36,7 +36,6 @@ class DataViewModel : BaseViewModel() {
 		"https://i.pinimg.com/originals/46/d8/32/46d832ea0eaea0fe48a84e0e2fbb0794.jpg",
 		"https://i.pinimg.com/originals/74/36/fa/7436fa1fc24c43146c7d93d749119f7f.jpg",
 		"https://i.pinimg.com/originals/71/a9/ca/71a9ca4457e0dca85d404a34cd60d0e4.jpg",
-		"https://photo7n.gracg.com/330735_1_e986b8f319211f634da888d66e641069.jpg",
 		"https://i.pinimg.com/originals/38/95/56/389556e038e8078248dfd1a3305f858a.jpg",
 		"https://i.pinimg.com/originals/7b/e7/6d/7be76d77f7e6735a67eff67641cc0a5d.jpg",
 		"https://i.pinimg.com/originals/30/35/b7/3035b770f117a11c5aa6a8a395852e8c.jpg",
