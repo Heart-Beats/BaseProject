@@ -53,6 +53,7 @@
     </FrameLayout>
 
     <FrameLayout
+        android:id="@+id/webview_container"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1">
@@ -64,10 +65,10 @@
             android:visibility="gone"
             tools:visibility="visible" />
 
-        <com.hl.web.widgets.ProgressBridgeWebView
-            android:id="@+id/progress_webView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:overScrollMode="never" />
+        <!--<com.hl.web.widgets.ProgressBridgeWebView-->
+        <!--    android:id="@+id/progress_webView"-->
+        <!--    android:layout_width="match_parent"-->
+        <!--    android:layout_height="match_parent"-->
+        <!--    android:overScrollMode="never" />-->
     </FrameLayout>
 </LinearLayout>

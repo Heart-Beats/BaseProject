@@ -5,15 +5,16 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.content.res.Configuration
+import android.graphics.Bitmap
 import android.graphics.Rect
 import android.net.Uri
 import android.os.Bundle
 import android.text.TextPaint
 import android.view.View
-import android.view.ViewGroup
 import android.webkit.WebResourceRequest
 import android.webkit.WebSettings
 import android.webkit.WebView
+import android.widget.FrameLayout
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import com.elvishew.xlog.XLog
@@ -34,6 +35,7 @@ import com.hl.web.client.MyWebChromeClient
 import com.hl.web.databinding.HlWebFragmentWebViewBinding
 import com.hl.web.helpers.JsBridgeHelper
 import com.hl.web.helpers.logJs
+import com.hl.web.pool.WebViewPoolManager
 import com.hl.web.widgets.ProgressBridgeWebView
 
 
@@ -116,16 +118,30 @@ open class WebViewFragment : ViewBindingBaseFragment<HlWebFragmentWebViewBinding
 	}
 
 	private fun HlWebFragmentWebViewBinding.initWebView(args: WebViewFragmentArgs) {
-		webView = progressWebView.apply {
+		webView = WebViewPoolManager.obtain(requireContext()).apply {
 			setProgressDisplay(onLoadNeedProgress())
 			settings.initWebSetting()
 		}
+		val layoutParams = FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT)
+		webviewContainer.addView(webView, layoutParams)
 
 		webView.webChromeClient = getWebChromeClient(args)
 		webView.webViewClient = getWebViewClient()
 	}
 
 	private fun initTitle(args: WebViewFragmentArgs, title: String?) {
+		if (this.view == null) {
+			return
+		}
+
+		if (this.view != null) {
+			// 回退页面时由于 WebViewPoolManager 中 loadUrl ("about:blank")，因此会收到回调
+			if ("about:blank" == title) {
+				// loadUrl("about:blank") 导致了存在页面历史栈，导致返回时，会加载该页面，回退时直接退出不加载标题
+				return
+			}
+		}
+
 		val paint = TextPaint()
 		paint.textSize = 16F.dp
 
@@ -190,7 +206,7 @@ open class WebViewFragment : ViewBindingBaseFragment<HlWebFragmentWebViewBinding
 		this.displayZoomControls = true
 		this.cacheMode = WebSettings.LOAD_DEFAULT
 
-		//设置是否开启密码保存功能，不建议开启，默认已经做了处理，存在盗取密码的危险
+		// 设置是否开启密码保存功能，不建议开启，默认已经做了处理，存在盗取密码的危险
 		this.savePassword = false
 	}
 
@@ -200,7 +216,7 @@ open class WebViewFragment : ViewBindingBaseFragment<HlWebFragmentWebViewBinding
 	open fun HlWebFragmentWebViewBinding.getWebChromeClient(args: WebViewFragmentArgs) =
 		object : MyWebChromeClient(this@WebViewFragment) {
 
-			//用于全屏渲染视频的View
+			// 用于全屏渲染视频的View
 			private var mCustomView: View? = null
 
 			private var mCustomViewCallback: CustomViewCallback? = null
@@ -220,7 +236,7 @@ open class WebViewFragment : ViewBindingBaseFragment<HlWebFragmentWebViewBinding
 			override fun onShowCustomView(view: View?, callback: CustomViewCallback) {
 				super.onShowCustomView(view, callback)
 
-				//如果view 已经存在，则隐藏
+				// 如果view 已经存在，则隐藏
 				if (mCustomView != null) {
 					callback.onCustomViewHidden()
 					return
@@ -233,7 +249,7 @@ open class WebViewFragment : ViewBindingBaseFragment<HlWebFragmentWebViewBinding
 				videoLayout.visible()
 				videoLayout.bringToFront()
 
-				//设置横屏
+				// 设置横屏
 				requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
 			}
 
@@ -250,7 +266,7 @@ open class WebViewFragment : ViewBindingBaseFragment<HlWebFragmentWebViewBinding
 				} catch (e: Exception) {
 				}
 
-				//竖屏
+				// 竖屏
 				requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
 			}
 		}
@@ -275,6 +291,18 @@ open class WebViewFragment : ViewBindingBaseFragment<HlWebFragmentWebViewBinding
 			return super.shouldOverrideUrlLoading(view, request)
 		}
 
+		override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
+			if ("about:blank" == url) {
+				// 回退页面时由于 WebViewPoolManager 中 loadUrl ("about:blank")，因此会收到回调
+				if (this@WebViewFragment.view != null) {
+					// loadUrl("about:blank") 导致了存在页面历史栈，导致返回时，会加载该页面，回退时直接退出
+					superBackPressed()
+				}
+				return
+			}
+			super.onPageStarted(view, url, favicon)
+		}
+
 		override fun onPageFinished(view: WebView?, url: String?) {
 			super.onPageFinished(view, url)
 			logJs("onH5Load", url)
@@ -293,8 +321,12 @@ open class WebViewFragment : ViewBindingBaseFragment<HlWebFragmentWebViewBinding
 		if (this.webView.canGoBack()) {
 			this.webView.goBack()
 		} else {
-			super.onBackPressed()
+			superBackPressed()
 		}
+
+	private fun superBackPressed() {
+		super.onBackPressed()
+	}
 
 
 	override fun onResume() {
@@ -311,17 +343,7 @@ open class WebViewFragment : ViewBindingBaseFragment<HlWebFragmentWebViewBinding
 	}
 
 	override fun onDestroy() {
-		//有音频播放的 web 页面的销毁逻辑： 在关闭了Activity时，如果 Webview 的音乐或视频，还在播放。就必须销毁 Webview
-		//但是注意：webview 调用 destory 时,webview 仍绑定在 Activity 上，这是由于构建 webview 时传入了该 Activity 的 context 对象
-		//因此需要先从父容器中移除webview,然后再销毁webview:
-
-		val parent = webView.getParent() as? ViewGroup
-		if (parent != null) {
-			parent.removeView(webView)
-		}
-		webView.removeAllViews()
-		webView.destroy()
-
+		WebViewPoolManager.recycle(webView)
 		super.onDestroy()
 	}
 
