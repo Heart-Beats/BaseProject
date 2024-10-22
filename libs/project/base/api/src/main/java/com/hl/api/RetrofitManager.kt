@@ -1,6 +1,7 @@
 package com.hl.api
 
 import android.util.Log
+import com.hl.api.convert.SmartConverterFactory
 import com.hl.api.interceptor.HttpLoggingInterceptor
 import com.hl.api.interceptor.LogProxy
 import com.hl.api.interceptor.RequestHeaderOrParamsInterceptor
@@ -75,7 +76,7 @@ object RetrofitManager {
             Retrofit.Builder()
                 .baseUrl(baseUrl)
                 .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
+                .addConverterFactory(SmartConverterFactory.create())
                 .client(createClient(logProxy, publicHeaderOrParamsBlock, okHttpBuilderBlock))
                 .build()
                 .create<T>().also {

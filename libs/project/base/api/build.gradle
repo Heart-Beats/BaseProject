@@ -36,6 +36,9 @@ dependencies {
 
     api libs.retrofit.retrofit
     implementation libs.retrofit.converter.gson
+    implementation libs.retrofit.converter.jaxb
+    implementation libs.retrofit.converter.protobuf
+    implementation libs.retrofit.converter.scalars
     implementation libs.retrofit.adapter.rxjava3
     //    implementation libs.okHttp.logging.interceptor
 
