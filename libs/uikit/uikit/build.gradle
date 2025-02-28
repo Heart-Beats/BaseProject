@@ -56,7 +56,7 @@ dependencies {
     // embed 可使打包的产物中包含 java  依赖， aar 依赖或者 远程依赖
     api project(path: ':uikit-res')
     api project(path: ':uikit-toast')
-    api 'com.hl:ViewBinding'
+    api 'com.hl:view-binding'
 
     implementation libs.androidx.appcompat
     implementation libs.androidx.core.ktx

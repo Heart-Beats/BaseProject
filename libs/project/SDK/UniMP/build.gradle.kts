@@ -40,10 +40,10 @@ android {
 dependencies {
 	api(fileTree("libs") { include("*.jar") })
 
-	api(project(":SDK:uniapp-base-oaid-sdk"))
-	api(project(":SDK:uniapp-breakpad-build-release"))
-	api(project(":SDK:uniapp-v8-release"))
-	api(project(":SDK:uniMPSDK-V2-release"))
+	api(project(":uniapp-base-oaid-sdk"))
+	api(project(":uniapp-breakpad-build-release"))
+	api(project(":uniapp-v8-release"))
+	api(project(":uniMPSDK-V2-release"))
 
 	implementation(libs.androidx.recyclerview)
 	implementation("androidx.legacy:legacy-support-v4:1.0.0")

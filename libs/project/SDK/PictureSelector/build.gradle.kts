@@ -33,7 +33,7 @@ android {
 }
 
 dependencies {
-	api(project(":SDK:ImageLoad"))
+	api(project(":image-load"))
 
 	api(libs.pickSelector.picture.selector.asProvider())
 	api(libs.pickSelector.picture.selector.compress)

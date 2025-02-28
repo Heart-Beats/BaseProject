@@ -85,7 +85,7 @@ repositories {
 }
 
 dependencies {
-    implementation project(path: ':SDK:shadow-lib')
+    implementation project(path: ':shadow-lib')
 
     implementation Deps.Kotlin.kotlin_stdlib
 

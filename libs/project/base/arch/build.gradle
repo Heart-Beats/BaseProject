@@ -44,7 +44,7 @@ dependencies {
     api project(path: ':base-ui')
     api project(path: ':base-rv-adapter')
     api project(path: ':utils')
-    api project(path: ':SDK:Navigation')
+    api project(path: ':navigation')
 
     api libs.androidx.collection.ktx
 

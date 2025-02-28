@@ -34,6 +34,6 @@ android {
 dependencies {
 	implementation(libs.androidx.viewpager2)
 	implementation(libs.androidx.recyclerview)
-	implementation(project(":SDK:ImageLoad"))
+	implementation(project(":image-load"))
 	api(libs.banner)
 }

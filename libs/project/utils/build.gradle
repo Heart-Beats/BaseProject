@@ -67,11 +67,11 @@ android {
 
 dependencies {
     api project(path: ':base-app-res')
-    api project(':SDK:ActivityResult')
-    api project(':SDK:XLogInit')
-    api project(':SDK:Permission')
-    api project(':SDK:Popup')
-    api project(':SDK:ImageLoad')
+    api project(':activity-result')
+    api project(':xlog-init')
+    api project(':permission')
+    api project(':popup')
+    api project(':image-load')
 
     implementation libs.androidx.activity.ktx
     implementation libs.androidx.fragment.ktx

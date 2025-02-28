@@ -33,7 +33,7 @@ android {
 }
 
 dependencies {
-	implementation(project(":SDK:ActivityResult"))
+	implementation(project(":activity-result"))
 
 	// zxing_lite 使用到 AppCompatActivity， 但未自动依赖，添加此依赖解决编译报错
 	implementation(libs.androidx.appcompat)

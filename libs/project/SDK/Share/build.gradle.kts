@@ -34,5 +34,5 @@ android {
 dependencies {
 	implementation(libs.androidx.core.ktx)
 	implementation("com.hl:uikit-toast")
-	implementation(project(":SDK:MimeType"))
+	implementation(project(":mime-type"))
 }

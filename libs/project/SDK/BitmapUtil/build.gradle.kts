@@ -32,7 +32,7 @@ android {
 }
 
 dependencies {
-	implementation(project(":SDK:Permission"))
-	implementation(project(":SDK:MimeType"))
+	implementation(project(":permission"))
+	implementation(project(":mime-type"))
 	implementation(libs.utilCodeX)
 }

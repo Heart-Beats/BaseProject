@@ -34,5 +34,5 @@ android {
 
 dependencies {
 	api(libs.xlog)
-	api(project(":SDK:MMKVSharedPreferences"))
+	api(project(":mmkv-sp"))
 }

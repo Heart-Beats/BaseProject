@@ -37,5 +37,5 @@ dependencies {
 	implementation(libs.androidx.security.crypto)
 	api(libs.androidx.core.ktx)
 	api(libs.mmkv)
-	api(project(":SDK:JsonUtil"))
+	api(project(":json-util"))
 }

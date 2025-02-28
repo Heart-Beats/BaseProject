@@ -37,7 +37,7 @@ android {
 dependencies {
 	implementation("com.hl:uikit-toast")
 	implementation(project(":base-ui"))
-	implementation(project(":SDK:Permission"))
+	implementation(project(":permission"))
 
 	api(libs.camera.likeWX)
 }

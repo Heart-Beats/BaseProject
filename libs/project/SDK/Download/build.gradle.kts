@@ -36,8 +36,8 @@ dependencies {
 	implementation(libs.androidx.fragment.asProvider())
 
 	implementation("com.hl:uikit-toast")
-	implementation(project(":SDK:Permission"))
-	implementation(project(":SDK:XLogInit"))
+	implementation(project(":permission"))
+	implementation(project(":xlog-init"))
 
 	api(libs.okHttp.okhttp)
 	api(libs.okHttp.easy.http)

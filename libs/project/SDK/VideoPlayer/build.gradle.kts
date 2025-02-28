@@ -48,7 +48,7 @@ dependencies {
 	implementation(libs.androidx.activity.ktx)
 	implementation(libs.androidx.fragment.ktx)
 
-	implementation(project(":SDK:ImageLoad"))
+	implementation(project(":image-load"))
 
 	api(libs.gsyVideoPlayer)
 }

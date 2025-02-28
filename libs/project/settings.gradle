@@ -45,11 +45,38 @@ def includeBase() {
 }
 
 def includeSDK() {
-    include ':SDK:Umeng', ':SDK:Pay', ':SDK:TencentCloud', 'SDK:Navigation', ':SDK:Web', ':SDK:ActivityResult',
-            ':SDK:XLogInit', ':SDK:MMKVSharedPreferences', ':SDK:JsonUtil', ':SDK:Permission', ':SDK:PictureSelector',
-            ':SDK:ImageLoad', ':SDK:DateUtil', ':SDK:BitmapUtil', ':SDK:MimeType', ':SDK:Download', ':SDK:QRCode',
-            ':SDK:Popup', ':SDK:SmsUtil', ':SDK:PreviewFile', ':SDK:Share', ':SDK:VideoPlayer', ':SDK:Camera',
-            ':SDK:Update', ':SDK:Banner', ':SDK:ViewBinding'
+    include ':umeng', ':pay', ':tencent-cloud', ':navigation', ':web', ':activity-result',
+            ':xlog-init', ':mmkv-sp', ':json-util', ':permission', ':picture-selector',
+            ':image-load', ':date-util', ':bitmap-util', ':mime-type', ':download', ':qrcode',
+            ':popup', ':sms-util', ':preview-file', ':share', ':video-player', ':camera',
+            ':update', ':banner', ':view-binding'
+
+    project(':umeng').projectDir = file('./SDK/Umeng')
+    project(':pay').projectDir = file('./SDK/Pay')
+    project(':tencent-cloud').projectDir = file('./SDK/TencentCloud')
+    project(':navigation').projectDir = file('./SDK/Navigation')
+    project(':web').projectDir = file('./SDK/Web')
+    project(':activity-result').projectDir = file('./SDK/ActivityResult')
+    project(':xlog-init').projectDir = file('./SDK/XLogInit')
+    project(':mmkv-sp').projectDir = file('./SDK/MMKVSharedPreferences')
+    project(':json-util').projectDir = file('./SDK/JsonUtil')
+    project(':permission').projectDir = file('./SDK/Permission')
+    project(':picture-selector').projectDir = file('./SDK/PictureSelector')
+    project(':image-load').projectDir = file('./SDK/ImageLoad')
+    project(':date-util').projectDir = file('./SDK/DateUtil')
+    project(':bitmap-util').projectDir = file('./SDK/BitmapUtil')
+    project(':mime-type').projectDir = file('./SDK/MimeType')
+    project(':download').projectDir = file('./SDK/Download')
+    project(':qrcode').projectDir = file('./SDK/QRCode')
+    project(':popup').projectDir = file('./SDK/Popup')
+    project(':sms-util').projectDir = file('./SDK/SmsUtil')
+    project(':preview-file').projectDir = file('./SDK/PreviewFile')
+    project(':share').projectDir = file('./SDK/Share')
+    project(':video-player').projectDir = file('./SDK/VideoPlayer')
+    project(':camera').projectDir = file('./SDK/Camera')
+    project(':update').projectDir = file('./SDK/Update')
+    project(':banner').projectDir = file('./SDK/Banner')
+    project(':view-binding').projectDir = file('./SDK/ViewBinding')
 
     includeShadow()
 
@@ -57,26 +84,28 @@ def includeSDK() {
 }
 
 def includeShadow() {
-    //    include ':SDK:shadow-plugin-manager'
-    include ':SDK:shadow-lib', ':SDK:shadow-init'
+    //    include ':shadow-plugin-manager'
+    include ':shadow-lib', ':shadow-init'
 
-    //    project(':SDK:shadow-plugin-manager').projectDir = file('./SDK/Shadow/plugin-manager')
-    project(':SDK:shadow-lib').projectDir = file('./SDK/Shadow/shadow-lib')
-    project(':SDK:shadow-init').projectDir = file('./SDK/Shadow/shadow-init')
+    //    project(':shadow-plugin-manager').projectDir = file('./SDK/Shadow/plugin-manager')
+    project(':shadow-lib').projectDir = file('./SDK/Shadow/shadow-lib')
+    project(':shadow-init').projectDir = file('./SDK/Shadow/shadow-init')
 }
 
 def includeUniApp() {
-    include ':SDK:UniMP'
+    include ':uni-mp'
+
+    project(':uni-mp').projectDir = file('./SDK/UniMP')
 
     // 加入 UniApp 需要依赖的本地 AAR
     includeUniAppAARS()
 }
 
 def includeUniAppAARS() {
-    include ':SDK:uniapp-base-oaid-sdk', ':SDK:uniapp-breakpad-build-release', ':SDK:uniapp-v8-release', ':SDK:uniMPSDK-V2-release'
+    include ':uniapp-base-oaid-sdk', ':uniapp-breakpad-build-release', ':uniapp-v8-release', ':uniMPSDK-V2-release'
 
-    project(':SDK:uniapp-base-oaid-sdk').projectDir = file('./SDK/LocalAAR/uniapp-aars/base-oaid-sdk-aar')
-    project(':SDK:uniapp-breakpad-build-release').projectDir = file('./SDK/LocalAAR/uniapp-aars/breakpad-build-release-aar')
-    project(':SDK:uniapp-v8-release').projectDir = file('./SDK/LocalAAR/uniapp-aars/uniapp-v8-release-aar')
-    project(':SDK:uniMPSDK-V2-release').projectDir = file('./SDK/LocalAAR/uniapp-aars/uniMPSDK-V2-release-aar')
+    project(':uniapp-base-oaid-sdk').projectDir = file('./SDK/LocalAAR/uniapp-aars/base-oaid-sdk-aar')
+    project(':uniapp-breakpad-build-release').projectDir = file('./SDK/LocalAAR/uniapp-aars/breakpad-build-release-aar')
+    project(':uniapp-v8-release').projectDir = file('./SDK/LocalAAR/uniapp-aars/uniapp-v8-release-aar')
+    project(':uniMPSDK-V2-release').projectDir = file('./SDK/LocalAAR/uniapp-aars/uniMPSDK-V2-release-aar')
 }

@@ -159,12 +159,12 @@ dependencies {
 
         implementation 'com.hl:uikit'
 
-        implementation 'com.hl:Web'
-        implementation 'com.hl:TencentCloud'
+        implementation 'com.hl:web'
+        implementation 'com.hl:tencent-cloud'
         implementation 'com.hl:shadow-init'
-        implementation 'com.hl:UniMP'
-        implementation 'com.hl:Camera'
-        implementation 'com.hl:Banner'
+        implementation 'com.hl:uni-mp'
+        implementation 'com.hl:camera'
+        implementation 'com.hl:banner'
     }
 
     implementation libs.sensey

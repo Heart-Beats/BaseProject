@@ -52,7 +52,7 @@ repositories {
 dependencies {
     implementation fileTree(include: ['*.jar', '*.aar'], dir: 'libs')
 
-    api project(path: ':SDK:shadow-lib')
+    api project(path: ':shadow-lib')
 
     implementation libs.gson
 
