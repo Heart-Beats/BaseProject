@@ -34,12 +34,12 @@ afterEvaluate {
 
         pom {
             name = moduleName
-            description = "Android 开发捕获崩溃异常信息的工具库"
-            url = "https://github.com/Heart-Beats/AndroidCrash"
+            description = "Android 项目基础框架集成"
+            url = "https://github.com/Heart-Beats/BaseProject"
             licenses {
                 license {
                     name = "The Apache License, Version 2.0"
-                    url = "https://github.com/Heart-Beats/AndroidCrash/blob/main/LICENSE.md"
+                    url = "https://github.com/Heart-Beats/BaseProject/blob/main/LICENSE.md"
                     distribution = "http://www.apache.org/licenses/LICENSE-2.0.txt"
                 }
             }
@@ -51,9 +51,9 @@ afterEvaluate {
                 }
             }
             scm {
-                url = "https://github.com/Heart-Beats/AndroidCrash"
-                connection = "scm:git:git://github.com/Heart-Beats/AndroidCrash.git"
-                developerConnection = "scm:git:ssh://git@github.com/Heart-Beats/AndroidCrash.git"
+                url = "https://github.com/Heart-Beats/BaseProject"
+                connection = "scm:git:git://github.com/Heart-Beats/BaseProject.git"
+                developerConnection = "scm:git:ssh://git@github.com/Heart-Beats/BaseProject.git"
             }
         }
     }
