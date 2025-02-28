@@ -19,5 +19,5 @@ task clean(type: Delete) {
 
 
 
-//引入 maven 发布配置设置
-apply from: '../../publish_config.gradle'
+//引入 maven 发布脚本，针对 gradle 项目的所有子模块生效
+apply from: '../../module_maven_publish_apply.gradle'

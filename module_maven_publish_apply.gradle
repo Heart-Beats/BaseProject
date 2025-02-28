@@ -1,0 +1,17 @@
+//引入 maven 发布配置设置
+apply from: '../../publish_config.gradle'
+
+
+subprojects {
+
+    Project project = it
+
+    ext {
+        // 定义当前模块名称用于 Maven 发布
+        module_name = project.path.drop(1)
+    }
+
+    // maven 发布脚本路径
+    def mavenPublishScriptPath = rootProject.file('../../commonGradle/MavenPublish.gradle').path
+    apply from: mavenPublishScriptPath
+}
