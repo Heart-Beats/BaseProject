@@ -2,6 +2,8 @@ def isPublishRelease = false
 def ARTIFACT_VERSION = '0.0.3'
 
 ext {
+    module_group = "io.github.heart-beats.baseproject"
+
     myGroupId = 'com.hl'
     libProjectPath = 'libs/project'
     libUikitPath = 'libs/uikit'
@@ -18,4 +20,19 @@ ext {
 
         return ARTIFACT_VERSION + VERSION_SUFFIX
     }
+}
+
+
+subprojects {
+
+    Project project = it
+
+    ext {
+        // 定义当前模块名称用于 Maven 发布
+        module_name = project.path.drop(1)
+    }
+
+    // maven 发布脚本路径
+    def mavenPublishScriptPath = rootProject.file('../../commonGradle/MavenPublish.gradle').path
+    apply from: mavenPublishScriptPath
 }

@@ -1,0 +1,60 @@
+if (module_group == null || module_name == null) {
+    throw new IllegalStateException("必须提供 module_group 和 moduleName!")
+}
+
+apply plugin: 'com.vanniktech.maven.publish'
+
+apply plugin: 'signing'
+
+signing {
+    useGpgCmd() //使用 gpg-agent
+    sign publishing.publications
+}
+
+
+afterEvaluate {
+    mavenPublishing {
+
+        //    configure(new com.vanniktech.maven.publish.AndroidSingleVariantLibrary("release", true, true))
+
+        //    publishToMavenCentral(com.vanniktech.maven.publish.SonatypeHost.DEFAULT)
+        //    publishToMavenCentral(com.vanniktech.maven.publish.SonatypeHost.S01)
+        //    publishToMavenCentral(com.vanniktech.maven.publish.SonatypeHost.CENTRAL_PORTAL)
+        publishToMavenCentral("CENTRAL_PORTAL")
+
+        //     signAllPublications()
+
+        def moduleGroup = module_group
+        def moduleName = module_name
+        def publishVersion = rootProject.ext.getPublicationVersion()
+
+
+        println "maven 依赖坐标 --------->${moduleGroup}:${moduleName}:${publishVersion}"
+        coordinates(moduleGroup, moduleName, publishVersion)
+
+        pom {
+            name = moduleName
+            description = "Android 开发捕获崩溃异常信息的工具库"
+            url = "https://github.com/Heart-Beats/AndroidCrash"
+            licenses {
+                license {
+                    name = "The Apache License, Version 2.0"
+                    url = "https://github.com/Heart-Beats/AndroidCrash/blob/main/LICENSE.md"
+                    distribution = "http://www.apache.org/licenses/LICENSE-2.0.txt"
+                }
+            }
+            developers {
+                developer {
+                    id = "Heart-Beats"
+                    name = "Heart-Beats"
+                    url = "https://github.com/Heart-Beats"
+                }
+            }
+            scm {
+                url = "https://github.com/Heart-Beats/AndroidCrash"
+                connection = "scm:git:git://github.com/Heart-Beats/AndroidCrash.git"
+                developerConnection = "scm:git:ssh://git@github.com/Heart-Beats/AndroidCrash.git"
+            }
+        }
+    }
+}
