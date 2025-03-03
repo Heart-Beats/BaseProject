@@ -1,10 +1,10 @@
 package com.hl.baseproject.base
 
 import com.hl.api.PublicResp
-import com.hl.arch.api.IApiEventProvider
+import com.hl.api.event.IApiEventProvider
 import com.hl.arch.mvvm.vm.BaseLiveDataVM
-import com.hl.baseproject.repository.network.RequestApiInterface
 import com.hl.baseproject.repository.Repository
+import com.hl.baseproject.repository.network.RequestApiInterface
 
 /**
  * @author  张磊  on  2022/01/12 at 12:27

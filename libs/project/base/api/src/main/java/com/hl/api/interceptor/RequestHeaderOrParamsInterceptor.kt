@@ -27,10 +27,11 @@ class RequestHeaderOrParamsInterceptor private constructor() : Interceptor {
 
     @Throws(IOException::class)
     override fun intercept(chain: Interceptor.Chain): Response {
-        dynamicHeaderOrParams?.invoke(builder)
 
         val request = chain.request()
         val requestBuilder = request.newBuilder()
+
+        dynamicHeaderOrParams?.invoke(builder, request)
 
         // process header params inject
         val headerBuilder = request.headers.newBuilder()
@@ -228,5 +229,6 @@ class RequestHeaderOrParamsInterceptor private constructor() : Interceptor {
  * 动态添加公共请求头或请求参数
  *
  * @param headerInterceptorBuilder 添加动态参数的 builder
+ * @param request                  动态参数某些场景需要获取请求中的数据
  */
-typealias IDynamicHeaderOrParams = (headerInterceptorBuilder: RequestHeaderOrParamsInterceptor.Builder) -> Unit
+typealias IDynamicHeaderOrParams = (headerInterceptorBuilder: RequestHeaderOrParamsInterceptor.Builder, request: Request) -> Unit

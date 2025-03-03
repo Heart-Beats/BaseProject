@@ -5,8 +5,8 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asFlow
 import com.hl.api.PublicResp
-import com.hl.arch.api.ApiEvent
-import com.hl.arch.api.IApiEventProvider
+import com.hl.api.event.ApiEvent
+import com.hl.api.event.IApiEventProvider
 import com.hl.arch.mvvm.api.event.setSafeValue
 import com.hl.arch.mvvm.liveData.EventLiveData
 import com.hl.mmkvsharedpreferences.getApp
@@ -55,7 +55,7 @@ abstract class DispatcherVM : ViewModel(), IApiEventProvider {
 	 * @param  onSuccess                请求成功时的处理
 	 *
 	 */
-	protected open fun <BODY, T : PublicResp<BODY>> T.dispatchApiEvent(
+	protected open fun <BODY> PublicResp<BODY>.dispatchApiEvent(
 		needDispatchFailEvent: Boolean = true,
 		onFail: ((failCode: String, failReason: String) -> Unit)? = null,
 		onSuccess: (body: BODY?) -> Unit = {}

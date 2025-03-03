@@ -39,10 +39,10 @@ dependencies {
     implementation libs.retrofit.converter.jaxb
     implementation libs.retrofit.converter.protobuf
     implementation libs.retrofit.converter.scalars
-    implementation libs.retrofit.adapter.rxjava3
+    api libs.retrofit.adapter.rxjava3
     //    implementation libs.okHttp.logging.interceptor
 
-    implementation libs.kotlinx.coroutines.android
+    api libs.kotlinx.coroutines.android
 
     // okhttp 日志拦截打印
     implementation 'com.github.fengzhizi715.okhttp-logging-interceptor:core:v1.1.4'

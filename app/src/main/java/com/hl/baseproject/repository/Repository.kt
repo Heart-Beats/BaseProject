@@ -47,9 +47,9 @@ object Repository {
 				this.addHeaderParam("Content-type", "application/json;charset=UTF-8")
 					.addHeaderParam("User-Agent", "Android")
 					.addHeaderParam("deviceInfo", deviceInfo)
-					.addDynamicHeaderOrParams {
-						it.addHeaderParam("Authorization", UserManager.getUser().token ?: "")
-						it.addHeaderParam("traceId", createRandomString())
+					.addDynamicHeaderOrParams  { headerInterceptorBuilder, request ->
+						headerInterceptorBuilder.addHeaderParam("Authorization", UserManager.getUser().token ?: "")
+						headerInterceptorBuilder.addHeaderParam("traceId", createRandomString())
 					}
 			})
 	}

@@ -9,7 +9,6 @@ import okhttp3.ConnectionSpec
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory
-import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.create
 import java.security.SecureRandom
 import java.security.cert.X509Certificate
@@ -104,9 +103,9 @@ object RetrofitManager {
                 okHttpBuilderBlock()
 
                 // 公共请求头、请求参数拦截器添加在日志拦截器之前, okhttp 是按添加顺序进行拦截的
-                val headerBuilder: RequestHeaderOrParamsInterceptor.Builder = RequestHeaderOrParamsInterceptor.Builder()
+                val headerInterceptorBuilder: RequestHeaderOrParamsInterceptor.Builder = RequestHeaderOrParamsInterceptor.Builder()
                     .addHeaderParam("Content-Type", "application/json;charset=UTF-8")
-                addInterceptor(headerBuilder.apply(publicHeaderOrParamsBlock).build())
+                addInterceptor(headerInterceptorBuilder.apply(publicHeaderOrParamsBlock).build())
 
                 //添加 retrofit log 拦截器, 打印日志
                 val loggingInterceptor = HttpLoggingInterceptor

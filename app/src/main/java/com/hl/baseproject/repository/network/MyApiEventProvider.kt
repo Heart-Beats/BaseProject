@@ -1,7 +1,7 @@
 package com.hl.baseproject.base
 
-import com.hl.arch.api.ApiEvent
-import com.hl.arch.api.IApiEventProvider
+import com.hl.api.event.ApiEvent
+import com.hl.api.event.IApiEventProvider
 
 /**
  * @author  张磊  on  2023/02/17 at 17:27

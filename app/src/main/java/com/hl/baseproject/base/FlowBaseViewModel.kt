@@ -2,7 +2,7 @@ package com.hl.baseproject.base
 
 import androidx.lifecycle.viewModelScope
 import com.hl.api.PublicResp
-import com.hl.arch.api.IApiEventProvider
+import com.hl.api.event.IApiEventProvider
 import com.hl.arch.mvvm.vm.BaseFlowVM
 import com.hl.baseproject.repository.Repository
 import com.hl.baseproject.repository.network.RequestApiInterface

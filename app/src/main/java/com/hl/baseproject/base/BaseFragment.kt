@@ -1,7 +1,7 @@
 package com.hl.baseproject.base
 
 import androidx.viewbinding.ViewBinding
-import com.hl.arch.api.ApiEvent
+import com.hl.api.event.ApiEvent
 import com.hl.arch.mvvm.fragment.ViewBindingMvvmBaseFragment
 import com.hl.arch.mvvm.vm.FlowVM
 import com.hl.arch.mvvm.vm.LiveDataVM
