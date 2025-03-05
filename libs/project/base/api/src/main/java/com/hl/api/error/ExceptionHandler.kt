@@ -27,7 +27,7 @@ object ExceptionHandler {
 	// 内部服务器错误
 	private const val INTERNAL_SERVER_ERROR = 500
 
-	// 错误网关
+	// 网关错误
 	private const val BAD_GATEWAY = 502
 
 	// 暂停服务
@@ -44,15 +44,16 @@ object ExceptionHandler {
 		val responseThrowable: ResponseThrowable
 		when (throwable) {
 			is HttpException -> {
-				responseThrowable = ResponseThrowable(ERROR.HTTP_ERROR, throwable)
-				when (throwable.code()) {
+				val httpStatusCode = throwable.code()
+				responseThrowable = ResponseThrowable(httpStatusCode, throwable)
+				when (httpStatusCode) {
 					UNAUTHORIZED -> responseThrowable.message = "未授权"
 					FORBIDDEN -> responseThrowable.message = "禁止访问"
-					NOT_FOUND -> responseThrowable.message = "未找到"
+					NOT_FOUND -> responseThrowable.message = "路径未找到"
 					REQUEST_TIMEOUT -> responseThrowable.message = "请求超时"
 					GATEWAY_TIMEOUT -> responseThrowable.message = "网关超时"
 					INTERNAL_SERVER_ERROR -> responseThrowable.message = "内部服务器错误"
-					BAD_GATEWAY -> responseThrowable.message = "错误网关"
+					BAD_GATEWAY -> responseThrowable.message = "网关错误"
 					SERVICE_UNAVAILABLE -> responseThrowable.message = "暂停服务"
 					else -> responseThrowable.message = "网络错误"
 				}
@@ -125,20 +126,16 @@ object ExceptionHandler {
 		 */
 		const val NETWORK_ERROR: Int = 1002
 
-		/**
-		 * 协议出错
-		 */
-		const val HTTP_ERROR: Int = 1003
 
 		/**
 		 * 证书出错
 		 */
-		const val SSL_ERROR: Int = 1005
+		const val SSL_ERROR: Int = 1003
 
 		/**
 		 * 连接超时
 		 */
-		const val TIMEOUT_ERROR: Int = 1006
+		const val TIMEOUT_ERROR: Int = 1004
 	}
 
 	class ResponseThrowable(var code: Int, throwable: Throwable?) : Exception(throwable) {
