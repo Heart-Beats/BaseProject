@@ -5,7 +5,7 @@ plugins {
     alias libs.plugins.kotlin.android apply false
 
     // 目前该插件测试要求： Gradle:8.5   AGP:8.1.0
-    id 'com.vanniktech.maven.publish' version '0.30.0' apply false
+    id 'com.vanniktech.maven.publish' version '0.31.0-rc2' apply false
 }
 
 allprojects {
@@ -20,4 +20,4 @@ task clean(type: Delete) {
 
 
 //引入 maven 发布脚本，针对 gradle 项目的所有子模块生效
-apply from: '../../module_maven_publish_apply.gradle'
+//apply from: '../../module_maven_publish_apply.gradle'

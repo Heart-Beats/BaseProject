@@ -4,6 +4,9 @@ apply plugin: 'kotlin-android'
 
 //apply plugin: 'com.kezong.fat-aar'
 
+def mavenPublishScriptPath = rootProject.file('../../commonGradle/MavenPublish.gradle').path
+apply from: mavenPublishScriptPath
+
 android {
     namespace 'com.hl.uikit'
 

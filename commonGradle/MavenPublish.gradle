@@ -1,6 +1,6 @@
-if (module_group == null || module_name == null) {
-    throw new IllegalStateException("必须提供 module_group 和 moduleName!")
-}
+//if (module_group == null || module_name == null) {
+//    throw new IllegalStateException("必须提供 module_group 和 moduleName!")
+//}
 
 apply plugin: 'com.vanniktech.maven.publish'
 
@@ -12,49 +12,89 @@ signing {
 }
 
 
-afterEvaluate {
-    mavenPublishing {
+mavenPublishing {
 
-        //    configure(new com.vanniktech.maven.publish.AndroidSingleVariantLibrary("release", true, true))
+    //    configure(new com.vanniktech.maven.publish.AndroidSingleVariantLibrary("release", true, true))
 
-        //    publishToMavenCentral(com.vanniktech.maven.publish.SonatypeHost.DEFAULT)
-        //    publishToMavenCentral(com.vanniktech.maven.publish.SonatypeHost.S01)
-        //    publishToMavenCentral(com.vanniktech.maven.publish.SonatypeHost.CENTRAL_PORTAL)
-        publishToMavenCentral("CENTRAL_PORTAL")
+    //    publishToMavenCentral(com.vanniktech.maven.publish.SonatypeHost.DEFAULT)
+    //    publishToMavenCentral(com.vanniktech.maven.publish.SonatypeHost.S01)
+    //    publishToMavenCentral(com.vanniktech.maven.publish.SonatypeHost.CENTRAL_PORTAL)
+    publishToMavenCentral("CENTRAL_PORTAL")
 
-        //     signAllPublications()
+    //     signAllPublications()
 
-        def moduleGroup = module_group
-        def moduleName = module_name
-        def publishVersion = rootProject.ext.getPublicationVersion()
+    //        def moduleGroup = module_group
+    //        def moduleName = module_name
+    //        def publishVersion = rootProject.ext.getPublicationVersion()
+    //
+    //
+    //        println "maven 依赖坐标 --------->${moduleGroup}:${moduleName}:${publishVersion}"
+    //        coordinates(moduleGroup, moduleName, publishVersion)
+    coordinates("moduleGroup", "moduleName", "1.0.0")
+    //                coordinates(moduleGroup, moduleName, null)
 
-
-        println "maven 依赖坐标 --------->${moduleGroup}:${moduleName}:${publishVersion}"
-        coordinates(moduleGroup, moduleName, publishVersion)
-
-        pom {
-            name = moduleName
-            description = "Android 项目基础框架集成"
+    pom {
+        name = moduleName
+        description = "Android 项目基础框架集成"
+        url = "https://github.com/Heart-Beats/BaseProject"
+        licenses {
+            license {
+                name = "The Apache License, Version 2.0"
+                url = "https://github.com/Heart-Beats/BaseProject/blob/main/LICENSE.md"
+                distribution = "http://www.apache.org/licenses/LICENSE-2.0.txt"
+            }
+        }
+        developers {
+            developer {
+                id = "Heart-Beats"
+                name = "Heart-Beats"
+                url = "https://github.com/Heart-Beats"
+            }
+        }
+        scm {
             url = "https://github.com/Heart-Beats/BaseProject"
-            licenses {
-                license {
-                    name = "The Apache License, Version 2.0"
-                    url = "https://github.com/Heart-Beats/BaseProject/blob/main/LICENSE.md"
-                    distribution = "http://www.apache.org/licenses/LICENSE-2.0.txt"
-                }
-            }
-            developers {
-                developer {
-                    id = "Heart-Beats"
-                    name = "Heart-Beats"
-                    url = "https://github.com/Heart-Beats"
-                }
-            }
-            scm {
-                url = "https://github.com/Heart-Beats/BaseProject"
-                connection = "scm:git:git://github.com/Heart-Beats/BaseProject.git"
-                developerConnection = "scm:git:ssh://git@github.com/Heart-Beats/BaseProject.git"
-            }
+            connection = "scm:git:git://github.com/Heart-Beats/BaseProject.git"
+            developerConnection = "scm:git:ssh://git@github.com/Heart-Beats/BaseProject.git"
         }
     }
 }
+
+
+//Publishing tasks
+//----------------
+//        generateMetadataFileForMavenPublication - Generates the Gradle metadata file for publication 'maven'.
+//        generatePomFileForMavenPublication - Generates the Maven POM file for publication 'maven'.
+//        publish - Publishes all publications produced by this project.
+//        publishAllPublicationsToMavenCentralRepository - Publishes all Maven publications produced by this project to the mavenCentral repository.
+//        publishMavenPublicationToMavenCentralRepository - Publishes Maven publication 'maven' to Maven repository 'mavenCentral'.
+//        publishMavenPublicationToMavenLocal - Publishes Maven publication 'maven' to the local Maven repository.
+//        publishToMavenLocal - Publishes all Maven publications produced by this project to the local Maven cache.
+
+
+// 在根项目下创建所有的发布任务
+//rootProject.tasks.register("publishAll") {
+//    group = "publishing"
+//    description = "发布所有模块到Maven仓库"
+//
+//    // 聚合所有子模块的发布任务（包括 publishToMavenLocal 和 publishToMavenCentral）
+//    dependsOn(subprojects.collect {
+//        it.tasks.matching { task ->
+//            task.name.startsWith("publish")
+//        }
+//    }.flatten())
+//
+//    // 可选：添加后置清理任务
+//    finalizedBy cleanPublicationCache
+//
+//    doLast {
+//        logger.lifecycle("✅ 所有模块发布完成")
+//    }
+//}
+//
+//// 可选：清理发布缓存的任务
+//rootProject.tasks.register("cleanPublicationCache") {
+//    doLast {
+//        delete "${buildDir}/publications"
+//        logger.lifecycle("🧹 已清理发布缓存")
+//    }
+//}
