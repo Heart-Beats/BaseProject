@@ -4,7 +4,7 @@ def tencent_mirror_url = 'https://mirrors.cloud.tencent.com/gradle/'
 // gradle 阿里云镜像
 def aliyun_mirror_url = 'https://mirrors.aliyun.com/macports/distfiles/gradle/'
 
-def gradle_mirror_url = aliyun_mirror_url
+def gradle_mirror_url = tencent_mirror_url
 
 // 替换gradle wrapper的下载地址
 gradle.rootProject {
@@ -23,7 +23,7 @@ gradle.rootProject {
     }
 
     // 替换项目中原有的  distributionUrl 地址
-    def newDistributionUrl = distributionUrl.replace('https://services.gradle.org/distributions/', gradle_mirror_url)
+    def newDistributionUrl = distributionUrl.replace(distributionUrl.substring(0, distributionUrl.lastIndexOf('/') + 1), gradle_mirror_url)
     println "项目 Gradle Wrapper 替换后的 distributionUrl: $newDistributionUrl"
 
     // 更新 distributionUrl 属性
@@ -38,13 +38,14 @@ gradle.rootProject {
 gradle.settingsEvaluated { settings ->
     settings.pluginManagement {
         repositories {
+            maven { url 'https://mirrors.cloud.tencent.com/nexus/repository/maven-public/' } // 腾讯镜像
             maven { url 'https://maven.aliyun.com/repository/public' }
             maven { url 'https://maven.aliyun.com/repository/google' }
             maven { url 'https://maven.aliyun.com/repository/gradle-plugin' }
             maven { url 'https://jitpack.io' }
-            gradlePluginPortal()
             google()  // 阿里云对于有些库会有丢失，加入进行兜底
             mavenCentral()
+            gradlePluginPortal()
         }
     }
     settings.dependencyResolutionManagement {
