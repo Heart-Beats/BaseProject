@@ -163,16 +163,15 @@ class BaseViewModelDelegate : ViewModelDelegate {
 	}
 
 	/********************请求时产生的相关 UI 事件处理*****************************************/
-	private inline fun <T> Flow<T>.safeCollect(
-		lifecycleOwner: LifecycleOwner,
-		crossinline action: suspend (value: T) -> Unit
-	) {
-		repeatSafeCollect(lifecycleOwner, action)
+	private inline fun <T> Flow<T>.safeCollect(lifecycleOwner: LifecycleOwner, crossinline action: suspend (value: T) -> Unit) {
+		repeatSafeCollect(lifecycleOwner) {
+			action(it)
+		}
 	}
 
-	protected inline fun <T> Flow<PublicResp<T>?>.apiRespSafeCollect(
+	protected inline fun <T> Flow<PublicResp<T?>>.apiRespSafeCollect(
 		lifecycleOwner: LifecycleOwner,
-		crossinline isSuccess: PublicResp<T>.() -> Boolean,
+		crossinline isSuccess: PublicResp<T?>.() -> Boolean,
 		crossinline onFail: (failCode: String, failReason: String) -> Unit = { _, _ -> },
 		crossinline onSuccess: (value: T) -> Unit
 	) {
