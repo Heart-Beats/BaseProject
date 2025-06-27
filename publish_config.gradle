@@ -1,5 +1,5 @@
 def isPublishRelease = false
-def ARTIFACT_VERSION = '0.0.3'
+def ARTIFACT_VERSION = '0.0.4'
 
 ext {
     module_group = "io.github.heart-beats.baseproject"
