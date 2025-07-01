@@ -15,12 +15,15 @@ if (rootProject.ext.isPublishRelease) {
 
 mavenPublishing {
 
-    //    configure(new com.vanniktech.maven.publish.AndroidSingleVariantLibrary("release", true, true))
+    // configure(new com.vanniktech.maven.publish.AndroidSingleVariantLibrary("release", true, true))
 
     //    publishToMavenCentral(com.vanniktech.maven.publish.SonatypeHost.DEFAULT)
     //    publishToMavenCentral(com.vanniktech.maven.publish.SonatypeHost.S01)
     //    publishToMavenCentral(com.vanniktech.maven.publish.SonatypeHost.CENTRAL_PORTAL)
     publishToMavenCentral("CENTRAL_PORTAL")
+
+    // 配置 sourcesJar 与 javadocJar
+    //    configureBasedOnAppliedPlugins(true, false)
 
     //    signAllPublications()
 
