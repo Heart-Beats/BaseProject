@@ -1,4 +1,4 @@
-def isPublishRelease = false
+def IS_PUBLISH_RELEASE = false
 def ARTIFACT_VERSION = '0.0.4'
 
 ext {
@@ -14,6 +14,7 @@ ext {
     GITHUB_REPOSITORY = "https://maven.pkg.github.com/" + "${GITHUB_USER}/${GITHUB_PROJECT_NAME}".toLowerCase()
     GITHUB_PERSONAL_ACCESS_TOKEN = System.getenv("GITHUB_PACKAGES_WRITE_TOKEN") ?: project.properties['GITHUB_PACKAGES_WRITE_TOKEN']
 
+    isPublishRelease =  IS_PUBLISH_RELEASE
     getPublicationVersion = {
         def VERSION_SUFFIX = ''
         if (!isPublishRelease) VERSION_SUFFIX = '-SNAPSHOT'

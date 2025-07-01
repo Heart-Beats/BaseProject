@@ -15,3 +15,36 @@ subprojects {
     def mavenPublishScriptPath = rootProject.file('../../commonGradle/MavenPublish.gradle').path
     apply from: mavenPublishScriptPath
 }
+
+
+
+// 在项目依赖构建完成时，向根项目注册聚合任务：发布所有子模块
+gradle.projectsEvaluated {
+    // 在根项目下创建所有的发布任务
+    def publishAllTaskName = ['publishMavenPublicationToMavenLocal', 'publishMavenPublicationToMavenCentralRepository']
+
+    publishAllTaskName.forEach { publishTaskName ->
+        def publishAllName = publishTaskName.replace('publishMavenPublication', 'publishAll')
+
+        // 发布所在的仓库名称
+        def publishRepositoryName = publishTaskName.split('publishMavenPublicationTo')[1]
+
+        // 在根项目下创建所有的发布任务
+        rootProject.tasks.register("${publishAllName}"){
+            group = "publishing"
+            description = "发布所有组件到 $publishRepositoryName"
+
+            dependsOn(rootProject.subprojects.collect { project ->
+                // 目前该插件不支持 local aar 发布，因此相关任务直接获取会失败
+                // project.tasks.named(publishTaskName).get().doLast {
+                project.tasks.findByName(publishTaskName)?.doLast {
+                    logger.lifecycle("✅ 模块 ${project.name} 发布 ${publishRepositoryName} 完成")
+                }
+            }.findAll { it != null })
+
+            doLast {
+                logger.lifecycle("✅ ${rootProject.name} 下的所有模块已发布至 $publishRepositoryName")
+            }
+        }
+    }
+}

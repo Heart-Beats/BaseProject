@@ -1,14 +1,16 @@
-//if (module_group == null || module_name == null) {
-//    throw new IllegalStateException("必须提供 module_group 和 moduleName!")
-//}
+if (module_group == null || module_name == null) {
+    throw new IllegalStateException("必须提供 module_group 和 moduleName!")
+}
 
 apply plugin: 'com.vanniktech.maven.publish'
 
 apply plugin: 'signing'
 
-signing {
-    useGpgCmd() //使用 gpg-agent
-    sign publishing.publications
+if (rootProject.ext.isPublishRelease) {
+    signing {
+        useGpgCmd() //使用 gpg-agent
+        sign publishing.publications
+    }
 }
 
 mavenPublishing {
@@ -20,7 +22,7 @@ mavenPublishing {
     //    publishToMavenCentral(com.vanniktech.maven.publish.SonatypeHost.CENTRAL_PORTAL)
     publishToMavenCentral("CENTRAL_PORTAL")
 
-    //     signAllPublications()
+    //    signAllPublications()
 
     def moduleGroup = module_group
     def moduleName = module_name
@@ -55,42 +57,3 @@ mavenPublishing {
         }
     }
 }
-
-//Publishing tasks
-//----------------
-//        generateMetadataFileForMavenPublication - Generates the Gradle metadata file for publication 'maven'.
-//        generatePomFileForMavenPublication - Generates the Maven POM file for publication 'maven'.
-//        publish - Publishes all publications produced by this project.
-//        publishAllPublicationsToMavenCentralRepository - Publishes all Maven publications produced by this project to the mavenCentral repository.
-//        publishMavenPublicationToMavenCentralRepository - Publishes Maven publication 'maven' to Maven repository 'mavenCentral'.
-//        publishMavenPublicationToMavenLocal - Publishes Maven publication 'maven' to the local Maven repository.
-//        publishToMavenLocal - Publishes all Maven publications produced by this project to the local Maven cache.
-
-
-// 在根项目下创建所有的发布任务
-//rootProject.tasks.register("publishAll") {
-//    group = "publishing"
-//    description = "发布所有模块到Maven仓库"
-//
-//    // 聚合所有子模块的发布任务（包括 publishToMavenLocal 和 publishToMavenCentral）
-//    dependsOn(subprojects.collect {
-//        it.tasks.matching { task ->
-//            task.name.startsWith("publish")
-//        }
-//    }.flatten())
-//
-//    // 可选：添加后置清理任务
-//    finalizedBy cleanPublicationCache
-//
-//    doLast {
-//        logger.lifecycle("✅ 所有模块发布完成")
-//    }
-//}
-//
-//// 可选：清理发布缓存的任务
-//rootProject.tasks.register("cleanPublicationCache") {
-//    doLast {
-//        delete "${buildDir}/publications"
-//        logger.lifecycle("🧹 已清理发布缓存")
-//    }
-//}

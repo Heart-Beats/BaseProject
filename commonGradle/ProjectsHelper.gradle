@@ -1,0 +1,59 @@
+import org.gradle.api.services.BuildService
+import org.gradle.api.services.BuildServiceParameters
+
+// 定义一个单例服务接口
+interface ExecutionFlagService extends BuildService<BuildServiceParameters.None> {
+    boolean hasExecuted()
+    void markExecuted()
+}
+
+// 实现单例服务
+class ExecutionFlagServiceImpl implements ExecutionFlagService {
+    private boolean executed = false
+
+    @Override
+    boolean hasExecuted() {
+        return executed
+    }
+
+    @Override
+    void markExecuted() {
+        executed = true
+    }
+
+    @Override
+    BuildServiceParameters.None getParameters() {
+        return null
+    }
+}
+
+// 注册单例服务，若服务不存在则创建
+def flagService = gradle.sharedServices.registerIfAbsent("executionFlagService", ExecutionFlagServiceImpl) {
+    // 配置服务
+}
+
+// flagService 作用域局限于脚本内部，子项目无法访问。为解决这个问题，可将 flagService 暴露到根项目的扩展属性中，让所有子项目都能访问
+// 将 flagService 存储到根项目的扩展属性中
+project.rootProject.ext.flagService = flagService
+
+/**
+ * 注册 projectsEvaluated 事件监听器，确保传入的逻辑只执行一次
+ * @param project 需要监听 projectsEvaluated 事件的项目
+ * @param logic 当项目的 projectsEvaluated 事件触发且服务未执行过时要执行的闭包逻辑
+ */
+static def registerProjectsEvaluated(Project project, Closure<?> logic) {
+    project.gradle.projectsEvaluated {
+        // 从根项目的扩展属性中获取 flagService
+        def service = project.rootProject.ext.flagService.get()
+        if (!service.hasExecuted()) {
+            // 执行传入的闭包逻辑
+            logic.call(project)
+            // 标记为已执行
+            service.markExecuted()
+        }
+    }
+}
+
+
+// 暴露 registerProjectsEvaluated 方法
+ext.registerProjectsEvaluated = this.&registerProjectsEvaluated

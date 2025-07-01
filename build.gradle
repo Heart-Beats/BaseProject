@@ -26,3 +26,30 @@ task clean(type: Delete) {
         dependsOn it.task(":clean")
     }
 }
+
+
+// 在项目依赖构建完成时，向根项目注册一个发布所有子项目的任务
+gradle.projectsEvaluated {
+    def publishAllTaskName = ['publishMavenPublicationToMavenLocal', 'publishMavenPublicationToMavenCentralRepository']
+
+    publishAllTaskName.forEach { publishTaskName ->
+        def publishAllName = publishTaskName.replace('publishMavenPublication', 'publishAll')
+
+        // 发布所在的仓库名称
+        def publishRepositoryName = publishTaskName.split('publishMavenPublicationTo')[1]
+
+        // 在根项目下创建所有的发布任务
+        gradle.rootProject.task(publishAllName) {
+            group = "publishing"
+            description = "发布所有组件到 ${publishRepositoryName}"
+
+            gradle.includedBuilds.forEach { includedBuild ->
+                dependsOn includedBuild.task(":${publishAllName}")
+            }
+
+            doLast {
+                logger.lifecycle("✅ BaseProject 所有组件发布至 ${publishRepositoryName} 完成")
+            }
+        }
+    }
+}
