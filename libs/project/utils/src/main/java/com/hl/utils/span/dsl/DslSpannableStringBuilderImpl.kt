@@ -44,9 +44,12 @@ class DslSpannableStringBuilderImpl(private val textView: TextView) : DslSpannab
 				charSeq = charSeq.toSizeSpan(0..text.length, textSize, isSp)
 			}
 			if (isOnClick) {
-				textView.movementMethod = LinkMovementMethod.getInstance()
-				// 点击时移除点击背景高亮色
-				textView.highlightColor = Color.TRANSPARENT
+				if (onClick != null) {
+					textView.movementMethod = LinkMovementMethod.getInstance()
+					// 点击时移除点击背景高亮色
+					textView.highlightColor = Color.TRANSPARENT
+				}
+
 				charSeq = charSeq.toClickSpan(0..text.length, textColor, isUseUnderLine, onClick)
 			}
 			if (isSetTypeface) {
