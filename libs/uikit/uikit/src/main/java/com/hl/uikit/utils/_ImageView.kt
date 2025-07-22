@@ -25,12 +25,12 @@ import kotlin.math.min
  * @param textColor 文本的颜色，使用 @ColorInt 注解确保传入有效的颜色值。
  * @param bgColor 背景的颜色，使用 @ColorInt 注解确保传入有效的颜色值。
  */
-fun ImageView.setTextImage(text: String, @ColorInt textColor: Int, @ColorInt bgColor: Int) {
+fun ImageView.setTextImage(text: String, @ColorInt textColor: Int, @ColorInt bgColor: Int, @Px textSize: Float = -1F) {
 	this.post {
 		MainScope().launch {
 			val imageView = this@setTextImage
 			val bitmap = withContext(Dispatchers.IO) {
-				val bitmap = Bitmap.createBitmap(imageView.width, imageView.height, Bitmap.Config.ARGB_8888)
+				val bitmap = createBitmap(imageView.width, imageView.height)
 				val canvas = Canvas(bitmap)
 
 				// 绘制背景
@@ -40,7 +40,7 @@ fun ImageView.setTextImage(text: String, @ColorInt textColor: Int, @ColorInt bgC
 				paint.isAntiAlias = true
 				// 绘制文本
 				paint.color = textColor
-				paint.textSize = (min(imageView.width, imageView.height) * 0.5).toFloat()
+				paint.textSize = if(textSize == -1F) (min(imageView.width, imageView.height) * 0.5).toFloat() else textSize
 				paint.textAlign = Paint.Align.CENTER
 				val xPos = (canvas.width / 2).toFloat()
 				val yPos = (canvas.height / 2 - (paint.descent() + paint.ascent()) / 2)
