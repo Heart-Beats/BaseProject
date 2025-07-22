@@ -6,7 +6,13 @@ import android.text.Spannable
 import android.text.SpannableString
 import android.text.TextPaint
 import android.text.method.LinkMovementMethod
-import android.text.style.*
+import android.text.style.AbsoluteSizeSpan
+import android.text.style.BackgroundColorSpan
+import android.text.style.ClickableSpan
+import android.text.style.ForegroundColorSpan
+import android.text.style.RelativeSizeSpan
+import android.text.style.StrikethroughSpan
+import android.text.style.StyleSpan
 import android.view.View
 import android.widget.TextView
 import androidx.core.content.ContextCompat
@@ -49,7 +55,7 @@ toast("哎呀，您点到我了呢，嘿嘿")
  * @param size  文字大小的值， 默认 14
  * @param isSp  单位是否为 sp，默认 true
  */
-fun CharSequence.toSizeSpan(range: IntRange, size: Int = 14, isSp: Boolean = true): CharSequence {
+fun CharSequence.toSizeSpan(range: IntRange = 0..this.length, size: Int = 14, isSp: Boolean = true): CharSequence {
 	return SpannableString(this).apply {
 		setSpan(
 			AbsoluteSizeSpan(size, isSp),
@@ -65,7 +71,7 @@ fun CharSequence.toSizeSpan(range: IntRange, size: Int = 14, isSp: Boolean = tru
  * @param range 要改变大小的文字的范围
  * @param scale 缩放值，大于1，则比其他文字大；小于1，则比其他文字小；默认是1.5
  */
-fun CharSequence.toScaleSpan(range: IntRange, scale: Float = 1.5f): CharSequence {
+fun CharSequence.toScaleSpan(range: IntRange = 0..this.length, scale: Float = 1.5f): CharSequence {
 	return SpannableString(this).apply {
 		setSpan(
 			RelativeSizeSpan(scale),
@@ -81,7 +87,7 @@ fun CharSequence.toScaleSpan(range: IntRange, scale: Float = 1.5f): CharSequence
  * @param range 要改变前景色的文字的范围
  * @param color 要改变的颜色，默认是红色
  */
-fun CharSequence.toColorSpan(range: IntRange, color: Int = Color.RED): CharSequence {
+fun CharSequence.toColorSpan(range: IntRange = 0..this.length, color: Int = Color.RED): CharSequence {
 	return SpannableString(this).apply {
 		setSpan(
 			ForegroundColorSpan(color),
@@ -97,7 +103,7 @@ fun CharSequence.toColorSpan(range: IntRange, color: Int = Color.RED): CharSeque
  * @param range 要改变背景色的文字的范围
  * @param color 要改变的颜色，默认是红色
  */
-fun CharSequence.toBackgroundColorSpan(range: IntRange, color: Int = Color.RED): CharSequence {
+fun CharSequence.toBackgroundColorSpan(range: IntRange = 0..this.length, color: Int = Color.RED): CharSequence {
 	return SpannableString(this).apply {
 		setSpan(
 			BackgroundColorSpan(color),
@@ -112,7 +118,7 @@ fun CharSequence.toBackgroundColorSpan(range: IntRange, color: Int = Color.RED):
  * 将一段文字中指定range的文字添加删除线
  * @param range 要添加删除线的文字的范围
  */
-fun CharSequence.toStrikeThroughSpan(range: IntRange): CharSequence {
+fun CharSequence.toStrikeThroughSpan(range: IntRange = 0..this.length): CharSequence {
 	return SpannableString(this).apply {
 		setSpan(
 			StrikethroughSpan(),
@@ -128,7 +134,7 @@ fun CharSequence.toStrikeThroughSpan(range: IntRange): CharSequence {
  * @param range 目标文字的范围
  */
 fun CharSequence.toClickSpan(
-	range: IntRange,
+	range: IntRange = 0..this.length,
 	color: Int = Color.RED,
 	isUnderlineText: Boolean = false,
 	clickAction: (() -> Unit)?
@@ -152,7 +158,7 @@ fun CharSequence.toClickSpan(
  * 将一段文字中指定range的文字添加style效果
  * @param range 要添加删除线的文字的范围
  */
-fun CharSequence.toStyleSpan(style: Int = Typeface.BOLD, range: IntRange): CharSequence {
+fun CharSequence.toStyleSpan(style: Int = Typeface.BOLD, range: IntRange = 0..this.length): CharSequence {
 	return SpannableString(this).apply {
 		setSpan(
 			StyleSpan(style),
@@ -167,7 +173,7 @@ fun CharSequence.toStyleSpan(style: Int = Typeface.BOLD, range: IntRange): CharS
  * 将一段文字中指定range的文字添加自定义效果
  * @param range 要添加删除线的文字的范围
  */
-fun CharSequence.toCustomTypeFaceSpan(typeface: Typeface, range: IntRange): CharSequence {
+fun CharSequence.toCustomTypeFaceSpan(typeface: Typeface, range: IntRange = 0..this.length): CharSequence {
 	return SpannableString(this).apply {
 		setSpan(
 			CustomTypefaceSpan(typeface),
@@ -185,7 +191,7 @@ fun CharSequence.toCustomTypeFaceSpan(typeface: Typeface, range: IntRange): Char
  */
 fun CharSequence.toImageSpan(
 	imageRes: Int,
-	range: IntRange,
+	range: IntRange = 0..this.length,
 	verticalAlignment: Int = 0,  //默认底部  4是垂直居中
 	marginLeft: Int = 0,
 	marginRight: Int = 0,
@@ -215,7 +221,7 @@ fun CharSequence.toImageSpan(
 
 
 /******************************** TextView的扩展 ,本质上还是调用上面的方法  ********************************/
-fun TextView.sizeSpan(str: String = "", range: IntRange, textSize: Int = 14, isSp: Boolean = true): TextView {
+fun TextView.sizeSpan(str: String = "", range: IntRange = 0..str.length, textSize: Int = 14, isSp: Boolean = true): TextView {
 	text = (str.ifEmpty { text }).toSizeSpan(range, textSize, isSp)
 	return this
 }
@@ -225,7 +231,7 @@ fun TextView.appendSizeSpan(str: String = "", textSize: Int = 14, isSp: Boolean 
 	return this
 }
 
-fun TextView.scaleSpan(str: String = "", range: IntRange, scale: Float = 1.5f): TextView {
+fun TextView.scaleSpan(str: String = "", range: IntRange = 0..str.length, scale: Float = 1.5f): TextView {
 	text = (str.ifEmpty { text }).toScaleSpan(range, scale)
 	return this
 }
@@ -235,7 +241,7 @@ fun TextView.appendScaleSpan(str: String = "", scale: Float = 1.5f): TextView {
 	return this
 }
 
-fun TextView.colorSpan(str: String = "", range: IntRange, color: Int = Color.RED): TextView {
+fun TextView.colorSpan(str: String = "", range: IntRange = 0..str.length, color: Int = Color.RED): TextView {
 	text = (str.ifEmpty { text }).toColorSpan(range, color)
 	return this
 }
@@ -247,7 +253,7 @@ fun TextView.appendColorSpan(str: String = "", color: Int = Color.RED): TextView
 
 fun TextView.backgroundColorSpan(
 	str: String = "",
-	range: IntRange,
+	range: IntRange = 0..str.length,
 	color: Int = Color.RED
 ): TextView {
 	text = (str.ifEmpty { text }).toBackgroundColorSpan(range, color)
@@ -259,7 +265,7 @@ fun TextView.appendBackgroundColorSpan(str: String = "", color: Int = Color.RED)
 	return this
 }
 
-fun TextView.strikeThrougthSpan(str: String = "", range: IntRange): TextView {
+fun TextView.strikeThrougthSpan(str: String = "", range: IntRange = 0..str.length): TextView {
 	text = (str.ifEmpty { text }).toStrikeThroughSpan(range)
 	return this
 }
@@ -270,27 +276,32 @@ fun TextView.appendStrikeThrougthSpan(str: String = ""): TextView {
 }
 
 fun TextView.clickSpan(
-	str: String = "", range: IntRange,
-	color: Int = Color.RED, isUnderlineText: Boolean = false, clickAction: () -> Unit
+	str: String = "", range: IntRange = 0..str.length,
+	color: Int = Color.RED, isUnderlineText: Boolean = false, clickAction: (() -> Unit)?
 ): TextView {
-	movementMethod = LinkMovementMethod.getInstance()
-	highlightColor = Color.TRANSPARENT  // remove click bg color
-	text =
-		(str.ifEmpty { text }).toClickSpan(range, color, isUnderlineText, clickAction)
+	if (clickAction != null) {
+		movementMethod = LinkMovementMethod.getInstance()
+		highlightColor = Color.TRANSPARENT  // remove click bg color
+	}
+
+	text = (str.ifEmpty { text }).toClickSpan(range, color, isUnderlineText, clickAction)
 	return this
 }
 
 fun TextView.appendClickSpan(
 	str: String = "", color: Int = Color.RED,
-	isUnderlineText: Boolean = false, clickAction: () -> Unit
+	isUnderlineText: Boolean = false, clickAction: (() -> Unit)?
 ): TextView {
-	movementMethod = LinkMovementMethod.getInstance()
-	highlightColor = Color.TRANSPARENT  // remove click bg color
+	if (clickAction != null) {
+		movementMethod = LinkMovementMethod.getInstance()
+		highlightColor = Color.TRANSPARENT  // remove click bg color
+	}
+
 	append(str.toClickSpan(0..str.length, color, isUnderlineText, clickAction))
 	return this
 }
 
-fun TextView.styleSpan(str: String = "", range: IntRange, style: Int = Typeface.BOLD): TextView {
+fun TextView.styleSpan(str: String = "", range: IntRange = 0..str.length, style: Int = Typeface.BOLD): TextView {
 	text = (str.ifEmpty { text }).toStyleSpan(style = style, range = range)
 	return this
 }
@@ -300,7 +311,7 @@ fun TextView.appendStyleSpan(str: String = "", style: Int = Typeface.BOLD): Text
 	return this
 }
 
-fun TextView.customTypeFaceSpan(str: String = "", range: IntRange, typeface: Typeface): TextView {
+fun TextView.customTypeFaceSpan(str: String = "", range: IntRange = 0..str.length, typeface: Typeface): TextView {
 	text = (str.ifEmpty { text }).toCustomTypeFaceSpan(typeface, range = range)
 	return this
 }
@@ -313,18 +324,18 @@ fun TextView.appendCustomTypeFaceSpan(str: String = "", typeface: Typeface): Tex
 fun TextView.imagepan(
 	imageRes: Int,
 	verticalAlignment: Int = 0,  //默认底部
-	range: IntRange,
-	maginLeft: Int = 0,
+	str: String = "",
+	range: IntRange = 0..str.length,
+	marginLeft: Int = 0,
 	marginRight: Int = 0,
 	width: Int = 0,
-	height: Int = 0,
-	str: String = ""
+	height: Int = 0
 ): TextView {
 	text = (str.ifEmpty { text }).toImageSpan(
 		imageRes,
 		range = range,
 		verticalAlignment = verticalAlignment,
-		marginLeft = maginLeft,
+		marginLeft = marginLeft,
 		marginRight = marginRight,
 		width = width,
 		height = height
