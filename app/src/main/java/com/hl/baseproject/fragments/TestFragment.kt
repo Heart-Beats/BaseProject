@@ -104,6 +104,14 @@ class TestFragment : ViewBindingMvvmBaseFragment<FragmentTestBinding>() {
 			}
 		}
 
+		// testSpan.text = "开始时间：".run {
+		// 	toColorSpan(color = Color.RED).toSizeSpan(size = 30, isSp = true) + "测试点击".toClickSpan(color = Color.CYAN) {
+		// 		toast("已被点击")
+		// 	}
+		// }
+		//
+		// testSpan.movementMethod = LinkMovementMethod.getInstance()
+
 		testSaveImage.onClick {
 			val bitmap = ImageUtils.view2Bitmap(testImage)
 			com.hl.bitmaputil.BitmapUtil.saveBitmap(requireContext(), bitmap, "测试图片.png", failAction = {
