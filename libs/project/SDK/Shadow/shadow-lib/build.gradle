@@ -1,11 +1,53 @@
 plugins {
-    id 'java-library'
-    id 'kotlin'
+    alias libs.plugins.android.library
+    alias libs.plugins.kotlin.android
 }
 
-java {
-    sourceCompatibility JavaVersion.VERSION_1_8
-    targetCompatibility JavaVersion.VERSION_1_8
+android {
+    namespace = "com.hl.shadow.lib"
+    resourcePrefix "hl_shadow_lib_"
+
+    compileSdk libs.versions.compileSdk.get().toInteger()
+    defaultConfig {
+        minSdkVersion libs.versions.minSdk.get().toInteger()
+        targetSdkVersion libs.versions.targetSdk.get().toInteger()
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+
+        ndk {
+            /**
+             * armeabi-v7a 和 arm64-v8a 架构的设备会向下兼容：
+             * 1. 只适配 armeabi 的 APP 可以跑在 armeabi,x86,x86_64,armeabi-v7a,arm64-v8 设备上
+             * 2. 只适配 armeabi-v7a 可以运行在 armeabi-v7a 和 arm64-v8a 设备上
+             * 3. 只适配 arm64-v8a 的 App 只可以运行在 arm64-v8a 设备上
+             *
+             */
+            //设置支持的SO库架构
+            abiFilters "armeabi-v7a", "arm64-v8a"
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
+    }
+
+    buildFeatures {
+        aidl false
+
+        // 默认不生成 BuildConfig 类
+        buildConfig = false
+    }
 }
 
 dependencies {

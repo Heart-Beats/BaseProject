@@ -1,21 +1,10 @@
 apply from: '../../commonGradle/gradle_config_optimize.gradle'
 
 dependencyResolutionManagement {
-    repositories {
-        maven {
-            name = "GitHubPackages"
-            url 'https://maven.pkg.github.com/Heart-Beats/BaseProject'
-            credentials {
-                username = 'Heart-Beats'
-                password = GITHUB_PACKAGES_READ_TOKEN
-            }
-        }
-    }
-
     versionCatalogs {
         // 默认创建的 libs 进行配置
         libs {
-            from("com.hl:catalog:1.0.3")
+            from("io.github.heart-beats.baseproject:catalog:1.0.3")
 
             version("androidGradlePlugin", "8.0.1")
             version("kotlin", "1.9.20")

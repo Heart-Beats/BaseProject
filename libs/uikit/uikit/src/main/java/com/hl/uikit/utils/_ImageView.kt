@@ -1,10 +1,11 @@
 package com.hl.uikit.utils
 
-import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.widget.ImageView
 import androidx.annotation.ColorInt
+import androidx.annotation.Px
+import androidx.core.graphics.createBitmap
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
