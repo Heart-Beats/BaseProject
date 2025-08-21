@@ -1,6 +1,10 @@
 apply from: '../../commonGradle/gradle_config_optimize.gradle'
 
 dependencyResolutionManagement {
+    repositories {
+        mavenCentral()
+    }
+
     versionCatalogs {
         // 默认创建的 libs 进行配置
         libs {
