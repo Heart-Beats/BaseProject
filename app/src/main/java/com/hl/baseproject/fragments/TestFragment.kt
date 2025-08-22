@@ -3,6 +3,7 @@ package com.hl.baseproject.fragments
 import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Bundle
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.FragmentNavigator
 import com.blankj.utilcode.util.ImageUtils
 import com.elvishew.xlog.XLog
@@ -12,6 +13,7 @@ import com.hl.arch.mvvm.vm.LiveDataVM
 import com.hl.baseproject.BuildConfig
 import com.hl.baseproject.R
 import com.hl.baseproject.databinding.FragmentTestBinding
+import com.hl.baseproject.viewmodels.TestViewModel
 import com.hl.dateutil.toFormatString
 import com.hl.navigatioin.getCurrentDestination
 import com.hl.tencentcloud.cos.TencentCosUtil
@@ -29,6 +31,8 @@ import java.util.Date
 
 
 class TestFragment : ViewBindingMvvmBaseFragment<FragmentTestBinding>() {
+
+	private val viewModel: TestViewModel by viewModels()
 
 	override fun isActivityMainPage(): Boolean {
 		return false
@@ -181,6 +185,18 @@ class TestFragment : ViewBindingMvvmBaseFragment<FragmentTestBinding>() {
 			// mediaPlayerHelper.preparePlayUrl(url)
 
 			mediaPlayerHelper.preparePlayRes(requireContext(), R.raw.summer)
+		}
+
+		testCheckPhone.onClick {
+			viewModel.checkPhone()
+		}
+
+		testQuantumEncrypt.onClick {
+			viewModel.doQuantumEncrypt()
+		}
+
+		testQuantumDecrypt.onClick {
+			viewModel.doQuantumDecrypt()
 		}
 	}
 }

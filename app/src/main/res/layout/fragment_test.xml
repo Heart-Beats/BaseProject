@@ -85,4 +85,28 @@
         android:text="测试播放在线音频"
         android:textSize="24sp" />
 
+    <TextView
+        android:id="@+id/test_check_phone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/dp_10"
+        android:text="测试本地服务-手机号校验"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/test_quantum_encrypt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/dp_10"
+        android:text="测试本地服务-量子加密"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/test_quantum_decrypt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/dp_10"
+        android:text="测试本地服务-量子解密"
+        android:textSize="15sp" />
+
 </LinearLayout>
