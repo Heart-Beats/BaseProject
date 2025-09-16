@@ -1,5 +1,6 @@
 package com.hl.rvadapter.utils
 
+import android.os.SystemClock
 import android.view.View
 
 /**
@@ -13,7 +14,7 @@ import android.view.View
 internal fun View.onClick(interval: Long, listener: (View) -> Unit) {
 	setOnClickListener {
 		val time = it.getTag(it.id)?.toString()?.toLongOrNull()
-		val currentTime = System.currentTimeMillis()
+		val currentTime = SystemClock.elapsedRealtime()
 		if (time == null || currentTime - time > interval) {
 			it.setTag(it.id, currentTime)
 			listener.invoke(it)
