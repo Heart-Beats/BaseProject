@@ -47,7 +47,7 @@ task buildSdk() {
 }
 
 //引入配置设置
-apply from: 'publish_config.gradle'
+apply from: './commonGradle/maven-publish/publish_config.gradle'
 apply plugin: 'maven-publish'
 
 /**

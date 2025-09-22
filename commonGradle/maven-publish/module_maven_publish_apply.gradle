@@ -1,9 +1,9 @@
-//引入 maven 发布配置设置
-apply from: '../../publish_config.gradle'
+def projectRelativeRootPath = '../../'
 
+//引入 maven 发布配置设置
+apply from: rootProject.file(projectRelativeRootPath + './commonGradle/maven-publish/publish_config.gradle').path
 
 subprojects {
-
     Project project = it
 
     ext {
@@ -11,9 +11,15 @@ subprojects {
         module_name = project.path.drop(1)
     }
 
-    // maven 发布脚本路径
-    def mavenPublishScriptPath = rootProject.file('../../commonGradle/MavenPublish.gradle').path
-    apply from: mavenPublishScriptPath
+    project.afterEvaluate {
+        if (project.plugins.hasPlugin('com.android.application')) {
+            return
+        }
+
+        // maven 发布脚本路径
+        def mavenPublishScriptPath = rootProject.file(projectRelativeRootPath +'./commonGradle/maven-publish/MavenPublish.gradle').path
+        project.apply from: mavenPublishScriptPath
+    }
 }
 
 
@@ -30,7 +36,7 @@ gradle.projectsEvaluated {
         def publishRepositoryName = publishTaskName.split('publishMavenPublicationTo')[1]
 
         // 在根项目下创建所有的发布任务
-        rootProject.tasks.register("${publishAllName}"){
+        rootProject.tasks.register("${publishAllName}") {
             group = "publishing"
             description = "发布所有组件到 $publishRepositoryName"
 
