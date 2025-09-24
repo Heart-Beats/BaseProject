@@ -3,105 +3,68 @@ package com.hl.arch.mvvm.vm
 import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.hl.api.PublicResp
-import com.hl.arch.mvvm.api.event.RequestStateEvent
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
+import com.hl.api.event.ApiEvent
+import com.hl.api.event.IApiEventProvider
+import com.hl.arch.mvvm.api.event.UiEvent
+import com.hl.arch.mvvm.api.event.dismissLoading
+import com.hl.arch.mvvm.api.event.showException
+import com.hl.arch.mvvm.api.event.showLoading
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.onCompletion
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 
-abstract class FlowVM : DispatcherVM() {
+abstract class FlowVM : DispatcherVM(), IApiEventProvider {
 
     private val tag = "FlowVM"
 
-    /**
-     * replay:                  对新订阅者重新发送之前已发出的数据项数目
-     * extraBufferCapacity：    除 replay 外缓冲的数据项数目。即缓冲区总大小 = replay + extraBufferCapacity
-     * onBufferOverflow:        缓冲区中已满时的策略。
-     *      默认值：BufferOverflow.SUSPEND（挂起消费者）、DROP_LATEST（丢弃最新值）、DROP_OLDEST（丢弃最老值）。
-     *
-     * MutableSharedFlow（） 方法默认创建一个缓存大小为 0, 重发数据项为 0 的可读写共享热流，
-     *      由于缓存大小为 0，因此新的订阅者获取不到之前的数据，所以非粘性，可作为通知事件
-     *      同时需要注意： 新添加的消费者，若流无任何数据生产，则会被一直挂起直至有生产数据
-     */
-    private val _requestStateFlow by lazy { MutableSharedFlow<RequestStateEvent>() }
+    // 使用 ShareFlow 目前在 ViewModel 的 init 方法中请求数据，会导致相关事件收集丢失，因为这时页面的 onViewModelCreated 还没有被调用
+    internal val uiEvent by lazy { MutableSharedFlow<UiEvent>() }
 
-    // 请求状态为只读共享流
-    internal val requestStateEventFlow by lazy { _requestStateFlow.asSharedFlow() }
-
-
-    protected fun <BODY> apiFlow(
-        needLoading: Boolean,
-        reqBlock: suspend () -> PublicResp<BODY>,
+    protected fun <BODY> apiLaunch(
+        needLoading: Boolean = true,
         needDispatchFailEvent: Boolean = true,
+        reqBlock: suspend CoroutineScope.() -> PublicResp<BODY>,
         onFail: ((failCode: String, failReason: String) -> Unit)? = null,
         onSuccess: (body: BODY?) -> Unit = {}
-    ) = flow {
-        val resp = reqBlock()
-        emit(resp)
-    }
-        .flowOn(Dispatchers.IO)
-        .onEach {
-            Log.d(tag, "apiFlow: 收到请求的数据")
+    ) {
+        if (needLoading) {
+            // 请求开始开启 loading
+            uiEvent.showLoading(viewModelScope)
+        }
 
-            it.dispatchApiEvent(needDispatchFailEvent, onFail, onSuccess)
-        }
-        .onStart {
-            Log.d(tag, "apiFlow: 请求开始")
-            if (needLoading) {
-                _requestStateFlow.emit(RequestStateEvent.createLoadingEvent())
-            }
-        }.catch { exception ->
-            Log.e(tag, "apiFlow: 请求出错", exception)
-            _requestStateFlow.emit(RequestStateEvent.createErrorEvent(exception))
-        }
-        .onCompletion { exception ->
-            // 该方法在流完成或取消时调用，回调参数为取消异常或失败的原因
-            if (exception != null) {
-                // 异常未被 catch 代码块捕获，不为空
-                Log.e(tag, "apiFlow: 请求完成", exception)
-            } else {
-                Log.d(tag, "apiFlow: 请求完成")
+        reqBlock.launchAction {
+            this.onSuccess {
                 if (needLoading) {
-                    _requestStateFlow.emit(RequestStateEvent.createCompletedEvent())
+                    // 请求结束关闭 loading
+                    uiEvent.dismissLoading(viewModelScope)
+                }
+
+                onSuccess(it)
+            }
+
+            this.onFail { failCode, failReason ->
+                if (needLoading) {
+                    // 请求结束关闭 loading
+                    uiEvent.dismissLoading(viewModelScope)
+                }
+
+                if (isRequestExceptionByCode(failCode.toInt())) {
+                    uiEvent.showException(viewModelScope, Throwable(failReason))
+                    return@onFail
+                }
+
+                if (needDispatchFailEvent) {
+                    val apiEvent = createApiEvent(failCode.toInt(), failReason)
+                    Log.i(tag, "根据请求创建的 apiEvent -----------> $apiEvent")
+
+                    viewModelScope.launch {
+                        apiEventFailedFlow.emit(apiEvent as ApiEvent.Failed)
+                    }
+                } else {
+                    // 不分发请求错误事件时，使用 onFail 回传错误信息
+                    onFail?.invoke(failCode, failReason)
                 }
             }
         }
-
-    /**
-     * 返回一个初始值为 null 的 StateFlow
-     *
-     * @param  needLoading              是否需要 loading 事件
-     * @param  reqBlock                 请求的方法
-     * @param  needDispatchFailEvent    是否分发请求失败事件
-     *
-     */
-    protected fun <BODY> apiStateFlow(
-        needLoading: Boolean,
-        reqBlock: suspend () -> PublicResp<BODY>,
-        needDispatchFailEvent: Boolean = true,
-        onFail: ((failCode: String, failReason: String) -> Unit)? = null,
-        onSuccess: (body: BODY?) -> Unit = {}
-    ) = apiFlow(needLoading, reqBlock, needDispatchFailEvent, onFail, onSuccess).toStateFlow()
-
-
-    private fun <T> Flow<T>.toStateFlow() = this.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5000),
-        initialValue = null
-    )
-
-    protected fun <T> MutableStateFlow<T>.toStateFlow() = this.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5000),
-        initialValue = this.value
-    )
+    }
 }

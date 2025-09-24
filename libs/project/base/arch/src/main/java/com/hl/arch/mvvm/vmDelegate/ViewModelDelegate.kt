@@ -1,26 +1,21 @@
 package com.hl.arch.mvvm.vmDelegate
 
-import android.content.BroadcastReceiver
-import android.content.Intent
 import android.util.Log
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelStore
 import androidx.lifecycle.ViewModelStoreOwner
+import androidx.lifecycle.coroutineScope
 import com.elvishew.xlog.XLog
 import com.hl.api.PublicResp
 import com.hl.arch.loading.getLoadingPopup
-import com.hl.arch.mvvm.api.event.RequestStateEvent
 import com.hl.arch.mvvm.api.event.UiEvent
 import com.hl.arch.mvvm.vm.DispatcherVM
 import com.hl.arch.mvvm.vm.FlowVM
 import com.hl.arch.mvvm.vm.LiveDataVM
 import com.hl.arch.utils.apiRespRepeatSafeCollect
 import com.hl.arch.utils.repeatSafeCollect
-import com.hl.utils.ReflectHelper
 import com.hl.utils.onceLastObserve
-import com.hl.utils.registerLocalReceiver
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.launch
 
 /**
  * @author  张磊  on  2023/02/10 at 18:25
@@ -31,7 +26,7 @@ interface ViewModelDelegate {
 	var lifecycleOwnerName: String
 
 	/**
-	 * 注册 ViewModel 创建的广播
+	 * 注册 ViewModel 已创建的监听
 	 *
 	 * @param viewModelStoreOwner viewModel 仓库所有者， 一般为 FragmentActivity 或 Fragment 即可
 	 */
@@ -85,30 +80,21 @@ class BaseViewModelDelegate : ViewModelDelegate {
 	override var lifecycleOwnerName: String = ""
 
 	override fun LifecycleOwner.registerOnViewModelCreated(viewModelStoreOwner: ViewModelStoreOwner) {
-		lifecycleOwnerName = this.javaClass.simpleName
+		val lifecycleOwner = this@registerOnViewModelCreated
+		lifecycleOwnerName = lifecycleOwner.javaClass.simpleName
+
 		Log.d(TAG, "$lifecycleOwnerName registerOnViewModelCreated: ")
 
-		val viewModelStore = viewModelStoreOwner.viewModelStore
+		lifecycleOwner.lifecycle.coroutineScope.launch {
+			DispatcherVM.viewModelOnCreateSharedFlow.collect { (storeLifecycleOwner, viewModel) ->
+				if (storeLifecycleOwner != lifecycleOwner) {
+					return@collect
+				}
 
-		val onReceive: (BroadcastReceiver, Intent) -> Unit = { _, intent ->
-			if (intent.action == DispatcherVM.VIEW_MODEL_ON_CREATE) {
-				val viewModelMap =
-					ReflectHelper(ViewModelStore::class.java).getFiledValue<Map<String, ViewModel>>(viewModelStore, "map")
-
-				viewModelMap?.values
-					?.filter {
-						// 过滤出已存放中的当前创建的 viewModel
-						it.javaClass.name == intent.getStringExtra(DispatcherVM.VIEW_MODEL_NAME)
-					}
-					?.forEach { viewModel ->
-						// 页面收到 viewModel 创建的通知， 需要注意 viewModel 创建需要在广播注册之后，目前广播是在页面 onCreate 时注册的
-						onViewModelCreated(viewModel, this)
-					}
+				// 通知 ViewModel 已被创建
+				onViewModelCreated(viewModel, lifecycleOwner)
 			}
 		}
-
-		// 注册 ViewModel 创建的广播
-		this.lifecycle.registerLocalReceiver(DispatcherVM.VIEW_MODEL_ON_CREATE, onReceive = onReceive)
 	}
 
 
@@ -142,18 +128,17 @@ class BaseViewModelDelegate : ViewModelDelegate {
 	}
 
 	private fun FlowVM.stateEventFlowCollect(lifecycleOwner: LifecycleOwner) {
-		this.requestStateEventFlow.safeCollect(lifecycleOwner) {
+		this.uiEvent.safeCollect(lifecycleOwner) {
 			when (it) {
-				is RequestStateEvent.LoadingEvent -> {
-					Log.d(TAG, "LoadingEvent: ")
+				is UiEvent.UiShowLoading -> {
 					onShowLoading(it.showMsg)
 				}
-				is RequestStateEvent.ErrorEvent -> {
-					Log.d(TAG, "ErrorEvent: ")
+
+				is UiEvent.UiShowException -> {
 					onShowError(it.throwable)
 				}
-				is RequestStateEvent.CompletedEvent -> {
-					Log.d(TAG, "CompletedEvent: ")
+
+				is UiEvent.UiDismissLoading -> {
 					onDismissLoading()
 				}
 			}

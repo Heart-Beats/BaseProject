@@ -2,11 +2,22 @@ package com.hl.arch.mvvm.api.event
 
 import com.hl.arch.mvvm.liveData.EventLiveData
 import com.hl.utils.isMainThread
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.launch
 
 /**
  * @author  张磊  on  2021/11/06 at 18:57
  * Email: 913305160@qq.com
  */
+
+sealed class UiEvent {
+	data class UiShowLoading(var showMsg: CharSequence = "") : UiEvent()
+
+	object UiDismissLoading : UiEvent()
+
+	data class UiShowException(var throwable: Throwable) : UiEvent()
+}
 
 fun EventLiveData<UiEvent>.showLoading(showMsg: CharSequence = "") {
 	setSafeValue(UiEvent.UiShowLoading(showMsg))
@@ -28,10 +39,21 @@ fun <T> EventLiveData<T>.setSafeValue(value: T?) {
 	}
 }
 
-sealed class UiEvent {
-	data class UiShowLoading(var showMsg: CharSequence = "") : UiEvent()
 
-	object UiDismissLoading : UiEvent()
+fun MutableSharedFlow<UiEvent>.showLoading(scope: CoroutineScope, showMsg: CharSequence = "") {
+	scope.launch {
+		this@showLoading.emit(UiEvent.UiShowLoading(showMsg))
+	}
+}
 
-	data class UiShowException(var throwable: Throwable) : UiEvent()
+fun MutableSharedFlow<UiEvent>.dismissLoading(scope: CoroutineScope) {
+	scope.launch {
+		this@dismissLoading.emit(UiEvent.UiDismissLoading)
+	}
+}
+
+fun MutableSharedFlow<UiEvent>.showException(scope: CoroutineScope, throwable: Throwable) {
+	scope.launch {
+		this@showException.emit(UiEvent.UiShowException(throwable))
+	}
 }
