@@ -12,105 +12,34 @@ import javax.net.ssl.SSLHandshakeException
 
 object ExceptionHandler {
 
-	// 未授权
-	private const val UNAUTHORIZED = 401
-
-	// 禁止的
-	private const val FORBIDDEN = 403
-
-	// 未找到
-	private const val NOT_FOUND = 404
-
-	// 请求超时
-	private const val REQUEST_TIMEOUT = 408
-
-	// 内部服务器错误
-	private const val INTERNAL_SERVER_ERROR = 500
-
-	// 网关错误
-	private const val BAD_GATEWAY = 502
-
-	// 暂停服务
-	private const val SERVICE_UNAVAILABLE = 503
-
-	// 网关超时
-	private const val GATEWAY_TIMEOUT = 504
-
-	/**
-	 * 处理异常
-	 */
-	fun handleException(throwable: Throwable?): ResponseThrowable {
-		// 返回时抛出异常
-		val responseThrowable: ResponseThrowable
-		when (throwable) {
-			is HttpException -> {
-				val httpStatusCode = throwable.code()
-				responseThrowable = ResponseThrowable(httpStatusCode, throwable)
-				when (httpStatusCode) {
-					UNAUTHORIZED -> responseThrowable.message = "未授权"
-					FORBIDDEN -> responseThrowable.message = "禁止访问"
-					NOT_FOUND -> responseThrowable.message = "路径未找到"
-					REQUEST_TIMEOUT -> responseThrowable.message = "请求超时"
-					GATEWAY_TIMEOUT -> responseThrowable.message = "网关超时"
-					INTERNAL_SERVER_ERROR -> responseThrowable.message = "内部服务器错误"
-					BAD_GATEWAY -> responseThrowable.message = "网关错误"
-					SERVICE_UNAVAILABLE -> responseThrowable.message = "暂停服务"
-					else -> responseThrowable.message = "网络错误"
-				}
-				return responseThrowable
-			}
-
-			is ServerException -> {
-				// 服务器异常
-				val resultException = throwable
-				responseThrowable = ResponseThrowable(resultException.code, resultException)
-				responseThrowable.message = resultException.message ?: "未知错误"
-				return responseThrowable
-			}
-
-			is JsonParseException, is JSONException, is ParseException -> {
-				responseThrowable = ResponseThrowable(ERROR.PARSE_ERROR, throwable)
-				responseThrowable.message = "解析错误"
-				return responseThrowable
-			}
-
-			is ConnectException, is UnknownHostException -> {
-				responseThrowable = ResponseThrowable(ERROR.NETWORK_ERROR, throwable)
-				responseThrowable.message = "网络异常"
-				return responseThrowable
-			}
-
-			is SSLHandshakeException -> {
-				responseThrowable = ResponseThrowable(ERROR.SSL_ERROR, throwable)
-				responseThrowable.message = "证书验证失败"
-				return responseThrowable
-			}
-
-			is ConnectTimeoutException -> {
-				responseThrowable = ResponseThrowable(ERROR.TIMEOUT_ERROR, throwable)
-				responseThrowable.message = "连接超时"
-				return responseThrowable
-			}
-
-			is SocketTimeoutException -> {
-				responseThrowable = ResponseThrowable(ERROR.TIMEOUT_ERROR, throwable)
-				responseThrowable.message = "连接超时"
-				return responseThrowable
-			}
-
-			else -> {
-				responseThrowable = ResponseThrowable(ERROR.UNKNOWN, throwable)
-				responseThrowable.message = throwable?.message ?: "未知错误"
-				return responseThrowable
-			}
-		}
-	}
-
-
 	/**
 	 * 约定异常
 	 */
 	object ERROR {
+		// 未授权
+		const val UNAUTHORIZED = 401
+
+		// 禁止的
+		const val FORBIDDEN = 403
+
+		// 未找到
+		const val NOT_FOUND = 404
+
+		// 请求超时
+		const val REQUEST_TIMEOUT = 408
+
+		// 内部服务器错误
+		const val INTERNAL_SERVER_ERROR = 500
+
+		// 网关错误
+		const val BAD_GATEWAY = 502
+
+		// 暂停服务
+		const val SERVICE_UNAVAILABLE = 503
+
+		// 网关超时
+		const val GATEWAY_TIMEOUT = 504
+
 		/**
 		 * 未知错误
 		 */
@@ -136,15 +65,104 @@ object ExceptionHandler {
 		 * 连接超时
 		 */
 		const val TIMEOUT_ERROR: Int = 1004
+
+		val errorMap = hashMapOf(
+			UNAUTHORIZED to "未授权",
+			FORBIDDEN to "禁止访问",
+			NOT_FOUND to "路径未找到",
+			REQUEST_TIMEOUT to "请求超时",
+			GATEWAY_TIMEOUT to "网关超时",
+			INTERNAL_SERVER_ERROR to "内部服务器错误",
+			BAD_GATEWAY to "网关错误",
+			SERVICE_UNAVAILABLE to "暂停服务",
+
+			PARSE_ERROR to "解析错误",
+			NETWORK_ERROR to "网络错误",
+			SSL_ERROR to "证书出错",
+			TIMEOUT_ERROR to "连接超时",
+			UNKNOWN to "未知错误",
+		)
+
+		// 添加 get 运算符重载
+		operator fun get(errorCode: Int): String {
+			return errorMap[errorCode]?.also {
+				// 未知错误时，将错误码和错误信息添加到 errorMap 中， 这里主要针对 HttpException 异常
+				errorMap.put(errorCode,  "网络错误")
+			} ?: "未知错误"
+		}
+	}
+
+	/**
+	 * 处理异常
+	 */
+	fun handleException(throwable: Throwable?): ResponseThrowable {
+		// 返回时抛出异常
+		val responseThrowable: ResponseThrowable
+		when (throwable) {
+			is HttpException -> {
+				val httpStatusCode = throwable.code()
+				responseThrowable = ResponseThrowable(httpStatusCode, throwable)
+				when (httpStatusCode) {
+					ERROR.UNAUTHORIZED -> responseThrowable.message = ERROR[ERROR.UNAUTHORIZED]
+					ERROR.FORBIDDEN -> responseThrowable.message = ERROR[ERROR.FORBIDDEN]
+					ERROR.NOT_FOUND -> responseThrowable.message = ERROR[ERROR.NOT_FOUND]
+					ERROR.REQUEST_TIMEOUT -> responseThrowable.message = ERROR[ERROR.REQUEST_TIMEOUT]
+					ERROR.GATEWAY_TIMEOUT -> responseThrowable.message = ERROR[ERROR.GATEWAY_TIMEOUT]
+					ERROR.INTERNAL_SERVER_ERROR -> responseThrowable.message = ERROR[ERROR.INTERNAL_SERVER_ERROR]
+					ERROR.BAD_GATEWAY -> responseThrowable.message = ERROR[ERROR.BAD_GATEWAY]
+					ERROR.SERVICE_UNAVAILABLE -> responseThrowable.message = ERROR[ERROR.SERVICE_UNAVAILABLE]
+					else -> responseThrowable.message = ERROR[httpStatusCode]
+				}
+				return responseThrowable
+			}
+
+			is JsonParseException, is JSONException, is ParseException -> {
+				responseThrowable = ResponseThrowable(ERROR.PARSE_ERROR, throwable)
+				responseThrowable.message = ERROR[ERROR.PARSE_ERROR]
+				return responseThrowable
+			}
+
+			is ConnectException, is UnknownHostException -> {
+				responseThrowable = ResponseThrowable(ERROR.NETWORK_ERROR, throwable)
+				responseThrowable.message = ERROR[ERROR.NETWORK_ERROR]
+				return responseThrowable
+			}
+
+			is SSLHandshakeException -> {
+				responseThrowable = ResponseThrowable(ERROR.SSL_ERROR, throwable)
+				responseThrowable.message = ERROR[ERROR.SSL_ERROR]
+				return responseThrowable
+			}
+
+			is ConnectTimeoutException -> {
+				responseThrowable = ResponseThrowable(ERROR.TIMEOUT_ERROR, throwable)
+				responseThrowable.message = ERROR[ERROR.TIMEOUT_ERROR]
+				return responseThrowable
+			}
+
+			is SocketTimeoutException -> {
+				responseThrowable = ResponseThrowable(ERROR.TIMEOUT_ERROR, throwable)
+				responseThrowable.message = ERROR[ERROR.TIMEOUT_ERROR]
+				return responseThrowable
+			}
+
+			else -> {
+				responseThrowable = ResponseThrowable(ERROR.UNKNOWN, throwable)
+				responseThrowable.message = throwable?.message ?: ERROR[ERROR.UNKNOWN]
+				return responseThrowable
+			}
+		}
+	}
+
+	/**
+	 * 是否是请求异常的错误码
+	 */
+	fun isRequestExceptionByCode(errorCode: Int): Boolean {
+		return ERROR.errorMap.containsKey(errorCode)
 	}
 
 	class ResponseThrowable(var code: Int, throwable: Throwable?) : Exception(throwable) {
 		override lateinit var message: String
-	}
-
-	class ServerException : RuntimeException() {
-		var code: Int = 0
-		override var message: String? = null
 	}
 }
 
