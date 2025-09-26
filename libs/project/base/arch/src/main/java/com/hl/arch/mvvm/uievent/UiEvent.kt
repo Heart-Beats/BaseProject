@@ -1,5 +1,6 @@
 package com.hl.arch.mvvm.api.event
 
+import android.util.Log
 import com.hl.arch.mvvm.liveData.EventLiveData
 import com.hl.utils.isMainThread
 import kotlinx.coroutines.CoroutineScope
@@ -11,7 +12,10 @@ import kotlinx.coroutines.launch
  * Email: 913305160@qq.com
  */
 
+private const val TAG = "UiEvent"
+
 sealed class UiEvent {
+
 	data class UiShowLoading(var showMsg: CharSequence = "") : UiEvent()
 
 	object UiDismissLoading : UiEvent()
@@ -20,14 +24,17 @@ sealed class UiEvent {
 }
 
 fun EventLiveData<UiEvent>.showLoading(showMsg: CharSequence = "") {
+	Log.d(TAG, "showLoading  ----------->")
 	setSafeValue(UiEvent.UiShowLoading(showMsg))
 }
 
 fun EventLiveData<UiEvent>.dismissLoading() {
+	Log.d(TAG, "dismissLoading  ----------->")
 	setSafeValue(UiEvent.UiDismissLoading)
 }
 
 fun EventLiveData<UiEvent>.showException(throwable: Throwable) {
+	Log.d(TAG, "showException  ----------->")
 	setSafeValue(UiEvent.UiShowException(throwable))
 }
 

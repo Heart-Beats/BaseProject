@@ -40,7 +40,7 @@ interface ViewModelDelegate {
 	}
 
 	/**
-	 * 重写处理  api 请求相关事件, 可见 [com.hl.arch.api.ApiEvent.Failed]
+	 * 重写处理  api 请求相关事件, 可见 [com.hl.api.event.ApiEvent.Failed]
 	 */
 	fun onLiveDataVMCreated(liveDataVM: LiveDataVM) {
 		XLog.d("$lifecycleOwnerName onLiveDataVMCreated --------->$liveDataVM")
@@ -48,7 +48,7 @@ interface ViewModelDelegate {
 
 
 	/**
-	 * 重写处理  api 请求相关事件, 可见 [com.hl.arch.api.ApiEvent.Failed]
+	 * 重写处理  api 请求相关事件, 可见 [com.hl.api.event.ApiEvent.Failed]
 	 */
 	fun onFlowVMCreated(flowVM: FlowVM) {
 		XLog.d("$lifecycleOwnerName onFlowVMCreated --------->$flowVM")
