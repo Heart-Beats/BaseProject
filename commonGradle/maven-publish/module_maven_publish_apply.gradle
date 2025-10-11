@@ -1,3 +1,24 @@
+gradle.beforeProject {
+    // 项目配置之前动态添加 buildscript 依赖
+    it.buildscript {
+        repositories {
+            maven { url 'https://maven.aliyun.com/repository/public' }
+            maven { url 'https://maven.aliyun.com/repository/google' }
+            maven { url 'https://maven.aliyun.com/repository/gradle-plugin' }
+            maven { url 'https://jitpack.io' }
+            google() // 阿里云对于有些库会有丢失，加入进行兜底
+            mavenCentral()
+            gradlePluginPortal()
+        }
+
+        dependencies {
+            // 目前该插件测试要求： Gradle:8.5+   AGP:8.1.0+
+            classpath 'com.vanniktech:gradle-maven-publish-plugin:0.33.0'
+        }
+    }
+}
+
+
 def projectRelativeRootPath = '../../'
 
 //引入 maven 发布配置设置
