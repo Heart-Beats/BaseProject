@@ -1,0 +1,201 @@
+// 打印出所有 .so 库的文件地址
+tasks.whenTaskAdded { task ->
+    // 注意：如果是有多个 flavor，则为 merge“Flavor”DebugNativeLibs 的形式
+    String taskName = task.name
+    if (taskName.matches('^merge.*[(Debug)|(Release)]NativeLibs$')) {
+        task.doFirst {
+            println("------------------- find so files start -------------------")
+
+            it.inputs.files.each { file ->
+                printDir(new File(file.absolutePath))
+            }
+
+            println("------------------- find so files end -------------------")
+        }
+    }
+}
+
+def printDir(File file) {
+    if (file != null) {
+        if (file.isDirectory()) {
+            file.listFiles().each {
+                printDir(it)
+            }
+        } else if (file.absolutePath.endsWith(".so")) {
+            println "find so file: $file.absolutePath  \n"
+        }
+    }
+}
+
+
+// 定义检查动态库差异的任务
+task checkNativeLibraryDifferences {
+    group '验证'
+    description '检查不同架构间的动态库差异，找出缺失或额外的库文件'
+
+    doLast {
+        // 获取配置的架构列表
+        def configuredAbis = []
+        if (project.hasProperty('android') && android.defaultConfig.hasProperty('ndk') &&
+                android.defaultConfig.ndk.hasProperty('abiFilters')) {
+            configuredAbis = android.defaultConfig.ndk.abiFilters as List
+        }
+
+        // 如果没有配置架构，使用常见架构
+        if (configuredAbis.isEmpty()) {
+            configuredAbis = ['armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64']
+        }
+
+        println "\n===== 开始检查动态库差异 ====="
+        println "配置的架构: ${configuredAbis}"
+
+        // 尝试不同可能的原生库输出目录
+        def libDirs = [
+                new File(buildDir, 'intermediates/merged_native_libs/debug/out/lib'),
+                new File(buildDir, 'intermediates/library_jni/debug/jni'),
+                new File(buildDir, 'outputs/native-debug-symbols/debug/native-debug-symbols/lib'),
+                new File(buildDir, 'libs'),
+                new File(buildDir, 'outputs/libs'),
+                new File(buildDir, 'intermediates/native_libs/debug/lib')
+        ]
+
+        def foundLibDir = null
+        for (dir in libDirs) {
+            if (dir.exists() && dir.isDirectory()) {
+                foundLibDir = dir
+                break
+            }
+        }
+
+        if (foundLibDir) {
+            println "库文件根目录: ${foundLibDir.absolutePath}"
+            analyzeLibraryDifferences(configuredAbis, foundLibDir)
+        } else {
+            println "警告: 未找到动态库目录! 请检查构建输出路径"
+
+            // 打印我们检查过的可能路径
+            println "已检查的路径:"
+            libDirs.each {
+                println "  - ${it.absolutePath}"
+            }
+        }
+    }
+}
+
+// 分析不同架构间的动态库差异
+void analyzeLibraryDifferences(List<String> configuredAbis, File libDir) {
+    // 存储每个架构下的库文件映射
+    def architectureLibraries = [:]
+
+    // 存储所有架构下的库文件集合，用于比较
+    def allLibraries = [] as Set
+
+    // 收集每个架构下的库文件
+    configuredAbis.each { abi ->
+        def abiLibDir = new File(libDir, abi)
+        def soFiles = []
+
+        if (abiLibDir.exists() && abiLibDir.isDirectory()) {
+            // 查找所有.so文件
+            soFiles = abiLibDir.listFiles({ file -> file.name.endsWith('.so') } as FileFilter)
+
+            if (soFiles) {
+                def libNames = soFiles.collect { it.name }
+                architectureLibraries[abi] = libNames
+                allLibraries.addAll(libNames)
+
+                println "\n架构 ${abi} 包含 ${libNames.size()} 个动态库:"
+                libNames.each { libName ->
+                    println "  - ${libName}"
+                }
+            } else {
+                println "\n警告: 架构 ${abi} 没有找到任何动态库文件"
+                architectureLibraries[abi] = []
+            }
+        } else {
+            println "\n警告: 架构 ${abi} 的目录不存在或为空"
+            architectureLibraries[abi] = []
+        }
+    }
+
+    // 找出所有架构间的差异
+    println "\n===== 架构间动态库差异分析 ====="
+
+    // 1. 找出在所有架构中都存在的库
+    def commonLibraries = allLibraries
+    configuredAbis.each { abi ->
+        commonLibraries = commonLibraries.intersect(architectureLibraries[abi] as Set)
+    }
+
+    println "\n在所有架构中都存在的库 (${commonLibraries.size()} 个):"
+    commonLibraries.each { libName ->
+        println "  - ${libName}"
+    }
+
+    // 2. 找出在某些架构中缺失的库
+    def missingLibraryReport = [:]
+
+    allLibraries.each { libName ->
+        def missingInAbis = []
+
+        configuredAbis.each { abi ->
+            if (!(libName in architectureLibraries[abi])) {
+                missingInAbis.add(abi)
+            }
+        }
+
+        if (missingInAbis) {
+            missingLibraryReport[libName] = missingInAbis
+        }
+    }
+
+    if (missingLibraryReport) {
+        println "\n在某些架构中缺失的库 (${missingLibraryReport.size()} 个):"
+        missingLibraryReport.each { libName, missingAbis ->
+            println "  - ${libName}: 缺失在 ${missingAbis.join(', ')} 架构中"
+        }
+    } else {
+        println "\n所有库文件在所有架构中都存在，没有缺失！"
+    }
+
+    // 3. 统计每个架构的库文件数量差异
+    println "\n各架构库文件数量统计:"
+    def totalLibrariesCount = 0
+    configuredAbis.each { abi ->
+        def count = architectureLibraries[abi].size()
+        totalLibrariesCount += count
+        println "  - ${abi}: ${count} 个库文件"
+    }
+
+    // 4. 输出总体差异报告
+    println "\n===== 差异分析总结 ====="
+    println "总共检查了 ${allLibraries.size()} 个不同的库文件"
+    println "在 ${configuredAbis.size()} 个架构中总共有 ${totalLibrariesCount} 个库文件实例"
+
+    if (missingLibraryReport) {
+        println "发现 ${missingLibraryReport.size()} 个库文件在某些架构中缺失"
+        println "建议检查这些缺失的库文件，确保跨架构兼容性"
+    } else {
+        println "所有架构的动态库文件完全一致，跨架构兼容性良好！"
+    }
+}
+
+// 使用Gradle推荐的方式设置任务依赖关系
+gradle.projectsEvaluated {
+    // 安全地查找并关联到可能存在的构建任务
+    ['assembleDebug', 'assembleRelease', 'build', 'assemble'].each { taskName ->
+        if (tasks.findByName(taskName)) {
+            tasks.named(taskName) { t ->
+                t.finalizedBy checkNativeLibraryDifferences
+                println "已将checkNativeLibraryDifferences关联到任务 ${taskName}"
+            }
+        }
+    }
+}
+
+// 添加一个单独的任务，用于手动触发差异检查
+task checkNativeLibsDiff {
+    group '验证'
+    description '手动检查不同架构间的动态库差异'
+    dependsOn checkNativeLibraryDifferences
+}
