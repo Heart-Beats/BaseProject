@@ -319,7 +319,7 @@ class UIKitWaveLoadingView : View {
 		preDrawTextPath()
 	}
 
-	override fun onDraw(canvas: Canvas?) {
+	override fun onDraw(canvas: Canvas) {
 		clipCanvasShape(canvas)
 		drawWave(canvas)
 		drawBorder(canvas)

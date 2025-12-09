@@ -5,7 +5,11 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
-import android.os.*
+import android.os.Bundle
+import android.os.Handler
+import android.os.IBinder
+import android.os.Looper
+import android.os.RemoteException
 import android.util.Log
 import android.util.Pair
 import com.hl.shadow.lib.ShadowConstants
@@ -18,8 +22,15 @@ import com.tencent.shadow.dynamic.loader.PluginServiceConnection
 import org.json.JSONException
 import java.io.File
 import java.io.IOException
-import java.util.*
-import java.util.concurrent.*
+import java.util.LinkedList
+import java.util.concurrent.ArrayBlockingQueue
+import java.util.concurrent.Callable
+import java.util.concurrent.ExecutionException
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Future
+import java.util.concurrent.ThreadPoolExecutor
+import java.util.concurrent.TimeUnit
+import java.util.concurrent.TimeoutException
 
 /**
  * @author  张磊  on  2022/09/30 at 15:43
@@ -165,7 +176,7 @@ abstract class BaseMultiLoaderPluginManager(context: Context) : PluginManagerTha
 			var serviceConnection: ServiceConnection? = null
 			try {
 				// 在宿主中定义的接口，用来回调 PluginServiceConnection 相关的方法
-				val instance = Class.forName("com.hl.shadow.dynamic.impl.ServiceConnectionIml").newInstance()
+				val instance = Class.forName("com.hl.shadow.dynamic.impl.ServiceConnectionIml").getDeclaredConstructor().newInstance()
 				serviceConnection = instance as ServiceConnection
 			} catch (e: Exception) {
 				e.printStackTrace()

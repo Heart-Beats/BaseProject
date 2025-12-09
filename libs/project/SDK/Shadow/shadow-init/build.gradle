@@ -33,9 +33,12 @@ android {
 
 repositories {
     mavenLocal()
-
-    maven { url 'https://maven.aliyun.com/repository/public' }
+    maven { url 'https://maven.aliyun.com/repository/public' } // central 和 jcenter 的聚合仓
     maven { url 'https://maven.aliyun.com/repository/google' }
+    maven { url 'https://jitpack.io' }
+    maven { url 'https://mirrors.cloud.tencent.com/nexus/repository/maven-public/' }   // 腾讯镜像
+    google()  // 阿里云对于有些库会有丢失，加入进行兜底
+    mavenCentral()
 
     maven {
         name = "GitHubPackages"

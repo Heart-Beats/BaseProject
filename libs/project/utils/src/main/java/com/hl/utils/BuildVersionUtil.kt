@@ -23,6 +23,14 @@ object BuildVersionUtil {
 	 * 是否 Android 12 及以上
 	 */
 	@JvmStatic
+	fun isOver13(): Boolean {
+		return Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
+	}
+
+    /**
+	 * 是否 Android 12 及以上
+	 */
+	@JvmStatic
 	fun isOver12(): Boolean {
 		return Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
 	}
@@ -58,6 +66,14 @@ object BuildVersionUtil {
 	fun isOver8(): Boolean {
 		return Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
 	}
+
+    /**
+     * 是否 Android 7.0  及以上
+     */
+    @JvmStatic
+    fun isOver7(): Boolean {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
+    }
 
 	/**
 	 * 是否 Android 6.0  及以上

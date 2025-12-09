@@ -1,16 +1,14 @@
 package com.hl.utils
 
-import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
 import android.provider.Settings
 import android.telephony.TelephonyManager
 import androidx.annotation.RequiresApi
-import androidx.annotation.RequiresPermission
 import com.blankj.utilcode.util.NetworkUtils
 import java.lang.reflect.Method
-import java.util.*
+import java.util.Locale
 
 /**
  * @Author  张磊  on  2020/09/28 at 9:58
@@ -36,24 +34,24 @@ object DeviceInfoUtil {
 	 * 获取设备的唯一标识， 需要 “android.permission.READ_Phone_STATE”权限
 	 */
 	@SuppressLint("HardwareIds")
-	@RequiresPermission(Manifest.permission.READ_PHONE_STATE)
 	@RequiresApi(Build.VERSION_CODES.O)
 	fun getIMEIDeviceId(context: Context): String {
 		val deviceId: String
 
-		deviceId = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        deviceId = if (BuildVersionUtil.isOver10()) {
 			Settings.Secure.getString(context.contentResolver, Settings.Secure.ANDROID_ID)
 		} else {
-			val mTelephony = context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
-			if (mTelephony.deviceId != null) {
-				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-					mTelephony.imei
-				} else {
-					mTelephony.deviceId
-				}
-			} else {
-				Settings.Secure.getString(context.contentResolver, Settings.Secure.ANDROID_ID)
-			}
+            try {
+                val mTelephony =
+                    context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
+                if (BuildVersionUtil.isOver8()) {
+                    mTelephony.imei
+                } else {
+                    mTelephony.deviceId
+                }
+            } catch (e: Exception) {
+                Settings.Secure.getString(context.contentResolver, Settings.Secure.ANDROID_ID)
+            }
 		}
 		return deviceId
 	}
@@ -195,7 +193,6 @@ object DeviceInfoUtil {
 	 * 获取当前手机的一些相关信息
 	 */
 	@RequiresApi(Build.VERSION_CODES.O)
-	@RequiresPermission(Manifest.permission.READ_PHONE_STATE)
 	fun getDeviceAllInfo(context: Context): String {
 		return """
 				1. IMEI或者设备ID:

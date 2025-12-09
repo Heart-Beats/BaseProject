@@ -13,7 +13,7 @@ dependencyResolutionManagement {
         libs {
             from("io.github.heart-beats.baseproject:catalog:1.0.3")
 
-            version("androidGradlePlugin", "8.0.1")
+            version("androidGradlePlugin", "8.2.2")
             version("kotlin", "1.9.20")
             version("minSdk", "26")
             version("compileSdk", "34")

@@ -1,6 +1,12 @@
 package com.hl.utils
 
-import java.io.*
+import java.io.BufferedInputStream
+import java.io.BufferedOutputStream
+import java.io.File
+import java.io.FileInputStream
+import java.io.FileOutputStream
+import java.io.InputStream
+import java.io.OutputStream
 
 /**
  * @author  张磊  on  2021/10/28 at 19:59
@@ -14,9 +20,11 @@ object FileUtil {
 		// 文件不存在时创建文件
 		if (!outputFile.exists()) {
 			val parentFile = outputFile.parentFile
-			if (!parentFile.exists()) {
-				parentFile.mkdirs()
-			}
+            if (parentFile != null) {
+                if (!parentFile.exists()) {
+                    parentFile.mkdirs()
+                }
+            }
 			outputFile.createNewFile()
 		}
 
@@ -35,7 +43,7 @@ object FileUtil {
 
 				return true
 			}
-		} catch (e: Exception) {
+		} catch (_: Exception) {
 			return false
 		}
 	}

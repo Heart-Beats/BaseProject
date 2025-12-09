@@ -3,10 +3,14 @@ package com.hl.utils.keyboard
 import android.content.Context
 import android.graphics.Color
 import android.graphics.Rect
-import android.graphics.drawable.ColorDrawable
 import android.util.DisplayMetrics
-import android.view.*
+import android.view.Gravity
+import android.view.View
+import android.view.ViewGroup
+import android.view.ViewTreeObserver
+import android.view.WindowManager
 import android.widget.PopupWindow
+import androidx.core.graphics.drawable.toDrawable
 import androidx.core.view.updatePadding
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.DefaultLifecycleObserver
@@ -34,7 +38,7 @@ class SoftKeyboardHeightProvider(val activity: FragmentActivity) : PopupWindow(a
         setContentView(contentView)
         width = 0
         height = ViewGroup.LayoutParams.MATCH_PARENT
-        setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        setBackgroundDrawable(Color.TRANSPARENT.toDrawable())
         softInputMode = WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE
         inputMethodMode = INPUT_METHOD_NEEDED
 

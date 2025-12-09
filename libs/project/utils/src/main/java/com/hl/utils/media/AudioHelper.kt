@@ -37,7 +37,7 @@ class AudioHelper(context: Context) {
 				audioManager.setStreamVolume(
 					AudioManager.STREAM_VOICE_CALL,
 					audioManager.getStreamMaxVolume(AudioManager.STREAM_VOICE_CALL),
-					AudioManager.STREAM_VOICE_CALL
+					AudioManager.FLAG_SHOW_UI
 				)
 			}
 
@@ -58,7 +58,7 @@ class AudioHelper(context: Context) {
 				audioManager.setStreamVolume(
 					AudioManager.STREAM_VOICE_CALL,
 					currVolume,
-					AudioManager.STREAM_VOICE_CALL
+					AudioManager.FLAG_SHOW_UI
 				)
 			}
 			true

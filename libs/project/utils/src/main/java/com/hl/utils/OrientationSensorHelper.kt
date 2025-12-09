@@ -23,7 +23,7 @@ class OrientationSensorHelper(lifecycle: Lifecycle, private val angleListener: (
 
 	private val mSensorManager: SensorManager = BaseUtil.app.getSystemService(Context.SENSOR_SERVICE) as SensorManager
 
-	private val mSensor: Sensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION)
+	private val mSensor: Sensor? = mSensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION)
 	private var lastTime: Long = 0
 	private val timeSensor = 100
 	private var mAngle = 0f

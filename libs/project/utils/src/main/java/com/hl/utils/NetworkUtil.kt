@@ -4,7 +4,6 @@ import android.Manifest
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
-import android.os.Build
 import androidx.annotation.NonNull
 import androidx.annotation.RequiresPermission
 
@@ -21,7 +20,7 @@ object NetworkUtil {
 	@RequiresPermission(Manifest.permission.ACCESS_NETWORK_STATE)
 	fun isConnected(@NonNull context: Context): Boolean {
 		val manager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+		if (BuildVersionUtil.isOver6()) {
 			val networkCapabilities: NetworkCapabilities? = manager.getNetworkCapabilities(manager.activeNetwork)
 			if (networkCapabilities != null) {
 				return (networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)
@@ -41,7 +40,7 @@ object NetworkUtil {
 	 */
 	fun isWifiConnected(@NonNull context: Context): Boolean {
 		val manager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+		if (BuildVersionUtil.isOver6()) {
 			val networkCapabilities: NetworkCapabilities? = manager.getNetworkCapabilities(manager.activeNetwork)
 			if (networkCapabilities != null) {
 				return networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)
@@ -58,7 +57,7 @@ object NetworkUtil {
 	 */
 	fun isMobileData(@NonNull context: Context): Boolean {
 		val manager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+		if (BuildVersionUtil.isOver6()) {
 			val networkCapabilities: NetworkCapabilities? = manager.getNetworkCapabilities(manager.activeNetwork)
 			if (networkCapabilities != null) {
 				return networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)
@@ -70,9 +69,9 @@ object NetworkUtil {
 		return false
 	}
 
-	fun getNetworkInfo(@NonNull context: Context): Any? {
+	fun getNetworkInfo(context: Context): Any? {
 		val manager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+		if (BuildVersionUtil.isOver6()) {
 			val networkCapabilities: NetworkCapabilities? = manager.getNetworkCapabilities(manager.activeNetwork)
 			if (networkCapabilities != null) {
 				return networkCapabilities

@@ -76,7 +76,7 @@ object PackageInstallerUtil {
 	 * 检查是否有安装未知来源应用的权限
 	 */
 	private fun hasInstallPermission(context: Context): Boolean {
-		return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+		return if (BuildVersionUtil.isOver8()) {
 			context.packageManager.canRequestPackageInstalls()
 		} else {
 			true
@@ -94,7 +94,7 @@ object PackageInstallerUtil {
 		fragmentActivity: FragmentActivity,
 		onPermissionResult: (Boolean) -> Unit
 	) {
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (BuildVersionUtil.isOver8()) {
 			// 创建权限请求的Intent
 			val intent = Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES)
 			intent.data = "package:${fragmentActivity.packageName}".toUri()
@@ -119,7 +119,7 @@ object PackageInstallerUtil {
 	 * 注册广播接收器
 	 */
 	private fun registerBroadcastReceiver(context: Context, receiver: BroadcastReceiver, intentFilter: IntentFilter) {
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        if (BuildVersionUtil.isOver13()) {
 			context.registerReceiver(receiver, intentFilter, Context.RECEIVER_NOT_EXPORTED)
 		} else {
 			context.registerReceiver(receiver, intentFilter)
@@ -351,7 +351,7 @@ object PackageInstallerUtil {
 	}
 
 	private inline fun <reified T> Intent.getParcelable(key: String): T? {
-		return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+		return if (BuildVersionUtil.isOver13()) {
 			this.getParcelableExtra(key, T::class.java)
 		} else {
 			this.getParcelableExtra(key) as? T

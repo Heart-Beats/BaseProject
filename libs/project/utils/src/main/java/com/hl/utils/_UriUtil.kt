@@ -1,7 +1,6 @@
 package com.hl.utils
 
 import android.net.Uri
-import android.os.Build
 import androidx.core.content.FileProvider
 import com.blankj.utilcode.util.UriUtils
 import java.io.File
@@ -16,13 +15,15 @@ fun file2Uri(filePath: String): Uri {
     if (!file.exists()) {
         val parentFile = file.parentFile
         assert(parentFile != null)
-        if (!parentFile.exists()) {
-            parentFile.mkdirs()
-        } else {
-            file.createNewFile()
+        if (parentFile != null) {
+            if (!parentFile.exists()) {
+                parentFile.mkdirs()
+            } else {
+                file.createNewFile()
+            }
         }
     }
-    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+    return if (BuildVersionUtil.isOver7()) {
         // 需要配置文件 fileprovider，注意配置的 authority
         val app = BaseUtil.app
         FileProvider.getUriForFile(app, app.packageName + ".fileprovider", file)

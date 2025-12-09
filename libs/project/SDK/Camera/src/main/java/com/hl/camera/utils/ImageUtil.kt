@@ -18,7 +18,7 @@ internal object ImageUtil {
 	fun save(
 		src: Bitmap,
 		file: File,
-		format: Bitmap.CompressFormat?,
+		format: Bitmap.CompressFormat,
 		quality: Int = 100,
 		recycle: Boolean = false
 	): Boolean {

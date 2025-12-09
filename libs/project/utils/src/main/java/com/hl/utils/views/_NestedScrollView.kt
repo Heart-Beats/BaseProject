@@ -1,5 +1,6 @@
 package com.hl.utils.views
 
+import android.annotation.SuppressLint
 import android.view.MotionEvent
 import android.view.View
 import androidx.core.widget.NestedScrollView
@@ -12,13 +13,15 @@ import androidx.core.widget.NestedScrollView
 /**
  * 设置滚动条可以被触摸
  */
+@SuppressLint("ClickableViewAccessibility")
 fun NestedScrollView.setSupportTouchOnScrollBar() {
-	this.setOnTouchListener { v, event ->
+	this.setOnTouchListener { _, event ->
 		handleTouch(event)
 		false
 	}
 }
 
+@SuppressLint("RestrictedApi")
 private fun NestedScrollView.handleTouch(event: MotionEvent) {
 	// if (event.action != MotionEvent.ACTION_DOWN) return
 

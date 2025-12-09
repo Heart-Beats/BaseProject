@@ -14,8 +14,8 @@ import android.view.WindowManager
  */
 
 fun Activity.getNavigationBarRealHeight(): Int {
-    val window: Window = this.getWindow()
-    val decorView: View = window.getDecorView()
+    val window: Window = this.window
+    val decorView: View = window.decorView
     val rect = Rect()
     decorView.getWindowVisibleDisplayFrame(rect)
     val outMetrics = DisplayMetrics()
