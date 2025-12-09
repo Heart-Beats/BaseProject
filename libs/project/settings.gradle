@@ -13,6 +13,7 @@ dependencyResolutionManagement {
             version("androidGradlePlugin", "8.0.1")
             version("kotlin", "1.9.20")
             version("minSdk", "26")
+            version("compileSdk", "34")
         }
     }
 }
