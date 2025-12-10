@@ -12,7 +12,7 @@ gradle.beforeProject {
         }
 
         dependencies {
-            // 目前该插件测试要求： Gradle:8.5+   AGP:8.1.0+
+            // 目前该插件测试要求： Gradle:8.13+   AGP:8.2.2+
             classpath 'com.vanniktech:gradle-maven-publish-plugin:0.35.0'
         }
     }

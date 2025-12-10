@@ -20,7 +20,8 @@ mavenPublishing {
     publishToMavenCentral()
 
     // 配置 sourcesJar 与 javadocJar(参见：https://github.com/vanniktech/gradle-maven-publish-plugin/blob/main/plugin/src/main/kotlin/com/vanniktech/maven/publish/MavenPublishBaseExtension.kt#L430)
-    //    configureBasedOnAppliedPlugins(true, JavadocJar.None())
+    //    configureBasedOnAppliedPlugins(true, com.vanniktech.maven.publish.tasks.JavadocJar.None())
+    configureBasedOnAppliedPlugins(true, false)
 
     //    signAllPublications()
 

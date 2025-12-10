@@ -37,7 +37,7 @@ android {
 }
 
 dependencies {
-	implementation("com.hl:uikit-toast")
+	implementation("${rootProject.extra.get("myGroupId")}:uikit-toast:${rootProject.extra.get("myVersion")}")
 
 	implementation(project(":base-ui"))
 	implementation(project(":base-app-res"))

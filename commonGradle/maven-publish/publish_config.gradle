@@ -2,9 +2,8 @@ def IS_PUBLISH_RELEASE = false
 def ARTIFACT_VERSION = '0.0.4'
 
 ext {
-    module_group = "io.github.heart-beats.baseproject"
+    module_group = 'io.github.heart-beats.baseproject'
 
-    myGroupId = 'com.hl'
     libProjectPath = 'libs/project'
     libUikitPath = 'libs/uikit'
 
@@ -21,4 +20,7 @@ ext {
 
         return ARTIFACT_VERSION + VERSION_SUFFIX
     }
+
+    myGroupId = module_group
+    myVersion = getPublicationVersion()
 }

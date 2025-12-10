@@ -81,7 +81,7 @@ dependencies {
 
     implementation project(":uikit")
 
-    implementation "com.hl:base-ui"
+    implementation "${rootProject.extra.get("myGroupId")}:base-ui:${rootProject.extra.get("myVersion")}"
 }
 
 

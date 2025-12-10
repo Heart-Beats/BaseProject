@@ -51,7 +51,8 @@ dependencies {
 	api(libs.androidx.fragment.ktx)
 
 	api(project(":view-binding"))
-	api("com.hl:uikit-toast")
+
+	api("${rootProject.extra.get("myGroupId")}:uikit-toast:${rootProject.extra.get("myVersion")}")
 
 	api(libs.statusbar.immersionbar.asProvider())
 	api(libs.statusbar.immersionbar.ktx)

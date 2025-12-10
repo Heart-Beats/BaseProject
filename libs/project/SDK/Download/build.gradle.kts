@@ -35,7 +35,7 @@ dependencies {
 	implementation(libs.androidx.activity.asProvider())
 	implementation(libs.androidx.fragment.asProvider())
 
-	implementation("com.hl:uikit-toast")
+	implementation("${rootProject.extra.get("myGroupId")}:uikit-toast:${rootProject.extra.get("myVersion")}")
 	implementation(project(":permission"))
 	implementation(project(":xlog-init"))
 

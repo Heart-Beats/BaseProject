@@ -33,6 +33,6 @@ android {
 }
 dependencies {
 	implementation(libs.androidx.core.ktx)
-	implementation("com.hl:uikit-toast")
+	implementation("${rootProject.extra.get("myGroupId")}:uikit-toast:${rootProject.extra.get("myVersion")}")
 	implementation(project(":mime-type"))
 }

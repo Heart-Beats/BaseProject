@@ -27,6 +27,8 @@ task clean(type: Delete) {
     }
 }
 
+apply from: './commonGradle/maven-publish/publish_config.gradle'
+
 
 // 在项目依赖构建完成时，向根项目注册一个发布所有子项目的任务
 gradle.projectsEvaluated {
