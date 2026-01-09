@@ -32,7 +32,7 @@ android {
 }
 
 dependencies {
-	implementation(libs.androidx.databinding.runtime)
+	api(libs.androidx.databinding.runtime)
 	implementation(libs.androidx.activity.ktx)
 	implementation(libs.androidx.fragment.ktx)
 	implementation(libs.androidx.recyclerview)

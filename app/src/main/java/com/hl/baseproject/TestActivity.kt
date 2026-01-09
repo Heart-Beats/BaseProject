@@ -7,9 +7,10 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.hl.baseproject.databinding.ActivityTestBinding
-import com.hl.rvadapter.BaseMultiAdapter
-import com.hl.rvadapter.BaseSingleAdapter
-import com.hl.rvadapter.itemprovider.BaseItemProvider
+import com.hl.rvadapter.normal.BaseMultiAdapter
+import com.hl.rvadapter.normal.BaseSingleAdapter
+import com.hl.rvadapter.normal.itemprovider.BaseItemProvider
+import com.hl.rvadapter.normal.viewholder.BaseViewHolder
 import com.hl.ui.base.ViewBindingBaseActivity
 import com.hl.ui.utils.dpInt
 import com.hl.ui.utils.onClick
@@ -59,7 +60,7 @@ class TestActivity : ViewBindingBaseActivity<ActivityTestBinding>() {
 					override val layoutId: Int = R.layout.item_text
 					override val itemViewType: Int = 9
 
-					override fun onItemBind(viewHolder: com.hl.rvadapter.viewholder.BaseViewHolder<String>, itemData: String) {
+					override fun onItemBind(viewHolder: BaseViewHolder<String>, itemData: String) {
 						viewHolder.getView<TextView>(R.id.item_text)?.text = itemData
 					}
 
@@ -86,7 +87,7 @@ class TestActivity : ViewBindingBaseActivity<ActivityTestBinding>() {
 
 			override val itemLayout: Int = R.layout.item_text_2
 
-			override fun onItemBind(viewHolder: com.hl.rvadapter.viewholder.BaseViewHolder<String>, itemData: String) {
+			override fun onItemBind(viewHolder: BaseViewHolder<String>, itemData: String) {
 				viewHolder.getView<TextView>(R.id.item_text)?.text = itemData
 			}
 		}

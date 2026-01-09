@@ -8,7 +8,7 @@ import androidx.viewbinding.ViewBinding
  * @author  张磊  on  2023/02/10 at 16:06
  * Email: 913305160@qq.com
  *
- * 创建 ViewBinding 对象
+ * 通过反射创建 ViewBinding 对象
  */
 
 /**
@@ -30,6 +30,9 @@ inline fun <reified VB : ViewBinding> inflateBinding(layoutInflater: LayoutInfla
 
 inline fun <reified VB : ViewBinding> inflateBinding(parent: ViewGroup) =
 	inflateBinding(LayoutInflater.from(parent.context), parent,  VB::class.java)
+
+inline fun <VB : ViewBinding> inflateBinding(parent: ViewGroup, clazz: Class<VB>) =
+    inflateBinding(LayoutInflater.from(parent.context), parent,  clazz)
 
 
 fun <VB : ViewBinding> inflateBinding(layoutInflater: LayoutInflater, clazz: Class<VB>) =

@@ -1,8 +1,11 @@
-package com.hl.rvadapter
+package com.hl.rvadapter.normal
 
 import android.view.View
-import com.hl.rvadapter.itemprovider.BaseItemProvider
-import com.hl.rvadapter.viewholder.BaseViewHolder
+import com.hl.rvadapter.normal.itemprovider.BaseItemProvider
+import com.hl.rvadapter.normal.itemprovider.impl.DataItemProvider
+import com.hl.rvadapter.normal.itemprovider.impl.FooterItemProvider
+import com.hl.rvadapter.normal.itemprovider.impl.HeaderItemProvider
+import com.hl.rvadapter.normal.viewholder.BaseViewHolder
 
 /**
  * @author  张磊  on  2023/06/08 at 11:23
@@ -56,10 +59,10 @@ abstract class BaseSingleAdapter<T>(private val adapterData: MutableList<T>) : B
 
 	override fun registerItemProvider(position: Int, itemData: T): BaseItemProvider<out T> {
 		return when {
-			isDisplayHeader(position) -> HeaderItemProvider()
-			isDisplayFooter(position) -> FooterItemProvider()
-			isDisplayData(position) -> DataItemProvider()
-			else -> DataItemProvider()
+			isDisplayHeader(position) -> HeaderItemProvider(headerView)
+			isDisplayFooter(position) -> FooterItemProvider(footerView)
+			isDisplayData(position) -> DataItemProvider(itemLayout, this)
+			else -> DataItemProvider(itemLayout, this)
 		}
 	}
 
@@ -176,55 +179,6 @@ abstract class BaseSingleAdapter<T>(private val adapterData: MutableList<T>) : B
 			//  当有头部时，显示正常数据的索引需要减 1
 			isDisplayData(position) -> if (isHaveHeader()) position - 1 else position
 			else -> position
-		}
-	}
-
-	private inner class HeaderItemProvider : BaseItemProvider<T>() {
-
-		override var layoutView = headerView
-
-		override val layoutId: Int = 0
-
-		override val itemViewType: Int = ItemViewType.HEADER.ordinal
-
-		override fun onItemBind(viewHolder: BaseViewHolder<T>, itemData: T) {}
-	}
-
-	private inner class FooterItemProvider : BaseItemProvider<T>() {
-
-		override var layoutView = footerView
-
-		override val layoutId: Int = 0
-
-		override val itemViewType: Int = ItemViewType.FOOTER.ordinal
-
-		override fun onItemBind(viewHolder: BaseViewHolder<T>, itemData: T) {}
-	}
-
-	private inner class DataItemProvider : BaseItemProvider<T>() {
-
-		override val layoutId: Int = itemLayout
-
-		override val itemViewType: Int = ItemViewType.DATA.ordinal
-
-		override fun onItemInit(viewHolder: BaseViewHolder<T>) {
-			this@BaseSingleAdapter.onItemInit(viewHolder)
-		}
-
-		override fun onItemBind(helper: BaseViewHolder<T>, itemData: T, payloads: List<Any>) {
-			this@BaseSingleAdapter.onItemBind(helper, itemData, payloads)
-		}
-
-		override fun onItemClick(itemView: View, position: Int, itemData: T) {
-			this@BaseSingleAdapter.onItemClick(itemView, position, itemData)
-		}
-
-		override fun onItemLongClick(itemView: View, position: Int, itemData: T) {
-			this@BaseSingleAdapter.onItemLongClick(itemView, position, itemData)
-		}
-
-		override fun onItemBind(viewHolder: BaseViewHolder<T>, itemData: T) {
-			this@BaseSingleAdapter.onItemBind(viewHolder, itemData)
 		}
 	}
 }

@@ -4,19 +4,21 @@ import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import com.elvishew.xlog.XLog
 import androidx.fragment.app.activityViewModels
+import com.elvishew.xlog.XLog
 import com.hl.baseproject.R
 import com.hl.baseproject.base.BaseFragment
 import com.hl.baseproject.databinding.FragmentHomeMiddleBinding
 import com.hl.baseproject.repository.network.bean.Article
 import com.hl.baseproject.viewmodels.DataViewModel
 import com.hl.baseproject.viewmodels.HomeViewModel
-import com.hl.imageload.GlideUtil
 import com.hl.dateutil.toFormatString
+import com.hl.imageload.GlideUtil
+import com.hl.popup.showImage
+import com.hl.rvadapter.normal.BaseSingleAdapter
+import com.hl.rvadapter.normal.viewholder.BaseViewHolder
 import com.hl.utils.onceLastObserve
 import com.hl.utils.views.setItemTouchHelper
-import com.hl.popup.showImage
 import com.hl.web.navigateToWeb
 import java.security.SecureRandom
 import java.util.Date
@@ -30,7 +32,7 @@ class HomeMiddleFragment : BaseFragment<FragmentHomeMiddleBinding>() {
 	private val homeViewModel by activityViewModels<HomeViewModel>()
 	private val dataViewModel by activityViewModels<DataViewModel>()
 
-	private lateinit var homeArticledAdapter: com.hl.rvadapter.BaseSingleAdapter<Article>
+	private lateinit var homeArticledAdapter: BaseSingleAdapter<Article>
 
 	private var curPage = 0
 
@@ -73,7 +75,7 @@ class HomeMiddleFragment : BaseFragment<FragmentHomeMiddleBinding>() {
 	}
 
 	private fun initHomeArticleAdapter(images: List<String>) {
-		homeArticledAdapter = object : com.hl.rvadapter.BaseSingleAdapter<Article>(mutableListOf()) {
+		homeArticledAdapter = object : BaseSingleAdapter<Article>(mutableListOf()) {
 
 			override val itemLayout: Int = R.layout.item_home_article
 
@@ -81,14 +83,14 @@ class HomeMiddleFragment : BaseFragment<FragmentHomeMiddleBinding>() {
 				itemView.navigateToWeb(itemData.link ?: return, isNeedTitle = true)
 			}
 
-			override fun onItemInit(viewHolder: com.hl.rvadapter.viewholder.BaseViewHolder<Article>) {
+			override fun onItemInit(viewHolder: BaseViewHolder<Article>) {
 				viewHolder.setChildClick(R.id.item_article_image) { childView, _, _ ->
 					val imageUrl = childView.getTag()
 					childView.context.showImage(childView as ImageView, imageUrl)
 				}
 			}
 
-			override fun onItemBind(viewHolder: com.hl.rvadapter.viewholder.BaseViewHolder<Article>, itemData: Article) {
+			override fun onItemBind(viewHolder: BaseViewHolder<Article>, itemData: Article) {
 				// SecureRandom 可产生真随机数
 				val randomImageUrl = images[SecureRandom().nextInt(images.size)]
 				viewHolder.getView<ImageView>(R.id.item_article_image)?.run {

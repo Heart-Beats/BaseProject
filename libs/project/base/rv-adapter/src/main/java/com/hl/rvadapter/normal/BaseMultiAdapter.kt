@@ -1,4 +1,4 @@
-package com.hl.rvadapter
+package com.hl.rvadapter.normal
 
 import android.util.SparseArray
 import android.view.LayoutInflater
@@ -7,20 +7,22 @@ import android.view.ViewGroup
 import androidx.core.util.containsKey
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.hl.rvadapter.IDataOperate
 import com.hl.rvadapter.diffcallback.MyDiffCallback
-import com.hl.rvadapter.itemprovider.BaseItemProvider
-import com.hl.rvadapter.viewholder.BaseViewHolder
-import com.hl.rvadapter.viewholder.MultiViewHolder
+import com.hl.rvadapter.normal.itemprovider.BaseItemProvider
+import com.hl.rvadapter.normal.itemprovider.impl.EmptyItemProvider
+import com.hl.rvadapter.normal.viewholder.BaseViewHolder
+import com.hl.rvadapter.normal.viewholder.MultiViewHolder
 import java.lang.reflect.ParameterizedType
 
 /**
  * @author  张磊  on  2022/09/22 at 11:31
  * Email: 913305160@qq.com
  *
- * 目前使用 ItemDragCallBack 拖拽排序有问题 @see[com.hl.arch.adapters.drag.ItemDragCallBack]
+ * 目前使用 ItemDragCallBack 拖拽排序有问题 @see[com.hl.rvadapter.drag.ItemDragCallBack]
  */
 abstract class BaseMultiAdapter<T>(private val adapterData: MutableList<T>) : RecyclerView.Adapter<BaseViewHolder<T>>(),
-	IDataOperate<T> {
+    IDataOperate<T> {
 
 	/**
 	 * 空态 view
@@ -40,7 +42,7 @@ abstract class BaseMultiAdapter<T>(private val adapterData: MutableList<T>) : Re
 
 	override fun getItemViewType(position: Int): Int {
 		val itemProvider =
-			if (isDisplayEmpty()) EmptyItemProvider() else registerItemProvider(position, getItemData(position))
+			if (isDisplayEmpty()) EmptyItemProvider(emptyView) else registerItemProvider(position, getItemData(position))
 
 		val itemViewType = itemProvider.itemViewType
 
@@ -59,7 +61,7 @@ abstract class BaseMultiAdapter<T>(private val adapterData: MutableList<T>) : Re
 	/**
 	 * 是否没有数据
 	 */
-	protected fun isNoData() = adapterData.size == 0
+	protected fun isNoData() = adapterData.isEmpty()
 
 	override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<T> {
 		val itemProvider = itemProviders[viewType]
@@ -177,17 +179,5 @@ abstract class BaseMultiAdapter<T>(private val adapterData: MutableList<T>) : Re
 				notifyItemChanged(index)
 			}
 		}
-	}
-
-
-	private inner class EmptyItemProvider : BaseItemProvider<T>() {
-
-		override var layoutView = emptyView
-
-		override val layoutId: Int = 0
-
-		override val itemViewType: Int = ItemViewType.EMPTY.ordinal
-
-		override fun onItemBind(viewHolder: BaseViewHolder<T>, itemData: T) {}
 	}
 }

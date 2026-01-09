@@ -1,17 +1,18 @@
-package com.hl.rvadapter.viewholder
+package com.hl.rvadapter.binding.viewholder
 
 import android.view.View
-import com.hl.rvadapter.BaseMultiAdapter
-import com.hl.rvadapter.itemprovider.BaseItemProvider
+import androidx.viewbinding.ViewBinding
+import com.hl.rvadapter.binding.BaseBindingMultiAdapter
+import com.hl.rvadapter.binding.itemprovider.BaseBindingItemProvider
 
 /**
- * @author  张磊  on  2022/09/22 at 16:03
+ * @author  张磊  on  2025/11/03 at 11:19
  * Email: 913305160@qq.com
  */
-internal open class MultiViewHolder<T>(
-	private val baseItemProvider: BaseItemProvider<T>,
-	adapter: BaseMultiAdapter<T>, itemView: View
-) : BaseViewHolder<T>(adapter, itemView) {
+internal open class MultiBindingViewHolder<T, VB : ViewBinding>(
+    private val baseItemProvider: BaseBindingItemProvider<T,VB>,
+    adapter: BaseBindingMultiAdapter<T>, binding: VB
+) : BaseBindingViewHolder<T,VB>(adapter, binding) {
 
 	init {
 		onItemInit()
@@ -30,7 +31,7 @@ internal open class MultiViewHolder<T>(
 		baseItemProvider.onItemBind(this, itemData)
 	}
 
-	override fun onBindView(itemData: T, payloads: MutableList<Any>) {
+	override fun onBindView(itemData: T, payloads: List<Any?>) {
 		baseItemProvider.onItemBind(this, itemData, payloads)
 	}
 

@@ -17,6 +17,7 @@ inline fun <reified VB : ViewBinding> View.getBinding() = getBinding(VB::class.j
  */
 @Suppress("UNCHECKED_CAST")
 fun <VB : ViewBinding> View.getBinding(clazz: Class<VB>) =
-	getTag(R.id.hl_view_binding_tag ) as? VB ?: (clazz.getMethod("bind", View::class.java)
-		.invoke(null, this) as VB)
-		.also { setTag(R.id.hl_view_binding_tag, it) }
+    getTag(R.id.hl_view_binding_tag) as? VB
+        ?: (clazz.getMethod("bind", View::class.java).invoke(null, this) as VB).also {
+            setTag(R.id.hl_view_binding_tag, it)
+        }

@@ -1,9 +1,9 @@
-package com.hl.rvadapter.itemprovider
+package com.hl.rvadapter.normal.itemprovider
 
 import android.view.View
 import androidx.annotation.IdRes
 import androidx.annotation.LayoutRes
-import com.hl.rvadapter.viewholder.BaseViewHolder
+import com.hl.rvadapter.normal.viewholder.BaseViewHolder
 
 /**
  * @author  张磊  on  2022/09/22 at 15:56

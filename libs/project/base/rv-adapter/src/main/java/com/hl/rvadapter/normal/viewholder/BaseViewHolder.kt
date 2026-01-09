@@ -1,4 +1,4 @@
-package com.hl.rvadapter.viewholder
+package com.hl.rvadapter.normal.viewholder
 
 import android.view.View
 import androidx.annotation.IdRes
