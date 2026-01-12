@@ -23,4 +23,4 @@ inline fun <reified VB : ViewBinding> ViewGroup.inflate() = lazy(NONE) { inflate
  *
  * 注意此时布局的根节点需要为 Merge, 因为此种布局的 ViewBinding 中的 inflate 方法只有 LayoutInflater 与 ViewGroup 两个参数， 与正常的不同
  */
-inline fun <reified VB : ViewBinding> ViewGroup.bindingMerge() = inflateBinding<VB>(this)
+inline fun <reified VB : ViewBinding> ViewGroup.bindingMerge() = inflateMergeBinding<VB>(this)

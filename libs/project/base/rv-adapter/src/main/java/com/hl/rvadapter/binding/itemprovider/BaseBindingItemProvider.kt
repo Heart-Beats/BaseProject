@@ -16,7 +16,7 @@ import com.hl.viewbinding.inflateBinding
 /**
  *  adapter 与 ViewHolder 之间的连接类， 其可向 ViewHolder 提供相关的视图以及数据
  */
-abstract class BaseBindingItemProvider<T, VB : ViewBinding> {
+abstract class BaseBindingItemProvider<T, VB : ViewBinding> (){
 
     /**
      * 获取当前 ViewHolder 对应的 Item 类型
@@ -26,7 +26,7 @@ abstract class BaseBindingItemProvider<T, VB : ViewBinding> {
     /**
      * 获取当前 ViewHolder 所需的 ViewBinding
      */
-    open fun createBinding(parent: ViewGroup): VB {
+    internal open fun createBinding(parent: ViewGroup): VB {
         return ViewBindingUtil.withGenericBindingClass(this) { clazz ->
             inflateBinding(parent, clazz)
         }

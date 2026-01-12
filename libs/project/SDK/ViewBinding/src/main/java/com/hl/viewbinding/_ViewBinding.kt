@@ -28,20 +28,30 @@ inline fun <reified VB : ViewBinding> inflateBinding(parent: ViewGroup, attachTo
 inline fun <reified VB : ViewBinding> inflateBinding(layoutInflater: LayoutInflater, parent: ViewGroup?, attachToParent: Boolean) =
 	inflateBinding(layoutInflater, parent, attachToParent, VB::class.java)
 
-inline fun <reified VB : ViewBinding> inflateBinding(parent: ViewGroup) =
-	inflateBinding(LayoutInflater.from(parent.context), parent,  VB::class.java)
+inline fun <VB : ViewBinding> inflateBinding(parent: ViewGroup, clazz: Class<VB>, attachToParent: Boolean = false) =
+    inflateBinding(LayoutInflater.from(parent.context), parent, attachToParent, clazz)
 
-inline fun <VB : ViewBinding> inflateBinding(parent: ViewGroup, clazz: Class<VB>) =
-    inflateBinding(LayoutInflater.from(parent.context), parent,  clazz)
+inline fun <reified VB : ViewBinding> inflateMergeBinding(parent: ViewGroup) =
+    inflateMergeBinding(LayoutInflater.from(parent.context), parent,  VB::class.java)
 
 
+/**
+ * 正常的布局文件生成的 ViewBind，存在以下两个方法
+ *   1. inflate(LayoutInflater inflater)
+ *   2. inflate(LayoutInflater inflater, ViewGroup parent, boolean attachToParent)
+ */
 fun <VB : ViewBinding> inflateBinding(layoutInflater: LayoutInflater, clazz: Class<VB>) =
 	clazz.getMethod("inflate", LayoutInflater::class.java).invoke(null, layoutInflater) as VB
-
-fun <VB : ViewBinding> inflateBinding(layoutInflater: LayoutInflater, parent: ViewGroup?, clazz: Class<VB>) =
-	clazz.getMethod("inflate", LayoutInflater::class.java, ViewGroup::class.java)
-		.invoke(null, layoutInflater, parent) as VB
 
 fun <VB : ViewBinding> inflateBinding(layoutInflater: LayoutInflater, parent: ViewGroup?, attachToParent: Boolean, clazz: Class<VB>) =
 	clazz.getMethod("inflate", LayoutInflater::class.java, ViewGroup::class.java, Boolean::class.java)
 		.invoke(null, layoutInflater, parent, attachToParent) as VB
+
+/**
+ * Merge 的布局文件生成的 ViewBind，仅存在以下方法
+ *   1. inflate(LayoutInflater inflater, ViewGroup parent)
+ */
+fun <VB : ViewBinding> inflateMergeBinding(layoutInflater: LayoutInflater, parent: ViewGroup?, clazz: Class<VB>) =
+
+    clazz.getMethod("inflate", LayoutInflater::class.java, ViewGroup::class.java)
+        .invoke(null, layoutInflater, parent) as VB
