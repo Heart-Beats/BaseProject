@@ -27,10 +27,20 @@ abstract class BaseBindingItemProvider<T, VB : ViewBinding> (){
      * 获取当前 ViewHolder 所需的 ViewBinding
      */
     internal open fun createBinding(parent: ViewGroup): VB {
-        return ViewBindingUtil.withGenericBindingClass(this) { clazz ->
-            inflateBinding(parent, clazz)
-        }
+        return inflateBinding(parent, bindingClass)
     }
+
+    /**
+     * 缓存 ViewBinding 的 Class 对象，避免每次创建 ViewHolder 时都进行反射
+     */
+    private val bindingClass: Class<VB> by lazy {
+        ViewBindingUtil.getGenericBindingClass(getBindingClassSource())
+    }
+
+    /**
+     * 获取 ViewBinding 的 Class 类型，子类可重写以指定从哪个对象提取泛型信息
+     */
+    protected open fun getBindingClassSource(): Any = this
 
     /**
      * ViewHolder 已完成初始化

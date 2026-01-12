@@ -1,24 +1,17 @@
 package com.hl.rvadapter.binding.itemprovider.impl
 
 import android.view.View
-import android.view.ViewGroup
 import androidx.viewbinding.ViewBinding
 import com.hl.rvadapter.ItemViewType
 import com.hl.rvadapter.binding.BaseBindingSingleAdapter
 import com.hl.rvadapter.binding.itemprovider.BaseBindingItemProvider
 import com.hl.rvadapter.binding.viewholder.BaseBindingViewHolder
-import com.hl.viewbinding.ViewBindingUtil
-import com.hl.viewbinding.inflateBinding
 
 internal class DataItemProvider<T, VB : ViewBinding>(val adapter: BaseBindingSingleAdapter<T, VB>) : BaseBindingItemProvider<T, VB>() {
 
     override val itemViewType: Int = ItemViewType.DATA.ordinal
 
-    override fun createBinding(parent: ViewGroup): VB {
-        return ViewBindingUtil.withGenericBindingClass(adapter) { clazz ->
-            inflateBinding(parent, clazz)
-        }
-    }
+    override fun getBindingClassSource() = adapter
 
     override fun onItemInit(viewHolder: BaseBindingViewHolder<T, VB>) {
         adapter.onItemInit(viewHolder)

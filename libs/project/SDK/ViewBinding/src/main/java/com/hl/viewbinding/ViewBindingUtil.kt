@@ -61,11 +61,17 @@ object ViewBindingUtil {
             }
         }
 
+
+
+    fun <VB : ViewBinding> withGenericBindingClass(any: Any,  block: (Class<VB>) -> VB): VB {
+        return block.invoke(getGenericBindingClass(any))
+    }
+
     /**
      * 从对象的泛型参数中获取 ViewBinding 的 Class 类型
      */
     @Suppress("UNCHECKED_CAST")
-    fun <VB : ViewBinding> withGenericBindingClass(any: Any,  block: (Class<VB>) -> VB): VB {
+    fun <VB : ViewBinding> getGenericBindingClass(any: Any): Class<VB> {
         var genericSuperclass = any.javaClass.genericSuperclass
         var superclass = any.javaClass.superclass
 
@@ -76,7 +82,7 @@ object ViewBindingUtil {
                     .filterIsInstance<Class<*>>()
                     .firstOrNull { ViewBinding::class.java.isAssignableFrom(it) }
                     ?.let { type ->
-                        return block.invoke(type as Class<VB>)
+                        return type as Class<VB>
                     }
             }
             genericSuperclass = superclass.genericSuperclass
