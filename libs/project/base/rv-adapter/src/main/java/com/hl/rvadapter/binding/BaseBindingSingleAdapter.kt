@@ -1,7 +1,11 @@
+// libs/project/base/rv-adapter/src/main/java/com/hl/rvadapter/binding/BaseBindingSingleAdapter.kt
+
 package com.hl.rvadapter.binding
 
 import android.view.View
 import androidx.viewbinding.ViewBinding
+import com.hl.rvadapter.IDataType
+import com.hl.rvadapter.ItemViewType
 import com.hl.rvadapter.binding.itemprovider.BaseBindingItemProvider
 import com.hl.rvadapter.binding.itemprovider.impl.DataItemProvider
 import com.hl.rvadapter.binding.itemprovider.impl.FooterItemProvider
@@ -12,7 +16,7 @@ import com.hl.rvadapter.binding.viewholder.BaseBindingViewHolder
  * @author  张磊  on  2023/06/08 at 11:23
  * Email: 913305160@qq.com
  */
-abstract class BaseBindingSingleAdapter<T, VB : ViewBinding>(private val adapterData: MutableList<T>) :
+abstract class BaseBindingSingleAdapter<T : IDataType, VB : ViewBinding>(private val adapterData: MutableList<T>) :
     BaseBindingMultiAdapter<T>(adapterData) {
 
     /**
@@ -24,6 +28,24 @@ abstract class BaseBindingSingleAdapter<T, VB : ViewBinding>(private val adapter
      * 尾部布局
      */
     open var footerView: View? = null
+
+    /**
+     * 缓存空视图数据实例，避免重复创建
+     */
+    private val cachedHeaderItemData: T by lazy {
+        createGenericItemData().also {
+            it.itemViewType = ItemViewType.HEADER.ordinal
+        }
+    }
+
+    /**
+     * 缓存空视图数据实例，避免重复创建
+     */
+    private val cachedFooterItemData: T by lazy {
+        createGenericItemData().also {
+            it.itemViewType = ItemViewType.FOOTER.ordinal
+        }
+    }
 
     /**
      *创建 viewHolder 时的回调
@@ -61,7 +83,6 @@ abstract class BaseBindingSingleAdapter<T, VB : ViewBinding>(private val adapter
         return when {
             isDisplayHeader(position) -> HeaderItemProvider(headerView)
             isDisplayFooter(position) -> FooterItemProvider(footerView)
-            isDisplayData(position) -> DataItemProvider(this)
             else -> DataItemProvider(this)
         }
     }
@@ -81,8 +102,23 @@ abstract class BaseBindingSingleAdapter<T, VB : ViewBinding>(private val adapter
     }
 
 
-    override fun getItemData(position: Int): T {
-        return getRealData(position)
+    /**
+     * 获取对应位置的真实数据，头尾时返回默认的虚拟数据
+     */
+    override fun getRealData(position: Int): T {
+        return when {
+            isDisplayHeader(position) -> cachedHeaderItemData
+            isDisplayFooter(position) -> cachedFooterItemData
+            else -> getData()[getRealDataPosition(position)]
+        }
+    }
+
+    private fun getRealDataPosition(position: Int): Int {
+        return when {
+            //  当有头部时，显示正常数据的索引需要减 1
+            isDisplayData(position) -> if (isHaveHeader()) position - 1 else position
+            else -> position
+        }
     }
 
     override fun insertData(vararg addData: T) {
@@ -98,7 +134,6 @@ abstract class BaseBindingSingleAdapter<T, VB : ViewBinding>(private val adapter
             notifyItemRangeInserted(insertIndex, addData.size)
         }
     }
-
 
     /**
      *  删除数据
@@ -161,26 +196,5 @@ abstract class BaseBindingSingleAdapter<T, VB : ViewBinding>(private val adapter
     /**
      * 是否显示正常数据
      */
-    private fun isDisplayData(position: Int) =
-        !isDisplayHeader(position) && !isDisplayFooter(position)
-
-    /**
-     * 获取对应位置的真实数据，头尾以及空态时返回默认的虚拟数据
-     */
-    private fun getRealData(position: Int): T {
-        return when {
-            isDisplayEmpty() || isDisplayHeader(position) || isDisplayFooter(position) -> createDefaultItemData()
-            isDisplayData(position) -> getData()[getRealPosition(position)]
-            else -> getData()[getRealPosition(position)]
-        }
-    }
-
-    private fun getRealPosition(position: Int): Int {
-        return when {
-            //  当有头部时，显示正常数据的索引需要减 1
-            isDisplayData(position) -> if (isHaveHeader()) position - 1 else position
-            else -> position
-        }
-    }
-
+    private fun isDisplayData(position: Int) = !isDisplayHeader(position) && !isDisplayFooter(position)
 }

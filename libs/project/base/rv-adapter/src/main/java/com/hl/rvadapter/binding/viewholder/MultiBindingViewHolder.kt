@@ -2,6 +2,7 @@ package com.hl.rvadapter.binding.viewholder
 
 import android.view.View
 import androidx.viewbinding.ViewBinding
+import com.hl.rvadapter.IDataType
 import com.hl.rvadapter.binding.BaseBindingMultiAdapter
 import com.hl.rvadapter.binding.itemprovider.BaseBindingItemProvider
 
@@ -9,7 +10,7 @@ import com.hl.rvadapter.binding.itemprovider.BaseBindingItemProvider
  * @author  张磊  on  2025/11/03 at 11:19
  * Email: 913305160@qq.com
  */
-internal open class MultiBindingViewHolder<T, VB : ViewBinding>(
+internal open class MultiBindingViewHolder<T: IDataType, VB : ViewBinding>(
     private val baseItemProvider: BaseBindingItemProvider<T,VB>,
     adapter: BaseBindingMultiAdapter<T>, binding: VB
 ) : BaseBindingViewHolder<T,VB>(adapter, binding) {

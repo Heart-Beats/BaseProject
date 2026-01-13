@@ -4,13 +4,14 @@ import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 import com.hl.rvadapter.IDataOperate
+import com.hl.rvadapter.IDataType
 import com.hl.rvadapter.utils.onClick
 
 /**
  * @author  张磊  on  2025/11/03 at 15:58
  * Email: 913305160@qq.com
  */
-abstract class BaseBindingViewHolder<T, VB : ViewBinding>(
+abstract class BaseBindingViewHolder<T: IDataType, VB : ViewBinding>(
     val adapter: RecyclerView.Adapter<BaseBindingViewHolder<T, ViewBinding>>,
     val binding: VB
 ) : RecyclerView.ViewHolder(binding.root) {

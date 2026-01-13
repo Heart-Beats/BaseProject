@@ -4,6 +4,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.IdRes
 import androidx.viewbinding.ViewBinding
+import com.hl.rvadapter.IDataType
 import com.hl.rvadapter.binding.viewholder.BaseBindingViewHolder
 import com.hl.viewbinding.ViewBindingUtil
 import com.hl.viewbinding.inflateBinding
@@ -16,19 +17,7 @@ import com.hl.viewbinding.inflateBinding
 /**
  *  adapter 与 ViewHolder 之间的连接类， 其可向 ViewHolder 提供相关的视图以及数据
  */
-abstract class BaseBindingItemProvider<T, VB : ViewBinding> (){
-
-    /**
-     * 获取当前 ViewHolder 对应的 Item 类型
-     */
-    abstract val itemViewType: Int
-
-    /**
-     * 获取当前 ViewHolder 所需的 ViewBinding
-     */
-    internal open fun createBinding(parent: ViewGroup): VB {
-        return inflateBinding(parent, bindingClass)
-    }
+abstract class BaseBindingItemProvider<T : IDataType, VB : ViewBinding>(){
 
     /**
      * 缓存 ViewBinding 的 Class 对象，避免每次创建 ViewHolder 时都进行反射
@@ -41,6 +30,13 @@ abstract class BaseBindingItemProvider<T, VB : ViewBinding> (){
      * 获取 ViewBinding 的 Class 类型，子类可重写以指定从哪个对象提取泛型信息
      */
     protected open fun getBindingClassSource(): Any = this
+
+    /**
+     * 获取当前 ViewHolder 所需的 ViewBinding
+     */
+    internal open fun createBinding(parent: ViewGroup): VB {
+        return inflateBinding(parent, bindingClass)
+    }
 
     /**
      * ViewHolder 已完成初始化
