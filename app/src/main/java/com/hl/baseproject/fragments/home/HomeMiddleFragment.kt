@@ -3,20 +3,19 @@ package com.hl.baseproject.fragments.home
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
-import android.widget.TextView
 import androidx.fragment.app.activityViewModels
 import com.elvishew.xlog.XLog
-import com.hl.baseproject.R
 import com.hl.baseproject.base.BaseFragment
 import com.hl.baseproject.databinding.FragmentHomeMiddleBinding
+import com.hl.baseproject.databinding.ItemHomeArticleBinding
 import com.hl.baseproject.repository.network.bean.Article
 import com.hl.baseproject.viewmodels.DataViewModel
 import com.hl.baseproject.viewmodels.HomeViewModel
 import com.hl.dateutil.toFormatString
 import com.hl.imageload.GlideUtil
 import com.hl.popup.showImage
-import com.hl.rvadapter.normal.BaseSingleAdapter
-import com.hl.rvadapter.normal.viewholder.BaseViewHolder
+import com.hl.rvadapter.binding.BaseBindingSingleAdapter
+import com.hl.rvadapter.binding.viewholder.BaseBindingViewHolder
 import com.hl.utils.onceLastObserve
 import com.hl.utils.views.setItemTouchHelper
 import com.hl.web.navigateToWeb
@@ -32,7 +31,7 @@ class HomeMiddleFragment : BaseFragment<FragmentHomeMiddleBinding>() {
 	private val homeViewModel by activityViewModels<HomeViewModel>()
 	private val dataViewModel by activityViewModels<DataViewModel>()
 
-	private lateinit var homeArticledAdapter: BaseSingleAdapter<Article>
+	private lateinit var homeArticledAdapter: BaseBindingSingleAdapter<Article, ItemHomeArticleBinding>
 
 	private var curPage = 0
 
@@ -75,37 +74,37 @@ class HomeMiddleFragment : BaseFragment<FragmentHomeMiddleBinding>() {
 	}
 
 	private fun initHomeArticleAdapter(images: List<String>) {
-		homeArticledAdapter = object : BaseSingleAdapter<Article>(mutableListOf()) {
+		homeArticledAdapter = object : BaseBindingSingleAdapter<Article, ItemHomeArticleBinding>(mutableListOf()) {
 
-			override val itemLayout: Int = R.layout.item_home_article
-
-			override fun onItemClick(itemView: View, position: Int, itemData: Article) {
-				itemView.navigateToWeb(itemData.link ?: return, isNeedTitle = true)
-			}
-
-			override fun onItemInit(viewHolder: BaseViewHolder<Article>) {
-				viewHolder.setChildClick(R.id.item_article_image) { childView, _, _ ->
-					val imageUrl = childView.getTag()
-					childView.context.showImage(childView as ImageView, imageUrl)
+				override fun onItemClick(itemView: View, position: Int, itemData: Article) {
+					itemView.navigateToWeb(itemData.link ?: return, isNeedTitle = true)
 				}
-			}
 
-			override fun onItemBind(viewHolder: BaseViewHolder<Article>, itemData: Article) {
-				// SecureRandom 可产生真随机数
-				val randomImageUrl = images[SecureRandom().nextInt(images.size)]
-				viewHolder.getView<ImageView>(R.id.item_article_image)?.run {
-					this.setTag(randomImageUrl)
-					GlideUtil.load(context, randomImageUrl, this)
+				override fun onItemInit(viewHolder: BaseBindingViewHolder<Article, ItemHomeArticleBinding>) {
+					viewHolder.setChildClick({ this.itemArticleImage }) { childView, _, _ ->
+						val imageUrl = childView.tag
+						childView.context.showImage(childView as ImageView, imageUrl)
+					}
 				}
-				viewHolder.getView<TextView>(R.id.item_article_title)?.text = itemData.title?.trim()
 
-				val authorOrSharerName = if (itemData.author.isNullOrBlank()) itemData.shareUser else itemData.author
-				viewHolder.getView<TextView>(R.id.item_article_author_or_sharer)?.text = authorOrSharerName?.trim()
+				override fun onItemBind(
+					viewHolder: BaseBindingViewHolder<Article, ItemHomeArticleBinding>,
+					itemData: Article
+				) {
+                    // SecureRandom 可产生真随机数
+                    val randomImageUrl = images[SecureRandom().nextInt(images.size)]
+                    viewHolder.binding.itemArticleImage.run {
+                        this.tag = randomImageUrl
+                        GlideUtil.load(context, randomImageUrl, this)
+                    }
+                    viewHolder.binding.itemArticleTitle.text = itemData.title?.trim()
+                    val authorOrSharerName = if (itemData.author.isNullOrBlank()) itemData.shareUser else itemData.author
+                    viewHolder.binding.itemArticleAuthorOrSharer.text = authorOrSharerName?.trim()
+                    viewHolder.binding.itemArticlePublishTime.text =
+                        " • ${Date(itemData.publishTime ?: 0).toFormatString()}"
+				}
 
-				viewHolder.getView<TextView>(R.id.item_article_publish_time)?.text =
-					" • ${Date(itemData.publishTime ?: 0).toFormatString()}"
 			}
-		}
 
 		viewBinding.homeArticleList.run {
 			this.adapter = homeArticledAdapter
