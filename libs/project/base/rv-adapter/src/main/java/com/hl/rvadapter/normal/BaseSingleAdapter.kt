@@ -1,6 +1,8 @@
 package com.hl.rvadapter.normal
 
 import android.view.View
+import com.hl.rvadapter.IDataType
+import com.hl.rvadapter.ItemViewType
 import com.hl.rvadapter.normal.itemprovider.BaseItemProvider
 import com.hl.rvadapter.normal.itemprovider.impl.DataItemProvider
 import com.hl.rvadapter.normal.itemprovider.impl.FooterItemProvider
@@ -11,7 +13,7 @@ import com.hl.rvadapter.normal.viewholder.BaseViewHolder
  * @author  张磊  on  2023/06/08 at 11:23
  * Email: 913305160@qq.com
  */
-abstract class BaseSingleAdapter<T>(private val adapterData: MutableList<T>) : BaseMultiAdapter<T>(adapterData) {
+abstract class BaseSingleAdapter<T: IDataType>(private val adapterData: MutableList<T>) : BaseMultiAdapter<T>(adapterData) {
 
 	/**
 	 * 头部布局
@@ -22,6 +24,24 @@ abstract class BaseSingleAdapter<T>(private val adapterData: MutableList<T>) : B
 	 * 尾部布局
 	 */
 	open var footerView: View? = null
+
+	/**
+	 * 缓存头部视图数据实例，避免重复创建
+	 */
+	private val cachedHeaderItemData: T by lazy {
+		createDefaultItemData().also {
+            it.itemViewType = ItemViewType.HEADER.ordinal
+        }
+	}
+
+	/**
+	 * 缓存尾部视图数据实例，避免重复创建
+	 */
+	private val cachedFooterItemData: T by lazy {
+		createDefaultItemData().also {
+            it.itemViewType = ItemViewType.FOOTER.ordinal
+        }
+	}
 
 	/**
 	 * 正常数据布局
@@ -61,7 +81,6 @@ abstract class BaseSingleAdapter<T>(private val adapterData: MutableList<T>) : B
 		return when {
 			isDisplayHeader(position) -> HeaderItemProvider(headerView)
 			isDisplayFooter(position) -> FooterItemProvider(footerView)
-			isDisplayData(position) -> DataItemProvider(itemLayout, this)
 			else -> DataItemProvider(itemLayout, this)
 		}
 	}
@@ -81,8 +100,23 @@ abstract class BaseSingleAdapter<T>(private val adapterData: MutableList<T>) : B
 	}
 
 
-	override fun getItemData(position: Int): T {
-		return getRealData(position)
+	/**
+	 * 获取对应位置的真实数据，头尾时返回默认的虚拟数据
+	 */
+	override fun getRealData(position: Int): T {
+		return when {
+			isDisplayHeader(position) -> cachedHeaderItemData
+			isDisplayFooter(position) -> cachedFooterItemData
+			else -> getData()[getRealDataPosition(position)]
+		}
+	}
+
+	private fun getRealDataPosition(position: Int): Int {
+		return when {
+			//  当有头部时，显示正常数据的索引需要减 1
+			isDisplayData(position) -> if (isHaveHeader()) position - 1 else position
+			else -> position
+		}
 	}
 
 	override fun insertData(vararg addData: T) {
@@ -162,23 +196,4 @@ abstract class BaseSingleAdapter<T>(private val adapterData: MutableList<T>) : B
 	 * 是否显示正常数据
 	 */
 	private fun isDisplayData(position: Int) = !isDisplayHeader(position) && !isDisplayFooter(position)
-
-	/**
-	 * 获取对应位置的真实数据，头尾以及空态时返回默认的虚拟数据
-	 */
-	private fun getRealData(position: Int): T {
-		return when {
-			isDisplayEmpty() || isDisplayHeader(position) || isDisplayFooter(position) -> createDefaultItemData()
-			isDisplayData(position) -> getData()[getRealPosition(position)]
-			else -> getData()[getRealPosition(position)]
-		}
-	}
-
-	private fun getRealPosition(position: Int): Int {
-		return when {
-			//  当有头部时，显示正常数据的索引需要减 1
-			isDisplayData(position) -> if (isHaveHeader()) position - 1 else position
-			else -> position
-		}
-	}
 }

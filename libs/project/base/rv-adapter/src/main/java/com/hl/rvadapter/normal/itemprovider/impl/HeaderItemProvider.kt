@@ -1,17 +1,15 @@
 package com.hl.rvadapter.normal.itemprovider.impl
 
 import android.view.View
-import com.hl.rvadapter.ItemViewType
+import com.hl.rvadapter.IDataType
 import com.hl.rvadapter.normal.itemprovider.BaseItemProvider
 import com.hl.rvadapter.normal.viewholder.BaseViewHolder
 
-internal class HeaderItemProvider<T>(headerView: View?) : BaseItemProvider<T>() {
+internal class HeaderItemProvider<T: IDataType>(headerView: View?) : BaseItemProvider<T>() {
 
     override var layoutView = headerView
 
     override val layoutId: Int = 0
-
-    override val itemViewType: Int = ItemViewType.HEADER.ordinal
 
     override fun onItemBind(viewHolder: BaseViewHolder<T>, itemData: T) {}
 }

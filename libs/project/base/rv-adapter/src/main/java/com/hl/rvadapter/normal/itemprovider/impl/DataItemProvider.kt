@@ -1,16 +1,14 @@
 package com.hl.rvadapter.normal.itemprovider.impl
 
 import android.view.View
-import com.hl.rvadapter.ItemViewType
+import com.hl.rvadapter.IDataType
 import com.hl.rvadapter.normal.BaseSingleAdapter
 import com.hl.rvadapter.normal.itemprovider.BaseItemProvider
 import com.hl.rvadapter.normal.viewholder.BaseViewHolder
 
-internal class DataItemProvider<T>(itemLayout: Int, private val adapter: BaseSingleAdapter<T>) : BaseItemProvider<T>() {
+internal class DataItemProvider<T: IDataType>(itemLayout: Int, private val adapter: BaseSingleAdapter<T>) : BaseItemProvider<T>() {
 
     override val layoutId: Int = itemLayout
-
-    override val itemViewType: Int = ItemViewType.DATA.ordinal
 
     override fun onItemInit(viewHolder: BaseViewHolder<T>) {
         adapter.onItemInit(viewHolder)

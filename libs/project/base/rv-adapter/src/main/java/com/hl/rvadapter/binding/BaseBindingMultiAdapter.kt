@@ -122,7 +122,7 @@ abstract class BaseBindingMultiAdapter<T : IDataType>(private val adapterData: M
     /**
      * 获取对应位置的数据
      */
-    protected open fun getItemData(position: Int): T {
+    protected fun getItemData(position: Int): T {
         return if (isDisplayEmpty()) {
             getEmptyItemData()
         } else {

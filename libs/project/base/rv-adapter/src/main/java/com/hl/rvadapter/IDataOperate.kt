@@ -4,7 +4,7 @@ package com.hl.rvadapter
  * @author  张磊  on  2022/09/22 at 11:04
  * Email: 913305160@qq.com
  */
-interface IDataOperate<T> {
+interface IDataOperate<T: IDataType> {
 
 	/**
 	 * 向列表尾部插入数据

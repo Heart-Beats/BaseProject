@@ -1,6 +1,7 @@
 package com.hl.rvadapter.normal.viewholder
 
 import android.view.View
+import com.hl.rvadapter.IDataType
 import com.hl.rvadapter.normal.BaseMultiAdapter
 import com.hl.rvadapter.normal.itemprovider.BaseItemProvider
 
@@ -8,7 +9,7 @@ import com.hl.rvadapter.normal.itemprovider.BaseItemProvider
  * @author  张磊  on  2022/09/22 at 16:03
  * Email: 913305160@qq.com
  */
-internal open class MultiViewHolder<T>(
+internal open class MultiViewHolder<T: IDataType>(
 	private val baseItemProvider: BaseItemProvider<T>,
 	adapter: BaseMultiAdapter<T>, itemView: View
 ) : BaseViewHolder<T>(adapter, itemView) {

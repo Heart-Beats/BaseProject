@@ -3,6 +3,7 @@ package com.hl.rvadapter.normal.itemprovider
 import android.view.View
 import androidx.annotation.IdRes
 import androidx.annotation.LayoutRes
+import com.hl.rvadapter.IDataType
 import com.hl.rvadapter.normal.viewholder.BaseViewHolder
 
 /**
@@ -13,7 +14,7 @@ import com.hl.rvadapter.normal.viewholder.BaseViewHolder
 /**
  *  adapter 与 ViewHolder 之间的连接类， 其可向 ViewHolder 提供相关的视图以及数据
  */
-abstract class BaseItemProvider<T> {
+abstract class BaseItemProvider<T: IDataType> {
 
 	/**
 	 * 当前 ViewHolder 对应的 view， 与 layoutId 互斥，优先以 layoutView
@@ -26,11 +27,6 @@ abstract class BaseItemProvider<T> {
 	abstract val layoutId: Int
 		@LayoutRes
 		get
-
-	/**
-	 * 获取当前 ViewHolder 对应的 Item 类型
-	 */
-	abstract val itemViewType: Int
 
 
 	/**
