@@ -141,7 +141,10 @@ abstract class BaseBindingMultiAdapter<T : IDataType>(private val adapterData: M
             val genericSuperclass = this.javaClass.genericSuperclass
             if (genericSuperclass is ParameterizedType) {
                 val type = genericSuperclass.actualTypeArguments[0]
-                val instance = (type as Class<T>).getDeclaredConstructor().newInstance()
+                val declaredConstructor = ( type as Class<T>).getDeclaredConstructor()
+                declaredConstructor.isAccessible = true
+                val instance = declaredConstructor.newInstance()
+                declaredConstructor.isAccessible = false
                 instance
             } else {
                 error("获取传入数据类型失败！")
