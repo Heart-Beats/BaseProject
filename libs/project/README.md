@@ -12,17 +12,41 @@
 
 - `base-api`：网络请求模块
 - `base-app-res`：应用公共资源模块
-- `base-arch`：基础架构模块
-- `navigation`：Jetpack  Navigation 使用优化模块
-- `SDK`：三方  SDK 接入模块 ， 其中目前集成以下 SDK
-  <img src="https://raw.githubusercontent.com/Heart-Beats/Note-Pictures/main/images/image-20230314111313188.png" alt="image-20230314111313188" style="zoom: 80%;" />
-  - `LocalAAR`：一些  SDK  所必需依赖的 AAR 包
-  - `Pay` ：支付模块，目前支持微信与支付宝
-  - `shadow`:  Shadow 插件化宿主接入模块
-  - `TencentCloud`： 腾讯云对象存储模块
+- `base-arch`：基础架构模块（聚合 `base-api`、`base-ui`、`base-rv-adapter`、`utils`、`navigation`）
+- `base-ui`：UI 基础组件模块（Activity/Fragment 基类、ViewBinding 委托、Compose 集成）
+- `base-rv-adapter`：RecyclerView 适配器模块（ViewBinding 适配器 + 传统 ViewHolder 适配器）
+- `navigation`：Jetpack Navigation 使用优化模块
+- `utils`：工具类模块
+- `SDK`：三方 SDK 接入模块，其中目前集成以下 SDK：
+  - `LocalAAR`：一些 SDK 所必需依赖的本地 AAR 包（UniMP 相关）
+  - `ActivityResult`：ActivityResult API 封装
+  - `Banner`：轮播图组件
+  - `BitmapUtil`：位图工具（Base64 互转、View 截图）
+  - `Camera`：相机功能（JCameraView 封装）
+  - `DateUtil`：日期工具（格式化、农历、时间计算）
+  - `Download`：文件下载（EasyHttp 封装）
+  - `ImageLoad`：图片加载（Glide 封装）
+  - `JsonUtil`：JSON 处理（Gson 封装）
+  - `MMKVSharedPreferences`：高性能存储（MMKV + SharedPreferences 兼容）
+  - `MimeType`：文件类型识别（MIME 类型枚举）
+  - `Navigation`：Jetpack Navigation 优化（add/hide 策略）
+  - `Pay`：支付模块，目前支持微信与支付宝
+  - `Permission`：权限请求（PermissionX 封装）
+  - `PictureSelector`：图片选择（LuckPicture 封装）
+  - `Popup`：弹窗组件（XPopup 封装）
+  - `PreviewFile`：文件预览（腾讯 X5 内核）
+  - `QRCode`：二维码生成/扫描（ZXingLite）
+  - `Shadow`：Shadow 插件化宿主接入模块（含 `shadow-lib`、`shadow-init`、`plugin-aidl`、`plugin-manager` 4 个子模块）
+  - `Share`：系统分享（文本、文件）
+  - `SmsUtil`：短信发送
+  - `TencentCloud`：腾讯云对象存储模块
   - `Umeng`：友盟分享、推送、三方应用授权以及应用性能监测模块
   - `UniMP`：Uni 小程序接入模块，可使原生应用拥有小程序能力
-- `utils`：工具类模块
+  - `update`：应用内更新（APK 下载安装）
+  - `VideoPlayer`：视频播放（GSYVideoPlayer 封装）
+  - `ViewBinding`：ViewBinding 工具（泛型自动推导）
+  - `Web`：WebView 模块（JsBridge 通信）
+  - `XLogInit`：日志初始化（XLog 封装）
 
 其中相关模块之间的依赖关系如下：
 
@@ -39,7 +63,7 @@
 
 #### 2.1  `base-api`
 
-基于 Retrofit 进行封装的接口请求模块，主要对外公开接口方法：`RetrofitManager.buildRetrofit(baseUrl, isPrintLog, publicHeaderOrParamsBlock, okHttpBuilderBlock)`
+基于 Retrofit 进行封装的接口请求模块，主要对外公开接口方法：`RetrofitManager.buildRetrofit(baseUrl, logProxy, publicHeaderOrParamsBlock, okHttpBuilderBlock)`
 
 具体使用方式见  Demo 中的 [Repository.kt](https://github.com/Heart-Beats/BaseProject/blob/c30c6a69e05548a794d96670d298c3a9a9c1a38a/app/src/main/java/com/hl/baseproject/repository/Repository.kt#LL22C3-L22C3) 类，其中 `publicHeaderOrParamsBlock`  参数用来实现公共请求头的定制化，`okHttpBuilderBlock`  参数用来实现 `OkHttpClient`  的定制化。
 
@@ -238,3 +262,24 @@ interface TransferListener {
 `UniMPHelper`  为对外使用类，要使用 Uni 小程序，首先需要初始化 `DCUniMPSDK` ，调用 `UniMPHelper.initUniMP(...)` 方法即可，需要注意接入小程序后会使应用存在多个进程，因此==需要在主进程中执行该方法进行初始化==。
 
 其他方法可见相关注释来在具体场景中进行使用，这里也不作介绍。
+
+---
+
+## 📚 各模块详细文档
+
+### 基础架构模块
+- [base-api 网络请求](base/api/README.md)
+- [base-arch 架构核心](base/arch/README.md)
+- [base-app-res 公共资源](base/app-res/README.md)
+- [base-ui UI 基础](base/ui/README.md)
+- [base-rv-adapter 适配器](base/rv-adapter/README.md)
+- [utils 工具类](utils/README.md)
+
+### SDK 集成模块
+- [SDK 模块总览](SDK/README.md)
+- [Pay 支付](SDK/Pay/README.md) | [Umeng 友盟](SDK/Umeng/README.md) | [TencentCloud 腾讯云](SDK/TencentCloud/README.md)
+- [UniMP 小程序](SDK/UniMP/README.md) | [Shadow 插件化](SDK/Shadow/README.md)
+- [Web WebView](SDK/Web/README.md) | [Navigation 导航](SDK/Navigation/README.md)
+- [XLogInit 日志](SDK/XLogInit/README.md) | [MMKV 存储](SDK/MMKVSharedPreferences/README.md)
+- [ImageLoad 图片加载](SDK/ImageLoad/README.md) | [Permission 权限](SDK/Permission/README.md)
+- [更多 SDK 模块 →](SDK/README.md)

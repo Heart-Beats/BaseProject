@@ -1,20 +1,12 @@
 package com.hl.uikit
 
-import android.app.Application
 import android.content.Context
 import android.view.Gravity
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 
-fun Context.toastInit() {
-    ToastUtils.init(applicationContext as Application)
-}
-
 fun Context.toast(text: CharSequence, duration: Int = Toast.LENGTH_SHORT, @GravityFlag gravity: Int = Gravity.CENTER) {
-    if (!ToastUtils.isInitialized) {
-        toastInit()
-    }
-    ToastUtils.show {
+    ToastUtils.show(this) {
         this.layout = R.layout.uikit_layout_toast
         this.text = text
         this.gravity = gravity
@@ -40,11 +32,7 @@ fun Context.toastFailure(
     duration: Int = Toast.LENGTH_SHORT,
     @GravityFlag gravity: Int = Gravity.CENTER
 ) {
-    if (!ToastUtils.isInitialized) {
-        toastInit()
-    }
-
-    ToastUtils.show {
+    ToastUtils.show(this) {
         this.layout = R.layout.uikit_layout_toast_with_icon
         this.iconRes = R.drawable.uikit_ic_toast_fail
         this.text = text
@@ -78,10 +66,7 @@ fun Context.toastSuccess(
     duration: Int = Toast.LENGTH_SHORT,
     @GravityFlag gravity: Int = Gravity.CENTER
 ) {
-    if (!ToastUtils.isInitialized) {
-        toastInit()
-    }
-    ToastUtils.show {
+    ToastUtils.show(this) {
         this.layout = R.layout.uikit_layout_toast_with_icon
         this.iconRes = R.drawable.uikit_ic_toast_success
         this.text = text

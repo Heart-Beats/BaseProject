@@ -1,6 +1,7 @@
 package com.hl.uikit
 
 import android.app.Application
+import android.content.Context
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.widget.ImageView
@@ -16,21 +17,24 @@ object ToastUtils {
     private var toast: Toast? = null
     private lateinit var app: Application
 
-    val isInitialized: Boolean
+    private val isInitialized: Boolean
         get() {
             return ToastUtils::app.isInitialized
         }
 
-    fun init(app: Application) {
+    private fun init(app: Application) {
         this.app = app
     }
 
 
-    fun cancel() {
-        toast?.cancel()
+    fun show(context: Context, build: ToastBuilder.() -> Unit) {
+        if (!isInitialized) {
+            init(context.applicationContext as Application)
+        }
+        show(build)
     }
 
-    fun show(build: ToastBuilder.() -> Unit) {
+    private fun show(build: ToastBuilder.() -> Unit) {
         val toastBuilder = ToastBuilder().apply(build)
 
         val layout = toastBuilder.layout
@@ -64,6 +68,10 @@ object ToastUtils {
         //         onFinished()
         //     }, durationTime
         // )
+    }
+
+    private fun cancel() {
+        toast?.cancel()
     }
 }
 
