@@ -7,8 +7,37 @@ apply plugin: 'com.vanniktech.maven.publish'
 apply plugin: 'signing'
 
 if (rootProject.ext.isPublishRelease) {
+    // ============================================================================
+    // 凭证加载：优先级 local.properties > 环境变量 > Gradle 属性
+    // ============================================================================
+    def getSecret = { String key, String envKey = null ->
+        // 1. 优先从 local.properties 读取
+        File secretPropsFile = project.rootProject.file('local.properties')
+        if (secretPropsFile.exists()) {
+            Properties p = new Properties()
+            p.load(new FileInputStream(secretPropsFile))
+            if (p.containsKey(key)) return p.getProperty(key)
+        }
+        // 2. 从环境变量读取
+        if (envKey != null) {
+            def env = System.getenv(envKey)
+            if (env != null) return env
+        }
+        // 3. 从 Gradle 属性读取（-P 或 gradle.properties）
+        if (project.hasProperty(key)) return project.property(key)
+        return null
+    }
+
     signing {
-        useGpgCmd() //使用 gpg-agent
+        def signingKey = getSecret("signing.privateKey", "SIGNING_KEY")
+        def signingPassword = getSecret("signing.password", "SIGNING_PASSWORD")
+
+        if (signingKey != null && signingPassword != null) {
+            // CI / 无 GPG 环境：使用 ASCII-armored 内存密钥签名（仅支持 RSA 密钥）
+            useInMemoryPgpKeys(signingKey, signingPassword)
+        } else {
+            useGpgCmd() //使用 gpg-agent
+        }
         sign publishing.publications
     }
 }
