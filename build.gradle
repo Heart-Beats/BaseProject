@@ -2,7 +2,7 @@
 buildscript {
     dependencies {
         // 添加 VasDolly 多渠道打包插件
-        classpath 'com.tencent.vasdolly:plugin:3.0.4'
+        classpath 'com.tencent.vasdolly:plugin:3.0.6'
     }
 }
 
