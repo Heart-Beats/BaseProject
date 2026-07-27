@@ -1,0 +1,141 @@
+/**
+ * 定义打包的模块名称
+ */
+String getModuleName() {
+    return module_name
+}
+
+/**
+ * 定义打包的 aar 名称
+ */
+String getAarName(variant) {
+    def libName = getModuleName()
+    def version = '0.0.1'
+    def date = new Date().format("yyyyMMdd")
+    return "${libName}_v${version}_${date}_${variant.buildType.name}.aar"
+}
+
+/**
+ * 定义打包输出的目录
+ */
+File getBuildOutputAarDir() {
+    return new File(rootProject.projectDir, "build/aars")
+}
+
+def build_aar_name = ''
+
+// 修改打包的 aar 名称
+android.libraryVariants.all { variant ->
+    variant.outputs.all { output ->
+        outputFileName = getAarName(variant)
+        build_aar_name = outputFileName
+    }
+}
+
+tasks.whenTaskAdded { Task task ->
+    String taskName = task.name
+
+    if (taskName.matches('^pre.*[(Debug)|(Release)]Embed$')) {
+        // fataar 编译之前需要清除之前的编译产物，否则会有问题
+        Task cleanTask = project.getTasksByName('clean', false).first()
+        task.dependsOn(cleanTask)
+        task.mustRunAfter(cleanTask)
+    }
+}
+
+// =========================================================================
+// 【优化点 1】在 afterEvaluate 阶段，自动检测是否存在 AAR 后处理任务
+// （如 fat-aar 的 reBundle），有则 hook 后处理任务，无则 hook 标准 bundle 任务，
+// 确保总是在 AAR 最终生成后再拷贝，避免拿到 fat-aar 未处理完的不完整产物
+// =========================================================================
+project.afterEvaluate {
+    tasks.matching { it.name.matches('^(re)?(B|b)undle.*(Debug|Release)Aar$') }.all { bundleTask ->
+        // 从 'bundleReleaseAar' 提取 variant 部分，例如 'Release'
+        String variantName = bundleTask.name.replaceAll('^bundle', '').replaceAll('Aar$', '')
+        String reBundleTaskName = "reBundleAar${variantName}"
+
+        // 优先使用 reBundle 任务（fat-aar 等第三方 AAR 后处理插件），不存在则回退到标准 bundle
+        Task finalTask = tasks.findByName(reBundleTaskName) ?: bundleTask
+
+        // 将拷贝逻辑内联到 doLast 中，确保脚本级变量（build_aar_name 等）解析正确
+        // 外部定义的 Groovy 方法/闭包在 doLast 内部因 delegate 指向 Task 会导致属性查找失败
+        finalTask.doLast {
+            def outputAar = new File(project.buildDir, "outputs/aar/$build_aar_name")
+            def buildOutputAarDir = getBuildOutputAarDir()
+
+            // 过滤动态库，仅保留 armeabi-v7a 和 arm64-v8a 架构
+            def allowedAbis = ['armeabi-v7a', 'arm64-v8a']
+            def filteredAar = filterAarNativeLibs(outputAar, allowedAbis)
+
+            // =========================================================================
+            // 【优化点 2】定向清理模块在目标目录下的历史老产物，防止因日期变化导致磁盘无限堆积
+            // =========================================================================
+            def targetPrefix = getModuleName()
+            if (buildOutputAarDir.exists()) {
+                buildOutputAarDir.listFiles().each { file ->
+                    // 精准匹配：必须是文件、以当前模块前缀开头、且以 .aar 结尾，不误伤其他同级模块
+                    if (file.isFile() && file.name.startsWith(targetPrefix) && file.name.endsWith(".aar")) {
+                        println "------------ [Clean] 发现历史老产物，正在自动清理: ${file.name} ----------"
+                        file.delete()
+                    }
+                }
+            } else {
+                buildOutputAarDir.mkdirs()
+            }
+
+            // 拷贝到目标目录
+            println "------------ 开始拷贝最新产物 ${filteredAar.name} 到 ${buildOutputAarDir} 下 ----------"
+            copy {
+                from filteredAar
+                into buildOutputAarDir
+            }
+        }
+    }
+}
+
+
+/**
+ * 过滤 AAR 中的动态库，仅保留指定架构
+ * @param aarFile 原始 AAR 文件
+ * @param allowedAbis 允许的 ABI 架构列表
+ * @return 过滤后的 AAR 文件
+ */
+File filterAarNativeLibs(File aarFile, List<String> allowedAbis) {
+    println "------------ 开始过滤 AAR 动态库，保留架构: $allowedAbis  ----------"
+    def tempDir = new File(aarFile.parentFile, "temp_aar_${System.currentTimeMillis()}")
+    def zipFile = new java.util.zip.ZipFile(aarFile)
+
+    // 解压并过滤
+    zipFile.entries().each { entry ->
+        def entryPath = entry.name
+        if (entryPath.startsWith("jni/")) {
+            def arch = entryPath.substring(4).split("/").first()
+            if (!allowedAbis.contains(arch)) {
+                return // 跳过该 entry
+            }
+        }
+        def targetPath = new File(tempDir, entryPath)
+        if (entry.isDirectory()) {
+            targetPath.mkdirs()
+        } else {
+            targetPath.parentFile.mkdirs()
+            targetPath.bytes = zipFile.getInputStream(entry).bytes
+        }
+    }
+    zipFile.close()
+
+    // 重新打包
+    def filteredAar = new File(aarFile.parentFile, aarFile.name)
+    new java.util.zip.ZipOutputStream(new FileOutputStream(filteredAar)).withStream { zos ->
+        tempDir.eachFileRecurse(groovy.io.FileType.FILES) { file ->
+            def entryName = file.absolutePath.substring(tempDir.absolutePath.length() + 1).replace("\\", "/")
+            zos.putNextEntry(new java.util.zip.ZipEntry(entryName))
+            zos.write(file.bytes)
+            zos.closeEntry()
+        }
+    }
+
+    // 清理临时目录
+    tempDir.deleteDir()
+    return filteredAar
+}

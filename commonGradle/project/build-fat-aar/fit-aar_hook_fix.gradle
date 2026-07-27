@@ -1,0 +1,237 @@
+afterEvaluate {
+    // 1. 自动提取所有通过 embed 依赖的本地子模块 Project
+    def embedConfiguration = configurations.findByName("embed")
+    if (embedConfiguration == null) return
+
+    def embedProjects = embedConfiguration.dependencies
+            .findAll { it instanceof ProjectDependency }
+            .collect { it.dependencyProject }
+
+    if (embedProjects.isEmpty()) return
+
+    // 2. 遍历打包变体（自动适配 Debug / Release）
+    android.libraryVariants.all { variant ->
+        def variantName = variant.name.capitalize()
+
+        // 【核心 Hook 点 A】定位最终打包生成 .aar 文件的 Zip 任务
+        def bundleAarTask = tasks.findByName("bundle${variantName}Aar")
+        // 【核心 Hook 点 B】定位主模块处理 Java 资源并打包进 classes.jar 的 Task
+        def processJavaResTask = tasks.findByName("process${variantName}JavaRes")
+
+        // =========================================================================
+        // 【第一部分】DataBinding 元数据完美缝合 (AAR 根目录级别)
+        // =========================================================================
+        if (bundleAarTask != null) {
+            def mergedDbBaseDir = file("${buildDir}/intermediates/merged_databinding_final/${variant.name}")
+            def targetLogDir = file("${mergedDbBaseDir}/data-binding-base-class-log")
+            def targetDataBindDir = file("${mergedDbBaseDir}/data-binding")
+
+            def mergeDbMetadataTask = tasks.create("mergeDataBindingMetadata${variantName}") {
+                embedProjects.each { embedProj ->
+                    if (embedProj.hasProperty('android')) {
+                        def subJavacTask = embedProj.tasks.findByName("compile${variantName}JavaWithJavac")
+                        if (subJavacTask != null) dependsOn(subJavacTask)
+                    }
+                }
+
+                doLast {
+                    if (mergedDbBaseDir.exists()) mergedDbBaseDir.deleteDir()
+                    targetLogDir.mkdirs()
+                    targetDataBindDir.mkdirs()
+
+                    // 【核心修复】：这里只遍历 embedProjects（纯子模块），天然不把主模块的 DataBinding 扫进去，防止冲突！
+                    embedProjects.each { embedProj ->
+                        if (embedProj.hasProperty('android')) {
+                            def subIntermediates = file("${embedProj.buildDir}/intermediates")
+                            if (subIntermediates.exists()) {
+                                subIntermediates.eachFileRecurse { file ->
+                                    if (file.isFile()) {
+                                        if (file.name.endsWith("-binding_classes.json")) {
+                                            copy { from file into targetLogDir }
+                                        }
+                                        if (file.name.endsWith("-br.bin") || file.name.endsWith("-setter_store.json")) {
+                                            copy { from file into targetDataBindDir }
+                                        }
+                                    }
+                                }
+                            }
+                        } else {
+                            def targetCfg = embedProj.configurations.findByName("default")
+                            if (targetCfg != null) {
+                                targetCfg.allArtifacts.files.files.each { archiveFile ->
+                                    if (archiveFile.exists() && archiveFile.name.endsWith('.aar')) {
+                                        project.zipTree(archiveFile).each { subFile ->
+                                            if (subFile.path.contains("data-binding-base-class-log")) {
+                                                copy { from subFile into targetLogDir }
+                                            } else if (subFile.path.contains("data-binding")) {
+                                                copy { from subFile into targetDataBindDir }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            bundleAarTask.dependsOn(mergeDbMetadataTask)
+            bundleAarTask.from(mergedDbBaseDir) {
+                include "data-binding-base-class-log/**"
+                include "data-binding/**"
+            }
+        }
+
+        // =========================================================================
+        // 【第二部分】SPI 服务与 Kotlin 元数据完美缝合 (classes.jar 内部级别)
+        // =========================================================================
+        if (processJavaResTask != null) {
+            def mergedServicesDir = file("${buildDir}/intermediates/merged_services/${variant.name}")
+            def extractedKotlinModulesDir = file("${buildDir}/intermediates/extracted_kotlin_modules/${variant.name}")
+
+            def mergeServiceAndKotlinTask = tasks.create("mergeEmbedServicesAndKotlin${variantName}") {
+                embedProjects.each { embedProj ->
+                    if (embedProj.hasProperty('android')) {
+                        def subProcessRes = embedProj.tasks.findByName("process${variantName}JavaRes")
+                        if (subProcessRes != null) dependsOn(subProcessRes)
+                        def subCompileKotlin = embedProj.tasks.findByName("compile${variantName}Kotlin")
+                        if (subCompileKotlin != null) dependsOn(subCompileKotlin)
+                    }
+                }
+
+                doLast {
+                    if (mergedServicesDir.exists()) mergedServicesDir.deleteDir()
+                    if (extractedKotlinModulesDir.exists()) extractedKotlinModulesDir.deleteDir()
+                    mergedServicesDir.mkdirs()
+                    extractedKotlinModulesDir.mkdirs()
+
+                    def serviceMap = [:] as Map<String, Set<String>>
+
+                    // SPI 属于可合并纯文本，此处保留主模块共同提取；但下面会对不可合并的 Kotlin 二进制元数据进行隔离
+                    ([project] + embedProjects).each { proj ->
+                        if (proj.hasProperty('android')) {
+                            if (proj.android.hasProperty('sourceSets')) {
+                                proj.android.sourceSets.main.resources.srcDirs.each { resDir ->
+                                    def servicesFolder = file("${resDir}/META-INF/services")
+                                    if (servicesFolder.exists() && servicesFolder.isDirectory()) {
+                                        servicesFolder.listFiles().each { file ->
+                                            if (file.isFile()) {
+                                                def interfaceName = file.name
+                                                if (!serviceMap.containsKey(interfaceName)) serviceMap[interfaceName] = [] as Set
+                                                file.readLines('UTF-8').each { line ->
+                                                    def trimmed = line.trim()
+                                                    if (!trimmed.isEmpty() && !trimmed.startsWith('#')) serviceMap[interfaceName].add(trimmed)
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                            def subBuildDir = proj.buildDir
+                            if (subBuildDir.exists()) {
+                                subBuildDir.eachFileRecurse { file ->
+                                    if (file.isFile()) {
+                                        // SPI 纯文本扫描追加
+                                        if (file.path.contains("META-INF" + File.separator + "services" + File.separator) &&
+                                                !file.path.contains("intermediates" + File.separator + "merged_services")) {
+                                            def interfaceName = file.name
+                                            if (!serviceMap.containsKey(interfaceName)) serviceMap[interfaceName] = [] as Set
+                                            file.readLines('UTF-8').each { line ->
+                                                def trimmed = line.trim()
+                                                if (!trimmed.isEmpty() && !trimmed.startsWith('#')) serviceMap[interfaceName].add(trimmed)
+                                            }
+                                        }
+
+                                        // 【核心修复】：对于不可合并的 .kotlin_module 二进制文件，严格执行“主子隔离”！
+                                        // 仅当遍历对象为外部 embed 子模块时才提取；当前主模块(proj == project)不再手工抽取
+                                        if (proj != project && file.name.endsWith(".kotlin_module")) {
+                                            copy { from file into extractedKotlinModulesDir }
+                                        }
+                                    }
+                                }
+                            }
+                        } else {
+                            def targetCfg = proj.configurations.findByName("default")
+                            if (targetCfg != null) {
+                                targetCfg.allArtifacts.files.files.each { archiveFile ->
+                                    if (archiveFile.exists()) {
+                                        if (archiveFile.name.endsWith('.aar')) {
+                                            project.zipTree(archiveFile).each { subFile ->
+                                                if (subFile.name == "classes.jar") {
+                                                    project.zipTree(subFile).each { jarFile ->
+                                                        if (jarFile.path.contains("META-INF/services/")) {
+                                                            def interfaceName = jarFile.name
+                                                            if (!serviceMap.containsKey(interfaceName)) serviceMap[interfaceName] = [] as Set
+                                                            jarFile.readLines('UTF-8').each { line ->
+                                                                def trimmed = line.trim()
+                                                                if (!trimmed.isEmpty() && !trimmed.startsWith('#')) serviceMap[interfaceName].add(trimmed)
+                                                            }
+                                                        }
+
+                                                        // 外部引入的第三方依赖包，放行通过
+                                                        if (jarFile.name.endsWith('.kotlin_module')) {
+                                                            copy { from jarFile into extractedKotlinModulesDir }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        } else if (archiveFile.name.endsWith('.jar')) {
+                                            project.zipTree(archiveFile).each { jarFile ->
+                                                if (jarFile.path.contains("META-INF/services/")) {
+                                                    def interfaceName = jarFile.name
+                                                    if (!serviceMap.containsKey(interfaceName)) serviceMap[interfaceName] = [] as Set
+                                                    jarFile.readLines('UTF-8').each { line ->
+                                                        def trimmed = line.trim()
+                                                        if (!trimmed.isEmpty() && !trimmed.startsWith('#')) serviceMap[interfaceName].add(trimmed)
+                                                    }
+                                                }
+
+                                                // 外部引入的普通 jar，放行通过
+                                                if (jarFile.name.endsWith('.kotlin_module')) {
+                                                    copy { from jarFile into extractedKotlinModulesDir }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    serviceMap.each { interfaceName, implementations ->
+                        def outputFile = file("${mergedServicesDir}/META-INF/services/${interfaceName}")
+                        outputFile.parentFile.mkdirs()
+                        outputFile.withWriter('UTF-8') { writer ->
+                            writer.write("# Full Merged SPI by fat-aar robust hook script\n")
+                            implementations.each { impl -> writer.write("${impl}\n") }
+                        }
+                    }
+                }
+            }
+
+            processJavaResTask.dependsOn(mergeServiceAndKotlinTask)
+
+            // =========================================================================
+            // 【过滤控制器】用智能闭包代替盲目的一刀切 exclude 字符串
+            // =========================================================================
+            processJavaResTask.exclude { details ->
+                def srcPath = details.file.absolutePath
+                // 来自亲手建立的合并输出临时目录，绝不能过滤，放行！
+                if (srcPath.contains("merged_services") || srcPath.contains("extracted_kotlin_modules")) {
+                    return false
+                }
+                // 拦截来自各个子模块分散的原始旧文件，防止它们重复写入造成错误
+                return details.path.startsWith("META-INF/services/") || details.path.endsWith(".kotlin_module")
+            }
+
+            // 完美喂入合并后的新资源
+            processJavaResTask.from(mergedServicesDir) {
+                include "META-INF/services/*"
+            }
+            processJavaResTask.from(extractedKotlinModulesDir) {
+                into "META-INF"
+            }
+        }
+    }
+}
