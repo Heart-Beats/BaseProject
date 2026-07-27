@@ -1,9 +1,11 @@
+import org.gradle.api.Task
+
 apply {
 	val commonGradleFile: File by extra
 
-	this.from(File(commonGradleFile, "jdk_http_util.gradle.kts"))
+	this.from(File(commonGradleFile, "http/jdk_http_util.gradle.kts"))
 	this.from(File(commonGradleFile, "exec_command.gradle.kts"))
-	this.from(File(commonGradleFile, "flavor_channel.gradle"))
+	this.from(File(commonGradleFile, "flavor/flavor_channel.gradle"))
 }
 
 // 执行命令行函数

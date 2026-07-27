@@ -5,7 +5,7 @@ plugins {
     id 'kotlin-parcelize' // 目前在 groovy 中无法直接通过 toml 文件进行使用,  issue:https://github.com/gradle/gradle/issues/17968
 }
 
-apply from: "../commonGradle/build_config.gradle"
+apply from: "../commonGradle/project/build_config.gradle"
 
 android {
     namespace 'com.hl.baseproject'

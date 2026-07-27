@@ -4,7 +4,7 @@ ext {
 }
 
 apply {
-    from new File(commonGradleFile, "so_check.gradle")
+    from new File(commonGradleFile, "project/so_check.gradle")
     from new File(commonGradleFile, "apk_build.gradle")
 }
 
@@ -30,13 +30,13 @@ def initBuildConfigValueFun(defaultConfig) {
 
         def api = [
                 // 开发
-                Env_D  : 'https://dev-yky.youmatech.com/',
+                Env_D  : 'https://xxx.com/',
                 // 测试
-                Env_T  : 'https://test-yky.youmatech.com/',
+                Env_T  : 'https://xxx.com/',
                 // 预发布
-                Env_P  : 'https://dev-jsyjy.yuanzhiyijiantong.com/',
+                Env_P  : 'https://xxx.com/',
                 // 正式
-                Env_R  : 'https://yky.youmatech.com/',
+                Env_R  : 'https://xxx.com/',
         ]
 
         // 默认环境，给非多渠道插件打包时使用, 即 build Apk  或者 build Bundle
