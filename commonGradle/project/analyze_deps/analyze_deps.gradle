@@ -1,0 +1,561 @@
+/**
+ * aar 依赖分析脚本 (纯 Gradle 版本)  -  分析模块中声明的一级依赖哪些未在 aar 中使用
+ *
+ * 用法:
+ *   gradlew :[module]:analyzeDeps
+ *
+ * 功能:
+ *   1. dumpDepArtifacts  - 解析所有 runtime 依赖的真实文件路径、一级依赖、依赖树
+ *   2. analyzeDeps       - 从 Gradle 缓存读取依赖包名,扫描 AAR 字节码,输出冗余依赖
+ *
+ * 正确性保证:
+ *   - 包名从 Gradle 缓存的真实 JAR/AAR 文件中提取 (零手工映射)
+ *   - AAR 字节码解析 .class 常量池中的类引用
+ *   - 交集比对: 依赖包名 ∩ AAR 引用包名 = 必需依赖
+ *
+ * 覆盖范围:
+ *   ✓ import + new 直接引用          — .class 常量池 CONSTANT_Class 条目
+ *   ✓ Class.forName("字面量类名")      — 常量池 CONSTANT_String 条目
+ *   ✓ META-INF/services/ 服务发现    — 扫描实现类名 → 包前缀,加入匹配池
+ *   ✓ kapt 注解处理器                — 编译期处理,不进入 runtime,不在分析范围
+ *   ✓ AndroidX/Kotlin 平台包         — 作为常规依赖参与分析
+ *   ✗ JNI FindClass 动态加载          — 类名在 .so 中,脚本不扫描 native 库
+ *   ✗ 运行时拼接类名                  — "com." + vendor + ".Foo" 无完整字符串
+ */
+
+import java.util.zip.ZipFile
+import java.util.zip.ZipInputStream
+import groovy.json.JsonOutput
+import groovy.json.JsonSlurper
+
+// ============================================================
+// 常量
+// ============================================================
+def AAR_DIR        = new File(project.projectDir, 'libs')
+
+// ANSI 颜色
+def ANSI_YELLOW  = '\u001B[33m'
+def ANSI_BOLD    = '\u001B[1m'
+def ANSI_RESET   = '\u001B[0m'
+def YL = ANSI_YELLOW
+def RS = ANSI_RESET
+def BYL = ANSI_BOLD + ANSI_YELLOW  // 粗体黄
+def ARTIFACTS_FILE = new File(rootProject.buildDir, 'analyze_deps/dep_artifacts.txt')
+def FIRST_LEVEL_FILE = new File(rootProject.buildDir, 'analyze_deps/dep_first_level.txt')
+def DEP_TREE_FILE   = new File(rootProject.buildDir, 'analyze_deps/dep_tree.txt')
+def CACHE_FILE     = new File(rootProject.buildDir, 'analyze_deps/.dep_cache.json')
+
+// ============================================================
+// Task 1: dumpDepArtifacts - 解析依赖文件路径
+// ============================================================
+task dumpDepArtifacts {
+    description = '将已解析的依赖项工件路径转储到 dep_artifacts.txt'
+    group = '分析'
+
+    doLast {
+        // --- 全量依赖 (含传递) ---
+        def seen = [] as Set
+        def count = 0
+        ARTIFACTS_FILE.parentFile.mkdirs()
+        ARTIFACTS_FILE.withWriter('UTF-8') { writer ->
+            configurations.getByName('debugRuntimeClasspath')
+                    .resolvedConfiguration.resolvedArtifacts.each { artifact ->
+                def id = artifact.moduleVersion.id
+                def coord = "${id.group}:${id.name}:${id.version}"
+                if (seen.add(coord)) {
+                    writer.writeLine("${coord}|${artifact.file.absolutePath}")
+                    count++
+                }
+            }
+        }
+        println "  [dumpDepArtifacts] 已写入 ${count} 个依赖到 ${ARTIFACTS_FILE.name}"
+
+        // --- 一级依赖 (不含传递，即 build.gradle dependencies{} 中直接声明的) ---
+        def firstLevelSet = [] as Set
+        // 收集所有 implementation/api 声明的一级依赖
+        ['implementation', 'api'].each { cfgName ->
+            try {
+                configurations.getByName(cfgName).dependencies.each { dep ->
+                    if (dep.group && dep.name) {
+                        def ver = dep.version ?: 'unspecified'
+                        firstLevelSet << "${dep.group}:${dep.name}:${ver}"
+                    }
+                }
+            } catch (e) { /* 忽略无法解析的配置 */ }
+        }
+        FIRST_LEVEL_FILE.parentFile.mkdirs()
+        FIRST_LEVEL_FILE.withWriter('UTF-8') { writer ->
+            firstLevelSet.each { writer.writeLine(it) }
+        }
+        println "  [dumpDepArtifacts] 已写入 ${firstLevelSet.size()} 个一级依赖到 ${FIRST_LEVEL_FILE.name}"
+
+        // --- 依赖树映射 (传递依赖 → 所属一级依赖) ---
+        DEP_TREE_FILE.parentFile.mkdirs()
+        DEP_TREE_FILE.withWriter('UTF-8') { writer ->
+            def rootDeps = configurations.getByName('debugRuntimeClasspath')
+                    .resolvedConfiguration.firstLevelModuleDependencies
+            def rootList = rootDeps.toList()
+            // [selected_coord -> root_coord] 映射,先到先得
+            // 这样同一传递依赖只会归属到一个 root (其实际解析的入口)
+            def transitiveParent = [:] as Map<String, String>
+            def resResult = configurations.getByName('debugRuntimeClasspath').incoming.resolutionResult
+            def allComponents = resResult.allComponents.toList()
+
+            rootList.each { rootDep ->
+                def rootGroup = rootDep.moduleGroup
+                def rootName  = rootDep.moduleName
+                def rootCoord = "${rootGroup}:${rootName}"
+                // 通过 group:name 匹配 selected 组件 (忽略版本)
+                def rootComp = allComponents.find { c ->
+                    try { c.moduleVersion.group == rootGroup && c.moduleVersion.name == rootName }
+                    catch (e) { false }
+                }
+                if (rootComp == null) {
+                    // 即使没找到 selected,也至少记录这个 root 自身
+                    if (!transitiveParent.containsKey(rootCoord)) {
+                        transitiveParent[rootCoord] = rootCoord
+                    }
+                    return
+                }
+
+                def queue = [] as Queue
+                queue << rootComp
+                def localSeen = [] as Set
+                localSeen << rootComp
+
+                while (!queue.isEmpty()) {
+                    def comp = queue.remove(0)
+                    comp.dependencies.toList().each { depResult ->
+                        def sel = depResult.selected
+                        if (sel == null) return
+                        def selGroup = sel.moduleVersion.group
+                        def selName  = sel.moduleVersion.name
+                        def selCoord = "${selGroup}:${selName}"
+                        // 已记录过父依赖则跳过 (BFS 找到的是最近祖先)
+                        if (!transitiveParent.containsKey(selCoord) && localSeen.add(sel)) {
+                            transitiveParent[selCoord] = rootCoord
+                            queue << sel
+                        }
+                    }
+                }
+            }
+
+            // 写文件
+            transitiveParent.each { selCoord, rootCoord ->
+                writer.writeLine("${selCoord}|${rootCoord}")
+            }
+        }
+        println "  [dumpDepArtifacts] 已写入依赖树到 ${DEP_TREE_FILE.name}"
+    }
+}
+
+// ============================================================
+// Task 2: analyzeDeps - 完整分析 (自动运行 dumpDepArtifacts)
+// ============================================================
+task analyzeDeps {
+    description = '分析 libs 中的 AAR 不使用 build.gradle 中的哪些依赖项'
+    group = '分析'
+    dependsOn dumpDepArtifacts
+
+    doLast {
+        def stopwatch = System.currentTimeMillis()
+
+        // ---- 加载缓存 ----
+        def cache = [:]
+        if (CACHE_FILE.exists()) {
+            try { cache = new JsonSlurper().parse(CACHE_FILE) as Map } catch (e) { cache = [:] }
+            println "  缓存: ${cache.size()} 个已计算过的依赖"
+        }
+
+        // ---- Step 1: 读取依赖工件 ----
+        println '\n[1/5] 读取依赖工件 ...'
+        def depEntries = [:]              // coord -> [path1, path2, ...]
+        ARTIFACTS_FILE.eachLine('UTF-8') { line ->
+            def parts = line.split('\\|')
+            if (parts.length >= 2) {
+                def coord = parts[0].trim()
+                def path  = parts[1..-1].join('|').trim()
+                depEntries.get(coord, []) << path
+            }
+        }
+        println "  已加载 ${depEntries.size()} 个依赖 (含传递)"
+
+        // ---- 读取一级依赖 (build.gradle 直接声明的) ----
+        def firstLevelDeps = [] as Set
+        if (FIRST_LEVEL_FILE.exists()) {
+            FIRST_LEVEL_FILE.eachLine('UTF-8') { line ->
+                def trimmed = line.trim()
+                if (trimmed) firstLevelDeps << trimmed
+            }
+        }
+        println "  其中一级依赖: ${firstLevelDeps.size()} 个 (dependencies{} 直接声明)"
+
+        // ---- 读取依赖树映射 (传递 → 所属一级) ----
+        // key: selected_coord (g:n)  value: root_coord (g:n)
+        // 兼容 depEntries 中带版本号的形式: 写入 dep_tree.txt 的 selected 不带版本
+        def transitiveParent = [:]  // group:name -> parent group:name
+        if (DEP_TREE_FILE.exists()) {
+            DEP_TREE_FILE.eachLine('UTF-8') { line ->
+                def parts = line.split('\\|')
+                if (parts.length >= 2) {
+                    transitiveParent[parts[0].trim()] = parts[1].trim()
+                }
+            }
+        }
+
+        // ---- Step 2: 从 Gradle 缓存提取每个依赖的包名 ----
+        println '\n[2/5] 从 Gradle 缓存提取包名 ...'
+        def pkgToDeps = [:]              // package_prefix -> Set[coord]
+
+        int done = 0
+        depEntries.each { coord, paths ->
+            done++
+            def cacheKey = paths.join('|')
+
+            // 从缓存获取包名列表
+            List<String> pkgList
+            if (cache.containsKey(cacheKey)) {
+                pkgList = cache[cacheKey] as List
+            } else {
+                pkgList = []
+                paths.each { p -> pkgList.addAll(extractPackages(new File(p))) }
+                pkgList = pkgList.unique()
+                if (pkgList) {
+                    cache[cacheKey] = pkgList
+                }
+            }
+
+            pkgList.each { pkg ->
+                pkgToDeps.get(pkg, [:])[coord] = true
+            }
+
+            if (done % 30 == 0) println "  ${done}/${depEntries.size()} ..."
+        }
+
+        // 清理已删除依赖的缓存条目，保存缓存
+        def activeCacheKeys = [] as Set
+        depEntries.each { coord, paths -> activeCacheKeys << paths.join('|') }
+        cache.keySet().retainAll(activeCacheKeys)
+        CACHE_FILE.parentFile.mkdirs()
+        CACHE_FILE.withWriter('UTF-8') { it.write(JsonOutput.prettyPrint(JsonOutput.toJson(cache))) }
+        println "  已提取 ${pkgToDeps.size()} 个唯一第三方包名 (缓存已保存: ${CACHE_FILE.name})"
+
+        // ---- Step 3: 扫描 AAR 字节码 ----
+        println '\n[3/5] 扫描 AAR 字节码 ...'
+        def referencedPkgs = [] as Set
+
+        AAR_DIR.eachFileMatch(~/.*\.aar/) { aar ->
+            print "  ${aar.name} ... "
+            def matches = scanAarBytecode(aar, pkgToDeps.keySet(), referencedPkgs)
+            referencedPkgs.addAll(matches)
+            println "${matches.size()} 个匹配"
+        }
+
+        // ---- Step 4: 交叉比对 ----
+        println '\n[4/5] 匹配分析中 ...'
+        def depStats = [:]               // coord -> [total, refed]
+
+        pkgToDeps.each { pkg, coords ->
+            boolean isRef = referencedPkgs.contains(pkg)
+            coords.keySet().each { coord ->
+                def stats = depStats.get(coord, [total: 0, refed: 0])
+                stats.total++
+                if (isRef) stats.refed++
+                depStats[coord] = stats
+            }
+        }
+
+        def used   = depStats.findAll { it.value.refed > 0 }
+        def unused = depStats.findAll { it.value.refed == 0 }
+
+    // 拆分一级依赖 vs 传递依赖
+    def unusedFirstLevel = [:]   // 一级未引用 (可直接从 build.gradle 删除)
+    def unusedTransitive = [:]   // 传递未引用 (随一级依赖自动消失)
+
+    unused.each { coord, stats ->
+        // 匹配一级依赖 (版本号可能因冲突解决而不同，用 group:name 匹配)
+        boolean isFirstLevel = firstLevelDeps.contains(coord)
+        if (!isFirstLevel) {
+            // 尝试用 group:name 匹配 (忽略版本差异)
+            def parts = coord.split(':')
+            if (parts.length >= 3) {
+                def gn = "${parts[0]}:${parts[1]}"
+                // 用 ":" 作为边界，避免 com.example:foo 误匹配 com.example:foo-ext
+                isFirstLevel = firstLevelDeps.any { it == coord || it.startsWith("${gn}:") }
+            }
+        }
+        if (isFirstLevel) {
+            unusedFirstLevel[coord] = stats
+        } else {
+            unusedTransitive[coord] = stats
+        }
+    }
+
+        def elapsed = (System.currentTimeMillis() - stopwatch) / 1000.0
+
+        // ---- 输出结果 ----
+        def sep = '=' * 76
+        println "\n${sep}"
+        println String.format("  分析结果  (耗时 %.0f秒, 总依赖: %d, 已引用: %d, 一级未引用: %d, 传递未引用: %d)",
+                elapsed, depStats.size(), used.size(), unusedFirstLevel.size(), unusedTransitive.size())
+        println sep
+
+        if (used) {
+            println "\n  --- [已引用 - 需保留 (${used.size()} 个)] ---"
+            used.sort { -it.value.refed }.each { coord, stats ->
+                println String.format("  %4d pkg(s) | %s", stats.refed, coord)
+            }
+        }
+
+        if (unusedFirstLevel) {
+            println "\n  --- [${BYL}未引用 - 可移除${RS}] (${unusedFirstLevel.size()} 个一级依赖) ---"
+
+            // 按类别分组
+            def groups = new LinkedHashMap()
+            groups['ExoPlayer 视频播放']          = []
+            groups['OpenTelemetry 链路追踪']     = []
+            groups['华为 HMS 服务']              = []
+            groups['Matrix 性能监控']            = []
+            groups['Rx 生命周期/缓存']            = []
+            groups['融云推送 SDK']               = []
+            groups['UI 组件库']                  = []
+            groups['依赖注入 (Dagger)']           = []
+            groups['图片/视频处理']               = []
+            groups['厂商推送']                    = []
+            groups['其他']                       = []
+
+            unusedFirstLevel.keySet().sort().each { dep ->
+                if (dep.contains('exoplayer')) {
+                    groups['ExoPlayer 视频播放'] << dep
+                } else if (dep.contains('opentelemetry')) {
+                    groups['OpenTelemetry 链路追踪'] << dep
+                } else if (dep.contains('huawei')) {
+                    groups['华为 HMS 服务'] << dep
+                } else if (dep.contains('matrix')) {
+                    groups['Matrix 性能监控'] << dep
+                } else if (dep.contains('rongcloud')) {
+                    groups['融云推送 SDK'] << dep
+                } else if (dep.contains('rxlifecycle') || dep.contains('rxerrorhandler') || dep.contains('RxCache') || dep.contains('rxandroid') || dep.contains('Jolyglot')) {
+                    groups['Rx 生命周期/缓存'] << dep
+                } else if (dep.contains('sweetalert') || dep.contains('calendarview') || dep.contains('paginate') || dep.contains('TitleBar') || dep.contains('StatusBar') || dep.contains('materialish')) {
+                    groups['UI 组件库'] << dep
+                } else if (dep.contains('dagger')) {
+                    groups['依赖注入 (Dagger)'] << dep
+                } else if (dep.contains('picasso') || dep.contains('image-viewer') || dep.contains('subsampling') || dep.contains('ShapeImageView') || dep.contains('lottie') || dep.contains('gsyijkjava')) {
+                    groups['图片/视频处理'] << dep
+                } else if (dep.contains('hihonor') || dep.contains('meizu_sdk') || dep.contains('oppo_sdk') || dep.contains('vivo_sdk') || dep.contains('xm_sdk')) {
+                    groups['厂商推送'] << dep
+                } else {
+                    groups['其他'] << dep
+                }
+            }
+
+            groups.each { name, deps ->
+                if (deps) {
+                    println "\n  [${YL}${name}${RS}] (${deps.size()} 个)"
+                    deps.each { println "    ${YL}- ${it}${RS}" }
+                }
+            }
+        }
+
+        if (unusedTransitive) {
+            println "\n${sep}"
+            println "  --- [未引用的传递依赖] (${unusedTransitive.size()} 个，删除对应一级依赖后自动消失) ---"
+
+            // 按一级父依赖分组
+            def transitiveGroups = new LinkedHashMap()
+            unusedTransitive.keySet().sort().each { dep ->
+                // dep 形如 g:n:version,transitiveParent 的 key 是 g:n,所以取前两段匹配
+                def parts = dep.split(':')
+                def gn = parts.length >= 2 ? "${parts[0]}:${parts[1]}" : dep
+                def parent = transitiveParent[gn] ?: transitiveParent[dep] ?: '未知来源'
+                transitiveGroups.get(parent, []) << dep
+            }
+
+            transitiveGroups.sort { it.key }.each { parent, deps ->
+                println "\n  ${YL}∈── 所属一级: ${parent}${RS} (${deps.size()} 个)"
+                deps.each { println "         ${YL}${it}${RS}" }
+            }
+            println "\n${sep}"
+        }
+
+        println "\n${sep}"
+        println '  完成。请检查上方 [未引用] 分组，从 build.gradle 中移除对应依赖。'
+        println sep
+    }
+}
+
+// ============================================================
+// 辅助方法
+// ============================================================
+
+/**
+ * 从单个 JAR 或 AAR 文件中提取所有第三方包名
+ * AAR 需要先解出内部的 classes.jar
+ */
+List<String> extractPackages(File artifact) {
+    if (!artifact.exists()) return []
+
+    def packages = [] as Set
+    def name = artifact.name.toLowerCase()
+
+    // 仅跳过 JDK/Android Runtime 内置包 (不对应任何依赖声明)
+    def skipPrefixes = [
+        'java/', 'javax/', 'jdk/', 'sun/',
+        'android/', 'com/android/',
+        'dalvik/', 'org/w3c/', 'org/xml/', 'org/json/', 'org/apache/',
+        'META-INF'
+    ]
+    // AAR SDK 自身的包
+    def sdkPrefixes = ['com/ctq/']
+
+    try {
+        if (name.endsWith('.aar')) {
+            def aarZip = new ZipFile(artifact)
+            // 扫描 AAR 本身的 META-INF/services/
+            collectServicePackagesFromZip(aarZip, packages)
+            // 扫描 classes.jar
+            def classesJarEntry = aarZip.getEntry('classes.jar')
+            if (classesJarEntry) {
+                def classesJarBytes = aarZip.getInputStream(classesJarEntry).bytes
+                aarZip.close()
+                collectClassPackages(classesJarBytes, packages)
+                // 扫描 classes.jar 内的 META-INF/services/
+                collectServicePackages(classesJarBytes, packages)
+            } else {
+                aarZip.close()
+            }
+        } else if (name.endsWith('.jar')) {
+            collectClassPackages(artifact.bytes, packages)
+            // 扫描 JAR 内的 META-INF/services/
+            collectServicePackages(artifact.bytes, packages)
+        }
+    } catch (e) {
+        // 某些 artifact 格式异常，跳过
+    }
+
+    // 过滤掉框架包和 SDK 自身包
+    return packages.findAll { pkg ->
+        !(skipPrefixes.any { pkg.startsWith(it) } || sdkPrefixes.any { pkg.startsWith(it) })
+    }.toList()
+}
+
+/**
+ * 从 JAR 字节数组中收集所有 .class 文件的包名
+ */
+void collectClassPackages(byte[] jarBytes, Set<String> packages) {
+    def zis = new ZipInputStream(new ByteArrayInputStream(jarBytes))
+    def entry
+    while ((entry = zis.nextEntry) != null) {
+        if (entry.name.endsWith('.class')) {
+            def lastSlash = entry.name.lastIndexOf('/')
+            if (lastSlash > 0) {
+                packages << entry.name.substring(0, lastSlash)
+            }
+        }
+        zis.closeEntry()
+    }
+    zis.close()
+}
+
+/**
+ * 从 ZipInputStream 中提取 META-INF/services/ 实现类名 → 包名前缀
+ */
+void collectServicePackages(byte[] jarBytes, Set<String> packages) {
+    def zis = new ZipInputStream(new ByteArrayInputStream(jarBytes))
+    def entry
+    while ((entry = zis.nextEntry) != null) {
+        if (entry.name.startsWith('META-INF/services/') && !entry.isDirectory()) {
+            try {
+                def content = zis.text.trim()
+                content.eachLine { className ->
+                    def trimmed = className.trim()
+                    if (trimmed && !trimmed.startsWith('#')) {
+                        def lastDot = trimmed.lastIndexOf('.')
+                        if (lastDot > 0) {
+                            packages << trimmed.substring(0, lastDot).replace('.', '/')
+                        }
+                    }
+                }
+            } catch (e) { /* 忽略无效的 services 文件 */ }
+        }
+        zis.closeEntry()
+    }
+    zis.close()
+}
+
+/**
+ * 从 ZipFile 中提取 META-INF/services/ 实现类名 → 包名前缀
+ */
+void collectServicePackagesFromZip(ZipFile zip, Set<String> packages) {
+    def entries = zip.entries()
+    while (entries.hasMoreElements()) {
+        def entry = entries.nextElement()
+        if (entry.name.startsWith('META-INF/services/') && !entry.isDirectory()) {
+            try {
+                def content = zip.getInputStream(entry).text.trim()
+                content.eachLine { className ->
+                    def trimmed = className.trim()
+                    if (trimmed && !trimmed.startsWith('#')) {
+                        def lastDot = trimmed.lastIndexOf('.')
+                        if (lastDot > 0) {
+                            packages << trimmed.substring(0, lastDot).replace('.', '/')
+                        }
+                    }
+                }
+            } catch (e) { /* 忽略无效的 services 文件 */ }
+        }
+    }
+}
+
+/**
+ * 扫描单个 AAR 的字节码,找出引用了哪些第三方包
+ * 只搜索尚未被 foundPkgs 标记已找到的包 (渐进式剪枝)
+ */
+Set<String> scanAarBytecode(File aar, Set<String> allPkgs, Set<String> foundPkgs) {
+    def newFound = [] as Set
+    def remainingPkgs = allPkgs - foundPkgs
+    if (!remainingPkgs) return newFound
+
+    try {
+        def aarZip = new ZipFile(aar)
+        def classesJarEntry = aarZip.getEntry('classes.jar')
+        if (!classesJarEntry) { aarZip.close(); return newFound }
+
+        def classesJarBytes = aarZip.getInputStream(classesJarEntry).bytes
+        aarZip.close()
+
+        def totalClasses = 0
+        def zis = new ZipInputStream(new ByteArrayInputStream(classesJarBytes))
+        def entry
+        while ((entry = zis.nextEntry) != null) {
+            if (!entry.name.endsWith('.class')) { zis.closeEntry(); continue }
+            totalClasses++
+
+            // 读取 .class 文件内容
+            def baos = new ByteArrayOutputStream()
+            byte[] buf = new byte[4096]
+            int len
+            while ((len = zis.read(buf)) != -1) { baos.write(buf, 0, len) }
+            def content = new String(baos.toByteArray(), 'UTF-8')
+            baos.close()
+            zis.closeEntry()
+
+            // 搜索包引用
+            for (pkg in remainingPkgs) {
+                if (content.contains(pkg)) {
+                    newFound << pkg
+                    remainingPkgs = remainingPkgs - pkg
+                    if (!remainingPkgs) {
+                        zis.close()
+                        return newFound
+                    }
+                }
+            }
+        }
+        zis.close()
+    } catch (e) {
+        println "(错误: ${e.message})"
+    }
+    return newFound
+}

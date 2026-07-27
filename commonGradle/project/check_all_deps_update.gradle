@@ -1,0 +1,169 @@
+tasks.register("checkDepsUpdateAll") {
+    group = "help"
+    description = "全量依赖检测：引入智能语义版本号对比，自动与风险清单完美分流"
+
+    doLast {
+        println "🚀 正在启动全量依赖扫描（已启用智能语义版本号比对引擎）..."
+        def originalDeps = [:]
+
+        // 判定非稳定版的正则
+        def isUnstable = { String version ->
+            if (version == null) return true
+            def stableKeyword = ['RELEASE', 'FINAL', 'GA'].any { version.toUpperCase().contains(it) }
+            def regex = /(?i)^[0-9,.v-]+(-r?|b|alpha|beta|rc|cr|preview|SNAPSHOT|M[0-9]).*/
+            return !stableKeyword && (version ==~ regex)
+        }
+
+        // 核心算法：智能比较两个语义化版本号的大小
+        // 返回：1 (latest > current, 正常升级); 0 (相同); -1 (latest < current, 疑似降级/异常)
+        def compareVersion = { String current, String latest ->
+            try {
+                if (current == latest) return 0
+                // 提取核心数字部分，过滤掉 -android, -jre 等后缀干扰
+                def cleanVer = { String ver ->
+                    def matcher = ver =~ /^([0-9.]+)/
+                    return matcher.find() ? matcher.group(1) : "0"
+                }
+                def currNums = cleanVer(current).split('\\.').collect { it.toInteger() }
+                def lateNums = cleanVer(latest).split('\\.').collect { it.toInteger() }
+
+                // 补齐长度对齐
+                int maxLen = Math.max(currNums.size(), lateNums.size())
+                while (currNums.size() < maxLen) currNums.add(0)
+                while (lateNums.size() < maxLen) lateNums.add(0)
+
+                // 远古时期版本诈尸阻断：如果版本号数字多于 5 位（类似 20030203 这种长整型格式），直接判定异常
+                if (cleanVer(latest).replace(".", "").length() > 7 && cleanVer(current).replace(".", "").length() <= 5) {
+                    return -1
+                }
+
+                // 逐位比较数字大小
+                for (int i = 0; i < maxLen; i++) {
+                    if (lateNums[i] > currNums[i]) return 1
+                    if (lateNums[i] < currNums[i]) return -1
+                }
+                return 0
+            } catch (Exception e) {
+                // 解析失败兜底（比如遇到了非标准字符），为了安全打入人工确认区
+                return -1
+            }
+        }
+
+        // ==========================================
+        // 🛡️ 核心配置区
+        // ==========================================
+        // 1. 系统底层依赖组织隔离
+        def systemGroups = [
+                "com.android.tools", "com.android.databinding", "androidx.databinding",
+                "org.jacoco", "com.android.tools.utp"
+        ]
+
+        // 2. 间接乱入的编译插件、扩展组件拦截关键词
+        def pluginKeywords = [
+                "-gradle", "-compiler", "-plugin", "android-extensions-runtime",
+                "kotlin-android-extensions", "commonizer-embeddable", "kotlin-annotation-processing"
+        ]
+
+        // 3. 【特权白名单】：允许这些库使用预览版
+        def allowUnstableList = ["io.github.didi.dokit:dokitx", "io.opentelemetry:opentelemetry-semconv"]
+
+        // 4. 【人工确认清单】：强制打入区域二的钉子户
+        def manualCheckList = [
+                "commons-io:commons-io",
+                "com.github.VictorAlbertos.RxCache:runtime"
+        ]
+        // ==========================================
+
+        def allProjects = [project] + project.subprojects
+        allProjects.each { proj ->
+            proj.configurations.each { config ->
+                if (config.canBeResolved) {
+                    try {
+                        config.resolvedConfiguration.lenientConfiguration.firstLevelModuleDependencies.each { dep ->
+                            def moduleId = dep.module.id
+                            def key = "${moduleId.group}:${moduleId.name}"
+                            def version = moduleId.version
+
+                            if (moduleId.group && version && version != "unspecified") {
+                                def isLocal = moduleId.group.startsWith("project :") || moduleId.group == project.rootProject.name
+                                def isSystem = systemGroups.any { moduleId.group.startsWith(it) }
+                                def isPlugin = (moduleId.group == "org.jetbrains.kotlin" || moduleId.group == "com.android.tools.utp") && pluginKeywords.any { moduleId.name.contains(it) }
+
+                                if (!isLocal && !isSystem && !isPlugin) {
+                                    originalDeps[key] = version
+                                }
+                            }
+                        }
+                    } catch (Exception e) {}
+                }
+            }
+        }
+
+        println "🔍 ${originalDeps.size()}个组件正在向云端获取最新状态并进行语义分析..."
+        def autoUpdates = [:]
+        def manualUpdates = [:]
+
+        originalDeps.each { key, currentVersion ->
+            def isManualTarget = manualCheckList.contains(key)
+            def detachedConfig = project.configurations.detachedConfiguration(project.dependencies.create("${key}:+"))
+
+            detachedConfig.resolutionStrategy.componentSelection {
+                all { ComponentSelection selection ->
+                    if (isManualTarget || allowUnstableList.contains(key)) return
+
+                    def candidateVer = selection.candidate.version
+                    if (isUnstable(candidateVer)) {
+                        selection.reject("Reject unstable")
+                        return
+                    }
+                }
+            }
+
+            try {
+                detachedConfig.resolvedConfiguration.lenientConfiguration.firstLevelModuleDependencies.each { resolvedDep ->
+                    def latest = resolvedDep.module.id.version
+
+                    if (latest && currentVersion != latest) {
+                        // 使用全新的语义化对比
+                        int compResult = compareVersion(currentVersion, latest)
+
+                        if (isManualTarget || compResult < 0) {
+                            def reasonStr = isManualTarget ? "人工指定黑名单" : "云端版本号异常/疑似降级"
+                            manualUpdates[key] = [current: currentVersion, latest: latest, reason: reasonStr]
+                        } else if (compResult > 0) {
+                            // 真正有高版本可升的，纳入自动升级区
+                            autoUpdates[key] = [current: currentVersion, latest: latest]
+                        }
+                    }
+                }
+            } catch (Exception e) {}
+        }
+
+        // ==========================================
+        // 📊 彻底分流输出报告
+        // ==========================================
+
+        println "\n🟢 【区域一：自动升级建议清单 (安全、已通过数字语义校验，可放心更新)】"
+        println "=========================================================================================="
+        printf("%-6s | %-50s | %-15s | %-15s\n", "序号", "Maven 坐标", "当前版本", "推荐版本")
+        println "=========================================================================================="
+        int i = 1
+        autoUpdates.each { key, info ->
+            printf("[%02d]    | %-50s | %-15s | ➔ \u001b[32m%-15s\u001b[0m\n", i++, key, info.current, info.latest)
+        }
+        if (autoUpdates.isEmpty()) println "✅ 当前没有安全的自动升级建议。"
+
+        println "\n🟡 【区域二：人工确认/异常风险清单 (真正的拦截隔离区)】"
+        println "========================================================================================================================"
+        printf("%-6s | %-45s | %-15s | %-18s | %-20s\n", "序号", "Maven 坐标", "当前版本", "云端最新版", "隔离原因")
+        println "========================================================================================================================"
+        int j = 1
+        manualUpdates.each { key, info ->
+            printf("[%02d]    | %-45s | %-15s | ➔ \u001b[33m%-18s\u001b[0m | [%s]\n", j++, key, info.current, info.latest, info.reason)
+        }
+        if (manualUpdates.isEmpty()) println "✅ 清单完美，未发现任何存在异常或被拦截的风险库。"
+
+        println "========================================================================================================================"
+        println "📢 运行报告完毕！"
+    }
+}
