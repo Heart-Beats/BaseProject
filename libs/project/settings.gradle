@@ -43,7 +43,7 @@ def includeSDK() {
             ':xlog-init', ':mmkv-sp', ':json-util', ':permission', ':picture-selector',
             ':image-load', ':date-util', ':bitmap-util', ':mime-type', ':download', ':qrcode',
             ':popup', ':sms-util', ':preview-file', ':share', ':video-player', ':camera',
-            ':update', ':banner', ':view-binding'
+            ':update', ':banner', ':view-binding', ':av-processor'
 
     project(':umeng').projectDir = file('./SDK/Umeng')
     project(':pay').projectDir = file('./SDK/Pay')
@@ -71,6 +71,7 @@ def includeSDK() {
     project(':update').projectDir = file('./SDK/Update')
     project(':banner').projectDir = file('./SDK/Banner')
     project(':view-binding').projectDir = file('./SDK/ViewBinding')
+    project(':av-processor').projectDir = file('./SDK/AvProcessor')
 
     includeShadow()
 
