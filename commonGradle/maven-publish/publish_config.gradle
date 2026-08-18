@@ -3,8 +3,8 @@ def ARTIFACT_VERSION = '0.0.5'
 
 // ===== Maven 发布公共配置（Maven Central） =====
 def PUBLISH_GROUP_ID = 'io.github.heart-beats.baseproject'
-// Maven Central 只接受 release 版本（不含 SNAPSHOT），与 ARTIFACT_VERSION 保持一致
-def PUBLISH_VERSION = ARTIFACT_VERSION
+// 发布版本随 IS_PUBLISH_RELEASE 切换：true 发布 release（如 0.0.5），false 发布 SNAPSHOT（如 0.0.5-SNAPSHOT）
+def PUBLISH_VERSION = IS_PUBLISH_RELEASE ? ARTIFACT_VERSION : "${ARTIFACT_VERSION}-SNAPSHOT"
 def PUBLISH_POM_DESCRIPTION = 'Android 项目基础框架'
 def PUBLISH_POM_URL = 'https://github.com/Heart-Beats/BaseProject'
 def PUBLISH_LICENSE_NAME = 'The Apache License, Version 2.0'
@@ -29,10 +29,7 @@ ext {
 
     isPublishRelease =  IS_PUBLISH_RELEASE
     getPublicationVersion = {
-        def VERSION_SUFFIX = ''
-        if (!isPublishRelease) VERSION_SUFFIX = '-SNAPSHOT'
-
-        return ARTIFACT_VERSION + VERSION_SUFFIX
+        return PUBLISH_VERSION
     }
 
     myGroupId = module_group

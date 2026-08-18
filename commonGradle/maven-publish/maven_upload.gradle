@@ -485,9 +485,28 @@ rootProject.subprojects { sub ->
             sign sub.publishing.publications.maven
         }
 
-        /* Central Portal Publisher API 上传任务（仅在需要发布到 Central 时注册） */
+        /*
+         * Central 发布通道：SNAPSHOT 版本走 maven-snapshots 仓库（maven-publish 原生机制），
+         * release 版本走 Portal bundle 上传 API。
+         */
         if (publishToCentral) {
-            configurePortalUploadTasks(sub, getSecret)
+            def pubVersion = sub.hasProperty('PUBLISH_VERSION')
+                    ? sub.property('PUBLISH_VERSION')
+                    : rootProject.property('PUBLISH_VERSION')
+            if (pubVersion.toString().contains('SNAPSHOT')) {
+                sub.publishing.repositories {
+                    maven {
+                        name = 'mavenCentralSnapshot'
+                        url = 'https://central.sonatype.com/repository/maven-snapshots/'
+                        credentials {
+                            username = getSecret("portalUsername", "PORTAL_USERNAME") ?: ''
+                            password = getSecret("portalPassword", "PORTAL_PASSWORD") ?: ''
+                        }
+                    }
+                }
+            } else {
+                configurePortalUploadTasks(sub, getSecret)
+            }
         }
     }
 }
@@ -720,17 +739,36 @@ if (publishToCustom && customMavenUrl) {
 }
 
 /*
- * publishAllToMavenCentral — 一次性发布所有子项目到 Central Portal
+ * publishAllToMavenCentral — 一次性发布所有子项目到 Central
+ * SNAPSHOT 版本走 maven-snapshots 仓库，release 版本走 Portal bundle 上传
  */
 if (publishToCentral) {
     tasks.register('publishAllToMavenCentral') {
         group = 'publishing'
-        description = '将所有子项目发布到 Maven Central Portal'
+        description = '将所有子项目发布到 Maven Central（release 走 Portal，SNAPSHOT 走 maven-snapshots）'
         dependsOn subprojects.stream().filter {
             !it.plugins.hasPlugin('com.android.application')
-        }.collect {
-            it.tasks.named('publishMavenPublicationToMavenCentralPortal').getOrNull()?.doLast {
-                logger.lifecycle("✅ 模块 ${project.name} 发布 MavenCentral 完成")
+        }.collect { sub ->
+            def v = sub.hasProperty('PUBLISH_VERSION')
+                    ? sub.property('PUBLISH_VERSION')
+                    : rootProject.property('PUBLISH_VERSION')
+            def isSnapshot = v.toString().contains('SNAPSHOT')
+            def taskName = isSnapshot
+                    ? 'publishMavenPublicationToMavenCentralSnapshotRepository'
+                    : 'publishMavenPublicationToMavenCentralPortal'
+            sub.tasks.named(taskName).getOrNull()?.doLast {
+                if (isSnapshot) {
+                    // SNAPSHOT 发布成功引导提示：SNAPSHOT 不产生 deployment 记录，无需查看 Publishing 页面
+                    def pub = sub.publishing.publications.maven
+                    def repoPath = pub.groupId.toString().replace('.', '/') + '/' + pub.artifactId + '/' + pub.version
+                    logger.lifecycle("")
+                    logger.lifecycle("✅ SNAPSHOT 发布成功：${pub.groupId}:${pub.artifactId}:${pub.version}")
+                    logger.lifecycle("   SNAPSHOT 不产生 deployment 记录，无需在 Publishing 页面查看")
+                    logger.lifecycle("   检查地址：https://central.sonatype.com/repository/maven-snapshots/${repoPath}/maven-metadata.xml")
+                    logger.lifecycle("   消费仓库：https://central.sonatype.com/repository/maven-snapshots/")
+                } else {
+                    logger.lifecycle("✅ 模块 ${project.name} 发布 MavenCentral 完成")
+                }
             }
         }.findAll {
             it != null
@@ -739,5 +777,15 @@ if (publishToCentral) {
         doLast {
             logger.lifecycle("✅ ${rootProject.name} 下的所有模块已发布至 MavenCentral")
         }
+    }
+
+    // 无论是否执行 publishAllToMavenCentral，都在项目配置完成后强制实例化该任务，
+    // 使其配置闭包执行并给各模块发布任务挂上 doLast（单独发布某个模块也会打印提示）。
+    gradle.projectsEvaluated {
+        // 用 findByName 安全实例化：publishAllToCustomMaven 仅在 publishTarget=custom 时注册，
+        // central 模式下不存在，直接 .get() 会抛 UnknownTaskException 导致构建失败。
+        tasks.findByName('publishAllToMavenLocal')?.get()
+        tasks.findByName('publishAllToCustomMaven')?.get()
+        tasks.findByName('publishAllToMavenCentral')?.get()
     }
 }
