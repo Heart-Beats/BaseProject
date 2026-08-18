@@ -229,6 +229,44 @@ def fixPomFile = { sub, String packaging = null, boolean addDependencies = false
                         "<description>${correctDesc}</description>")
             }
 
+            // 4. 修复动态依赖版本：Gradle 动态版本（如 "+"、"6.8.0+"）写入 POM 会被
+            //    Maven Central 拒绝（"Dependency version cannot end with '+'"），
+            //    从已解析配置取实际版本，替换 POM 中版本以 + 结尾的依赖。
+            def resolvedVersions = [:]
+            // api/implementation 等是声明配置（canBeResolved=false），不能直接解析；
+            // 动态收集所有 <flavor><BuildType>CompileClasspath（java 模块为 compileClasspath），
+            // 兼容有无 productFlavor 的模块，并排除 Test 相关的测试 classpath。
+            sub.configurations.findAll {
+                it.name.endsWith('CompileClasspath') && !it.name.contains('Test')
+            }.each { cfg ->
+                try {
+                    cfg.resolvedConfiguration.resolvedArtifacts.each { art ->
+                        def id = art.moduleVersion.id
+                        resolvedVersions["${id.group}:${id.name}"] = id.version
+                    }
+                } catch (Exception ignored) {
+                }
+            }
+            if (!resolvedVersions.isEmpty() && (pomContent =~ /(?s)<version>[^<]*\+<\/version>/)) {
+                def matcher = (~/(?s)<dependency>.*?<\/dependency>/).matcher(pomContent)
+                def sb = new StringBuilder()
+                while (matcher.find()) {
+                    def block = matcher.group()
+                    def g = (block =~ /<groupId>(.*?)<\/groupId>/).with { it.find() ? it.group(1) : null }
+                    def a = (block =~ /<artifactId>(.*?)<\/artifactId>/).with { it.find() ? it.group(1) : null }
+                    def v = (block =~ /<version>(.*?)<\/version>/).with { it.find() ? it.group(1) : null }
+                    if (g != null && a != null && v != null && v.endsWith('+')) {
+                        def real = resolvedVersions["${g}:${a}"]
+                        if (real != null) {
+                            block = block.replaceAll(~/<version>.*?<\/version>/, "<version>${real}</version>")
+                        }
+                    }
+                    matcher.appendReplacement(sb, java.util.regex.Matcher.quoteReplacement(block))
+                }
+                matcher.appendTail(sb)
+                pomContent = sb.toString()
+            }
+
             pomFile.setText(pomContent, 'UTF-8')
         }
     }
@@ -782,10 +820,10 @@ if (publishToCentral) {
     // 无论是否执行 publishAllToMavenCentral，都在项目配置完成后强制实例化该任务，
     // 使其配置闭包执行并给各模块发布任务挂上 doLast（单独发布某个模块也会打印提示）。
     gradle.projectsEvaluated {
-        // 用 findByName 安全实例化：publishAllToCustomMaven 仅在 publishTarget=custom 时注册，
-        // central 模式下不存在，直接 .get() 会抛 UnknownTaskException 导致构建失败。
-        tasks.findByName('publishAllToMavenLocal')?.get()
-        tasks.findByName('publishAllToCustomMaven')?.get()
-        tasks.findByName('publishAllToMavenCentral')?.get()
+        // findByName 会立即实例化任务（触发其配置闭包执行，给各模块发布任务挂 doLast），
+        // 且任务不存在时返回 null 不报错（publishAllToCustomMaven 仅 custom 模式注册）。
+        tasks.findByName('publishAllToMavenLocal')
+        tasks.findByName('publishAllToCustomMaven')
+        tasks.findByName('publishAllToMavenCentral')
     }
 }
