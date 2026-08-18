@@ -1,2 +1,4 @@
+ext.publishArtifact = file('uniMPSDK-V2-release.aar')
+
 configurations.maybeCreate("default")
 artifacts.add("default", file('uniMPSDK-V2-release.aar'))

@@ -30,23 +30,52 @@ task clean(type: Delete) {
 apply from: './commonGradle/maven-publish/publish_config.gradle'
 
 
-// 在项目依赖构建完成时，向根项目注册一个发布所有子项目的任务
+// 在项目依赖构建完成时，向根项目注册发布聚合任务，并委派给各 includedBuild 的同名任务
 gradle.projectsEvaluated {
-    def publishAllTaskName = ['publishMavenPublicationToMavenLocal', 'publishMavenPublicationToMavenCentralRepository']
+    // 发布目标（与 includedBuild 中 maven_upload.gradle 的 publishTarget 一致；-PpublishTarget 会透传到 includedBuild）
+    def publishTarget = gradle.rootProject.hasProperty('publishTarget')
+            ? gradle.rootProject.property('publishTarget')
+            : 'central'
 
-    publishAllTaskName.forEach { publishTaskName ->
-        def publishAllName = publishTaskName.replace('publishMavenPublication', 'publishAll')
+    // 检测 includedBuild 是否接入 vanniktech（libs/*/build.gradle 引入 module_maven_publish_apply.gradle 即视为接入）
+    def usesVanniktechPublish = gradle.includedBuilds.any { includedBuild ->
+        def buildFile = new File(includedBuild.projectDir, 'build.gradle')
+        buildFile.exists() && buildFile.getText('UTF-8').contains('module_maven_publish_apply.gradle')
+    }
 
-        // 发布所在的仓库名称
-        def publishRepositoryName = publishTaskName.split('publishMavenPublicationTo')[1]
+    // 动态候选：本地发布始终存在；接入 vanniktech 用其聚合任务名，否则按 publishTarget 选择
+    def candidateTaskNames = ['publishAllToMavenLocal'] as LinkedHashSet
+    if (usesVanniktechPublish) {
+        candidateTaskNames += 'publishAllToMavenCentralRepository'
+    } else if (publishTarget == 'central') {
+        candidateTaskNames += 'publishAllToMavenCentral'
+    } else if (publishTarget == 'custom') {
+        candidateTaskNames += 'publishAllToCustomMaven'
+    }
 
-        // 在根项目下创建所有的发布任务
+    candidateTaskNames.each { publishAllName ->
+        // 去重兜底：根项目已存在同名任务则跳过，避免重复注册报错
+        if (gradle.rootProject.tasks.findByName(publishAllName) != null) {
+            return
+        }
+
+        // 收集各 includedBuild 中同名任务的引用
+        def taskRefs = gradle.includedBuilds.collect { includedBuild ->
+            includedBuild.task(":${publishAllName}")
+        }
+        // 没有任何 includedBuild 提供该任务（例如未使用 includeBuild 时）则跳过
+        if (taskRefs.isEmpty()) {
+            return
+        }
+
+        def publishRepositoryName = publishAllName.split('publishAllTo')[1]
+
         gradle.rootProject.task(publishAllName) {
             group = "publishing"
             description = "发布所有组件到 ${publishRepositoryName}"
 
-            gradle.includedBuilds.forEach { includedBuild ->
-                dependsOn includedBuild.task(":${publishAllName}")
+            taskRefs.each { taskRef ->
+                dependsOn taskRef
             }
 
             doLast {

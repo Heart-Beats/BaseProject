@@ -1,0 +1,743 @@
+/*
+ * 统一 Maven 发布配置（根项目级别）
+ *
+ * 在根项目 build.gradle 中通过 apply from 引入，自动为所有子项目注入发布能力。
+ * 支持的项目类型（自动检测）：
+ *   - com.android.library（Android AAR）
+ *   - java-library / groovy / kotlin-jvm（JAR）
+ *   - 自定义产物模式（通过 ext.publishArtifact 指定预编译文件）
+ *
+ * 发布配置说明：
+ *   发布属性由 publish_config.gradle 统一注入到每个子项目的 ext 属性，包含：
+ *   PUBLISH_ARTIFACT_ID  （必填，由模块名自动推导）构件 ID
+ *   PUBLISH_GROUP_ID     （可选，默认取根项目的值）
+ *   PUBLISH_VERSION      （可选，默认取根项目的值）
+ *   publishEnabled       （可选，默认 true；设为 false 可跳过该子项目）
+ *
+ *   POM 元数据属性（均可选，优先读子项目，其次取根项目）：
+ *   PUBLISH_POM_NAME / PUBLISH_POM_DESCRIPTION / PUBLISH_POM_URL
+ *   PUBLISH_DEVELOPER_ID / PUBLISH_DEVELOPER_NAME / PUBLISH_DEVELOPER_EMAIL
+ *   PUBLISH_SCM_CONNECTION / PUBLISH_SCM_DEV_CONNECTION / PUBLISH_SCM_URL
+ *   PUBLISH_LICENSE_NAME / PUBLISH_LICENSE_URL
+ *
+ *   自定义产物模式，还需在 build.gradle 中声明：
+ *   ext.publishArtifact = file('xxx.aar')
+ *
+ * 发布目标选择（通过 -PpublishTarget 指定）：
+ *   central  — 仅发布到 Maven Central Portal（ZIP bundle 上传，默认）
+ *   custom   — 仅发布到自定义 Maven 私库（maven-publish 原生机制）
+ *
+ * Maven Central Portal 公共仓库配置（gradle.properties / local.properties / 环境变量）：
+ *   portalUsername      —— Portal User Token 的用户名（UUID 形式，非登录账号）
+ *   portalPassword      —— Portal User Token 的密码（UUID 形式）‘’
+ *
+ *   Maven Central Portal 同时要求配置 GPG 签名（gradle.properties / local.properties / 环境变量）：
+ *       signing.privateKey     —— GPG 证书私钥
+         signing.password       —— GPG 证书密码
+ *
+ * 自定义 Maven 私库配置（gradle.properties / local.properties / 环境变量）：
+ *   CUSTOM_MAVEN_URL              — 私库地址（必填，为空则跳过私库发布）
+ *   CUSTOM_MAVEN_USERNAME         — 认证用户名（可选）
+ *   CUSTOM_MAVEN_PASSWORD         — 认证密码（可选）
+ *   CUSTOM_MAVEN_SIGNING_REQUIRED — 私库是否要求签名（可选，默认 false）
+ */
+
+
+/* ============================================================================
+ * 辅助函数 — 从 local.properties / 环境变量 / 项目属性中读取密钥
+ * ============================================================================ */
+def getSecret = { String key, String envKey = null ->
+    File secretPropsFile = rootProject.file('local.properties')
+    if (secretPropsFile.exists()) {
+        Properties p = new Properties()
+        p.load(new FileInputStream(secretPropsFile))
+        if (p.containsKey(key)) return p.getProperty(key)
+    }
+    if (envKey != null) {
+        def env = System.getenv(envKey)
+        if (env != null) return env
+    }
+    if (rootProject.hasProperty(key)) return rootProject.property(key)
+    return null
+}
+
+/*
+ * 统一创建 sources 和 javadoc 任务。
+ * Maven Central 要求每个发布都必须包含这两个 JAR，
+ * 根据子项目类型采用不同的配置策略，返回 [sourcesJar, javadocJar] 两个任务引用。
+ */
+def createSourcesAndJavadocTasks = { sub, isAndroidLib, isJavaLib, isKotlinAndroid, isKotlinJvm, isGroovy, hasCustomArtifact ->
+    // classifier 在 Gradle 5.0 已弃用、8.0 移除，统一通过 archiveClassifier 设置，
+    // 低于 5.0 时回退到 classifier（通过 Groovy 动态属性兼容）
+    def setClassifier = { task, value ->
+        if (org.gradle.util.GradleVersion.current() >= org.gradle.util.GradleVersion.version('8.0')) {
+            task.archiveClassifier = value
+        } else {
+            task.classifier = value
+        }
+    }
+
+    if (isAndroidLib || isKotlinAndroid) {
+        // 生成 Javadoc 文档
+        sub.task("androidJavadocs", type: Javadoc) {
+            source = sub.android.sourceSets.main.java.sourceFiles
+            // 源码按 UTF-8 读取，避免 Windows 下 Javadoc 默认按 GBK 解析中文注释报「不可映射字符」
+            options.encoding = 'UTF-8'
+            // 发布场景只需产出 javadoc.jar，忽略文档告警/错误（如无法解析的 {@link}）
+            failOnError = false
+
+            // 补全编译 classpath：javadoc 任务默认 classpath 为空，无法解析
+            // android.* / 第三方依赖包，导致大量「程序包 xxx 不存在」报错。
+            // 动态收集所有主 variant 的 *CompileClasspath（已含 android.jar 与编译期依赖），
+            // 兼容有无 productFlavor 的模块：有 flavor 时 configuration 名为
+            // <flavor><BuildType>CompileClasspath（如 paidReleaseCompileClasspath），
+            // 不存在无前缀的 releaseCompileClasspath；同时排除 Test 相关的测试 classpath。
+            sub.configurations.findAll {
+                it.name.endsWith('CompileClasspath') && !it.name.contains('Test')
+            }.each {
+                classpath += it
+            }
+        }
+
+        // 从 Javadoc 输出打包 javadoc.jar
+        def j = sub.task("androidJavadocsJar", type: Jar, dependsOn: 'androidJavadocs') {
+            setClassifier(delegate, 'javadoc')
+            from sub.tasks.androidJavadocs.destinationDir
+        }
+
+        // 从源码打包 sources.jar
+        def s = sub.task("androidSourcesJar", type: Jar) {
+            setClassifier(delegate, 'sources')
+            from sub.android.sourceSets.main.java.sourceFiles
+        }
+        return [s, j]
+    } else if (isJavaLib || isKotlinJvm || isGroovy) {
+        // Java/Groovy/Kotlin JVM：统一 UTF-8 编码并忽略 javadoc 告警
+        sub.tasks.named('javadoc') {
+            options.encoding = 'UTF-8'
+            failOnError = false
+        }
+        def s = sub.task("sourcesJar", type: Jar, dependsOn: 'classes') {
+            setClassifier(delegate, 'sources')
+            from sub.sourceSets.main.allSource
+        }
+        def j = sub.task("javadocJar", type: Jar, dependsOn: 'javadoc') {
+            setClassifier(delegate, 'javadoc')
+            from sub.tasks.javadoc.destinationDir
+        }
+        return [s, j]
+    }
+    // 自定义产物模式（hasCustomArtifact）：生成占位 JAR
+    def s = sub.task("generateSourcesJar", type: Jar) {
+        setClassifier(delegate, 'sources')
+    }
+    def j = sub.task("generateJavadocJar", type: Jar) {
+        setClassifier(delegate, 'javadoc')
+    }
+    return [s, j]
+}
+
+/*
+ * POM 文件后处理统一入口。
+ * 在 generatePomFileForMavenPublication 任务完成后执行，处理三类问题：
+ *
+ * 1. 中文乱码修复：当描述含中文时，用注入属性中的原始值修正 POM 中的描述。
+ *
+ * 2. packaging 修正：当组件（release/java）为 null 时，Gradle 默认生成 packaging=pom，
+ *    需要根据项目类型修正为 aar 或 jar。
+ *
+ * 3. 依赖补充：当组件为 null 时，from component 无法自动导出依赖，
+ *    需要手动收集并添加到 POM，同时映射正确的 scope。
+ *
+ * 参数：
+ *   sub              - 子项目
+ *   packaging        - 目标 packaging 类型（'aar' / 'jar'），为 null 时不修正
+ *   addDependencies  - 是否需要手动添加依赖（组件为 null 时设为 true）
+ *
+ * scope 映射规则：
+ *   api              → compile    （编译+运行时可见，可传递）
+ *   implementation   → runtime    （仅运行时可见，可传递）
+ *   compileOnly      → provided   （编译时可见，运行时不包含）
+ *   runtimeOnly      → runtime    （仅运行时可见）
+ *   testImplementation → test     （仅测试时可见）
+ */
+def fixPomFile = { sub, String packaging = null, boolean addDependencies = false ->
+    sub.tasks.named('generatePomFileForMavenPublication').configure {
+        doLast {
+            def pomFile = sub.file("build/publications/maven/pom-default.xml")
+            if (!pomFile.exists()) return
+
+            def pomContent = pomFile.getText('UTF-8')
+
+            // 1. 修正 packaging
+            if (packaging != null) {
+                pomContent = pomContent.replace('<packaging>pom</packaging>', "<packaging>${packaging}</packaging>")
+            }
+
+            // 2. 手动添加依赖（仅在组件为 null 时需要）
+            if (addDependencies && !pomContent.contains('<dependencies>')) {
+                def collectedDeps = [:]
+                def configScopeMap = [
+                        'api'               : 'compile',
+                        'implementation'    : 'runtime',
+                        'compileOnly'       : 'provided',
+                        'runtimeOnly'       : 'runtime',
+                        'testImplementation': 'test'
+                ]
+                def configPriority = ['testImplementation', 'runtimeOnly', 'compileOnly', 'implementation', 'api']
+
+                configPriority.each { configName ->
+                    try {
+                        sub.configurations.findByName(configName)?.allDependencies?.each { dep ->
+                            if (dep.group != null && dep.name != null && dep.version != null) {
+                                def key = "${dep.group}:${dep.name}"
+                                collectedDeps[key] = [dep.group, dep.name, dep.version, configScopeMap[configName]]
+                            }
+                        }
+                    } catch (Exception ignored) {
+                    }
+                }
+
+                if (!collectedDeps.isEmpty()) {
+                    def depsBuilder = new StringBuilder()
+                    depsBuilder.append('  <dependencies>\n')
+                    collectedDeps.each { key, info ->
+                        def (depGroup, depName, depVersion, scope) = info
+                        if (depName != sub.name
+                                && depVersion != 'unspecified'
+                                && !depGroup.startsWith('Project ')) {
+                            depsBuilder.append('    <dependency>\n')
+                            depsBuilder.append("      <groupId>${depGroup}</groupId>\n")
+                            depsBuilder.append("      <artifactId>${depName}</artifactId>\n")
+                            depsBuilder.append("      <version>${depVersion}</version>\n")
+                            depsBuilder.append("      <scope>${scope}</scope>\n")
+                            depsBuilder.append('    </dependency>\n')
+                        }
+                    }
+                    depsBuilder.append('  </dependencies>\n')
+                    pomContent = pomContent.replace('</project>', "${depsBuilder}</project>")
+                }
+            }
+
+            // 3. 修复中文乱码
+            def correctDesc = sub.hasProperty('PUBLISH_POM_DESCRIPTION')
+                    ? sub.property('PUBLISH_POM_DESCRIPTION')
+                    : ''
+            if (correctDesc) {
+                pomContent = pomContent.replaceAll(
+                        '<description>.*?</description>',
+                        "<description>${correctDesc}</description>")
+            }
+
+            pomFile.setText(pomContent, 'UTF-8')
+        }
+    }
+}
+
+/*
+ * 计算 publishTarget（在 subprojects 之外读取一次即可）
+ */
+def publishTarget = rootProject.hasProperty('publishTarget')
+        ? rootProject.property('publishTarget')
+        : 'central'
+def publishToCentral = publishTarget == 'central'
+def publishToCustom = publishTarget == 'custom'
+
+/*
+ * 读取自定义 Maven 私库配置（根项目级别属性，子项目可覆盖）
+ */
+def customMavenUrl = getSecret("CUSTOM_MAVEN_URL", "CUSTOM_MAVEN_URL")
+def customMavenUser = getSecret("CUSTOM_MAVEN_USERNAME", "CUSTOM_MAVEN_USERNAME")
+def customMavenPass = getSecret("CUSTOM_MAVEN_PASSWORD", "CUSTOM_MAVEN_PASSWORD")
+def customMavenSigningRequired = getSecret("CUSTOM_MAVEN_SIGNING_REQUIRED", "CUSTOM_MAVEN_SIGNING_REQUIRED")
+
+
+/* ============================================================================
+ * 子项目发布配置
+ *
+ * 分两阶段执行：
+ *   阶段一（子项目 evaluate 之前）：判断子项目是否被注入了 PUBLISH_ARTIFACT_ID
+ *           （由 publish_config.gradle 统一注入），需要发布则提前 apply maven-publish + signing 插件。
+ *   阶段二（afterEvaluate 回调中）：检测子项目实际应用了哪个插件，
+ *           据此配置对应的发布产物（AAR / JAR / 自定义文件）。
+ * ============================================================================ */
+
+rootProject.subprojects { sub ->
+    /*
+     * 判断子项目是否注入 PUBLISH_ARTIFACT_ID 属性
+     */
+    if (!sub.hasProperty('PUBLISH_ARTIFACT_ID')) return
+
+    /* 支持通过 publishEnabled=false 跳过发布 */
+    def enabled = sub.hasProperty('publishEnabled') ? sub.property('publishEnabled') : 'true'
+    if (enabled.toString().equalsIgnoreCase('false')) return
+
+    /* 提前 apply 插件（evaluate 之前 apply 是安全的） */
+    sub.apply plugin: 'maven-publish'
+    sub.apply plugin: 'signing'
+
+    /*
+     * 延迟到子项目 evaluate 完成后再配置发布内容，
+     * 因为此处需要检测子项目实际 apply 了哪个插件（android / java / groovy 等）
+     */
+    sub.afterEvaluate {
+        def isAndroidLib = sub.plugins.hasPlugin('com.android.library')
+        def isJavaLib = sub.plugins.hasPlugin('java-library')
+        def isGroovy = sub.plugins.hasPlugin('groovy')
+        def isKotlinJvm = sub.plugins.hasPlugin('org.jetbrains.kotlin.jvm')
+        def isKotlinAndroid = sub.plugins.hasPlugin('org.jetbrains.kotlin.android')
+        def hasCustomArtifact = sub.ext.has('publishArtifact')
+
+        sub.publishing {
+            publications {
+                maven(MavenPublication) {
+                    groupId = sub.hasProperty('PUBLISH_GROUP_ID') ? sub.property('PUBLISH_GROUP_ID') : rootProject.property('PUBLISH_GROUP_ID')
+                    artifactId = sub.property('PUBLISH_ARTIFACT_ID')
+                    version = sub.hasProperty('PUBLISH_VERSION') ? sub.property('PUBLISH_VERSION') : rootProject.property('PUBLISH_VERSION')
+
+                    println "maven 依赖坐标 --------->${groupId}:${artifactId}:${version}"
+
+                    if (hasCustomArtifact) {
+                        /* 自定义产物模式：先复制到 build 目录再发布，
+                         * 避免 signing 插件生成的 .asc 签名文件落在源码目录 */
+                        def art = sub.ext.publishArtifact
+                        def artFile = art instanceof File ? art : sub.file(art.toString())
+
+                        // 复制源码目录的 aar/jar 到 build/custom-publish 下，
+                        // 让 signing 生成的 .asc 落在 build 目录而非源码目录
+                        def stagedDir = sub.layout.buildDirectory.dir('custom-publish').get().asFile
+                        def stageTask = sub.tasks.register('stageCustomPublishArtifact', Copy) {
+                            from artFile
+                            into stagedDir
+                        }
+
+                        artifact(new File(stagedDir, artFile.name)) {
+                            builtBy stageTask
+                        }
+
+                        // 根据文件扩展名确定 packaging 类型
+                        def customPackaging = artFile.name.endsWith('.aar') ? 'aar' : 'jar'
+                        // POM 后处理：packaging 修正 + 依赖补充 + 中文修复
+                        fixPomFile(sub, customPackaging, true)
+                    } else if (isAndroidLib || isKotlinAndroid) {
+                        /* Android Library：发布 release 变体 */
+                        def releaseComponent = sub.components.findByName('release')
+                                ?: sub.components.findByName('android')
+                        if (releaseComponent != null) {
+                            from releaseComponent
+                        } else {
+                            // AGP 8.x 未配置 singleVariant 时，手动指定 AAR 产物
+                            def aarFile = sub.file("build/outputs/aar/${sub.name}-release.aar")
+                            artifact(aarFile) { extension = 'aar' }
+                            // 确保 bundleReleaseAar 在所有发布相关任务之前执行
+                            sub.tasks.configureEach { task ->
+                                if (task.name.startsWith('publish') || task.name.startsWith('sign')) {
+                                    try {
+                                        task.dependsOn "bundleReleaseAar"
+                                    } catch (Exception ignored) {
+                                    }
+                                }
+                            }
+                        }
+                        // POM 后处理：packaging=aar + 中文修复；组件为 null 时还需补充依赖
+                        fixPomFile(sub, 'aar', releaseComponent == null)
+                    } else if (isJavaLib || isKotlinJvm || isGroovy) {
+                        /* Java / Kotlin JVM / Groovy：发布 java 组件 */
+                        def javaComponent = sub.components.findByName('java')
+                        if (javaComponent != null) {
+                            from javaComponent
+                        } else {
+                            // java 组件不存在时，手动指定 JAR 产物
+                            def jarFile = sub.file("build/libs/${sub.name}-${sub.version}.jar")
+                            if (!jarFile.exists()) {
+                                jarFile = sub.file("build/libs/${sub.name}.jar")
+                            }
+                            artifact(jarFile) { extension = 'jar' }
+                            // 确保 jar 打包任务在签名/发布之前执行
+                            sub.tasks.configureEach { task ->
+                                if (task.name.startsWith('publish') || task.name.startsWith('sign')) {
+                                    try {
+                                        task.dependsOn "jar"
+                                    } catch (Exception ignored) {
+                                    }
+                                }
+                            }
+                        }
+                        // POM 后处理：packaging=jar + 中文修复；组件为 null 时还需补充依赖
+                        fixPomFile(sub, 'jar', javaComponent == null)
+                    } else {
+                        throw new GradleException(
+                                "项目 '${sub.name}'：无法识别产物类型。" +
+                                        "请 apply 已知插件（java-library / com.android.library 等）" +
+                                        "或在 build.gradle 中设置 ext.publishArtifact。")
+                    }
+
+                    // 统一添加 sources + javadoc（Maven Central 强制要求）
+                    def (sourcesJar, javadocJar) = createSourcesAndJavadocTasks(sub, isAndroidLib, isJavaLib, isKotlinAndroid, isKotlinJvm, isGroovy, hasCustomArtifact)
+                    artifact(sourcesJar)
+                    artifact(javadocJar)
+
+                    /* POM 元数据配置 */
+                    pom {
+                        name = sub.hasProperty('PUBLISH_POM_NAME')
+                                ? sub.property('PUBLISH_POM_NAME')
+                                : artifactId
+                        description = sub.hasProperty('PUBLISH_POM_DESCRIPTION')
+                                ? sub.property('PUBLISH_POM_DESCRIPTION')
+                                : rootProject.hasProperty('PUBLISH_POM_DESCRIPTION')
+                                ? rootProject.property('PUBLISH_POM_DESCRIPTION')
+                                : ''
+                        url = sub.hasProperty('PUBLISH_POM_URL')
+                                ? sub.property('PUBLISH_POM_URL')
+                                : rootProject.hasProperty('PUBLISH_POM_URL')
+                                ? rootProject.property('PUBLISH_POM_URL')
+                                : ''
+                        licenses {
+                            license {
+                                name = sub.hasProperty('PUBLISH_LICENSE_NAME')
+                                        ? sub.property('PUBLISH_LICENSE_NAME')
+                                        : 'The MIT License'
+                                url = sub.hasProperty('PUBLISH_LICENSE_URL')
+                                        ? sub.property('PUBLISH_LICENSE_URL')
+                                        : 'https://opensource.org/licenses/MIT'
+                            }
+                        }
+                        developers {
+                            developer {
+                                id = sub.hasProperty('PUBLISH_DEVELOPER_ID')
+                                        ? sub.property('PUBLISH_DEVELOPER_ID')
+                                        : rootProject.hasProperty('PUBLISH_DEVELOPER_ID')
+                                        ? rootProject.property('PUBLISH_DEVELOPER_ID')
+                                        : ''
+                                name = sub.hasProperty('PUBLISH_DEVELOPER_NAME')
+                                        ? sub.property('PUBLISH_DEVELOPER_NAME')
+                                        : rootProject.hasProperty('PUBLISH_DEVELOPER_NAME')
+                                        ? rootProject.property('PUBLISH_DEVELOPER_NAME')
+                                        : ''
+                                email = sub.hasProperty('PUBLISH_DEVELOPER_EMAIL')
+                                        ? sub.property('PUBLISH_DEVELOPER_EMAIL')
+                                        : rootProject.hasProperty('PUBLISH_DEVELOPER_EMAIL')
+                                        ? rootProject.property('PUBLISH_DEVELOPER_EMAIL')
+                                        : ''
+                            }
+                        }
+                        scm {
+                            connection = sub.hasProperty('PUBLISH_SCM_CONNECTION')
+                                    ? sub.property('PUBLISH_SCM_CONNECTION')
+                                    : rootProject.hasProperty('PUBLISH_SCM_CONNECTION')
+                                    ? rootProject.property('PUBLISH_SCM_CONNECTION')
+                                    : ''
+                            developerConnection = sub.hasProperty('PUBLISH_SCM_DEV_CONNECTION')
+                                    ? sub.property('PUBLISH_SCM_DEV_CONNECTION')
+                                    : rootProject.hasProperty('PUBLISH_SCM_DEV_CONNECTION')
+                                    ? rootProject.property('PUBLISH_SCM_DEV_CONNECTION')
+                                    : ''
+                            url = sub.hasProperty('PUBLISH_SCM_URL')
+                                    ? sub.property('PUBLISH_SCM_URL')
+                                    : rootProject.hasProperty('PUBLISH_SCM_URL')
+                                    ? rootProject.property('PUBLISH_SCM_URL')
+                                    : ''
+                        }
+                    }
+                }
+            }
+
+            /*
+             * 自定义 Maven 私库仓库配置（仅在配置了 URL 且需要发布到私库时注册）
+             */
+            if (publishToCustom && customMavenUrl) {
+                repositories {
+                    maven {
+                        name = 'custom'
+                        url = customMavenUrl
+                        credentials {
+                            username = customMavenUser ?: ''
+                            password = customMavenPass ?: ''
+                        }
+                        allowInsecureProtocol = customMavenUrl.startsWith('http://')
+                    }
+                }
+                logger.lifecycle("[Custom Maven] 子项目 '${sub.name}' 已配置私库仓库: ${customMavenUrl}")
+            }
+        }
+
+        /*
+         * GPG 签名 — Maven Central 强制要求；自定义私库可选
+         */
+        sub.signing {
+            def signingKey = getSecret("signing.privateKey", "SIGNING_KEY")
+            def signingPassword = getSecret("signing.password", "SIGNING_PASSWORD")
+
+            if (signingKey != null && signingPassword != null) {
+                /* CI 环境：使用 ASCII-armored 内存密钥签名（仅支持 RSA 密钥） */
+                useInMemoryPgpKeys(signingKey, signingPassword)
+            } else {
+                /* 本地环境：通过 gpg 命令行工具签名（兼容 Ed25519/ECDSA/RSA 所有密钥类型） */
+                useGpgCmd()
+            }
+
+            /*
+             * 签名要求：Central Portal 强制签名；自定义私库由 CUSTOM_MAVEN_SIGNING_REQUIRED 控制
+             */
+            def signingRequired = publishToCentral
+                    || (customMavenSigningRequired?.toString()?.equalsIgnoreCase('true'))
+            required { signingRequired }
+            sign sub.publishing.publications.maven
+        }
+
+        /* Central Portal Publisher API 上传任务（仅在需要发布到 Central 时注册） */
+        if (publishToCentral) {
+            configurePortalUploadTasks(sub, getSecret)
+        }
+    }
+}
+
+
+/* ============================================================================
+ * Central Portal 上传任务配置函数
+ *
+ * 为指定子项目注册三个 Gradle 任务：
+ *   1. generatePortalChecksums        — 为已签名产物生成 .md5 / .sha1 校验文件
+ *   2. bundleMavenPublicationToPortal — 将产物按 Maven 仓库布局打包为 ZIP bundle
+ *   3. publishMavenPublicationToMavenCentralPortal — 调用 Portal Publisher API 上传
+ *
+ * 上传流程：publishMavenPublicationToMavenLocal → 生成 checksum → 打包 ZIP → POST 到 Portal
+ * ============================================================================ */
+
+def configurePortalUploadTasks(sub, getSecret) {
+    /*
+     * 为产物生成 checksum 文件（.md5 / .sha1），Portal 强制要求。
+     * 依赖 publishMavenPublicationToMavenLocal 输出到 ~/.m2/repository 的产物。
+     */
+    def checksumTask = sub.tasks.register("generatePortalChecksums") {
+        group = 'publishing'
+        description = "为 ${sub.name} 已签名产物生成 .md5 / .sha1 checksum 文件"
+        dependsOn sub.tasks.named('publishMavenPublicationToMavenLocal')
+
+        doLast {
+            def pub = sub.publishing.publications.maven
+            def m2Repo = new File(System.getProperty("user.home"), ".m2/repository")
+            def gavDir = new File(m2Repo,
+                    "${pub.groupId.replace('.', '/')}/${pub.artifactId}/${pub.version}")
+            if (!gavDir.exists()) {
+                throw new GradleException(
+                        "m2 GAV 目录不存在: ${gavDir.absolutePath}，" +
+                                "请先执行 publishMavenPublicationToMavenLocal")
+            }
+            gavDir.eachFile { f ->
+                if (f.isFile() && !f.name.endsWith('.md5') && !f.name.endsWith('.sha1')) {
+                    def md5File = new File(f.parentFile, "${f.name}.md5")
+                    def sha1File = new File(f.parentFile, "${f.name}.sha1")
+                    def md5Hex = java.security.MessageDigest.getInstance('MD5')
+                            .digest(f.bytes).encodeHex().toString()
+                    def sha1Hex = java.security.MessageDigest.getInstance('SHA-1')
+                            .digest(f.bytes).encodeHex().toString()
+                    md5File.text = md5Hex
+                    sha1File.text = sha1Hex
+                }
+            }
+        }
+    }
+
+    /*
+     * 将已签名产物打包为 Portal bundle ZIP。
+     * 产物通过 publishMavenPublicationToMavenLocal 输出到 ~/.m2/repository，
+     * 按 GAV 路径从 m2 读取已签名产物来打包。
+     * Portal API 要求 ZIP 内遵循 Maven Repository Layout。
+     */
+    def bundleTask = sub.tasks.register("bundleMavenPublicationToPortal", Zip) {
+        group = 'publishing'
+        description = "将 ${sub.name} 已签名产物打包为 Portal bundle ZIP"
+        dependsOn checksumTask
+
+        def pub = sub.publishing.publications.maven
+        def m2Repo = new File(System.getProperty("user.home"), ".m2/repository")
+        def gavPath = "${pub.groupId.replace('.', '/')}/${pub.artifactId}/${pub.version}"
+        def gavDir = new File(m2Repo, gavPath)
+
+        inputs.dir(gavDir).optional()
+
+        from(gavDir) {
+            into gavPath
+        }
+        archiveFileName = "${sub.name}-portal-bundle.zip"
+        destinationDirectory = sub.layout.buildDirectory.dir("portal-bundles")
+    }
+
+    /*
+     * 调用 Central Portal Publisher API 上传 ZIP bundle。
+     * 构建 multipart/form-data 请求体，POST 到 Portal upload 端点。
+     * 上传成功后产物进入 Portal 的 "Publishing" 队列，
+     * 需在 Portal 网站或通过 status API 触发 release。
+     */
+    sub.tasks.register("publishMavenPublicationToMavenCentralPortal") {
+        group = 'publishing'
+        description = "将 ${sub.name} 发布到 Maven Central Portal（Publisher API）"
+        dependsOn bundleTask
+
+        doLast {
+            def portalUser = getSecret("portalUsername", "PORTAL_USERNAME")
+            def portalPass = getSecret("portalPassword", "PORTAL_PASSWORD")
+            if (!portalUser || !portalPass) {
+                throw new GradleException(
+                        "缺少 Central Portal 凭证：请在 local.properties 配置 " +
+                                "portalUsername / portalPassword（Portal User Token），" +
+                                "或设置环境变量 PORTAL_USERNAME / PORTAL_PASSWORD。" +
+                                "当前 portalUser=${portalUser ?: '<空>'}")
+            }
+
+            def zipFile = bundleTask.get().archiveFile.get().asFile
+            if (!zipFile.exists()) {
+                throw new GradleException("Portal bundle 不存在: ${zipFile.absolutePath}")
+            }
+
+            /*
+             * 部署名称在 Portal 内唯一即可。
+             * 只使用字母、数字、连字符、点号、下划线，避免冒号等
+             * 特殊字符导致 Portal 服务端解析异常（返回 500）。
+             */
+            def pub = sub.publishing.publications.maven
+            def deploymentName = "${pub.groupId}.${pub.artifactId}.${pub.version}".replace(':', '-')
+
+            logger.lifecycle("[Portal] 上传 bundle: ${zipFile.name} " +
+                    "(${(zipFile.length() / 1024).round(1)} KB) " +
+                    "deployment=${deploymentName}")
+
+            // 构建 multipart body — 只包含 bundle 文件单个 part
+            // name / publishingType 通过 URL query parameter 传递（Portal API 规范要求）
+            def boundary = "----PortalBoundary${System.nanoTime()}"
+            def lineEnd = "\r\n"
+            def bodyFile = new File(zipFile.parentFile, "${zipFile.name}.multipart-body")
+
+            bodyFile.withOutputStream { bodyOut ->
+                // 文件: bundle（唯一 multipart part）
+                bodyOut.write("--${boundary}${lineEnd}".getBytes("UTF-8"))
+                bodyOut.write("Content-Disposition: form-data; name=\"bundle\"; filename=\"${zipFile.name}\"${lineEnd}".getBytes("UTF-8"))
+                bodyOut.write("Content-Type: application/octet-stream${lineEnd}".getBytes("UTF-8"))
+                bodyOut.write(lineEnd.getBytes("UTF-8"))
+                zipFile.withInputStream { stream ->
+                    bodyOut << stream
+                }
+                bodyOut.write(lineEnd.getBytes("UTF-8"))
+
+                // 结束边界
+                bodyOut.write("--${boundary}--${lineEnd}".getBytes("UTF-8"))
+            }
+
+            def bodyBytes = bodyFile.bytes
+            logger.lifecycle("[Portal] multipart body 已写入: ${bodyFile.absolutePath} (${bodyBytes.length} bytes)")
+
+            // name / publishingType 作为 URL query parameter
+            def uploadUrl = "https://central.sonatype.com/api/v1/publisher/upload" +
+                    "?name=${URLEncoder.encode(deploymentName, "UTF-8")}" +
+                    "&publishingType=USER_MANAGED"
+
+            def connection = (javax.net.ssl.HttpsURLConnection) new URL(uploadUrl)
+                    .openConnection()
+            connection.setRequestMethod("POST")
+            connection.setDoOutput(true)
+            connection.setFixedLengthStreamingMode(bodyBytes.length)
+            connection.setConnectTimeout(120000)
+            connection.setReadTimeout(120000)
+            connection.setRequestProperty("Authorization",
+                    "Bearer " + "${portalUser}:${portalPass}".bytes.encodeBase64().toString())
+            connection.setRequestProperty("Content-Type",
+                    "multipart/form-data; boundary=${boundary}")
+
+            connection.outputStream.withStream { out ->
+                out.write(bodyBytes)
+            }
+
+            def code = connection.responseCode
+            def body = (code in 200..299)
+                    ? connection.inputStream.text
+                    : connection.errorStream?.text
+            if (!(code in 200..299)) {
+                throw new GradleException(
+                        "Portal 上传失败 (HTTP ${code}): ${body}\n" +
+                                "multipart body 文件: ${bodyFile.absolutePath}\n" +
+                                "可用 curl 测试: curl -X POST " +
+                                "-H \"Authorization: Bearer <base64(user:pass)>\" " +
+                                "-H \"Content-Type: multipart/form-data; boundary=${boundary}\" " +
+                                "--data-binary @\"${bodyFile.absolutePath}\" \"${uploadUrl}\"")
+            }
+            logger.lifecycle("[Portal] 上传成功 (HTTP ${code})，部署已进入自动发布队列。")
+            logger.lifecycle("[Portal] 响应: ${body}")
+            logger.lifecycle("[Portal] 可在 https://central.sonatype.com/publishing 查看部署状态（检查/校验/发布）。")
+        }
+    }
+}
+
+
+/* ============================================================================
+ * 根项目级别聚合任务
+ * ============================================================================ */
+
+/*
+ * publishAllToMavenLocal — 一次性发布所有子项目到本地 Maven 仓库（~/.m2/repository）
+ */
+tasks.register('publishAllToMavenLocal') {
+    group = 'publishing'
+    description = '将所有子项目发布到本地 Maven 仓库'
+
+    dependsOn subprojects.stream().filter {
+        !it.plugins.hasPlugin('com.android.application')
+    }.collect {
+        it.tasks.named('publishMavenPublicationToMavenLocal').getOrNull()?.doLast {
+            logger.lifecycle("✅ 模块 ${project.name} 发布 MavenLocal 完成")
+        }
+    }.findAll {
+        it != null
+    }
+
+    doLast {
+        logger.lifecycle("✅ ${rootProject.name} 下的所有模块已发布至 MavenLocal")
+    }
+}
+
+/*
+ * publishAllToCustomMaven — 一次性发布所有子项目到自定义 Maven 私库
+ */
+if (publishToCustom && customMavenUrl) {
+    tasks.register('publishAllToCustomMaven') {
+        group = 'publishing'
+        description = '将所有子项目发布到自定义 Maven 私库'
+
+        dependsOn subprojects.stream().filter {
+            !it.plugins.hasPlugin('com.android.application')
+        }.collect {
+            it.tasks.named('publishMavenPublicationToCustomRepository').getOrNull()?.doLast {
+                logger.lifecycle("✅ 模块 ${project.name} 发布 CustomMaven 完成")
+            }
+        }.findAll {
+            it != null
+        }
+
+        doLast {
+            logger.lifecycle("✅ ${rootProject.name} 下的所有模块已发布至 CustomMaven")
+        }
+    }
+}
+
+/*
+ * publishAllToMavenCentral — 一次性发布所有子项目到 Central Portal
+ */
+if (publishToCentral) {
+    tasks.register('publishAllToMavenCentral') {
+        group = 'publishing'
+        description = '将所有子项目发布到 Maven Central Portal'
+        dependsOn subprojects.stream().filter {
+            !it.plugins.hasPlugin('com.android.application')
+        }.collect {
+            it.tasks.named('publishMavenPublicationToMavenCentralPortal').getOrNull()?.doLast {
+                logger.lifecycle("✅ 模块 ${project.name} 发布 MavenCentral 完成")
+            }
+        }.findAll {
+            it != null
+        }
+
+        doLast {
+            logger.lifecycle("✅ ${rootProject.name} 下的所有模块已发布至 MavenCentral")
+        }
+    }
+}

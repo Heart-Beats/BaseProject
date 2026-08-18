@@ -1,2 +1,4 @@
+ext.publishArtifact = file('breakpad-build-release.aar')
+
 configurations.maybeCreate("default")
 artifacts.add("default", file('breakpad-build-release.aar'))

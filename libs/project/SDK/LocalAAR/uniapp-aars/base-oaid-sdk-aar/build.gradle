@@ -1,2 +1,4 @@
+ext.publishArtifact = file('base-oaid-sdk.aar')
+
 configurations.maybeCreate("default")
 artifacts.add("default", file('base-oaid-sdk.aar'))

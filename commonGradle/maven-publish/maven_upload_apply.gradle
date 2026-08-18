@@ -1,0 +1,20 @@
+/**
+ * maven 发布统一入口脚本
+ *
+ * 在根项目 build.gradle 中通过 apply from 引入，仅需集成这一个脚本。
+ * 内部依次：
+ *   1. 引入 publish_config.gradle —— 提供 myGroupId / myVersion 等公共属性，
+ *      并为所有子模块统一注入 PUBLISH_ARTIFACT_ID / PUBLISH_GROUP_ID / PUBLISH_VERSION 等发布属性
+ *   2. 引入 maven_upload.gradle —— 根项目级别的 maven-publish + signing 发布逻辑
+ *
+ * 说明：maven_upload.gradle 与旧的 MavenPublish.gradle 不同，它是「根项目级别」脚本，
+ * 内部通过 rootProject.subprojects 遍历所有子模块完成发布配置，并注册 publishAllToMavenCentral
+ * 聚合任务，因此只需在根项目 apply 一次即可，无需在 afterEvaluate 里逐个子模块 apply。
+ */
+def projectRelativeRootPath = '../../'
+
+//引入 maven 发布配置设置（统一注入发布属性）
+apply from: rootProject.file(projectRelativeRootPath + './commonGradle/maven-publish/publish_config.gradle').path
+
+//引入 maven 发布脚本（根项目级别，一次性引入即可）
+apply from: rootProject.file(projectRelativeRootPath + './commonGradle/maven-publish/maven_upload.gradle').path

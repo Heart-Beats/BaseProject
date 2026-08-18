@@ -1,2 +1,4 @@
+ext.publishArtifact = file('uniapp-v8-release.aar')
+
 configurations.maybeCreate("default")
 artifacts.add("default", file('uniapp-v8-release.aar'))

@@ -11,7 +11,7 @@ task clean(type: Delete) {
 
 
 //引入 maven 发布脚本，针对 gradle 项目的所有子模块生效
-apply from: '../../commonGradle/maven-publish/module_maven_publish_apply.gradle'
+apply from: '../../commonGradle/maven-publish/maven_upload_apply.gradle'
 
 allprojects {
     //给所有的子模块添加组

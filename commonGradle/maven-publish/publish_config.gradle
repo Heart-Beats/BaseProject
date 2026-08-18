@@ -1,8 +1,22 @@
 def IS_PUBLISH_RELEASE = false
-def ARTIFACT_VERSION = '0.0.4'
+def ARTIFACT_VERSION = '0.0.5'
+
+// ===== Maven 发布公共配置（Maven Central） =====
+def PUBLISH_GROUP_ID = 'io.github.heart-beats.baseproject'
+// Maven Central 只接受 release 版本（不含 SNAPSHOT），与 ARTIFACT_VERSION 保持一致
+def PUBLISH_VERSION = ARTIFACT_VERSION
+def PUBLISH_POM_DESCRIPTION = 'Android 项目基础框架'
+def PUBLISH_POM_URL = 'https://github.com/Heart-Beats/BaseProject'
+def PUBLISH_LICENSE_NAME = 'The Apache License, Version 2.0'
+def PUBLISH_LICENSE_URL = 'https://github.com/Heart-Beats/BaseProject/blob/main/LICENSE.md'
+def PUBLISH_DEVELOPER_ID = 'Heart-Beats'
+def PUBLISH_DEVELOPER_NAME = 'Heart-Beats'
+def PUBLISH_SCM_CONNECTION = 'scm:git:git://github.com/Heart-Beats/BaseProject.git'
+def PUBLISH_SCM_DEV_CONNECTION = 'scm:git:ssh://git@github.com/Heart-Beats/BaseProject.git'
+def PUBLISH_SCM_URL = 'https://github.com/Heart-Beats/BaseProject'
 
 ext {
-    module_group = 'io.github.heart-beats.baseproject'
+    module_group = PUBLISH_GROUP_ID
 
     libProjectPath = 'libs/project'
     libUikitPath = 'libs/uikit'
@@ -23,4 +37,20 @@ ext {
 
     myGroupId = module_group
     myVersion = getPublicationVersion()
+}
+
+// ===== 为所有子模块统一注入 maven 发布属性 =====
+subprojects { sub ->
+    sub.ext.PUBLISH_ARTIFACT_ID = sub.path.drop(1)
+    sub.ext.PUBLISH_GROUP_ID = PUBLISH_GROUP_ID
+    sub.ext.PUBLISH_VERSION = PUBLISH_VERSION
+    sub.ext.PUBLISH_POM_DESCRIPTION = PUBLISH_POM_DESCRIPTION
+    sub.ext.PUBLISH_POM_URL = PUBLISH_POM_URL
+    sub.ext.PUBLISH_LICENSE_NAME = PUBLISH_LICENSE_NAME
+    sub.ext.PUBLISH_LICENSE_URL = PUBLISH_LICENSE_URL
+    sub.ext.PUBLISH_DEVELOPER_ID = PUBLISH_DEVELOPER_ID
+    sub.ext.PUBLISH_DEVELOPER_NAME = PUBLISH_DEVELOPER_NAME
+    sub.ext.PUBLISH_SCM_CONNECTION = PUBLISH_SCM_CONNECTION
+    sub.ext.PUBLISH_SCM_DEV_CONNECTION = PUBLISH_SCM_DEV_CONNECTION
+    sub.ext.PUBLISH_SCM_URL = PUBLISH_SCM_URL
 }
