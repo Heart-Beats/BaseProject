@@ -2,7 +2,7 @@ package com.hl.avprocessor.video
 
 import android.content.Context
 import android.media.MediaMetadataRetriever
-import android.os.FileUtils
+import android.text.TextUtils
 import android.util.Log
 import com.primaverahq.videocompressor.CompressionResult
 import com.primaverahq.videocompressor.VideoCompressor
@@ -65,7 +65,7 @@ object VideoFileCompressEngine {
             val inputFile = File(srcPath)
             val outputFile = File(outputPath)
 
-            val len = FileUtils.getLength(srcPath)
+            val len = getFileLength(srcPath)
             val sourceBitrate = getVideoBitrate(srcPath)
             val targetBitrate = if (sourceBitrate > 0) minOf(2_000_000, sourceBitrate) else 2_000_000
             Log.d(TAG, "compressVideo[第三方] 压缩前: $len bytes, 源码率: $sourceBitrate")
@@ -136,7 +136,7 @@ object VideoFileCompressEngine {
         val outputFile = File(getOutputPath(context, srcPath))
 
         return try {
-            val len = FileUtils.getLength(srcPath)
+            val len = getFileLength(srcPath)
             val sourceBitrate = getVideoBitrate(srcPath)
             Log.d(TAG, "compressVideoNative 压缩前: $len bytes, 源码率: $sourceBitrate")
 
@@ -189,7 +189,7 @@ object VideoFileCompressEngine {
     // ==================== 工具方法 ====================
 
     private fun getOutputPath(context: Context, srcPath: String): String {
-        val fileName = FileUtil.getFileName(srcPath)
+        val fileName = getFileName(srcPath)
         val cacheDir = context.externalCacheDir ?: return ""
         val dir = File(cacheDir, "video_disk_cache")
         if (!dir.exists()) dir.mkdirs()
@@ -248,5 +248,45 @@ object VideoFileCompressEngine {
         } else {
             Pair(rawW, rawH)
         }
+    }
+
+    private fun getFileLength(filePath: String): Long {
+        val file = File(filePath)
+         return if (file.isFile && file.exists()){
+            file.length()
+        }else{
+            0L
+        }
+    }
+
+    /**
+     * 从路径获取文件名，包含后缀
+     *
+     *
+     * <pre>
+     * getFileName(null)               =   null
+     * getFileName("")                 =   ""
+     * getFileName("   ")              =   "   "
+     * getFileName("a.mp3")            =   "a.mp3"
+     * getFileName("a.b.rmvb")         =   "a.b.rmvb"
+     * getFileName("abc")              =   "abc"
+     * getFileName("c:\\")              =   ""
+     * getFileName("c:\\a")             =   "a"
+     * getFileName("c:\\a.b")           =   "a.b"
+     * getFileName("c:a.txt\\a")        =   "a"
+     * getFileName("/home/admin")      =   "admin"
+     * getFileName("/home/admin/a.txt/b.mp3")  =   "b.mp3"
+    </pre> *
+     *
+     * @param filePath 文件路径
+     * @return 路径中的文件名，包含后缀
+     */
+    fun getFileName(filePath: String): String {
+        if (TextUtils.isEmpty(filePath)) {
+            return filePath
+        }
+
+        val filePosi = filePath.lastIndexOf(File.separator)
+        return if (filePosi == -1) filePath else filePath.substring(filePosi + 1)
     }
 }
