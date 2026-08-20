@@ -16,4 +16,6 @@ apply from: '../../commonGradle/maven-publish/maven_upload_apply.gradle'
 allprojects {
     //给所有的子模块添加组
     group = myGroupId
+    // 设置版本：project 依赖写入 POM 时依赖此版本，缺失会导致 POM 中缺少同仓模块依赖
+    version = myVersion
 }
