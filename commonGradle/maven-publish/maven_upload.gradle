@@ -86,16 +86,17 @@ def createSourcesAndJavadocTasks = { sub, isAndroidLib, isJavaLib, isKotlinAndro
             // 发布场景只需产出 javadoc.jar，忽略文档告警/错误（如无法解析的 {@link}）
             failOnError = false
 
-            // 补全编译 classpath：javadoc 任务默认 classpath 为空，无法解析
-            // android.* / 第三方依赖包，导致大量「程序包 xxx 不存在」报错。
-            // 动态收集所有主 variant 的 *CompileClasspath（已含 android.jar 与编译期依赖），
-            // 兼容有无 productFlavor 的模块：有 flavor 时 configuration 名为
-            // <flavor><BuildType>CompileClasspath（如 paidReleaseCompileClasspath），
-            // 不存在无前缀的 releaseCompileClasspath；同时排除 Test 相关的测试 classpath。
-            sub.configurations.findAll {
-                it.name.endsWith('CompileClasspath') && !it.name.contains('Test')
-            }.each {
-                classpath += it
+            // classpath 复用编译任务（compileReleaseJavaWithJavac）的 classpath：
+            // 已按编译 attributes 正确解析，project 依赖选中正确 variant。
+            // 不能直接引用 *CompileClasspath：javadoc 自身 attributes 缺少 artifactType 等，
+            // 解析 project 依赖时会产生 variant 歧义（Cannot choose between variants）。
+            // 依赖编译任务确保 classpath 已解析，执行时再取编译任务的 classpath。
+            dependsOn 'compileReleaseJavaWithJavac'
+            doFirst {
+                def ct = sub.tasks.findByName('compileReleaseJavaWithJavac')
+                if (ct != null) {
+                    classpath = ct.classpath
+                }
             }
         }
 
@@ -149,6 +150,11 @@ def createSourcesAndJavadocTasks = { sub, isAndroidLib, isJavaLib, isKotlinAndro
  */
 def collectDeclaredDependencies(sub, configNames, resolvedVersions, autoAddedDeps) {
     def platformDeps = [], regularDeps = [], bomManagedDeps = []
+    // 同一依赖可能同时出现在多个配置（Android 配置继承，如 api 声明也会出现在 implementation），
+    // 按 group:name 去重，避免 POM 中重复（如 dependencyManagement 里 BOM 出现两次）
+    def seenPlatform = new HashSet()
+    def seenRegular = new HashSet()
+    def seenBom = new HashSet()
     def configScopeMap = [
             'api'               : 'compile',
             'implementation'    : 'runtime',
@@ -167,7 +173,7 @@ def collectDeclaredDependencies(sub, configNames, resolvedVersions, autoAddedDep
                 group = sub.rootProject.ext.myGroupId
                 name = pd.path.replace(':', '')
                 version = sub.rootProject.ext.myVersion
-                if (!autoAddedDeps.contains(group + ":" + name)) {
+                if (!autoAddedDeps.contains(group + ":" + name) && seenRegular.add(group + ":" + name)) {
                     regularDeps << [group: group, name: name, version: version, scope: scope]
                 }
             } else if (dep instanceof org.gradle.api.artifacts.ModuleDependency) {
@@ -176,6 +182,7 @@ def collectDeclaredDependencies(sub, configNames, resolvedVersions, autoAddedDep
                 group = md.group
                 name = md.name
                 if (autoAddedDeps.contains(group + ":" + name)) return
+                def key = group + ":" + name
                 def cat = null
                 try {
                     cat = md.attributes.getAttribute(org.gradle.api.attributes.Category.CATEGORY_ATTRIBUTE)
@@ -184,18 +191,21 @@ def collectDeclaredDependencies(sub, configNames, resolvedVersions, autoAddedDep
                 def isPlatform = cat != null
                         && (cat.toString() == 'platform' || cat.toString() == 'enforced-platform')
                 if (isPlatform) {
+                    if (!seenPlatform.add(key)) return
                     def bv = md.version
                     if (bv != null && bv.endsWith('+')) {
                         bv = resolvedVersions["${group}:${name}"] ?: bv
                     }
                     platformDeps << [group: group, name: name, version: bv, scope: scope]
                 } else if (md.version != null) {
+                    if (!seenRegular.add(key)) return
                     def v = md.version
                     if (v.endsWith('+')) {
                         v = resolvedVersions["${group}:${name}"] ?: v
                     }
                     regularDeps << [group: group, name: name, version: v, scope: scope]
                 } else {
+                    if (!seenBom.add(key)) return
                     bomManagedDeps << [group: group, name: name, scope: scope]
                 }
             }
@@ -533,6 +543,10 @@ rootProject.subprojects { sub ->
 
                     println "maven 依赖坐标 --------->${groupId}:${artifactId}:${version}"
 
+                    // AGP 8.x 的 Android release 组件默认已包含 sources jar，from(component) 时自动带上，
+                    // 手动再加会重复；此标记用于决定是否跳过手动 sources
+                    def androidComponentAvailable = false
+
                     if (hasCustomArtifact) {
                         /* 自定义产物模式：先复制到 build 目录再发布，
                          * 避免 signing 插件生成的 .asc 签名文件落在源码目录 */
@@ -559,6 +573,7 @@ rootProject.subprojects { sub ->
                         /* Android Library：组件已注册（projectsEvaluated），有组件用 from(component)（fixPomFile 校验修复），无组件手动指定 AAR（fixPomFile 补齐） */
                         def releaseComponent = sub.components.findByName('release') ?: sub.components.findByName('android')
                         if (releaseComponent != null) {
+                            androidComponentAvailable = true
                             from releaseComponent
                         } else {
                             def aarFile = sub.file("build/outputs/aar/${sub.name}-release.aar")
@@ -603,8 +618,20 @@ rootProject.subprojects { sub ->
 
                     // 统一添加 sources + javadoc（Maven Central 强制要求）
                     def (sourcesJar, javadocJar) = createSourcesAndJavadocTasks(sub, isAndroidLib, isJavaLib, isKotlinAndroid, isKotlinJvm, isGroovy, hasCustomArtifact)
-                    artifact(sourcesJar)
-                    artifact(javadocJar)
+                    // AGP 8.x 的 Android release 组件已含 sources jar（from component 时自动带上），
+                    // 手动再加会重复（Invalid publication: multiple artifacts with identical classifier）；
+                    // 因此仅 Android 且有组件时只补 javadoc，其余情况 sources + javadoc 都补
+                    if (androidComponentAvailable) {
+                        artifact(javadocJar) { builtBy javadocJar }
+                    } else {
+                        artifact(sourcesJar) { builtBy sourcesJar }
+                        artifact(javadocJar) { builtBy javadocJar }
+                    }
+
+                    // Gradle 8.13 要求 metadata 任务也显式依赖 sources/javadoc 产物任务
+                    sub.tasks.named('generateMetadataFileForMavenPublication').configure {
+                        dependsOn sourcesJar, javadocJar
+                    }
 
                     /* POM 元数据配置 */
                     pom {
