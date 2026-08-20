@@ -397,10 +397,14 @@ def fixPomFile = { sub, String packaging = null, boolean hasComponent = false ->
             if (!pomFile.exists()) return
             def pomContent = pomFile.getText('UTF-8')
 
-            // 插件自动添加到配置的依赖（用户未显式声明），发布时从 POM 中排除
+            // 插件自动添加到配置的依赖（用户未显式声明），发布时从 POM 中排除。
+            // 这类依赖由构建插件在 consumer 侧也会自动注入，库不应在 POM 中重复声明固定版本，
+            // 否则会与 consumer 自身插件注入的版本冲突。
             def autoAddedDeps = [
-                    'androidx.databinding:viewbinding',   // AGP viewBinding 特性自动添加
-                    'org.jetbrains.kotlin:kotlin-stdlib'  // Kotlin 插件自动添加
+                    'androidx.databinding:viewbinding',                 // AGP viewBinding 特性自动添加（编译期）
+                    'org.jetbrains.kotlin:kotlin-stdlib',              // Kotlin 插件自动添加
+                    'org.jetbrains.kotlin:kotlin-parcelize-runtime',   // kotlin-parcelize 插件自动注入（runtimeOnly）
+                    'org.jetbrains.kotlin:kotlin-android-extensions-runtime' // kotlin-android-extensions 插件自动注入
             ] as Set
 
             // 收集所有「可解析」配置的实际版本（动态版本 + 修复、BOM 管理版本补齐）：
