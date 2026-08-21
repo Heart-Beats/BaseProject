@@ -95,7 +95,18 @@ def createSourcesAndJavadocTasks = { sub, isAndroidLib, isJavaLib, isKotlinAndro
             doFirst {
                 def ct = sub.tasks.findByName('compileReleaseJavaWithJavac')
                 if (ct != null) {
-                    classpath = ct.classpath
+                    // compileReleaseJavaWithJavac.classpath 只含第三方/工程依赖，
+                    // Android 框架类（android.jar）由 AGP 放在编译任务的 bootclasspath 上，
+                    // 必须一并并入 javadoc 的 classpath，否则 javadoc 找不到 android.content.* 等。
+                    def cp = ct.classpath
+                    try {
+                        def boot = sub.android.bootClasspath
+                        if (boot != null && !boot.isEmpty()) {
+                            cp = cp + sub.files(boot)
+                        }
+                    } catch (Exception ignored) {
+                    }
+                    classpath = cp
                 }
             }
         }
